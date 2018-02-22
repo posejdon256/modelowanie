@@ -26,3 +26,12 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+.ab-main-div {
+  width: 1920px;
+  background: #333366;
+  height: 1000px;
+}
+.ab-canvas-navbar-container {
+  height: 85%;
+  width: 100%;
+}
