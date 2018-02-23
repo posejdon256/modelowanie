@@ -3,8 +3,9 @@ import '../../css/canvas/Canvas.css';
 import getTorus from './Torus/Torus';
 import Draw, { setPixelColor, setCanvas, clearCanvas } from './Draw/Draw';
 import KeyboardCenter from './Keyboard/KeyboardCenter';
-import TranslationCenter, { setTranslationPoints, getTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
+import TranslationCenter, { setTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
 import MouseCenter from './Mouse/MouseCenter';
+import generateTorus from './Torus/Torus';
 
 export default class Canvas extends Component {
     constructor(props) {
@@ -18,7 +19,8 @@ export default class Canvas extends Component {
 
         //variables
         const canvas = this.refs.abCanvas;
-        const torus = getTorus(100.0, 200.0);
+        generateTorus(100.0, 200.0);
+        const torus = getTorus();
 
         // settings
         setPixelColor(254, 254, 254, 254);

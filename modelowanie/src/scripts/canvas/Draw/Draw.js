@@ -1,3 +1,5 @@
+import { getTorusLines } from "../Torus/Torus";
+
 
 let _r = 0;
 let _g = 0;
@@ -30,8 +32,17 @@ export function drawPixel(x, y) {
 export function clearCanvas() {
     _ctx.clearRect(0, 0, _canvas.width, _canvas.height);
 }
+function drawLine(x1, y1, x2, y2) {
+    _ctx.moveTo(x1, y1);
+    _ctx.lineTo(x2, y2);
+}
 export default function Draw(points) {
-    points.forEach(point => {
-        drawPixel(point.x, point.y);
-    });
+   const lines = getTorusLines();
+   _ctx.beginPath();
+   _ctx.strokeStyle = "rgba("+_r+","+_g+","+_b+","+_a+")";
+   lines.forEach(line => {
+       if(line[1] < points.length && line[0] < points.length)
+        drawLine(points[line[0]].x, points[line[0]].y, points[line[1]].x, points[line[1]].y,)
+   });
+   _ctx.stroke();
 }
