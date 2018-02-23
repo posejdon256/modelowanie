@@ -1,5 +1,16 @@
-.ab-canvas {
+.ab-canvas-div {
     width: 70%;
     height: 100%;
-    display: inline-block;
+    display: inline-flex;
+    position: relative
+}
+.ab-canvas {
+    width: 1000px;
+    height: 700px;
+    display: table-row-group;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #370037;
+
 }

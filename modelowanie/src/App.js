@@ -9,12 +9,25 @@ import Canvas from './scripts/canvas/Canvas';
 import Header from './scripts/header/Header';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      torusVisible: false
+    };
+
+    this.toggleTorus = this.toggleTorus.bind(this);
+  }
+  toggleTorus() {
+    this.setState({
+      torusVisible: !this.state.torusVisible
+    })
+  }
   render() {
     return (
       <div className="ab-main-div">
-        <Header />
+        <Header toggleTorus={this.toggleTorus} />
         <div className="ab-canvas-navbar-container">
-          <Canvas />
+          <Canvas visibleTorus={this.state.torusVisible} />
           <NavBar />
         </div>
       </div>
