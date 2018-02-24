@@ -1,26 +1,33 @@
 
-const TorusVertices = [];
-const TorusLines = [];
+let TorusVertices = [];
+let TorusLines = [];
 let _r = 0;
 let _R = 0;
+let _gridX = 0.3;
+let _gridY = 0.3;
 /**
  * Tworzy tablice z wierzchołkami torusa
  */
-export default function generateTorus(r, R) {
-    if(TorusVertices.length !== 0) {
+export default function generateTorus(r, R, gridX, gridY) {
+    if(TorusVertices.length !== 0 && gridX === _gridX && gridY === _gridY) {
         console.log('Torus already exists!')
         return TorusVertices;
     }
     _r = r;
     _R = R;
-    const step = 0.3;
+    _gridX = gridX;
+    _gridY = gridY;
+    const stepX = 6 / _gridX;
+    const stepY = 6/ _gridY;
     let counter = 0;
     let howMany = 0;
-    for(let i = 0.0; i <= 2 * Math.PI ; i += step) {
+    for(let i = 0.0; i <= 2 * Math.PI ; i += stepX) {
         howMany ++;
     }
-    for(let i = 0.0; i <= 2 * Math.PI ; i += step) {
-        for(let j = 0.0; j <= 2 * Math.PI; j += step) {
+    TorusVertices = [];
+    TorusLines = [];
+    for(let i = 0.0; i <= 2 * Math.PI ; i += stepY) {
+        for(let j = 0.0; j <= 2 * Math.PI; j += stepX) {
             TorusVertices.push({
                 x: (_R + (_r * Math.cos(j))) * Math.cos(i),
                 y: (_R + (_r * Math.cos(j))) * Math.sin(i),
@@ -36,7 +43,7 @@ export default function generateTorus(r, R) {
         }
     }
     counter = 0;
-    for(let i = 0.0; i <= 2 * Math.PI; i += step) {
+    for(let i = 0.0; i <= 2 * Math.PI; i += stepX) {
         TorusLines.push([counter, TorusVertices.length - howMany + counter]);
         counter ++;
     }

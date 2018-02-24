@@ -34,4 +34,5 @@
 .ab-canvas-navbar-container {
   height: 85%;
   width: 100%;
+  display: flex;
 }

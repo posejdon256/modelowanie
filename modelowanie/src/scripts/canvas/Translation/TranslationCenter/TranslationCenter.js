@@ -1,6 +1,6 @@
 import { multiplyMatrices, multiplyVectorAndMatrix } from "../../../MatrixOperations/Multiply/Multiply";
 import getRotationArray from "../Rotation/Rotation";
-import { setShiftVector, getShiftMatrix } from "../Shift/Shift";
+import { setShiftVector, getShiftMatrix, shiftPoint } from "../Shift/Shift";
 
 
 let translationPoints = [];
@@ -49,7 +49,19 @@ export default function Translate(translationObject) {
     setShiftVector(shiftVector);
     translationMatrix = multiplyMatrices(translationMatrix, getShiftMatrix());
     lastTranslation = translationMatrix;
-    return generateTranslation(translationMatrix);
+    const fov = Math.PI/6;
+    const f = 100;
+    const e = Math.tan(fov);
+    const n = 0.001;
+    const a = 700 / 1000;
+    const projection = [
+        [e, 0, 0, 0],
+        [0, e/a, 0, 0],
+        [0, 0, f/(f-n), 1],
+        [0, 0, -f*n/(f-n), 1]
+    ];
+    const help = multiplyMatrices(translationMatrix, projection);
+    return generateTranslation(help);
 }
 
 function generateTranslation(translationMatrix) {

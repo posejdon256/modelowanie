@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import '../../css/canvas/Canvas.css';
-import getTorus from './Torus/Torus';
 import Draw, { setPixelColor, setCanvas, clearCanvas } from './Draw/Draw';
 import KeyboardCenter from './Keyboard/KeyboardCenter';
 import TranslationCenter, { setTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
 import MouseCenter from './Mouse/MouseCenter';
-import generateTorus from './Torus/Torus';
+import generateTorus, { getTorusVertices } from './Torus/Torus';
 
 export default class Canvas extends Component {
     constructor(props) {
@@ -19,8 +18,8 @@ export default class Canvas extends Component {
 
         //variables
         const canvas = this.refs.abCanvas;
-        generateTorus(100.0, 200.0);
-        const torus = getTorus();
+        generateTorus(50.0, 200.0, this.props.gridX, this.props.gridY);
+        const torus = getTorusVertices();
 
         // settings
         setPixelColor(254, 254, 254, 254);
@@ -38,15 +37,17 @@ export default class Canvas extends Component {
 
         // set state
         this.setState({
-            torus: torus,
             points: translated
         });
     }
     componentWillReceiveProps(props) {
-        if(props.visibleTorus === this.props.visibleTorus)
-            return;
 
-        if(props.visibleTorus) {      
+         generateTorus(50.0, 200.0, props.gridX, props.gridY);
+         const torus = getTorusVertices();
+         setTranslationPoints(torus);
+        //DrawTorus
+        if(props.visibleTorus) { 
+            clearCanvas();     
             Draw(TranslationCenter({}));
         } else {
             clearCanvas();
@@ -61,7 +62,7 @@ export default class Canvas extends Component {
     render(){
         return(
         <div className="ab-canvas-div">
-            <canvas tabindex="1" ref="abCanvas" className="ab-canvas" width="1000px" height="700px" 
+            <canvas tabIndex="1" ref="abCanvas" className="ab-canvas" width="1000px" height="700px" 
             onKeyDown={this.keyFunction} 
             onKeyUp={this.keyFunction}
             onMouseDown={this.mouseFunction}
