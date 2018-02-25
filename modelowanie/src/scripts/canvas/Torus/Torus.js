@@ -8,15 +8,18 @@ let _gridY = 0.3;
 /**
  * Tworzy tablice z wierzchołkami torusa
  */
+function setTorusParameters(r, R, gridX, gridY) {
+    _r = r;
+    _R = R;
+    _gridX = gridX;
+    _gridY = gridY;
+}
 export default function generateTorus(r, R, gridX, gridY) {
     if(TorusVertices.length !== 0 && gridX === _gridX && gridY === _gridY) {
         console.log('Torus already exists!')
         return TorusVertices;
     }
-    _r = r;
-    _R = R;
-    _gridX = gridX;
-    _gridY = gridY;
+    setTorusParameters(r, R, gridX, gridY);
     const stepX = 6 / _gridX;
     const stepY = 6/ _gridY;
     let counter = 0;
@@ -29,9 +32,9 @@ export default function generateTorus(r, R, gridX, gridY) {
     for(let i = 0.0; i <= 2 * Math.PI ; i += stepY) {
         for(let j = 0.0; j <= 2 * Math.PI; j += stepX) {
             TorusVertices.push({
-                x: (_R + (_r * Math.cos(j))) * Math.cos(i),
-                y: (_R + (_r * Math.cos(j))) * Math.sin(i),
-                z: _r * Math.sin(j)
+                x: (_R + (_r * Math.cos(j))) * Math.cos(i) / (_R + _r),
+                y: (_R + (_r * Math.cos(j))) * Math.sin(i) / (_R + _r),
+                z: _r * Math.sin(j) / (_R + _r)
             });
             if(counter % howMany + 1 === howMany) {
                 TorusLines.push([counter, counter - howMany + 1])
@@ -53,4 +56,7 @@ export function getTorusVertices() {
 }
 export function getTorusLines() {
     return TorusLines;
+}
+export function getRAndr() {
+    return { r: _r, R: _R };
 }

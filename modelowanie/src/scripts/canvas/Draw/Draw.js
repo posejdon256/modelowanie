@@ -1,4 +1,4 @@
-import { getTorusLines } from "../Torus/Torus";
+import { getTorusLines, getRAndr } from "../Torus/Torus";
 
 
 let _r = 0;
@@ -36,13 +36,17 @@ function drawLine(x1, y1, x2, y2) {
     _ctx.moveTo(x1, y1);
     _ctx.lineTo(x2, y2);
 }
-export default function Draw(points) {
+export default function DrawTorus(points) {
    const lines = getTorusLines();
    _ctx.beginPath();
    _ctx.strokeStyle = "rgba("+_r+","+_g+","+_b+","+_a+")";
+   const rs = getRAndr();
    lines.forEach(line => {
-       if(line[1] < points.length && line[0] < points.length)
-        drawLine(points[line[0]].x, points[line[0]].y, points[line[1]].x, points[line[1]].y,)
+       if(line[1] < points.length && line[0] < points.length) {
+            drawLine(points[line[0]].x * (rs.R + rs.r) + (500), points[line[0]].y * (rs.R + rs.r)+ (300), points[line[1]].x * (rs.R + rs.r)+ (500), points[line[1]].y * (rs.R + rs.r)+ (300));
+        }
    });
    _ctx.stroke();
+   _ctx.fillStyle = "rgba(255, 255, 255, 1)";
+   _ctx.fillRect( 500, 300, 1, 1 );
 }

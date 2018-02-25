@@ -1,3 +1,5 @@
+import { multiplyMatrices } from "../../../MatrixOperations/Multiply/Multiply";
+
 
 function getXMatrix(alpha) {
     return [
@@ -36,5 +38,26 @@ export default function getRotationArray(axis, alpha) {
        return getYMatrix(alpha);
     } else {
        return getZMatrix(alpha);
+    }
+}
+export function getRotationArrayByPoint(axis, alpha, point) {
+    const arr1 = [
+        [1, 0, point.x, 0],
+        [0, 1, point.y, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]
+    ];
+    const arr2 = [
+        [1, 0, -point.x, 0],
+        [0, 1, -point.y, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]
+    ];
+    if(axis === 0) {
+        return multiplyMatrices(multiplyMatrices(arr1, getXMatrix(alpha)), arr2);
+    } else if(axis === 1) {
+        return multiplyMatrices(multiplyMatrices(arr1, getYMatrix(alpha)), arr2);
+    } else {
+        return multiplyMatrices(multiplyMatrices(arr1, getZMatrix(alpha)), arr2);
     }
 }

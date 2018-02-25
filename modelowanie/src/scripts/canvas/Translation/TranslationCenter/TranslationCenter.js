@@ -1,6 +1,8 @@
 import { multiplyMatrices, multiplyVectorAndMatrix } from "../../../MatrixOperations/Multiply/Multiply";
-import getRotationArray from "../Rotation/Rotation";
-import { setShiftVector, getShiftMatrix, shiftPoint } from "../Shift/Shift";
+import getRotationArray, {getRotationArrayByPoint} from "../Rotation/Rotation";
+import { setShiftVector, getShiftMatrix } from "../Shift/Shift";
+import getProjectionMatrix from '../Projection/Projection';
+import getScaleMatrix from "../Scale/Scale";
 
 
 let translationPoints = [];
@@ -16,15 +18,17 @@ let lastTranslation = [
 export default function Translate(translationObject) {
     const {front, left, top, axisX, axisY, alphaX, alphaY, alphaZ, axisZ} = translationObject;
     let translationMatrix = lastTranslation;
+    //rotation
     if(axisX) {
-        translationMatrix = multiplyMatrices(translationMatrix, getRotationArray(1, alphaX));
+        translationMatrix = multiplyMatrices(getRotationArray(1, alphaX), translationMatrix);
     }
     if(axisY) {
-        translationMatrix = multiplyMatrices(translationMatrix, getRotationArray(0, alphaY));
+        translationMatrix = multiplyMatrices(getRotationArray(0, alphaY), translationMatrix);
     }
     if(axisZ) {
-        translationMatrix = multiplyMatrices(translationMatrix, getRotationArray(2, alphaZ));
+        translationMatrix = multiplyMatrices(getRotationArray(2, alphaZ), translationMatrix);
     }
+    //shift
     const shiftVector = [];
     if(left !== undefined && left !== 0) {
         shiftVector.push(left);
@@ -37,31 +41,19 @@ export default function Translate(translationObject) {
         shiftVector.push(0);
     }
     if(front !== undefined && front !== 0) {
-        let scaleMatrix = [
-            [front, 0, 0, 0],
-            [0, front, 0, 0],
-            [0, 0, front, 0],
-            [0, 0, 0, 1]
-        ];
-        translationMatrix = multiplyMatrices(translationMatrix, scaleMatrix);
+        shiftVector.push(1);
+        translationMatrix = multiplyMatrices(getScaleMatrix(front), translationMatrix);
     }
-    shiftVector.push(0);
+    else
+        shiftVector.push(0);
     setShiftVector(shiftVector);
-    translationMatrix = multiplyMatrices(translationMatrix, getShiftMatrix());
+    translationMatrix = multiplyMatrices(getShiftMatrix(), translationMatrix);
     lastTranslation = translationMatrix;
-    const fov = Math.PI/6;
-    const f = 100;
-    const e = Math.tan(fov);
-    const n = 0.001;
-    const a = 700 / 1000;
-    const projection = [
-        [e, 0, 0, 0],
-        [0, e/a, 0, 0],
-        [0, 0, f/(f-n), 1],
-        [0, 0, -f*n/(f-n), 1]
-    ];
-    const help = multiplyMatrices(translationMatrix, projection);
-    return generateTranslation(help);
+
+    //projection
+    const projectioMatrix = multiplyMatrices(getProjectionMatrix(1), translationMatrix);
+
+    return generateTranslation(projectioMatrix);
 }
 
 function generateTranslation(translationMatrix) {

@@ -7,6 +7,7 @@ let lastX;
 let lastY;
 let rotationXY = false;
 let rotationZ = false;
+const alpha = 0.07;
 export function StartRotation(x, y, isZ){
     lastX = x;
     lastY = y;
@@ -31,17 +32,17 @@ export function TakeMouseMove(x, y){
     if(Math.abs(lastX - x) > Math.abs(lastY - y)) {
         translationObject = {
             axisX: true,
-            alphaX: lastX - x > 0 ? 0.1: - 0.1,
+            alphaX: lastX - x > 0 ? alpha: - alpha,
         }
     } else {
         translationObject = {
             axisY: true,
-            alphaY: lastY - y > 0 ? 0.1 : - 0.1,
+            alphaY: lastY - y > 0 ? alpha : - alpha,
         }
     }
     if(rotationZ) {
         translationObject.axisZ = true;
-        translationObject.alphaZ = lastY - y > lastX - x ? 0.1 : - 0.1;
+        translationObject.alphaZ = lastY - y > lastX - x ? alpha : - alpha;
     }
     lastX = x;
     lastY = y;

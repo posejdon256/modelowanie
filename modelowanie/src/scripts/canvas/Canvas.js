@@ -28,25 +28,20 @@ export default class Canvas extends Component {
 
         //move torus
         const translatedObject = {
-            left: 400,
-            top: -700,
-            axisY: true,
-            alphaY: 2
+            //  left: 2,
+            //  top: 2,
         };
-        const translated = TranslationCenter(translatedObject);
-
-        // set state
-        this.setState({
-            points: translated
-        });
+        TranslationCenter(translatedObject);
     }
     componentWillReceiveProps(props) {
-
-         generateTorus(50.0, 200.0, props.gridX, props.gridY);
-         const torus = getTorusVertices();
-         setTranslationPoints(torus);
+        
         //DrawTorus
         if(props.visibleTorus) { 
+            generateTorus(50.0, 200.0, props.gridX, props.gridY);
+            const torus = getTorusVertices();
+            setTranslationPoints(torus);
+
+            //DrawTorus
             clearCanvas();     
             Draw(TranslationCenter({}));
         } else {

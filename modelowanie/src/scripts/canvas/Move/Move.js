@@ -5,7 +5,7 @@ import Draw, { clearCanvas } from "../Draw/Draw";
 let front = 0;
 let left = 0;
 let top = 0;
-let step = 2;
+let step = 0.002;
 
 let interval;
 
@@ -21,7 +21,7 @@ function setIntervalForMoving(){
             const translated = Translate(trasnlationObject);
             clearCanvas();
             Draw(translated);
-        }, 20);
+        }, 5);
     }
 }
 function removeIntervalForMoving(){
