@@ -5,7 +5,7 @@ import Draw, { clearCanvas } from "../Draw/Draw";
 let front = 0;
 let left = 0;
 let top = 0;
-let step = 0.002;
+let step = 0.003;
 
 let interval;
 

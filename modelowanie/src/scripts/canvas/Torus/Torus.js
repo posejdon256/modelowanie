@@ -60,3 +60,6 @@ export function getTorusLines() {
 export function getRAndr() {
     return { r: _r, R: _R };
 }
+export function fetTorusCenter() {
+    return {x: 2, y: 2};
+}

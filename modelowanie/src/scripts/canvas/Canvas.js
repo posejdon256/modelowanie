@@ -27,11 +27,7 @@ export default class Canvas extends Component {
         setTranslationPoints(torus);
 
         //move torus
-        const translatedObject = {
-            //  left: 2,
-            //  top: 2,
-        };
-        TranslationCenter(translatedObject);
+        TranslationCenter({});
     }
     componentWillReceiveProps(props) {
         

@@ -1,8 +1,9 @@
 import { multiplyMatrices, multiplyVectorAndMatrix } from "../../../MatrixOperations/Multiply/Multiply";
 import getRotationArray, {getRotationArrayByPoint} from "../Rotation/Rotation";
-import { setShiftVector, getShiftMatrix } from "../Shift/Shift";
+import { setShiftVector, getShiftMatrix, ShiftWithRotation } from "../Shift/Shift";
 import getProjectionMatrix from '../Projection/Projection';
 import getScaleMatrix from "../Scale/Scale";
+import normalizeVector from "../../../Normalization/Normalize";
 
 
 let translationPoints = [];
@@ -20,13 +21,13 @@ export default function Translate(translationObject) {
     let translationMatrix = lastTranslation;
     //rotation
     if(axisX) {
-        translationMatrix = multiplyMatrices(getRotationArray(1, alphaX), translationMatrix);
+        translationMatrix = ShiftWithRotation(translationMatrix, 1, alphaX);
     }
     if(axisY) {
-        translationMatrix = multiplyMatrices(getRotationArray(0, alphaY), translationMatrix);
+        translationMatrix = ShiftWithRotation(translationMatrix, 0, alphaY);
     }
     if(axisZ) {
-        translationMatrix = multiplyMatrices(getRotationArray(2, alphaZ), translationMatrix);
+        translationMatrix = ShiftWithRotation(translationMatrix, 2, alphaZ);
     }
     //shift
     const shiftVector = [];
@@ -41,7 +42,7 @@ export default function Translate(translationObject) {
         shiftVector.push(0);
     }
     if(front !== undefined && front !== 0) {
-        shiftVector.push(1);
+        shiftVector.push(0);
         translationMatrix = multiplyMatrices(getScaleMatrix(front), translationMatrix);
     }
     else
@@ -53,7 +54,7 @@ export default function Translate(translationObject) {
     //projection
     const projectioMatrix = multiplyMatrices(getProjectionMatrix(1), translationMatrix);
 
-    return generateTranslation(projectioMatrix);
+    return generateTranslation(translationMatrix);
 }
 
 function generateTranslation(translationMatrix) {
@@ -65,7 +66,7 @@ function generateTranslation(translationMatrix) {
 }
 function generateTranslatedPoint(point, translationMatrix) {
     const pointMatrix = [point.x, point.y, point.z, 1];
-    const result = multiplyVectorAndMatrix(translationMatrix, pointMatrix);
+    const result = normalizeVector(multiplyVectorAndMatrix(translationMatrix, pointMatrix));
     return {
         x: result[0],
         y: result[1],
