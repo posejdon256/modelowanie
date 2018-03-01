@@ -1,20 +1,19 @@
 
-const fov = Math.PI/6;
-const f = 1000;
-const e = Math.tan(fov);
-const n = 0.001;
+const fov = Math.PI/4;
+const f =0.4;
+const e = 1/Math.tan(fov);
+const n = 0.1;
 const a = 1;
 
 const l = -1;
 const t = 1;
 const b = -1;
 const r = 1;
-
 const projectMatrix1 = [
     [e, 0, 0, 0],
     [0, e/a, 0, 0],
     [0, 0, f/(f-n), 1],
-    [0, 0, -f*n/(f-n), 0]
+    [0, 0, -f*n/(f-n), 1]
 ];
 const projectMatrixAnia = [
     [1, 0, 1, 0],

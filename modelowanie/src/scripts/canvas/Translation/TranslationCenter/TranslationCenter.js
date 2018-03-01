@@ -1,6 +1,6 @@
 import { multiplyMatrices, multiplyVectorAndMatrix } from "../../../MatrixOperations/Multiply/Multiply";
 import getRotationArray, {getRotationArrayByPoint} from "../Rotation/Rotation";
-import { setShiftVector, getShiftMatrix, ShiftWithRotation } from "../Shift/Shift";
+import { setShiftVector, getShiftMatrix, ShiftWithRotation, updateShift } from "../Shift/Shift";
 import getProjectionMatrix from '../Projection/Projection';
 import getScaleMatrix from "../Scale/Scale";
 import normalizeVector from "../../../Normalization/Normalize";
@@ -44,6 +44,7 @@ export default function Translate(translationObject) {
     if(front !== undefined && front !== 0) {
         shiftVector.push(0);
         translationMatrix = multiplyMatrices(getScaleMatrix(front), translationMatrix);
+        updateShift(front);
     }
     else
         shiftVector.push(0);
@@ -54,7 +55,7 @@ export default function Translate(translationObject) {
     //projection
     const projectioMatrix = multiplyMatrices(getProjectionMatrix(1), translationMatrix);
 
-    return generateTranslation(translationMatrix);
+    return generateTranslation(projectioMatrix);
 }
 
 function generateTranslation(translationMatrix) {

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import '../../css/canvas/Canvas.css';
-import Draw, { setPixelColor, setCanvas, clearCanvas } from './Draw/Draw';
+import {DrawTorus, setPixelColor, setCanvas, clearCanvas } from './Draw/Draw';
 import KeyboardCenter from './Keyboard/KeyboardCenter';
 import TranslationCenter, { setTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
 import MouseCenter from './Mouse/MouseCenter';
 import generateTorus, { getTorusVertices } from './Torus/Torus';
+import DrawTorus from './Draw/Draw';
 
 export default class Canvas extends Component {
     constructor(props) {
@@ -19,12 +20,12 @@ export default class Canvas extends Component {
         //variables
         const canvas = this.refs.abCanvas;
         generateTorus(50.0, 200.0, this.props.gridX, this.props.gridY);
-        const torus = getTorusVertices();
+     //   const torus = getTorusVertices();
 
         // settings
         setPixelColor(254, 254, 254, 254);
         setCanvas(canvas);
-        setTranslationPoints(torus);
+      //  setTranslationPoints(torus);
 
         //move torus
         TranslationCenter({});
@@ -39,7 +40,7 @@ export default class Canvas extends Component {
 
             //DrawTorus
             clearCanvas();     
-            Draw(TranslationCenter({}));
+         //   DrawTorus(TranslationCenter({}));
         } else {
             clearCanvas();
         }

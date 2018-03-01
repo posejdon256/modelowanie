@@ -55,3 +55,8 @@ export function ShiftWithRotation(translationMatrix, axis, alpha) {
     rotationArray = multiplyMatrices(rotationArray, right);
     return multiplyMatrices(rotationArray, translationMatrix);
 }
+export function updateShift(update) {
+    sumShift[0] *= update;
+    sumShift[1] *= update;
+    sumShift[2] *= update;
+}

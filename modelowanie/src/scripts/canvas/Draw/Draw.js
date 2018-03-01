@@ -36,7 +36,7 @@ function drawLine(x1, y1, x2, y2) {
     _ctx.moveTo(x1, y1);
     _ctx.lineTo(x2, y2);
 }
-export default function DrawTorus(points) {
+export function DrawTorus(points) {
    const lines = getTorusLines();
    _ctx.beginPath();
    _ctx.strokeStyle = "rgba("+_r+","+_g+","+_b+","+_a+")";
