@@ -1,11 +1,11 @@
-import Translate from "../Translation/TranslationCenter/TranslationCenter";
-import Draw, { clearCanvas } from "../Draw/Draw";
+import { DrawElipsoid, DrawTorus, clearCanvas } from "../Draw/Draw";
+import { TranslateElipsoid } from '../Elipsoid/Elipsoid';
 
 
 let front = 0;
 let left = 0;
 let top = 0;
-let step = 0.003;
+let step = 0.002;
 
 let interval;
 
@@ -17,10 +17,8 @@ function setIntervalForMoving(){
                 left: left,
                 top: top
             }
-            Translate(trasnlationObject);
-            const translated = Translate(trasnlationObject);
             clearCanvas();
-            Draw(translated);
+            DrawElipsoid(TranslateElipsoid(trasnlationObject));
         }, 5);
     }
 }

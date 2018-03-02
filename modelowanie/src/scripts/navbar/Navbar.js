@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../../css/navbar/Navbar.css';
+import ElipsoidNavbar from './Elipsoid/ElipsoidNavbar';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -18,13 +19,16 @@ export default class Navbar extends Component {
         return(
         <div className="ab-navbar">
             <div>
-                <label>Siatka pozioma</label>
-                <input type="range" min="2" max="100" onChange={this.updateXGrid} />
+                <div>
+                    <label>Siatka pozioma torusa</label>
+                    <input type="range" min="2" max="100" onChange={this.updateXGrid} />
+                </div>
+                <div>
+                    <label>Siatka pionowa torusa</label>
+                    <input type="range" min="2" max="100" onChange={this.updateYGrid} />
+                </div>
             </div>
-            <div>
-                <label>Siatka pionowa</label>
-                <input type="range" min="2" max="100" onChange={this.updateYGrid} />
-            </div>
+             <ElipsoidNavbar updateElipsoid={this.props.updateElipsoid} />
         </div>);
     }
 }

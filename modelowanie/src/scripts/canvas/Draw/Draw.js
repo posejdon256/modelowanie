@@ -1,4 +1,5 @@
 import { getTorusLines, getRAndr } from "../Torus/Torus";
+import { getABCElipsoid, getMinMaxSpecular } from "../Elipsoid/Elipsoid";
 
 
 let _r = 0;
@@ -7,6 +8,7 @@ let _b = 0;
 let _a = 0;
 let _ctx;
 let _canvas;
+let _imagedata;
 /**
  * Ustawia kolor rysowania
  * @param {int} r - color dla r od 0 do 255
@@ -24,9 +26,12 @@ export function setCanvas(canvas) {
     _ctx = canvas.getContext("2d");
     _ctx.translate(0.5, 0.5);
     _canvas = canvas;
+   // _imagedata = _ctx.getImageData(0, 0, canvas.width, canvas.height);
 }
-export function drawPixel(x, y) {
-    _ctx.fillStyle = "rgba("+_r+","+_g+","+_b+","+_a+")";
+export function drawPixel(x, y, I) {
+    _ctx.fillStyle = "rgba("+1*I+","+1*I+","+0*I+","+1+")";
+    _ctx.fillStyle = "rgba("+1*255+","+1*255+","+0+","+1+")";
+    console.log(I);
     _ctx.fillRect( parseInt(x,10), parseInt(y,10), 1, 1 );
 }
 export function clearCanvas() {
@@ -35,6 +40,21 @@ export function clearCanvas() {
 function drawLine(x1, y1, x2, y2) {
     _ctx.moveTo(x1, y1);
     _ctx.lineTo(x2, y2);
+}
+export function DrawElipsoid(points) {
+    const abc = getABCElipsoid();
+    const max = Math.max(abc.a, abc.b, abc.c);
+    const specular = getMinMaxSpecular();
+    let _imagedata = _ctx.createImageData(_canvas.width, _canvas.height);
+    for(let i = 0; i < points.length; i ++) {
+         const pixelIndex = ((points[i].y * _canvas.width) + points[i].x) * 4;
+         _imagedata.data[pixelIndex] = parseInt(255 *(points[i].specular - specular.min)/(specular.max - specular.min), 10);
+         _imagedata.data[pixelIndex + 1] = parseInt(255 *(points[i].specular - specular.min)/(specular.max - specular.min), 10);
+         _imagedata.data[pixelIndex + 2] = 0;
+         _imagedata.data[pixelIndex + 3] = 255;
+       // drawPixel(points[i].x * max, points[i].y * max, parseInt(255 *(points[i].specular - specular.min)/(specular.max - specular.min), 10));
+    }
+    _ctx.putImageData(_imagedata, 0, 0);
 }
 export function DrawTorus(points) {
    const lines = getTorusLines();

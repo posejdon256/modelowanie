@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import '../../css/canvas/Canvas.css';
-import {DrawTorus, setPixelColor, setCanvas, clearCanvas } from './Draw/Draw';
+import { DrawTorus, setPixelColor, setCanvas, clearCanvas, DrawElipsoid } from './Draw/Draw';
 import KeyboardCenter from './Keyboard/KeyboardCenter';
-import TranslationCenter, { setTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
+import { setTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
 import MouseCenter from './Mouse/MouseCenter';
-import generateTorus, { getTorusVertices } from './Torus/Torus';
-import DrawTorus from './Draw/Draw';
+import generateTorus, { getTorusVertices, TranslateTorus } from './Torus/Torus';
+import { generateElipsoid, TranslateElipsoid } from './Elipsoid/Elipsoid';
 
 export default class Canvas extends Component {
     constructor(props) {
@@ -20,27 +20,23 @@ export default class Canvas extends Component {
         //variables
         const canvas = this.refs.abCanvas;
         generateTorus(50.0, 200.0, this.props.gridX, this.props.gridY);
-     //   const torus = getTorusVertices();
 
         // settings
-        setPixelColor(254, 254, 254, 254);
+        setPixelColor(255, 255, 0, 254);
         setCanvas(canvas);
-      //  setTranslationPoints(torus);
-
-        //move torus
-        TranslationCenter({});
+        clearCanvas();
+        generateElipsoid(1000,16000,10000);
+        DrawElipsoid(TranslateElipsoid({}));
     }
     componentWillReceiveProps(props) {
         
         //DrawTorus
         if(props.visibleTorus) { 
             generateTorus(50.0, 200.0, props.gridX, props.gridY);
-            const torus = getTorusVertices();
-            setTranslationPoints(torus);
 
             //DrawTorus
-            clearCanvas();     
-         //   DrawTorus(TranslationCenter({}));
+          //  clearCanvas();     
+          //  DrawTorus(TranslateTorus({}));
         } else {
             clearCanvas();
         }

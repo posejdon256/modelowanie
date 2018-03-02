@@ -1,3 +1,7 @@
+import { setTranslationPoints, generateTranslation, getTranslationMatrix } from "../Translation/TranslationCenter/TranslationCenter";
+import getProjectionMatrix from '../Translation/Projection/Projection';
+import { multiplyMatrices } from '../../MatrixOperations/Multiply/Multiply';
+
 
 let TorusVertices = [];
 let TorusLines = [];
@@ -5,6 +9,13 @@ let _r = 0;
 let _R = 0;
 let _gridX = 0.3;
 let _gridY = 0.3;
+
+let lastTranslation = [
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1]
+];
 /**
  * Tworzy tablice z wierzchołkami torusa
  */
@@ -62,4 +73,10 @@ export function getRAndr() {
 }
 export function fetTorusCenter() {
     return {x: 2, y: 2};
+}
+export function TranslateTorus(configurationObject) {
+    lastTranslation = getTranslationMatrix(configurationObject, lastTranslation);
+    const projectioMatrix = multiplyMatrices(getProjectionMatrix(1), lastTranslation);
+    setTranslationPoints(TorusVertices);
+    return generateTranslation(lastTranslation);
 }

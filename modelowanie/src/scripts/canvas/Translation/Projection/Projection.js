@@ -33,7 +33,7 @@ export default function getProjectionMatrix(number) {
         return projectMatrix1;
     } else if (number === 2) {
         return projectMatrix2;
-    } else if( number == 3) {
+    } else if( number === 3) {
         return projectMatrixAnia;
     }
 }

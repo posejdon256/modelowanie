@@ -16,7 +16,7 @@ let lastTranslation = [
     [0, 0, 1, 0],
     [0, 0, 0, 1]
 ];
-export default function Translate(translationObject) {
+export function getTranslationMatrix(translationObject, lastTranslation) {
     const {front, left, top, axisX, axisY, alphaX, alphaY, alphaZ, axisZ} = translationObject;
     let translationMatrix = lastTranslation;
     //rotation
@@ -50,18 +50,13 @@ export default function Translate(translationObject) {
         shiftVector.push(0);
     setShiftVector(shiftVector);
     translationMatrix = multiplyMatrices(getShiftMatrix(), translationMatrix);
-    lastTranslation = translationMatrix;
-
-    //projection
-    const projectioMatrix = multiplyMatrices(getProjectionMatrix(1), translationMatrix);
-
-    return generateTranslation(projectioMatrix);
+    return translationMatrix;
 }
-
-function generateTranslation(translationMatrix) {
+export function generateTranslation(translationMatrix) {
     const result = [];
     translationPoints.forEach(point => {
-        result.push(generateTranslatedPoint(point, translationMatrix));
+        if(point.z !== undefined)
+            result.push(generateTranslatedPoint(point, translationMatrix));
     });
     return result;
 }

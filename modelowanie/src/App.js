@@ -36,14 +36,21 @@ class App extends Component {
       gridY: gridNumber
     });
   }
+  updateElipsoid(elipsoid) {
+    this.setState({
+      elipsoid: elipsoid
+    });
+  }
   render() {
     return (
       <div className="ab-main-div">
         <Header toggleTorus={this.toggleTorus} />
         <div className="ab-canvas-navbar-container">
-          <Canvas visibleTorus={this.state.torusVisible}
+          <Canvas 
+              visibleTorus={this.state.torusVisible}
               gridX={this.state.gridX}
               gridY={this.state.gridY}
+              elipsoid={this.state.elipsoid}
               />
           <NavBar 
             updateXGrid={this.updateXGrid}

@@ -1,7 +1,6 @@
-import Translate from "../Translation/TranslationCenter/TranslationCenter";
-import Draw, { clearCanvas } from "../Draw/Draw";
-
-
+import { DrawTorus, clearCanvas, DrawElipsoid } from "../Draw/Draw";
+import { TranslateTorus } from '../Torus/Torus';
+import { TranslateElipsoid } from "../Elipsoid/Elipsoid";
 
 let lastX;
 let lastY;
@@ -46,7 +45,6 @@ export function TakeMouseMove(x, y){
     }
     lastX = x;
     lastY = y;
-    const translated = Translate(translationObject);
     clearCanvas();
-    Draw(translated);
+    DrawElipsoid(TranslateElipsoid(translationObject));
 }
