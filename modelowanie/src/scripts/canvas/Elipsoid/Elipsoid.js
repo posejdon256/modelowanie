@@ -23,6 +23,37 @@ let lastTranslationMatrix = [
 let centerMatrix;
 let cameraVector = [0, 0, -2, 1];
 
+export function PseudoTranslate(configurationObject, pseudo) {
+    Elipsoid = [];
+    lastTranslationMatrix = getTranslationMatrix(configurationObject, lastTranslationMatrix);
+    generateCenterMatrix();
+    maxSpecular = -1000000000;
+    minSpecular = 1000000000;
+    const max = Math.max(a, b, c);
+    for(let i = 0; i + pseudo < 1000; i += pseudo) {
+        for (let j = 0; j + pseudo < 700; j += pseudo) {
+            const z = getElipsoidZ(i - 400, j - 400);
+            if(z !== undefined) {
+                const z2 = getElipsoidZ(i + pseudo - 400, j - 400);
+                const z3 = getElipsoidZ(i - 400, j + pseudo - 400);
+                const z4 = getElipsoidZ(i + pseudo - 400, j + pseudo - 400);
+                const rgb1 = preparePhongSpecular(i, j, z);
+                const rgb2 = preparePhongSpecular(i + pseudo, j, z2);
+                const rgb3 = preparePhongSpecular(i, j + pseudo, z3);
+                const rgb4 = preparePhongSpecular(i + pseudo, j + pseudo, z4);
+                const finalRgb = (rgb1 + rgb1 + rgb3 + rgb4) / 4;
+                if(finalRgb > maxSpecular) {
+                    maxSpecular = finalRgb;
+                }
+                if(minSpecular > finalRgb) {
+                    minSpecular = finalRgb;
+                }
+                Elipsoid.push({x: i, y: j, z: z === z, specular: finalRgb});
+            }
+        }
+    }
+    return Elipsoid;
+}
 export function getElipsoidZ(x, y) {
     const a2 = a1;
     const b2 = b1  + (centerMatrix[2][0] + centerMatrix[2][0])*x + (centerMatrix[2][1] + centerMatrix[2][1])*y;

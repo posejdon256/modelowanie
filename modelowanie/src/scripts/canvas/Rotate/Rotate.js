@@ -1,12 +1,12 @@
-import { DrawTorus, clearCanvas, DrawElipsoid } from "../Draw/Draw";
+import { DrawTorus, clearCanvas, DrawElipsoid, pseudoDrawElipsoid } from "../Draw/Draw";
 import { TranslateTorus } from '../Torus/Torus';
-import { TranslateElipsoid } from "../Elipsoid/Elipsoid";
+import { TranslateElipsoid, PseudoTranslate } from "../Elipsoid/Elipsoid";
 
 let lastX;
 let lastY;
 let rotationXY = false;
 let rotationZ = false;
-const alpha = 0.07;
+const alpha = 0.15;
 export function StartRotation(x, y, isZ){
     lastX = x;
     lastY = y;
@@ -22,6 +22,7 @@ export function StopRoatation(isZ){
         rotationZ = false;
     else
         rotationXY = false;
+        DrawElipsoid(TranslateElipsoid({}));
 }
 export function TakeMouseMove(x, y){
     if(!rotationZ && !rotationXY) {
@@ -46,5 +47,5 @@ export function TakeMouseMove(x, y){
     lastX = x;
     lastY = y;
     clearCanvas();
-    DrawElipsoid(TranslateElipsoid(translationObject));
+    pseudoDrawElipsoid(PseudoTranslate(translationObject, 10), 10);
 }

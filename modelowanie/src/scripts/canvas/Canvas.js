@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import '../../css/canvas/Canvas.css';
-import { DrawTorus, setPixelColor, setCanvas, clearCanvas, DrawElipsoid } from './Draw/Draw';
+import { DrawTorus, setPixelColor, setCanvas, clearCanvas, DrawElipsoid, pseudoDrawElipsoid } from './Draw/Draw';
 import KeyboardCenter from './Keyboard/KeyboardCenter';
 import { setTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
 import MouseCenter from './Mouse/MouseCenter';
 import generateTorus, { getTorusVertices, TranslateTorus } from './Torus/Torus';
-import { generateElipsoid, TranslateElipsoid } from './Elipsoid/Elipsoid';
+import { generateElipsoid, TranslateElipsoid, PseudoTranslate } from './Elipsoid/Elipsoid';
 
 export default class Canvas extends Component {
     constructor(props) {
@@ -25,8 +25,8 @@ export default class Canvas extends Component {
         setPixelColor(255, 255, 0, 254);
         setCanvas(canvas);
         clearCanvas();
-        generateElipsoid(1000,16000,10000);
-        DrawElipsoid(TranslateElipsoid({}));
+        generateElipsoid(30000,16000,10000);
+        pseudoDrawElipsoid(PseudoTranslate({}, 10), 10);
     }
     componentWillReceiveProps(props) {
         
