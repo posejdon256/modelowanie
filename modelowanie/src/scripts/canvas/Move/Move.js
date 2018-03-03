@@ -5,7 +5,7 @@ import { TranslateElipsoid } from '../Elipsoid/Elipsoid';
 let front = 0;
 let left = 0;
 let top = 0;
-let step = 0.002;
+let step = 10;
 
 let interval;
 

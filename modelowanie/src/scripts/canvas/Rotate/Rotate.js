@@ -47,5 +47,5 @@ export function TakeMouseMove(x, y){
     lastX = x;
     lastY = y;
     clearCanvas();
-    pseudoDrawElipsoid(PseudoTranslate(translationObject, 10), 10);
+    pseudoDrawElipsoid(PseudoTranslate(translationObject, 5), 5);
 }

@@ -14,12 +14,18 @@ class App extends Component {
     this.state = {
       torusVisible: false,
       gridX: 18,
-      gridY: 18
+      gridY: 18,
+      elipsoid: {
+        X: 10,
+        Y: 10,
+        Z: 10
+      }
     };
 
     this.toggleTorus = this.toggleTorus.bind(this);
     this.updateXGrid = this.updateXGrid.bind(this);
     this.updateYGrid = this.updateYGrid.bind(this);
+    this.updateElipsoid = this.updateElipsoid.bind(this);
   }
   toggleTorus() {
     this.setState({
@@ -55,6 +61,7 @@ class App extends Component {
           <NavBar 
             updateXGrid={this.updateXGrid}
             updateYGrid={this.updateYGrid}
+            updateElipsoid={this.updateElipsoid}
           />
         </div>
       </div>

@@ -13,6 +13,7 @@ let c1;
 let cameraZ;
 let minSpecular;
 let maxSpecular;
+let m;
 
 let lastTranslationMatrix = [
     [1, 0, 0, 0],
@@ -23,6 +24,12 @@ let lastTranslationMatrix = [
 let centerMatrix;
 let cameraVector = [0, 0, -2, 1];
 
+export function setABC(_a, _b, _c, _m) {
+    a = _a;
+    b = _b;
+    c = _c;
+    m = _m;
+}
 export function PseudoTranslate(configurationObject, pseudo) {
     Elipsoid = [];
     lastTranslationMatrix = getTranslationMatrix(configurationObject, lastTranslationMatrix);
@@ -87,15 +94,11 @@ function generateCenterMatrix() {
 
     cameraZ = multiplyVectorAndMatrix(lastTranslationMatrix, cameraVector)[2];
 }
-export function generateElipsoid(_a, _b, _c){ 
-    a = _a;
-    b = _b;
-    c = _c;
+export function generateElipsoid(){ 
     Elipsoid = [];
     generateCenterMatrix();
     maxSpecular = -1000000000;
     minSpecular = 1000000000;
-    const max = Math.max(a, b, c);
     for(let i = 0; i < 1000; i ++) {
         for (let j = 0; j < 700; j ++) {
             const z = getElipsoidZ(i - 400, j - 400);
@@ -115,7 +118,7 @@ export function generateElipsoid(_a, _b, _c){
 }
 export function TranslateElipsoid(configurationObject) {
     lastTranslationMatrix = getTranslationMatrix(configurationObject, lastTranslationMatrix);
-    generateElipsoid(a, b, c);
+    generateElipsoid();
     return Elipsoid
 }
 export function getABCElipsoid() {
@@ -132,7 +135,7 @@ function getNormalVector(x, y, z) {
 function preparePhongSpecular(x, y, z) {
     const normalVector = getNormalVector(x, y, z);
     const v1Multiv2 = getVectorLength(normalVector)*getVectorLength(cameraVector);
-    const result = Math.pow(multiplyVectorsScalar(normalVector, cameraVector), 1);
+    const result = Math.pow(multiplyVectorsScalar(normalVector, cameraVector), m);
     return result;
 }
 export function getMinMaxSpecular() {

@@ -5,7 +5,7 @@ import KeyboardCenter from './Keyboard/KeyboardCenter';
 import { setTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
 import MouseCenter from './Mouse/MouseCenter';
 import generateTorus, { getTorusVertices, TranslateTorus } from './Torus/Torus';
-import { generateElipsoid, TranslateElipsoid, PseudoTranslate } from './Elipsoid/Elipsoid';
+import { generateElipsoid, TranslateElipsoid, PseudoTranslate, setABC } from './Elipsoid/Elipsoid';
 
 export default class Canvas extends Component {
     constructor(props) {
@@ -25,8 +25,8 @@ export default class Canvas extends Component {
         setPixelColor(255, 255, 0, 254);
         setCanvas(canvas);
         clearCanvas();
-        generateElipsoid(30000,16000,10000);
-        pseudoDrawElipsoid(PseudoTranslate({}, 10), 10);
+        setABC(16000,16000,10000, 1)
+        DrawElipsoid(TranslateElipsoid({}));
     }
     componentWillReceiveProps(props) {
         
@@ -38,7 +38,16 @@ export default class Canvas extends Component {
           //  clearCanvas();     
           //  DrawTorus(TranslateTorus({}));
         } else {
+           // clearCanvas();
+        }
+        const { elipsoid } = props;
+        if(elipsoid.X !== this.props.elipsoid.X
+        || elipsoid.Y !== this.props.elipsoid.Y
+        || elipsoid.Z !== this.props.elipsoid.Z
+        || elipsoid.m !== this.props.elipsoid.m) {
+            setABC(1000 * elipsoid.X, 1000 * elipsoid.Y , 1000 * elipsoid.Z, elipsoid.m)
             clearCanvas();
+            DrawElipsoid(TranslateElipsoid({}));
         }
     }
     keyFunction(event) {

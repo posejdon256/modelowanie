@@ -3,6 +3,7 @@ import getRotationArray, {getRotationArrayByPoint} from "../Rotation/Rotation";
 import { setShiftVector, getShiftMatrix, ShiftWithRotation, updateShift } from "../Shift/Shift";
 import getProjectionMatrix from '../Projection/Projection';
 import getScaleMatrix from "../Scale/Scale";
+import math from 'mathjs';
 import normalizeVector from "../../../Normalization/Normalize";
 
 

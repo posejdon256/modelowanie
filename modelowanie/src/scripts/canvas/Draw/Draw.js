@@ -60,7 +60,6 @@ export function pseudoDrawElipsoid(points, pseudo) {
         _r = parseInt(255 *(points[i].specular - specular.min)/(specular.max - specular.min), 10);
         _g = parseInt(255 *(points[i].specular - specular.min)/(specular.max - specular.min), 10);
         _b = 0;
-        console.log(_r, _g, _b);
         _ctx.fillStyle = "rgba("+1*parseInt(_r, 10)+","+1*parseInt(_g, 10)+","+0+","+1+")";
         _ctx.fillRect(points[i].x ,points[i].y, pseudo, pseudo );
       // drawPixel(points[i].x * max, points[i].y * max, parseInt(255 *(points[i].specular - specular.min)/(specular.max - specular.min), 10));
