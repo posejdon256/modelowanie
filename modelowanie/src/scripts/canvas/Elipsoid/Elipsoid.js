@@ -14,6 +14,7 @@ let cameraZ;
 let minSpecular;
 let maxSpecular;
 let m;
+let rgbArray={};
 
 let lastTranslationMatrix = [
     [1, 0, 0, 0],
@@ -21,8 +22,9 @@ let lastTranslationMatrix = [
     [0, 0, 1, 0],
     [0, 0, 0, 1]
 ];
+let temporary;
 let centerMatrix;
-let cameraVector = [0, 0, -2, 1];
+let cameraVector = [0, 0, -1, 0];
 
 export function setABC(_a, _b, _c, _m) {
     a = _a;
@@ -30,35 +32,59 @@ export function setABC(_a, _b, _c, _m) {
     c = _c;
     m = _m;
 }
-export function PseudoTranslate(configurationObject, pseudo) {
+export function PseudoTranslate(configurationObject, pseudo, clear) {
     Elipsoid = [];
     lastTranslationMatrix = getTranslationMatrix(configurationObject, lastTranslationMatrix);
     generateCenterMatrix();
     maxSpecular = -1000000000;
     minSpecular = 1000000000;
     const max = Math.max(a, b, c);
-    for(let i = 0; i + pseudo < 1000; i += pseudo) {
-        for (let j = 0; j + pseudo < 700; j += pseudo) {
-            const z = getElipsoidZ(i - 400, j - 400);
-            if(z !== undefined) {
-                const z2 = getElipsoidZ(i + pseudo - 400, j - 400);
-                const z3 = getElipsoidZ(i - 400, j + pseudo - 400);
-                const z4 = getElipsoidZ(i + pseudo - 400, j + pseudo - 400);
-                const rgb1 = preparePhongSpecular(i, j, z);
-                const rgb2 = preparePhongSpecular(i + pseudo, j, z2);
-                const rgb3 = preparePhongSpecular(i, j + pseudo, z3);
-                const rgb4 = preparePhongSpecular(i + pseudo, j + pseudo, z4);
-                const finalRgb = (rgb1 + rgb1 + rgb3 + rgb4) / 4;
-                if(finalRgb > maxSpecular) {
-                    maxSpecular = finalRgb;
+    if(!Object.keys(rgbArray).length === 0 || rgbArray.constructor !== Object) {
+        for (let property in rgbArray) {
+            if (rgbArray.hasOwnProperty(property)) {
+                const cutted = property.split('_');
+                const i = parseInt(cutted[0], 10);
+                const j = parseInt(cutted[1], 10);
+                Elipsoid.push({x: i, y: j, z: rgbArray[property].z, specular: rgbArray[property].specular});
+                const z2 = getElipsoidZ((i + pseudo - 400)/max, (j - 400)/max);
+                const z3 = getElipsoidZ((i - 400)/max, (j + pseudo - 400)/max);
+
+                rgbArray[i+pseudo+'_'+j]={};
+                rgbArray[i+pseudo+'_'+j].specular = preparePhongSpecular(i+pseudo, j, z2);
+                rgbArray[i+pseudo+'_'+j].z = z2;
+
+                Elipsoid.push({x: i+pseudo, y: j, z: z2, specular: rgbArray[i+pseudo+'_'+j].specular});
+
+                rgbArray[i+'_'+j+pseudo]={};
+                rgbArray[i+'_'+j+pseudo].specular = preparePhongSpecular(i, j+pseudo, z3);
+                rgbArray[i+'_'+j+pseudo].z = z3;
+                Elipsoid.push({x: pseudo, y: j + pseudo, z: z2, specular: rgbArray[i+'_'+j+pseudo].specular});
+            }
+        }
+    } else {
+        for(let i = 0; i + pseudo < 1000; i += pseudo) {
+            for (let j = 0; j + pseudo < 700; j += pseudo) {
+                const z = getElipsoidZ((i - 400)/max, (j - 400)/max);
+                if(z !== undefined) {
+
+                    rgbArray[i+'_'+j]={};
+                    rgbArray[i+'_'+j].specular = preparePhongSpecular(i, j, z);
+                    rgbArray[i+'_'+j].z = z;
+
+                    const finalRgb = rgbArray[i+'_'+j].specular;
+                    if(finalRgb > maxSpecular) {
+                        maxSpecular = finalRgb;
+                    }
+                    if(minSpecular > finalRgb) {
+                        minSpecular = finalRgb;
+                    }
+                    Elipsoid.push({x: i, y: j, z: z, specular: finalRgb});
                 }
-                if(minSpecular > finalRgb) {
-                    minSpecular = finalRgb;
-                }
-                Elipsoid.push({x: i, y: j, z: z === z, specular: finalRgb});
             }
         }
     }
+    if(clear) 
+     rgbArray = {};
     return Elipsoid;
 }
 export function getElipsoidZ(x, y) {
@@ -80,28 +106,29 @@ export function getElipsoidZ(x, y) {
 }
 function generateCenterMatrix() {
     const diagonal = [
-        [a, 0, 0, 0],
-        [0, b, 0, 0],
-        [0, 0, c, 0],
+        [1/Math.pow(a,2), 0, 0, 0],
+        [0,1/Math.pow(b,2), 0, 0],
+        [0, 0,1/Math.pow(c,2), 0],
         [0, 0, 0, -1]
     ];
     centerMatrix = multiplyMatrices(math.transpose(math.inv(lastTranslationMatrix)), diagonal);
     centerMatrix = multiplyMatrices(centerMatrix, math.inv(lastTranslationMatrix));
-    centerMatrix = math.inv(centerMatrix);
     const tm = centerMatrix;
     a1 = tm[2][2];
     b1 = tm[2][3] + tm[0][2];
 
     cameraZ = multiplyVectorAndMatrix(lastTranslationMatrix, cameraVector)[2];
+    rgbArray = {};
 }
 export function generateElipsoid(){ 
     Elipsoid = [];
     generateCenterMatrix();
     maxSpecular = -1000000000;
     minSpecular = 1000000000;
+    const max = Math.max(a, b, c);
     for(let i = 0; i < 1000; i ++) {
         for (let j = 0; j < 700; j ++) {
-            const z = getElipsoidZ(i - 400, j - 400);
+            const z = getElipsoidZ((i-400)/max, (j-400)/max);
             if(z !== undefined) {
                 const rgb = preparePhongSpecular(i, j, z);
                 if(rgb > maxSpecular) {
@@ -110,10 +137,11 @@ export function generateElipsoid(){
                 if(minSpecular > rgb) {
                     minSpecular = rgb;
                 }
-                Elipsoid.push({x: i, y: j, z: z === z, specular: rgb});
+                Elipsoid.push({x: i, y: j, z: z*max, specular: rgb});
             }
         }
     }
+    //lastTranslationMatrix = temporary;
     return Elipsoid;
 }
 export function TranslateElipsoid(configurationObject) {
@@ -126,16 +154,17 @@ export function getABCElipsoid() {
 }
 function getNormalVector(x, y, z) {
     const tm = centerMatrix;
-   return [
-        2 * x * (tm[0][0] + tm[0][1] + tm[0][2] + tm[0][3]),
-        2 * y * (tm[1][0] + tm[1][1] + tm[1][2] + tm[1][3]),
-        2 * z * (tm[2][0] + tm[2][1] + tm[2][2] + tm[2][3])
+   const ret = [
+        (2 * tm[0][0] * x) + (tm[0][1] * y) + (tm[0][2] * z) + tm[0][3] + (tm[1][0] * y) + (tm[2][0] * z) + tm[3][0],
+        (2 * tm[1][1] * y) + (tm[0][1] * x) + (tm[1][0] * x) + (tm[1][2] * z) + tm[1][3] + (tm[2][1] * z) + tm[3][1],
+        (2 * tm[2][2] * z) + (tm[0][2] * x) + (tm[1][2] * y) * (tm[2][0] * x) + (tm[2][1] * y) + tm[2][3] + tm[3][2]
     ];
+    const length = getVectorLength(ret);
+    return [ret[0] / length, ret[1] /length, ret[2] / length];
 }
 function preparePhongSpecular(x, y, z) {
     const normalVector = getNormalVector(x, y, z);
-    const v1Multiv2 = getVectorLength(normalVector)*getVectorLength(cameraVector);
-    const result = Math.pow(multiplyVectorsScalar(normalVector, cameraVector), m);
+    const result = Math.pow(multiplyVectorsScalar(normalVector, cameraVector), 1);
     return result;
 }
 export function getMinMaxSpecular() {

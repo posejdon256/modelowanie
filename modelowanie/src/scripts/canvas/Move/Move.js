@@ -1,11 +1,11 @@
-import { DrawElipsoid, DrawTorus, clearCanvas } from "../Draw/Draw";
-import { TranslateElipsoid } from '../Elipsoid/Elipsoid';
+import { DrawElipsoid, DrawTorus, clearCanvas, pseudoDrawElipsoid } from "../Draw/Draw";
+import { TranslateElipsoid, PseudoTranslate } from '../Elipsoid/Elipsoid';
 
 
 let front = 0;
 let left = 0;
 let top = 0;
-let step = 10;
+let step = 1;
 
 let interval;
 
@@ -18,38 +18,54 @@ function setIntervalForMoving(){
                 top: top
             }
             clearCanvas();
-            DrawElipsoid(TranslateElipsoid(trasnlationObject));
+            pseudoDrawElipsoid(PseudoTranslate(trasnlationObject, 20, true), 20);
+           //DrawElipsoid(TranslateElipsoid(trasnlationObject));
         }, 5);
+    }
+}
+function DrawElipsoidRecurence(i) {
+    if(i < 8)
+        window.setTimeout(function(){
+            DrawElipsoid(TranslateElipsoid({}));
+        }, 100);
+    else {
+        window.setTimeout(function(){
+            DrawElipsoidRecurence(i-4);
+            // DrawElipsoid(TranslateElipsoid({}));
+            pseudoDrawElipsoid(PseudoTranslate({}, i-4), i-4);
+        },100);
     }
 }
 function removeIntervalForMoving(){
     if(front === 0 && left === 0 && top === 0) {
         clearInterval(interval);
         interval = undefined;
+        DrawElipsoidRecurence(20);
+      //  DrawElipsoid(TranslateElipsoid({}));
     }
 }
 export function MoveToTop(){
     if(top !== 0) return;
 
-    top = step;
+    top = -step;
     setIntervalForMoving();
 }
 export function MoveToDown(){
     if(top !== 0) return;
 
-    top = -step;
+    top = step;
     setIntervalForMoving();
 }
 export function MoveToFront(){
     if(front !== 0) return;
 
-    front = 1.01;
+    front = 0.7;
     setIntervalForMoving();
 }
 export function MoveToBack(){
     if(front !== 0) return;
 
-    front = 0.99;
+    front = 1.3;
     setIntervalForMoving();
 }
 export function MoveToLeft(){

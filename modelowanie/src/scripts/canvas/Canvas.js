@@ -25,27 +25,17 @@ export default class Canvas extends Component {
         setPixelColor(255, 255, 0, 254);
         setCanvas(canvas);
         clearCanvas();
-        setABC(16000,16000,10000, 1)
+        setABC(10,10,10, 1)
         DrawElipsoid(TranslateElipsoid({}));
     }
     componentWillReceiveProps(props) {
         
-        //DrawTorus
-        if(props.visibleTorus) { 
-            generateTorus(50.0, 200.0, props.gridX, props.gridY);
-
-            //DrawTorus
-          //  clearCanvas();     
-          //  DrawTorus(TranslateTorus({}));
-        } else {
-           // clearCanvas();
-        }
         const { elipsoid } = props;
         if(elipsoid.X !== this.props.elipsoid.X
         || elipsoid.Y !== this.props.elipsoid.Y
         || elipsoid.Z !== this.props.elipsoid.Z
         || elipsoid.m !== this.props.elipsoid.m) {
-            setABC(1000 * elipsoid.X, 1000 * elipsoid.Y , 1000 * elipsoid.Z, elipsoid.m)
+            setABC(elipsoid.X/5,  elipsoid.Y/5 ,  elipsoid.Z/5, elipsoid.m)
             clearCanvas();
             DrawElipsoid(TranslateElipsoid({}));
         }
