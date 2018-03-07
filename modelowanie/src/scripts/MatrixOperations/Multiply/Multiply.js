@@ -23,8 +23,8 @@ export function multiplyVectorAndMatrix(matrix, vector) {
     return result;
 }
 export function multiplyVectorsScalar(v1, v2) {
-    return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
+    return (v1[0]*v2[0]) + (v1[1]*v2[1]) + (v1[2]*v2[2]);
 }
 export function getVectorLength(v) {
-    return Math.sqrt(Math.pow(v[0], 2) + Math.pow(v[1], 2) + Math.pow(v[1], 2));
+    return Math.sqrt((v[0]*v[0]) + (v[1]*v[1]) + (v[2]*v[2]));
 }

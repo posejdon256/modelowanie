@@ -42,6 +42,7 @@ function drawLine(x1, y1, x2, y2) {
 export function DrawElipsoid(points) {
     const specular = getMinMaxSpecular();
     let _imagedata = _ctx.createImageData(_canvas.width, _canvas.height);
+    console.log(specular);
     for(let i = 0; i < points.length; i ++) {
          const pixelIndex = ((points[i].y * _canvas.width) + points[i].x) * 4;
          _imagedata.data[pixelIndex] = parseInt(255 *(points[i].specular - specular.min)/(specular.max - specular.min), 10);

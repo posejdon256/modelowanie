@@ -25,7 +25,7 @@ export default class Canvas extends Component {
         setPixelColor(255, 255, 0, 254);
         setCanvas(canvas);
         clearCanvas();
-        setABC(10,10,10, 1)
+        setABC(0.2,0.2,0.2, 1)
         DrawElipsoid(TranslateElipsoid({}));
     }
     componentWillReceiveProps(props) {
@@ -35,7 +35,7 @@ export default class Canvas extends Component {
         || elipsoid.Y !== this.props.elipsoid.Y
         || elipsoid.Z !== this.props.elipsoid.Z
         || elipsoid.m !== this.props.elipsoid.m) {
-            setABC(elipsoid.X/5,  elipsoid.Y/5 ,  elipsoid.Z/5, elipsoid.m)
+            setABC(elipsoid.X/100,  elipsoid.Y/100 ,  elipsoid.Z/100, elipsoid.m)
             clearCanvas();
             DrawElipsoid(TranslateElipsoid({}));
         }

@@ -5,7 +5,7 @@ import { TranslateElipsoid, PseudoTranslate } from '../Elipsoid/Elipsoid';
 let front = 0;
 let left = 0;
 let top = 0;
-let step = 1;
+let step = 0.001;
 
 let interval;
 
@@ -31,6 +31,7 @@ function DrawElipsoidRecurence(i) {
     else {
         window.setTimeout(function(){
             DrawElipsoidRecurence(i-4);
+            clearCanvas();
             // DrawElipsoid(TranslateElipsoid({}));
             pseudoDrawElipsoid(PseudoTranslate({}, i-4), i-4);
         },100);

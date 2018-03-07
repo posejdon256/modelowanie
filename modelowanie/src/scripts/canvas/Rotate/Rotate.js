@@ -24,6 +24,7 @@ function DrawElipsoidRecurence(i) {
         window.setTimeout(function(){
             DrawElipsoidRecurence(i-4);
             // DrawElipsoid(TranslateElipsoid({}));
+            clearCanvas();
             pseudoDrawElipsoid(PseudoTranslate({}, i-4), i-4);
         },100);
     }
