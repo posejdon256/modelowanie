@@ -7,7 +7,7 @@ let lastX;
 let lastY;
 let rotationXY = false;
 let rotationZ = false;
-const alpha = 0.07;
+const alpha = 0.10;
 export function StartRotation(x, y, isZ){
     lastX = x;
     lastY = y;

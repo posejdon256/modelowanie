@@ -4,7 +4,7 @@ const f =0.4;
 const e = 1/Math.tan(fov);
 const n = 0.1;
 const a = 1;
-const eyes = 0.05;
+let eyes = 0.03;
 
 const l = -1;
 const t = 1;

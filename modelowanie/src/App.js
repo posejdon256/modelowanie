@@ -14,7 +14,7 @@ class App extends Component {
     this.state = {
       torusVisible: false,
       gridX: 18,
-      gridY: 18
+      gridY: 18,
     };
 
     this.toggleTorus = this.toggleTorus.bind(this);
@@ -46,6 +46,7 @@ class App extends Component {
     return (
       <div className="ab-main-div">
         <Header toggleTorus={this.toggleTorus} />
+        <label>{this.state.eyes}</label>
         <div className="ab-canvas-navbar-container">
           <Canvas 
               visibleTorus={this.state.torusVisible}

@@ -72,36 +72,16 @@ export function DrawTorus(points) {
    _ctx.fillRect( 500, 300, 1, 1 );
 }
 function normalDrawTorus(points, lines) {
-    _ctx.beginPath();
     _ctx.strokeStyle = "rgba("+_r+","+_g+","+_b+","+_a+")";
-    const rs = getRAndr();
-    lines.forEach(line => {
-        if(line[1] < points.length && line[0] < points.length) {
-             drawLine(points[line[0]].x * (rs.R + rs.r) + (500), points[line[0]].y * (rs.R + rs.r)+ (300), points[line[1]].x * (rs.R + rs.r)+ (500), points[line[1]].y * (rs.R + rs.r)+ (300));
-         }
-    });
-    _ctx.stroke();
+    drawTorusLines(lines, _ctx, points);
 }
 function stereoscopyDrawTorus(points, lines) {
     const { left, right } = points;
-    const rs = getRAndr();
-    _ctxStereo2.beginPath();
-    _ctxStereo2.strokeStyle = "rgba(0, 249, 247, 1)";
-    lines.forEach(line => {
-        if(line[1] < left.length && line[0] < left.length) {
-             drawLine(left[line[0]].x * (rs.R + rs.r) + (500), left[line[0]].y * (rs.R + rs.r)+ (300), left[line[1]].x * (rs.R + rs.r)+ (500), left[line[1]].y * (rs.R + rs.r)+ (300), _ctxStereo2);
-         }
-    });
-    _ctxStereo2.stroke();
 
-    _ctxStereo.beginPath();
     _ctxStereo.strokeStyle = "rgba(236, 4, 0, 1)";
-    lines.forEach(line => {
-        if(line[1] < right.length && line[0] < right.length) {
-             drawLine(right[line[0]].x * (rs.R + rs.r) + (500), right[line[0]].y * (rs.R + rs.r)+ (300), right[line[1]].x * (rs.R + rs.r)+ (500), right[line[1]].y * (rs.R + rs.r)+ (300), _ctxStereo);
-         }
-    });
-    _ctxStereo.stroke();
+    _ctxStereo2.strokeStyle = "rgba(0, 249, 247, 1)";
+    drawTorusLines(lines, _ctxStereo2, left);
+    drawTorusLines(lines, _ctxStereo, right);
 
     // mix canvases
 
@@ -121,4 +101,14 @@ function stereoscopyDrawTorus(points, lines) {
     }
     _ctx.putImageData(imgNew, 0, 0);
     
+}
+function drawTorusLines(lines, ctx, points) {
+    const rs = getRAndr();
+    ctx.beginPath();
+    lines.forEach(line => {
+        if(line[1] < points.length && line[0] < points.length && points[line[0]].z > -1 && points[line[1]].z > -1) {
+             drawLine(points[line[0]].x * (rs.R + rs.r) + (500), points[line[0]].y * (rs.R + rs.r)+ (300), points[line[1]].x * (rs.R + rs.r)+ (500), points[line[1]].y * (rs.R + rs.r)+ (300), ctx);
+         }
+    });
+    ctx.stroke();
 }
