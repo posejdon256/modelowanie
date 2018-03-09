@@ -6,9 +6,9 @@ export default class ElipsoidNavbar extends Component {
 
         this.state = {
             radius: {
-                X: 1,
-                Y: 1,
-                Z: 1,
+                X: 10,
+                Y: 10,
+                Z: 10,
                 m: 1
             }
         };
@@ -54,19 +54,19 @@ export default class ElipsoidNavbar extends Component {
         <div>
             <div>
                 <label>Promień X elipsoidy</label>
-                <input type="range" min="1" max="100" onChange={this.updateElipsoideX} />
+                <input type="range" min="5" max="20" onChange={this.updateElipsoideX} />
             </div>
             <div>
                 <label>Promień Y elipsoidy</label>
-                <input type="range" min="1" max="100" onChange={this.updateElipsoideY} />
+                <input type="range" min="5" max="20" onChange={this.updateElipsoideY} />
             </div>
             <div>
                 <label>Promień Z elipsoidy</label>
-                <input type="range" min="1" max="100" onChange={this.updateElipsoideZ} />
+                <input type="range" min="5" max="20" onChange={this.updateElipsoideZ} />
             </div>
             <div>
                 <label>Natężenie światła</label>
-                <input type="range" min="1" max="99" onChange={this.updateElipsoideM} />
+                <input type="range" min="0.1" max="100" onChange={this.updateElipsoideM} />
             </div>
         </div>
         );

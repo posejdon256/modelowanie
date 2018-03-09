@@ -87,28 +87,28 @@ export function PseudoTranslate(configurationObject, pseudo, clear) {
      rgbArray = {};
     return Elipsoid;
 }
-export function getElipsoidZ(x, y) {
+export function getElipsoidZ(x, y, showZ) {
     const a2 = a1;
-    const b2 = b1  + (centerMatrix[2][0] + centerMatrix[2][0])*x + (centerMatrix[2][1] + centerMatrix[2][1])*y;
-    const c2 = (centerMatrix[1][0] + centerMatrix[0][1])* x * y +
-        (centerMatrix[3][0] + centerMatrix[0][3]) * x +
-        (centerMatrix[1][3] + centerMatrix[3][1]) * y +
-        centerMatrix[0][0] * Math.pow(x, 2) +
-        centerMatrix[1][1] * Math.pow(y, 2)
+    const b2 = b1  + ((centerMatrix[2][0] + centerMatrix[0][2])*x) + ((centerMatrix[2][1] + centerMatrix[1][2])*y);
+    const c2 = ((centerMatrix[1][0] + centerMatrix[0][1])* x * y) +
+        ((centerMatrix[3][0] + centerMatrix[0][3]) * x) +
+        ((centerMatrix[1][3] + centerMatrix[3][1]) * y) +
+        (centerMatrix[0][0] * Math.pow(x, 2)) +
+        (centerMatrix[1][1] * Math.pow(y, 2))
         + centerMatrix[3][3];
-    const delta = Math.pow(b2, 2) - 4 * a2 * c2;
+    const delta = Math.pow(b2, 2) - (4 * a2 * c2);
     if(delta < 0) {
         return undefined;
     }
     const z1 = (-b2 - Math.sqrt(delta))/(2*a2);
-    const z2 = (-b2 + Math.sqrt(delta))/(2*a2);    
-    return Math.min(z1 - cameraZ, z2 - cameraZ) ? z1 : z2;
+    const z2 = (-b2 + Math.sqrt(delta))/(2*a2);   
+    return Math.min(z1, z2) ? z1 : z2;
 }
 function generateCenterMatrix() {
     const diagonal = [
         [1/Math.pow(a,2), 0, 0, 0],
-        [0,1/Math.pow(b,2), 0, 0],
-        [0, 0,1/Math.pow(c,2), 0],
+        [0, 1/Math.pow(b,2), 0, 0],
+        [0, 0, 1/Math.pow(c,2), 0],
         [0, 0, 0, -1]
     ];
     centerMatrix = multiplyMatrices(math.transpose(math.inv(lastTranslationMatrix)), diagonal);
@@ -117,7 +117,7 @@ function generateCenterMatrix() {
     a1 = tm[2][2];
     b1 = tm[2][3] + tm[3][2];
 
-    cameraZ = multiplyVectorAndMatrix(lastTranslationMatrix, cameraVector)[2];
+    cameraZ = cameraVector[2];
     rgbArray = {};
 }
 export function generateElipsoid(){ 
@@ -128,9 +128,11 @@ export function generateElipsoid(){
     const max = 1000;
     for(let i = 0; i < 1000; i ++) {
         for (let j = 0; j < 700; j ++) {
-            const z = getElipsoidZ((i-400)/max, (j-400)/max);
+            const x = (i - 400) / max;
+            const y = (j - 400) / max;
+            const z = getElipsoidZ(x, y);
             if(z !== undefined) {
-                const rgb = preparePhongSpecular((i-400)/max, (j-400)/max, z);
+                const rgb = preparePhongSpecular(x, y, z);
                 if(rgb > maxSpecular) {
                     maxSpecular = rgb;
                 }
@@ -153,7 +155,7 @@ export function getABCElipsoid() {
     return {a: a, b: b, c: c};
 }
 function getNormalVector(x, y, z) {
-    const tm = centerMatrix;
+    const tm = centerMatrix; 
    const ret = [
         (2 * tm[0][0] * x) + (tm[0][1] * y) + (tm[0][2] * z) + tm[0][3] + (tm[1][0] * y) + (tm[2][0] * z) + tm[3][0],
         (2 * tm[1][1] * y) + (tm[0][1] * x) + (tm[1][0] * x) + (tm[1][2] * z) + tm[1][3] + (tm[2][1] * z) + tm[3][1],
@@ -163,10 +165,11 @@ function getNormalVector(x, y, z) {
     return [ret[0] / length, ret[1] /length, ret[2] / length];
 }
 function preparePhongSpecular(x, y, z) {
-    const x1 = x;
-    const y1 = y ;
-    const normalVector = getNormalVector(x1, y1, z);
-    const result = multiplyVectorsScalar(normalVector, cameraVector);
+    const normalVector = getNormalVector(x, y, z);
+    const result = Math.pow(multiplyVectorsScalar(normalVector, cameraVector), m);
+    if(result < 0){
+        return 0;
+    }
     if(result > 1)
         return 1;
     return result;

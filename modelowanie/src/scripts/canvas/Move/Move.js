@@ -25,16 +25,13 @@ function setIntervalForMoving(){
 }
 function DrawElipsoidRecurence(i) {
     if(i < 8)
-        window.setTimeout(function(){
             DrawElipsoid(TranslateElipsoid({}));
-        }, 100);
     else {
-        window.setTimeout(function(){
-            DrawElipsoidRecurence(i-4);
-            clearCanvas();
-            // DrawElipsoid(TranslateElipsoid({}));
-            pseudoDrawElipsoid(PseudoTranslate({}, i-4), i-4);
-        },100);
+        for(let i = 20; i > 4; i -=4) {
+            //  clearCanvas();
+              pseudoDrawElipsoid(PseudoTranslate({}, i), i);
+          }
+          DrawElipsoid(TranslateElipsoid({}));
     }
 }
 function removeIntervalForMoving(){
@@ -60,13 +57,13 @@ export function MoveToDown(){
 export function MoveToFront(){
     if(front !== 0) return;
 
-    front = 0.7;
+    front = 1.01;
     setIntervalForMoving();
 }
 export function MoveToBack(){
     if(front !== 0) return;
 
-    front = 1.3;
+    front = 0.99;
     setIntervalForMoving();
 }
 export function MoveToLeft(){

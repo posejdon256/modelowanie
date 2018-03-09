@@ -40,13 +40,11 @@ function drawLine(x1, y1, x2, y2) {
     _ctx.lineTo(x2, y2);
 }
 export function DrawElipsoid(points) {
-    const specular = getMinMaxSpecular();
     let _imagedata = _ctx.createImageData(_canvas.width, _canvas.height);
-    console.log(specular);
     for(let i = 0; i < points.length; i ++) {
          const pixelIndex = ((points[i].y * _canvas.width) + points[i].x) * 4;
-         _imagedata.data[pixelIndex] = parseInt(255 *(points[i].specular - specular.min)/(specular.max - specular.min), 10);
-         _imagedata.data[pixelIndex + 1] = parseInt(255 *(points[i].specular - specular.min)/(specular.max - specular.min), 10);
+         _imagedata.data[pixelIndex] = parseInt(255 *points[i].specular, 10);
+         _imagedata.data[pixelIndex + 1] = parseInt(255 *points[i].specular, 10);
          _imagedata.data[pixelIndex + 2] = 0;
          _imagedata.data[pixelIndex + 3] = 255;
        // drawPixel(points[i].x * max, points[i].y * max, parseInt(255 *(points[i].specular - specular.min)/(specular.max - specular.min), 10));
@@ -54,12 +52,9 @@ export function DrawElipsoid(points) {
     _ctx.putImageData(_imagedata, 0, 0);
 }
 export function pseudoDrawElipsoid(points, pseudo) {
-    const abc = getABCElipsoid();
-    const max = Math.max(abc.a, abc.b, abc.c);
-    const specular = getMinMaxSpecular();
     for(let i = 0; i < points.length; i ++) {
-        _r = parseInt(255 *(points[i].specular - specular.min)/(specular.max - specular.min), 10);
-        _g = parseInt(255 *(points[i].specular - specular.min)/(specular.max - specular.min), 10);
+        _r = parseInt(255 * points[i].specular, 10);
+        _g = parseInt(255 * points[i].specular, 10);
         _b = 0;
         _ctx.fillStyle = "rgba("+1*parseInt(_r, 10)+","+1*parseInt(_g, 10)+","+0+","+1+")";
         _ctx.fillRect(points[i].x ,points[i].y, pseudo, pseudo );

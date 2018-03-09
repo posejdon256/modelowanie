@@ -15,20 +15,6 @@ export function StartRotation(x, y, isZ){
     else
         rotationXY = true;
 }
-function DrawElipsoidRecurence(i) {
-    if(i < 8)
-        window.setTimeout(function(){
-            DrawElipsoid(TranslateElipsoid({}));
-        }, 100);
-    else {
-        window.setTimeout(function(){
-            DrawElipsoidRecurence(i-4);
-            // DrawElipsoid(TranslateElipsoid({}));
-            clearCanvas();
-            pseudoDrawElipsoid(PseudoTranslate({}, i-4), i-4);
-        },100);
-    }
-}
 export function StopRoatation(isZ){
     lastX = undefined;
     lastY = undefined;
@@ -36,7 +22,11 @@ export function StopRoatation(isZ){
         rotationZ = false;
     else
         rotationXY = false;
-        DrawElipsoidRecurence(20);
+        for(let i = 20; i > 4; i -=4) {
+          //  clearCanvas();
+            pseudoDrawElipsoid(PseudoTranslate({}, i), i);
+        }
+        DrawElipsoid(TranslateElipsoid({}));
         
 }
 export function TakeMouseMove(x, y){
