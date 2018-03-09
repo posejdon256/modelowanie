@@ -1,11 +1,10 @@
 import { multiplyMatrices, multiplyVectorAndMatrix } from "../../../MatrixOperations/Multiply/Multiply";
-import getRotationArray, {getRotationArrayByPoint} from "../Rotation/Rotation";
 import { setShiftVector, getShiftMatrix, ShiftWithRotation, updateShift } from "../Shift/Shift";
 import getProjectionMatrix from '../Projection/Projection';
 import getScaleMatrix from "../Scale/Scale";
 import normalizeVector from "../../../Normalization/Normalize";
 
-
+let stereoscopy;
 let translationPoints = [];
 export function setTranslationPoints(_points) {
     translationPoints = _points;
@@ -53,11 +52,26 @@ export default function Translate(translationObject) {
     lastTranslation = translationMatrix;
 
     //projection
-    const projectioMatrix = multiplyMatrices(getProjectionMatrix(1), translationMatrix);
-
+    if(!stereoscopy)
+        return normalTranslation();
+    else
+        return stereoscopyTranslation();
+}
+function normalTranslation() {
+    const projectioMatrix = multiplyMatrices(getProjectionMatrix(1), lastTranslation);
     return generateTranslation(projectioMatrix);
 }
+function stereoscopyTranslation() {
+    const leftEye = multiplyMatrices(getProjectionMatrix(4), lastTranslation);
+    const rightEye = multiplyMatrices(getProjectionMatrix(5), lastTranslation);
 
+    const leftEyeResult = generateTranslation(leftEye);
+    const rightEyeResult = generateTranslation(rightEye);
+    return { left: leftEyeResult, right: rightEyeResult };
+}
+export function setStereoscopyTranslation(_stereoscopy) {
+    stereoscopy = _stereoscopy;
+}
 function generateTranslation(translationMatrix) {
     const result = [];
     translationPoints.forEach(point => {

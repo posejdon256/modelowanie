@@ -1,5 +1,5 @@
 import Translate from "../Translation/TranslationCenter/TranslationCenter";
-import Draw, { clearCanvas } from "../Draw/Draw";
+import { DrawTorus, clearCanvas } from "../Draw/Draw";
 
 
 let front = 0;
@@ -20,7 +20,7 @@ function setIntervalForMoving(){
             Translate(trasnlationObject);
             const translated = Translate(trasnlationObject);
             clearCanvas();
-            Draw(translated);
+            DrawTorus(translated);
         }, 5);
     }
 }

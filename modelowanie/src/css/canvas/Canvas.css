@@ -11,6 +11,9 @@
     position: absolute;
     top: 20px;
     left: 20px;
-    background: #370037;
+    background: #000000;
 
+}
+.ab-canvas-stereopscopy {
+    display: none;
 }

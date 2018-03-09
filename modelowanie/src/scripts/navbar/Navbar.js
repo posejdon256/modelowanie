@@ -7,12 +7,16 @@ export default class Navbar extends Component {
 
         this.updateXGrid = this.updateXGrid.bind(this);
         this.updateYGrid = this.updateYGrid.bind(this);
+        this.updateChecked = this.updateChecked.bind(this);
     }
     updateXGrid(event) {
         this.props.updateXGrid(parseInt(event.target.value, 10));
     }
     updateYGrid(event) {
         this.props.updateYGrid(parseInt(event.target.value, 10));
+    }
+    updateChecked(event) {
+        this.props.updateChecked(event.target.checked);
     }
     render(){
         return(
@@ -25,6 +29,11 @@ export default class Navbar extends Component {
                 <label>Siatka pionowa</label>
                 <input type="range" min="2" max="100" onChange={this.updateYGrid} />
             </div>
+            <div>
+                <label htmlFor="3dTorus">Stereoskopia</label>
+                <input id="3dTorus" type="checkbox" onChange={this.updateChecked} />
+            </div>
+            <div className="test1"><div className="test2"></div></div>
         </div>);
     }
 }

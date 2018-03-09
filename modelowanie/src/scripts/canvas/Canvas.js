@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import '../../css/canvas/Canvas.css';
-import {DrawTorus, setPixelColor, setCanvas, clearCanvas } from './Draw/Draw';
+import {DrawTorus, setPixelColor, setCanvas, clearCanvas, setStereoscopyCancas } from './Draw/Draw';
 import KeyboardCenter from './Keyboard/KeyboardCenter';
 import TranslationCenter, { setTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
 import MouseCenter from './Mouse/MouseCenter';
 import generateTorus, { getTorusVertices } from './Torus/Torus';
-import DrawTorus from './Draw/Draw';
+import { setStereoscopy } from './Stereoscopy/Stereoscopy';
 
 export default class Canvas extends Component {
     constructor(props) {
@@ -19,12 +19,15 @@ export default class Canvas extends Component {
 
         //variables
         const canvas = this.refs.abCanvas;
+        const canvasStereo = this.refs.stereoscopyHelpCanvas;
+        const canvasStereo2 = this.refs.stereoscopyHelpCanvas2;
         generateTorus(50.0, 200.0, this.props.gridX, this.props.gridY);
      //   const torus = getTorusVertices();
 
         // settings
         setPixelColor(254, 254, 254, 254);
         setCanvas(canvas);
+        setStereoscopyCancas(canvasStereo, canvasStereo2);
       //  setTranslationPoints(torus);
 
         //move torus
@@ -33,6 +36,9 @@ export default class Canvas extends Component {
     componentWillReceiveProps(props) {
         
         //DrawTorus
+        if(props.stereoscopy !== this.props.stereoscopy) {
+            setStereoscopy(props.stereoscopy);
+        }
         if(props.visibleTorus) { 
             generateTorus(50.0, 200.0, props.gridX, props.gridY);
             const torus = getTorusVertices();
@@ -40,7 +46,7 @@ export default class Canvas extends Component {
 
             //DrawTorus
             clearCanvas();     
-         //   DrawTorus(TranslationCenter({}));
+            DrawTorus(TranslationCenter({}));
         } else {
             clearCanvas();
         }
@@ -60,6 +66,8 @@ export default class Canvas extends Component {
             onMouseDown={this.mouseFunction}
             onMouseUp={this.mouseFunction}
             onMouseMove={this.mouseFunction}/>
+            <canvas ref="stereoscopyHelpCanvas" className="abcanvas ab-canvas-stereopscopy" width="1000px" height="700px" />
+            <canvas ref="stereoscopyHelpCanvas2" className="abcanvas ab-canvas-stereopscopy" width="1000px" height="700px" />
         </div>);
     }
 }

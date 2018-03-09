@@ -20,11 +20,17 @@ class App extends Component {
     this.toggleTorus = this.toggleTorus.bind(this);
     this.updateXGrid = this.updateXGrid.bind(this);
     this.updateYGrid = this.updateYGrid.bind(this);
+    this.updateChecked = this.updateChecked.bind(this);
   }
   toggleTorus() {
     this.setState({
       torusVisible: !this.state.torusVisible,
     })
+  }
+  updateChecked(stereoscopy) {
+    this.setState({
+      stereoscopy: stereoscopy
+    });
   }
   updateXGrid(gridNumber) {
     this.setState({
@@ -41,13 +47,16 @@ class App extends Component {
       <div className="ab-main-div">
         <Header toggleTorus={this.toggleTorus} />
         <div className="ab-canvas-navbar-container">
-          <Canvas visibleTorus={this.state.torusVisible}
+          <Canvas 
+              visibleTorus={this.state.torusVisible}
               gridX={this.state.gridX}
               gridY={this.state.gridY}
+              stereoscopy={this.state.stereoscopy}
               />
           <NavBar 
             updateXGrid={this.updateXGrid}
             updateYGrid={this.updateYGrid}
+            updateChecked={this.updateChecked}
           />
         </div>
       </div>
