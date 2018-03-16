@@ -22,7 +22,9 @@ export default class Navbar extends Component {
             that.setState({
                 cursorX: cursor.x.toFixed(2),
                 cursorY: cursor.y.toFixed(2),
-                cursorZ: cursor.z.toFixed(2)
+                cursorZ: cursor.z.toFixed(2),
+                cursorPosX: cursor.screenX,
+                cursorPosY: cursor.screenY
             });
         }, 100);
     }
@@ -54,6 +56,10 @@ export default class Navbar extends Component {
             <div>
                 <label>Pozycja kursora:</label>
                 <label>{"x: " + this.state.cursorX + " y: " + this.state.cursorY + " z: " + this.state.cursorZ}</label>
+            </div>
+            <div>
+                <label>Współrzędne ekranowe:</label>
+                <label>{"x: " + this.state.cursorPosX + " y: " + this.state.cursorPosY}</label>
             </div>
         </div>);
     }

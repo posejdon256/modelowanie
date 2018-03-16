@@ -1,6 +1,7 @@
 import { MoveToFront, MoveToLeft, MoveToRight, StopMovingLeft, StopMovingRight, MoveToTop, MoveToBack, StopMovingTop, StopMovingDown, MoveToDown, StopMovingFront, StopMovingBack } from "../Move/Move";
-import { MoveToFrontCursor, MoveToLeftCursor, MoveToTopCursor, MoveToDownCursor, MoveToRightCursor, StopMovingLeftCursor, StopMovingDownCursor, StopMovingRightCursor, StopMovingTopCursor } from '../Move/MoveCursor';
+import { MoveToFrontCursor, MoveToLeftCursor, MoveToTopCursor, MoveToDownCursor, MoveToRightCursor, StopMovingLeftCursor, StopMovingDownCursor, StopMovingRightCursor, StopMovingTopCursor, MoveToBackCursor, StopMovingFrontCursor, StopMovingBackCursor, RemoveCatchPoint, CatchPoint } from '../Move/MoveCursor';
 import { addPoint } from "../Points/Points";
+import { getCanvas } from "../Draw/Draw";
 export default function KeyboardCenter(event) {
     if(event.type === 'keydown') {
         KeyDown(event);
@@ -44,6 +45,18 @@ function KeyDown(event) {
             addPoint();
             event.preventDefault();
             break;
+        case 38: //up
+            MoveToFrontCursor();
+            event.preventDefault();
+            break;
+        case 40: //down
+            MoveToBackCursor();
+            event.preventDefault();
+            break;
+        case 72: //H
+            const rect = getCanvas().getBoundingClientRect();
+            CatchPoint();
+            break;
         default:
             break;
     }
@@ -79,6 +92,17 @@ function KeyUp(event) {
             break;
         case 222: //'
             StopMovingRightCursor();
+            break;
+        case 38: //up
+            StopMovingFrontCursor();
+            event.preventDefault();
+            break;
+        case 40: //down
+            StopMovingBackCursor();
+            event.preventDefault();
+            break;
+        case 72: //H
+            RemoveCatchPoint();
             break;
         default:
             break;

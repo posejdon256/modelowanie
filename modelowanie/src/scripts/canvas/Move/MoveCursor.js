@@ -1,20 +1,25 @@
 import Translate from "../Translation/TranslationCenter/TranslationCenter";
 import { DrawPoints, clearCanvas } from "../Draw/Draw";
-import { updateCursor } from "../Cursor/Cursor";
+import { updateCursor, getCursor } from "../Cursor/Cursor";
 import Redraw from '../Draw/Redraw';
+import { selectPoints } from "../Mouse/SelectPoint";
+import { updatePoint } from "../Points/Points";
 
 
 let front = 0;
 let left = 0;
 let top = 0;
 let step = 0.0007;
+let catchedPoint = undefined;
 
 let interval;
 
 function setIntervalForMoving(){
     if(!interval) {
         interval = setInterval(function(){
-            updateCursor(left, top, 0);
+            updateCursor(left, top, front);
+            if(catchedPoint !== undefined)
+                updatePoint(catchedPoint.id, left, top, front);
             Redraw();
         }, 5);
     }
@@ -24,6 +29,13 @@ function removeIntervalForMoving(){
         clearInterval(interval);
         interval = undefined;
     }
+}
+export function CatchPoint() {
+    const cursor = getCursor();
+    catchedPoint = selectPoints(cursor.x, cursor.y, true, cursor.z);
+}
+export function RemoveCatchPoint(x, y) {
+    catchedPoint = undefined;
 }
 export function MoveToTopCursor(){
     if(top !== 0) return;
@@ -40,13 +52,13 @@ export function MoveToDownCursor(){
 export function MoveToFrontCursor(){
     if(front !== 0) return;
 
-    front = 1.01;
+    front = step;
     setIntervalForMoving();
 }
 export function MoveToBackCursor(){
     if(front !== 0) return;
 
-    front = 0.99;
+    front = -step;
     setIntervalForMoving();
 }
 export function MoveToLeftCursor(){

@@ -1,7 +1,8 @@
 import React, { Component} from 'react';
 import '../../../css/navbar/Navbar.css';
 import trash from '../../../pictures/trash.png';
-import { removePoint, updatePointName } from '../../canvas/Points/Points';
+import select from '../../../pictures/select.png';
+import { removePoint, updatePointName, selectPoint } from '../../canvas/Points/Points';
 
 export default class List extends Component {
 
@@ -28,6 +29,11 @@ export default class List extends Component {
             points: removePoint(id)
         });
     }
+    selectPoint(id) {
+        this.setState({
+            points: selectPoint(id)
+        });
+    }
     render() {
         const points  = this.state.points;
         return(
@@ -39,9 +45,12 @@ export default class List extends Component {
                         return (
                         <li className="ab-point-list-li">
                             <input className="ab-point-list-input" key={point.id} type="text" value={point.name} onChange={(e) => this.updatePointName(point.id, e.target.value)}/>
+                            <label className="ab-points-list-datas">{"x: " + point.x.toFixed(2) + " " + "y: " + point.y.toFixed(2) + " " + "z: " + point.z.toFixed(2) + " "}</label>
                             <button className="ab-delete-point-button" onClick={(e) => this.removePoint(point.id)}>
-                                <label>{"x: " + point.x.toFixed(2) + " " + "y: " + point.y.toFixed(2) + " " + "z: " + point.z.toFixed(2) + " "}</label>
                                 <img className="ab-delete-point" src={trash} alt="trash" />
+                            </button>
+                            <button className="ab-points-list-select-button" onClick={(e) => this.selectPoint(point.id)}>
+                                <img className="ab-select-point" src={select} alt="select" />
                             </button>
                         </li>
                         );

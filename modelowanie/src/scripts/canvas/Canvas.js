@@ -6,6 +6,7 @@ import TranslationCenter, { setTranslationPoints } from './Translation/Translati
 import MouseCenter from './Mouse/MouseCenter';
 import generateTorus, { getTorusVertices } from './Torus/Torus';
 import { setStereoscopy } from './Stereoscopy/Stereoscopy';
+import Redraw from './Draw/Redraw';
 
 export default class Canvas extends Component {
     constructor(props) {
@@ -45,8 +46,7 @@ export default class Canvas extends Component {
             setTranslationPoints(torus);
 
             //DrawTorus
-            clearCanvas();     
-            Draw(TranslationCenter({}));
+           Redraw();
         }
     }
     keyFunction(event) {

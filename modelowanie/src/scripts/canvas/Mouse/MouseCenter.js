@@ -1,4 +1,6 @@
 import { StartRotation, StopRoatation, TakeMouseMove } from "../Rotate/Rotate";
+import { selectPoints } from "./SelectPoint";
+import { getCanvas } from "../Draw/Draw";
 
 export default function MouseCenter(event) {
     if(event.type === 'mousedown') {
@@ -28,6 +30,8 @@ function MouseUp(event) {
     StopRoatation();
     switch(event.button) {
         case 0: //Left
+            const rect = getCanvas().getBoundingClientRect();
+            selectPoints(event.clientX - rect.left, event.clientY - rect.top);
             StopRoatation(false);
             break;
         case 2: //Right

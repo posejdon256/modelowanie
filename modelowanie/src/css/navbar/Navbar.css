@@ -13,11 +13,11 @@ label {
 .ab-ul-points{
     max-height: 200px;
     overflow-x: hidden;
-    width: 400px;
+    width: 450px;
     overflow-y: scroll;
     list-style-type: none;
 }
-.ab-delete-point{
+.ab-delete-point, .ab-select-point{
     width: 30px;
     height: 30px;
 }
@@ -39,4 +39,18 @@ label {
 .ab-point-list-li{
     position: relative;
     height: 32px;
+}
+.ab-points-list-datas {
+    position: absolute;
+    top: 0;
+    left: 180px;
+}
+.ab-points-list-select-button {
+    position: absolute;
+    top: 0;
+    left: 350px;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
 }
