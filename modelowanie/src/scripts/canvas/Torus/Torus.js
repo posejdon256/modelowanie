@@ -5,6 +5,7 @@ let _r = 0;
 let _R = 0;
 let _gridX = 0.3;
 let _gridY = 0.3;
+let visible = false;
 /**
  * Tworzy tablice z wierzchołkami torusa
  */
@@ -13,6 +14,12 @@ function setTorusParameters(r, R, gridX, gridY) {
     _R = R;
     _gridX = gridX;
     _gridY = gridY;
+}
+export function toggleTorus() {
+    visible = !visible;
+}
+export function getTorusVisibility(){
+    return visible;
 }
 export default function generateTorus(r, R, gridX, gridY) {
     if(TorusVertices.length !== 0 && gridX === _gridX && gridY === _gridY) {

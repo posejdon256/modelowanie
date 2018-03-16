@@ -1,4 +1,4 @@
-import { getTorusLines, getRAndr } from "../Torus/Torus";
+import { getTorusLines, getRAndr, getTorusVisibility } from "../Torus/Torus";
 
 
 let _r = 0;
@@ -60,31 +60,36 @@ function drawLine(x1, y1, x2, y2, ctx) {
     localContext.moveTo(x1, y1);
     localContext.lineTo(x2, y2);
 }
-export function DrawTorus(points) {
+export function Draw(points) {
     clearCanvas();
-   const lines = getTorusLines();
-   if(!stereoscopy) {
-        normalDrawTorus(points, lines);
-   } else {
-        stereoscopyDrawTorus(points, lines);
-   }
+    const torusVisible = getTorusVisibility();
+    if(torusVisible) {
+        torusDraw(points);
+    }
+    if(stereoscopy){
+        stereoscopyDraw();
+    }
    _ctx.fillStyle = "rgba(255, 255, 255, 1)";
    _ctx.fillRect( 500, 300, 1, 1 );
 }
-function normalDrawTorus(points, lines) {
-    _ctx.strokeStyle = "rgba("+_r+","+_g+","+_b+","+_a+")";
-    drawTorusLines(lines, _ctx, points);
+function torusDraw(points){
+    const lines = getTorusLines();
+    if(!stereoscopy) {
+        _ctx.strokeStyle = "rgba("+_r+","+_g+","+_b+","+_a+")";
+        drawTorusLines(lines, _ctx, points);
+    } else {
+        const { left, right } = points;
+        
+        _ctxStereo.strokeStyle = "rgba(236, 4, 0, 1)";
+        _ctxStereo2.strokeStyle = "rgba(0, 249, 247, 1)";
+        if(drawTorusLines) {
+            drawTorusLines(lines, _ctxStereo2, left);
+            drawTorusLines(lines, _ctxStereo, right);
+        }
+    }
 }
-function stereoscopyDrawTorus(points, lines) {
-    const { left, right } = points;
-
-    _ctxStereo.strokeStyle = "rgba(236, 4, 0, 1)";
-    _ctxStereo2.strokeStyle = "rgba(0, 249, 247, 1)";
-    drawTorusLines(lines, _ctxStereo2, left);
-    drawTorusLines(lines, _ctxStereo, right);
-
+function stereoscopyDraw() {
     // mix canvases
-
     const imgLeft = _ctxStereo2.getImageData(0, 0, _width, _height);
     
     const imgRight = _ctxStereo.getImageData(0, 0, _width, _height);
@@ -95,18 +100,19 @@ function stereoscopyDrawTorus(points, lines) {
         imgNew.data[i+1] = Math.min(imgLeft.data[i + 1] + imgRight.data[i + 1], 255);
         imgNew.data[i+2] = Math.min(imgLeft.data[i + 2] + imgRight.data[i + 2], 255);
         imgNew.data[i+3] = 255
-        if(imgLeft.data[i] !== 0 || imgLeft.data[i + 1 ] !== 0 || imgLeft.data[i + 2] !== 0) {
-            // console.log(imgNew.data[i], imgNew.data[i + 1], imgNew.data[ i + 2]);
-        }
     }
-    _ctx.putImageData(imgNew, 0, 0);
-    
+    _ctx.putImageData(imgNew, 0, 0);   
 }
 function drawTorusLines(lines, ctx, points) {
     const rs = getRAndr();
     ctx.beginPath();
     lines.forEach(line => {
-        if(line[1] < points.length && line[0] < points.length && points[line[0]].z > -1 && points[line[1]].z > -1) {
+        let bla = 10;
+        let blaZ = 100;
+        if(line[1] < points.length && line[0] < points.length && points[line[0]].z < 1 && points[line[0]].z > -blaZ && points[line[0]].x < bla && points[line[0]].x > -bla
+            && points[line[0]].y < bla  && points[line[0]].y > -bla && points[line[1]].z < 1 && points[line[1]].z > -blaZ && points[line[1]].x < bla && points[line[1]].x > -bla
+            && points[line[1]].y < bla && points[line[1]].y > -bla) {
+            //console.log(points[line[0]].z, points[line[1]].x);
              drawLine(points[line[0]].x * (rs.R + rs.r) + (500), points[line[0]].y * (rs.R + rs.r)+ (300), points[line[1]].x * (rs.R + rs.r)+ (500), points[line[1]].y * (rs.R + rs.r)+ (300), ctx);
          }
     });

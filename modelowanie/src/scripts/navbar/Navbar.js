@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../../css/navbar/Navbar.css';
+import List from './NavbarPoints/List';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -33,7 +34,7 @@ export default class Navbar extends Component {
                 <label htmlFor="3dTorus">Stereoskopia</label>
                 <input id="3dTorus" type="checkbox" onChange={this.updateChecked} />
             </div>
-            <div className="test1"><div className="test2"></div></div>
+            <List points={this.props.points}/>
         </div>);
     }
 }

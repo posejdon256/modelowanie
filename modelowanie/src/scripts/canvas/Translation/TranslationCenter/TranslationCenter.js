@@ -58,7 +58,7 @@ export default function Translate(translationObject) {
         return stereoscopyTranslation();
 }
 function normalTranslation() {
-    const projectioMatrix = multiplyMatrices(getProjectionMatrix(1), lastTranslation);
+    const projectioMatrix = multiplyMatrices(getProjectionMatrix(3), lastTranslation);
     return generateTranslation(projectioMatrix);
 }
 function stereoscopyTranslation() {
@@ -75,6 +75,7 @@ export function setStereoscopyTranslation(_stereoscopy) {
 function generateTranslation(translationMatrix) {
     const result = [];
     translationPoints.forEach(point => {
+        //if(point.z > -0.5)
         result.push(generateTranslatedPoint(point, translationMatrix));
     });
     return result;
@@ -82,6 +83,7 @@ function generateTranslation(translationMatrix) {
 function generateTranslatedPoint(point, translationMatrix) {
     const pointMatrix = [point.x, point.y, point.z, 1];
     const result = normalizeVector(multiplyVectorAndMatrix(translationMatrix, pointMatrix));
+   //console.log(result[2]);
     return {
         x: result[0],
         y: result[1],

@@ -17,10 +17,10 @@ const projectMatrix1 = [
     [0, 0, -f*n/(f-n), 1]
 ];
 const projectMatrixAnia = [
-    [1, 0, 1, 0],
-    [0, 1, 1, 0],
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
     [0, 0, 1, 0],
-    [0, 0, 0, 1]
+    [0, 0, 1 / r, 1]
 ];
 const projectMatrix2 = [
     [2 * n / (r - l), 0, (r + l) / (r - l), 0],
@@ -31,14 +31,14 @@ const projectMatrix2 = [
 const projectionMatrixStereoscopyLeft = [
     [1, 0, -(eyes) / (2 * r), 0],
     [0, 1, 0, 0],
-    [0, 0, 0, 0],
+    [0, 0, 1, 0],
     [0, 0, 1 / r, 1]
 ];
 
 const projectionMatrixStereoscopyRight = [
     [1, 0, (eyes) / (2 * r), 0],
     [0, 1, 0, 0],
-    [0, 0, 0, 0],
+    [0, 0, 1, 0],
     [0, 0, 1 / r, 1]
 ];
 export default function getProjectionMatrix(number) {

@@ -8,6 +8,10 @@ import NavBar from './scripts/navbar/Navbar';
 import Canvas from './scripts/canvas/Canvas';
 import Header from './scripts/header/Header';
 
+//additional dependencies
+import { addPoint, getPoints } from './scripts/canvas/Points/Points';
+import { toggleTorus, getTorusVisibility } from './scripts/canvas/Torus/Torus';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -15,17 +19,26 @@ class App extends Component {
       torusVisible: false,
       gridX: 18,
       gridY: 18,
+      points: []
     };
 
     this.toggleTorus = this.toggleTorus.bind(this);
     this.updateXGrid = this.updateXGrid.bind(this);
     this.updateYGrid = this.updateYGrid.bind(this);
     this.updateChecked = this.updateChecked.bind(this);
+    this.addPoint = this.addPoint.bind(this);
   }
   toggleTorus() {
+    toggleTorus();
     this.setState({
-      torusVisible: !this.state.torusVisible,
+      torusVisible: getTorusVisibility()
     })
+  }
+  addPoint() {
+    addPoint();
+    this.setState({
+      points: getPoints()
+    });
   }
   updateChecked(stereoscopy) {
     this.setState({
@@ -45,7 +58,10 @@ class App extends Component {
   render() {
     return (
       <div className="ab-main-div">
-        <Header toggleTorus={this.toggleTorus} />
+        <Header 
+          toggleTorus={this.toggleTorus} 
+          addPoint={this.addPoint} 
+        />
         <label>{this.state.eyes}</label>
         <div className="ab-canvas-navbar-container">
           <Canvas 
@@ -58,6 +74,7 @@ class App extends Component {
             updateXGrid={this.updateXGrid}
             updateYGrid={this.updateYGrid}
             updateChecked={this.updateChecked}
+            points={this.state.points}
           />
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../css/canvas/Canvas.css';
-import {DrawTorus, setPixelColor, setCanvas, clearCanvas, setStereoscopyCancas } from './Draw/Draw';
+import {Draw, setPixelColor, setCanvas, clearCanvas, setStereoscopyCancas } from './Draw/Draw';
 import KeyboardCenter from './Keyboard/KeyboardCenter';
 import TranslationCenter, { setTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
 import MouseCenter from './Mouse/MouseCenter';
@@ -46,7 +46,7 @@ export default class Canvas extends Component {
 
             //DrawTorus
             clearCanvas();     
-            DrawTorus(TranslationCenter({}));
+            Draw(TranslationCenter({}));
         } else {
             clearCanvas();
         }

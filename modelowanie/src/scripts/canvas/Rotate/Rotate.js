@@ -1,5 +1,5 @@
 import Translate from "../Translation/TranslationCenter/TranslationCenter";
-import { DrawTorus, clearCanvas } from "../Draw/Draw";
+import { Draw, clearCanvas } from "../Draw/Draw";
 
 
 
@@ -48,5 +48,5 @@ export function TakeMouseMove(x, y){
     lastY = y;
     const translated = Translate(translationObject);
     clearCanvas();
-    DrawTorus(translated);
+    Draw(translated);
 }
