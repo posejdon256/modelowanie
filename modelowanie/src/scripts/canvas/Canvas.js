@@ -47,12 +47,11 @@ export default class Canvas extends Component {
             //DrawTorus
             clearCanvas();     
             Draw(TranslationCenter({}));
-        } else {
-            clearCanvas();
         }
     }
     keyFunction(event) {
         KeyboardCenter(event);
+        this.props.refreshNavbar();
     }
     mouseFunction(event) {
         MouseCenter(event);

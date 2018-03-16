@@ -1,5 +1,6 @@
 import Translate from "../Translation/TranslationCenter/TranslationCenter";
 import { Draw, clearCanvas } from "../Draw/Draw";
+import Redraw from "../Draw/Redraw";
 
 
 
@@ -47,6 +48,7 @@ export function TakeMouseMove(x, y){
     lastX = x;
     lastY = y;
     const translated = Translate(translationObject);
-    clearCanvas();
-    Draw(translated);
+    //clearCanvas();
+    //Draw(translated);
+    Redraw();
 }

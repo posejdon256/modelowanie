@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import '../../../css/header/Header.css';
+import '../../../css/navbar/Navbar.css';
 import trash from '../../../pictures/trash.png';
 import { removePoint, updatePointName } from '../../canvas/Points/Points';
 
@@ -40,6 +40,7 @@ export default class List extends Component {
                         <li className="ab-point-list-li">
                             <input className="ab-point-list-input" key={point.id} type="text" value={point.name} onChange={(e) => this.updatePointName(point.id, e.target.value)}/>
                             <button className="ab-delete-point-button" onClick={(e) => this.removePoint(point.id)}>
+                                <label>{"x: " + point.x.toFixed(2) + " " + "y: " + point.y.toFixed(2) + " " + "z: " + point.z.toFixed(2) + " "}</label>
                                 <img className="ab-delete-point" src={trash} alt="trash" />
                             </button>
                         </li>

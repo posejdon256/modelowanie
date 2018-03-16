@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../../css/navbar/Navbar.css';
 import List from './NavbarPoints/List';
+import { getCursor } from '../canvas/Cursor/Cursor';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -9,6 +10,21 @@ export default class Navbar extends Component {
         this.updateXGrid = this.updateXGrid.bind(this);
         this.updateYGrid = this.updateYGrid.bind(this);
         this.updateChecked = this.updateChecked.bind(this);
+        this.state = {
+            cursorX: 0.00,
+            cursorY: 0.00,
+            cursorZ: 0.00
+        };
+
+        const that = this;
+        setInterval(function(){
+            const cursor = getCursor();
+            that.setState({
+                cursorX: cursor.x.toFixed(2),
+                cursorY: cursor.y.toFixed(2),
+                cursorZ: cursor.z.toFixed(2)
+            });
+        }, 100);
     }
     updateXGrid(event) {
         this.props.updateXGrid(parseInt(event.target.value, 10));
@@ -35,6 +51,10 @@ export default class Navbar extends Component {
                 <input id="3dTorus" type="checkbox" onChange={this.updateChecked} />
             </div>
             <List points={this.props.points}/>
+            <div>
+                <label>Pozycja kursora:</label>
+                <label>{"x: " + this.state.cursorX + " y: " + this.state.cursorY + " z: " + this.state.cursorZ}</label>
+            </div>
         </div>);
     }
 }

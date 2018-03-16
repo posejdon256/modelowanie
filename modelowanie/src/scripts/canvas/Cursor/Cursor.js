@@ -6,3 +6,8 @@ const cursor = {
 export function getCursor() {
     return cursor;
 }
+export function updateCursor(xDiff, yDiif, zDiff) {
+    cursor.x += xDiff;
+    cursor.y += yDiif;
+    cursor.z += zDiff;
+}

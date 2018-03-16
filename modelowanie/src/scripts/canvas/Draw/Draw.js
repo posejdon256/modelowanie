@@ -1,5 +1,6 @@
 import { getTorusLines, getRAndr, getTorusVisibility } from "../Torus/Torus";
-
+import { getCursor } from "../Cursor/Cursor";
+import Translate, { setTranslationPoints } from "../Translation/TranslationCenter/TranslationCenter";
 
 let _r = 0;
 let _g = 0;
@@ -43,9 +44,13 @@ export function setStereoscopyCancas(canvas, canvasStero2) {
     _ctxStereo2 = canvasStero2.getContext("2d");
     _ctxStereo2.translate(0.5, 0.5);
 }
-export function drawPixel(x, y) {
-    _ctx.fillStyle = "rgba("+_r+","+_g+","+_b+","+_a+")";
-    _ctx.fillRect( parseInt(x,10), parseInt(y,10), 1, 1 );
+export function drawPixel(x, y, ctx) {
+
+    let localContext = _ctx;
+    if(ctx) {
+        localContext = ctx;
+    }
+    localContext.fillRect( parseInt(x,10), parseInt(y,10), 1, 1 );
 }
 export function clearCanvas() {
     _ctx.clearRect(0, 0, _canvas.width, _canvas.height);
@@ -61,16 +66,80 @@ function drawLine(x1, y1, x2, y2, ctx) {
     localContext.lineTo(x2, y2);
 }
 export function Draw(points) {
-    clearCanvas();
     const torusVisible = getTorusVisibility();
     if(torusVisible) {
         torusDraw(points);
     }
+    
     if(stereoscopy){
         stereoscopyDraw();
     }
    _ctx.fillStyle = "rgba(255, 255, 255, 1)";
    _ctx.fillRect( 500, 300, 1, 1 );
+}
+export function DrawPoints(points) {
+    setTranslationPoints(points);
+    const translatedPoints = Translate({});
+    if(stereoscopy){
+        const {left, right} = translatedPoints;
+        _ctxStereo.fillStyle = "rgba(236, 4, 0, 1)";
+        _ctxStereo2.fillStyle = "rgba(0, 249, 247, 1)";
+        left.forEach(point => {
+            drawPoint(point.x, point.y, _ctxStereo);
+        });
+        right.forEach(point => {
+            drawPoint(point.x, point.y, _ctxStereo2);
+        });
+        stereoscopyDraw();
+    }
+    else {
+        translatedPoints.forEach(point => {
+            drawPoint(point.x, point.y, _ctx);
+        });
+    }
+   _ctx.fillStyle = "rgba(255, 255, 255, 1)";
+   _ctx.fillRect( 500, 300, 1, 1 );
+}
+export function DrawCursor() {
+    const cursorLX = 0.05;
+    const cursorLZ = 0.07;
+    const cursorLY = 0.05 * (5/3);
+    const cursor = getCursor();
+
+    const points = [];
+    let translatedPoints;
+    points.push({x: cursor.x - cursorLX, y: cursor.y, z: cursor.z});
+    points.push({x: cursor.x + cursorLX, y: cursor.y, z: cursor.z});
+    points.push({x: cursor.x, y: cursor.y - cursorLY, z: cursor.z});
+    points.push({x: cursor.x, y: cursor.y + cursorLY, z: cursor.z});
+    points.push({x: cursor.x, y: cursor.y, z: cursor.z - cursorLZ});
+    points.push({x: cursor.x, y: cursor.y, z: cursor.z + cursorLZ});
+
+    setTranslationPoints(points);
+    translatedPoints = Translate({});
+    
+    //_ctx.strokeStyle = "rgba(206, 76, 76, 1)";
+    _ctx.beginPath();
+    _ctx.strokeStyle = "rgba(255, 0, 0, 1)";
+    drawLine((translatedPoints[0].x + 1) * 500,(translatedPoints[0].y + 1) * 300, (translatedPoints[1].x + 1) * 500,(translatedPoints[1].y + 1) * 300);
+    _ctx.stroke();
+    _ctx.beginPath();
+    _ctx.strokeStyle = "rgba(0, 255, 0, 1)";
+    drawLine((translatedPoints[2].x + 1) * 500,(translatedPoints[2].y + 1) * 300, (translatedPoints[3].x + 1) * 500,(translatedPoints[3].y + 1) * 300);
+    _ctx.stroke();
+    _ctx.beginPath();
+    _ctx.strokeStyle = "rgba(0, 0, 255, 1)";
+    drawLine((translatedPoints[4].x + 1) * 500,(translatedPoints[4].y + 1) * 300, (translatedPoints[5].x + 1) * 500,(translatedPoints[5].y + 1) * 300);
+    _ctx.stroke();
+
+}
+function drawPoint(x, y, ctx) {
+    const points  = [];
+    for(let i = 0; i < 2; i ++) {
+        for(let j = 0; j < 2; j ++) {
+            drawPixel((x + (i/1000) + 1) * 500, (y + (j/700) + 1) * 300, ctx);
+        }
+    }
 }
 function torusDraw(points){
     const lines = getTorusLines();

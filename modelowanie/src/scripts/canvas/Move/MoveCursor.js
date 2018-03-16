@@ -1,28 +1,21 @@
 import Translate from "../Translation/TranslationCenter/TranslationCenter";
-import { Draw, clearCanvas } from "../Draw/Draw";
-import Redraw from "../Draw/Redraw";
+import { DrawPoints, clearCanvas } from "../Draw/Draw";
+import { updateCursor } from "../Cursor/Cursor";
+import Redraw from '../Draw/Redraw';
 
 
 let front = 0;
 let left = 0;
 let top = 0;
-let step = 0.003;
+let step = 0.0007;
 
 let interval;
 
 function setIntervalForMoving(){
     if(!interval) {
         interval = setInterval(function(){
-            const trasnlationObject = {
-                front: front,
-                left: left,
-                top: top
-            }
-            Translate(trasnlationObject);
-            const translated = Translate(trasnlationObject);
-            //clearCanvas();
-           // Draw(translated);
-           Redraw();
+            updateCursor(left, top, 0);
+            Redraw();
         }, 5);
     }
 }
@@ -32,63 +25,63 @@ function removeIntervalForMoving(){
         interval = undefined;
     }
 }
-export function MoveToTop(){
+export function MoveToTopCursor(){
     if(top !== 0) return;
 
-    top = step;
+    top = -step * (5/3);
     setIntervalForMoving();
 }
-export function MoveToDown(){
+export function MoveToDownCursor(){
     if(top !== 0) return;
 
-    top = -step;
+    top = step*(5/3);
     setIntervalForMoving();
 }
-export function MoveToFront(){
+export function MoveToFrontCursor(){
     if(front !== 0) return;
 
     front = 1.01;
     setIntervalForMoving();
 }
-export function MoveToBack(){
+export function MoveToBackCursor(){
     if(front !== 0) return;
 
     front = 0.99;
     setIntervalForMoving();
 }
-export function MoveToLeft(){
+export function MoveToLeftCursor(){
     if(left !== 0) return;    
 
     left = -step;
     setIntervalForMoving();
 }
-export function MoveToRight(){
+export function MoveToRightCursor(){
     if(left !== 0) return;
 
     left = step;
     setIntervalForMoving();
 }
-export function StopMovingFront(){
+export function StopMovingFrontCursor(){
     front = 0;
     removeIntervalForMoving();
 }
-export function StopMovingBack(){
+export function StopMovingBackCursor(){
     front = 0;
     removeIntervalForMoving();
 }
-export function StopMovingLeft(){
+export function StopMovingLeftCursor(){
     left = 0;
     removeIntervalForMoving();
 }
-export function StopMovingRight(){
+export function StopMovingRightCursor(){
     left = 0;
     removeIntervalForMoving();
 }
-export function StopMovingTop(){
+export function StopMovingTopCursor(){
     top = 0;
     removeIntervalForMoving();
 }
-export function StopMovingDown(){
+export function StopMovingDownCursor(){
     top = 0;
     removeIntervalForMoving();
 }

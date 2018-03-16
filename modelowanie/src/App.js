@@ -27,6 +27,7 @@ class App extends Component {
     this.updateYGrid = this.updateYGrid.bind(this);
     this.updateChecked = this.updateChecked.bind(this);
     this.addPoint = this.addPoint.bind(this);
+    this.refreshNavbar = this.refreshNavbar.bind(this);
   }
   toggleTorus() {
     toggleTorus();
@@ -34,11 +35,14 @@ class App extends Component {
       torusVisible: getTorusVisibility()
     })
   }
-  addPoint() {
-    addPoint();
+  refreshNavbar() {
     this.setState({
       points: getPoints()
     });
+  }
+  addPoint() {
+    addPoint();
+    this.refreshNavbar();
   }
   updateChecked(stereoscopy) {
     this.setState({
@@ -69,6 +73,7 @@ class App extends Component {
               gridX={this.state.gridX}
               gridY={this.state.gridY}
               stereoscopy={this.state.stereoscopy}
+              refreshNavbar={this.refreshNavbar}
               />
           <NavBar 
             updateXGrid={this.updateXGrid}
