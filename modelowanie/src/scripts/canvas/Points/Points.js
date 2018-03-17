@@ -1,5 +1,4 @@
 import { getCursor } from '../Cursor/Cursor';
-import { DrawPoints } from './../Draw/Draw';
 import Redraw from '../Draw/Redraw';
 
 const points = [];
@@ -62,5 +61,5 @@ export function addPoint() {
     pointNumber ++;
     points.push(newPoint);
 
-    DrawPoints(points);
+    Redraw();
 }

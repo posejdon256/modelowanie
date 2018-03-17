@@ -1,5 +1,3 @@
-import Translate from "../Translation/TranslationCenter/TranslationCenter";
-import { DrawPoints, clearCanvas } from "../Draw/Draw";
 import { updateCursor, getCursor } from "../Cursor/Cursor";
 import Redraw from '../Draw/Redraw';
 import { selectPoints } from "../Mouse/SelectPoint";

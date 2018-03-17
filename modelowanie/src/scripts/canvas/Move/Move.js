@@ -1,5 +1,4 @@
 import Translate from "../Translation/TranslationCenter/TranslationCenter";
-import { Draw, clearCanvas } from "../Draw/Draw";
 import Redraw from "../Draw/Redraw";
 
 
@@ -19,10 +18,8 @@ function setIntervalForMoving(){
                 top: top
             }
             Translate(trasnlationObject);
-            const translated = Translate(trasnlationObject);
-            //clearCanvas();
-           // Draw(translated);
-           Redraw();
+            Translate(trasnlationObject);
+            Redraw();
         }, 5);
     }
 }

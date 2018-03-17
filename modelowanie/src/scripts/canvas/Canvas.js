@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import '../../css/canvas/Canvas.css';
-import {Draw, setPixelColor, setCanvas, clearCanvas, setStereoscopyCancas } from './Draw/Draw';
+import { setPixelColor, setCanvas, setStereoscopyCanvases } from './Draw/Draw';
 import KeyboardCenter from './Keyboard/KeyboardCenter';
-import TranslationCenter, { setTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
+import { setTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
 import MouseCenter from './Mouse/MouseCenter';
 import generateTorus, { getTorusVertices } from './Torus/Torus';
 import { setStereoscopy } from './Stereoscopy/Stereoscopy';
@@ -23,16 +23,10 @@ export default class Canvas extends Component {
         const canvasStereo = this.refs.stereoscopyHelpCanvas;
         const canvasStereo2 = this.refs.stereoscopyHelpCanvas2;
         generateTorus(50.0, 200.0, this.props.gridX, this.props.gridY);
-     //   const torus = getTorusVertices();
-
         // settings
         setPixelColor(254, 254, 254, 254);
         setCanvas(canvas);
-        setStereoscopyCancas(canvasStereo, canvasStereo2);
-      //  setTranslationPoints(torus);
-
-        //move torus
-        TranslationCenter({});
+        setStereoscopyCanvases(canvasStereo, canvasStereo2);
     }
     componentWillReceiveProps(props) {
         
@@ -44,9 +38,7 @@ export default class Canvas extends Component {
             generateTorus(50.0, 200.0, props.gridX, props.gridY);
             const torus = getTorusVertices();
             setTranslationPoints(torus);
-
-            //DrawTorus
-           Redraw();
+            Redraw();
         }
     }
     keyFunction(event) {
