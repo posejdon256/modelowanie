@@ -36,14 +36,15 @@ export default class List extends Component {
     }
     render() {
         const points  = this.state.points;
+        const show = true;
         return(
             <div>
                 <label>Punkty sceny:</label>
                 <ul className="ab-ul-points">
-                {
+                {show ?
                     points.map(point => {
                         return (
-                        <li className="ab-point-list-li">
+                        <li key={point.id} className="ab-point-list-li">
                             <input className="ab-point-list-input" key={point.id} type="text" value={point.name} onChange={(e) => this.updatePointName(point.id, e.target.value)}/>
                             <label className="ab-points-list-datas">{"x: " + point.x.toFixed(2) + " y: " + point.y.toFixed(2) + " z: " + point.z.toFixed(2) + " "}</label>
                             <button className="ab-delete-point-button" onClick={(e) => this.removePoint(point.id)}>
@@ -54,7 +55,7 @@ export default class List extends Component {
                             </button>
                         </li>
                         );
-                    })
+                    }) : ''
                 }
                 </ul>
             </div>

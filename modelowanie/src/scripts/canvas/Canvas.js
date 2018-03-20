@@ -27,6 +27,8 @@ export default class Canvas extends Component {
         setPixelColor(254, 254, 254, 254);
         setCanvas(canvas);
         setStereoscopyCanvases(canvasStereo, canvasStereo2);
+
+        Redraw();
     }
     componentWillReceiveProps(props) {
         
@@ -42,8 +44,7 @@ export default class Canvas extends Component {
         }
     }
     keyFunction(event) {
-        KeyboardCenter(event);
-        this.props.refreshNavbar();
+        KeyboardCenter(event, this.props.refreshNavbar);
     }
     mouseFunction(event) {
         MouseCenter(event);

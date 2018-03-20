@@ -28,13 +28,14 @@ export function setStereoscopyCanvases(canvas, canvasStero2) {
     _ctxStereo2 = canvasStero2.getContext("2d");
     _ctxStereo2.translate(0.5, 0.5);
 }
-export function drawPixel(x, y, ctx) {
-
-    let localContext = _ctx;
-    if(ctx) {
-        localContext = ctx;
-    }
-    localContext.fillRect( parseInt(x,10), parseInt(y,10), 1, 1 );
+export function drawPixel(x, y, img, ctx) {
+    const place = (parseInt((y), 10)* _canvas.width * 4) + (parseInt(x, 10) * 4);
+    img.data[place] = 255;
+    img.data[place + 1] = 255;
+    img.data[place + 2] = 255;
+    img.data[place + 3] = 255
+    return img;
+   // localContext.fillRect( parseInt(x,10), parseInt(y,10), 1, 1 );
 }
 export function clearCanvas() {
     _ctx.clearRect(0, 0, _canvas.width, _canvas.height);

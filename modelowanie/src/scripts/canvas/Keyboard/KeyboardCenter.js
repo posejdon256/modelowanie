@@ -1,14 +1,16 @@
 import { MoveToFront, MoveToLeft, MoveToRight, StopMovingLeft, StopMovingRight, MoveToTop, MoveToBack, StopMovingTop, StopMovingDown, MoveToDown, StopMovingFront, StopMovingBack } from "../Move/Move";
 import { MoveToFrontCursor, MoveToLeftCursor, MoveToTopCursor, MoveToDownCursor, MoveToRightCursor, StopMovingLeftCursor, StopMovingDownCursor, StopMovingRightCursor, StopMovingTopCursor, MoveToBackCursor, StopMovingFrontCursor, StopMovingBackCursor, RemoveCatchPoint, CatchPoint } from '../Move/MoveCursor';
 import { addPoint } from "../Points/Points";
-export default function KeyboardCenter(event) {
+export default function KeyboardCenter(event, refresh) {
     if(event.type === 'keydown') {
         KeyDown(event);
     } else if(event.type === 'keyup') {
         KeyUp(event);
+        refresh();
     }
 }
 function KeyDown(event) {
+    console.log(event.keyCode);
     switch(event.keyCode) {
         case 87: //W
             MoveToTop();

@@ -11,6 +11,7 @@ import Header from './scripts/header/Header';
 //additional dependencies
 import { addPoint, getPoints } from './scripts/canvas/Points/Points';
 import { toggleTorus, getTorusVisibility } from './scripts/canvas/Torus/Torus';
+import Redraw from './scripts/canvas/Draw/Redraw';
 
 class App extends Component {
   constructor(props) {
@@ -33,7 +34,8 @@ class App extends Component {
     toggleTorus();
     this.setState({
       torusVisible: getTorusVisibility()
-    })
+    });
+    Redraw();
   }
   refreshNavbar() {
     this.setState({

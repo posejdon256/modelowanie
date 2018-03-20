@@ -7,25 +7,29 @@ import { updatePoint } from "../Points/Points";
 let front = 0;
 let left = 0;
 let top = 0;
-let step = 0.0007;
+let step = 0.0015;
 let catchedPoint = undefined;
+let stillMove = false;
 
-let interval;
-
-function setIntervalForMoving(){
-    if(!interval) {
-        interval = setInterval(function(){
-            updateCursor(left, top, front);
-            if(catchedPoint !== undefined)
-                updatePoint(catchedPoint.id, left, top, front);
-            Redraw();
-        }, 5);
-    }
+function interval1() {
+    if(!stillMove) 
+        return;
+    updateCursor(left, top, front);
+    if(catchedPoint !== undefined)
+        updatePoint(catchedPoint.id, left, top, front);
+    Redraw();
+    setTimeout(function(){
+        requestAnimationFrame(interval1);
+    }, 50);
+}
+async function setIntervalForMoving(){
+    stillMove = true;
+    interval1();
 }
 function removeIntervalForMoving(){
     if(front === 0 && left === 0 && top === 0) {
-        clearInterval(interval);
-        interval = undefined;
+        //clearInterval(interval);
+        stillMove = false;
     }
 }
 export function CatchPoint() {

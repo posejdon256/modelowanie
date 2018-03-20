@@ -15,21 +15,19 @@ export default class Navbar extends Component {
             cursorY: 0.00,
             cursorZ: 0.00
         };
-
-        const that = this;
-        setInterval(function(){
-            const cursor = getCursor();
-            that.setState({
+    }
+    updateXGrid(event) {
+        this.props.updateXGrid(parseInt(event.target.value, 10));
+    }
+    componentWillReceiveProps(props) {
+        const cursor = getCursor();
+            this.setState({
                 cursorX: cursor.x.toFixed(2),
                 cursorY: cursor.y.toFixed(2),
                 cursorZ: cursor.z.toFixed(2),
                 cursorPosX: cursor.screenX,
                 cursorPosY: cursor.screenY
             });
-        }, 100);
-    }
-    updateXGrid(event) {
-        this.props.updateXGrid(parseInt(event.target.value, 10));
     }
     updateYGrid(event) {
         this.props.updateYGrid(parseInt(event.target.value, 10));
