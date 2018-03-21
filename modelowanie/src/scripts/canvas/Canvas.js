@@ -35,6 +35,7 @@ export default class Canvas extends Component {
         //DrawTorus
         if(props.stereoscopy !== this.props.stereoscopy) {
             setStereoscopy(props.stereoscopy);
+            Redraw();
         }
         if(props.visibleTorus) { 
             generateTorus(50.0, 200.0, props.gridX, props.gridY);

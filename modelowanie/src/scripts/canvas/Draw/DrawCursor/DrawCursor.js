@@ -5,8 +5,8 @@ import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
 
 export function _DrawCursor(_ctx, _ctxStereo, _ctxStereo2) {
     const cursorLX = 0.05;
-    const cursorLZ = 0.07;
-    const cursorLY = 0.05 * (5/3);
+    const cursorLZ = 0.05;
+    const cursorLY = 0.05;
     const cursor = getCursor();
     const stereoscopy = getStereoscopy();
 

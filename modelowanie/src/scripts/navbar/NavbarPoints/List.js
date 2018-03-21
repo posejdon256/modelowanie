@@ -39,7 +39,7 @@ export default class List extends Component {
         const show = true;
         return(
             <div>
-                <label>Punkty sceny:</label>
+                <label>Obiekty sceny:</label>
                 <ul className="ab-ul-points">
                 {show ?
                     points.map(point => {
