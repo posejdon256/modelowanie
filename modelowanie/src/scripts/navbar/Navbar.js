@@ -10,16 +10,20 @@ export default class Navbar extends Component {
         this.updateXGrid = this.updateXGrid.bind(this);
         this.updateYGrid = this.updateYGrid.bind(this);
         this.updateChecked = this.updateChecked.bind(this);
+
+        const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
             cursorY: 0.00,
-            cursorZ: 0.00
+            cursorZ: 0.00,
+            cursorPosX: cursor.screenX,
+            cursorPosY: cursor.screenY
         };
     }
     updateXGrid(event) {
         this.props.updateXGrid(parseInt(event.target.value, 10));
     }
-    componentWillReceiveProps(props) {
+    componentWillReceiveProps(props) {     
         const cursor = getCursor();
             this.setState({
                 cursorX: cursor.x.toFixed(2),

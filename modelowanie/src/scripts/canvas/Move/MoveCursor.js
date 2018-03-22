@@ -1,13 +1,13 @@
 import { updateCursor, getCursor } from "../Cursor/Cursor";
 import Redraw from '../Draw/Redraw';
 import { selectPoints } from "../Mouse/SelectPoint";
-import { updatePoint } from "../Points/Points";
+import { updatePoint, selectPoint } from "../Points/Points";
 
 
 let front = 0;
 let left = 0;
 let top = 0;
-let step = 0.0015;
+let step = 0.01;
 let catchedPoint = undefined;
 let stillMove = false;
 
@@ -32,23 +32,28 @@ function removeIntervalForMoving(){
         stillMove = false;
     }
 }
-export function CatchPoint() {
+export function CatchPoint(point) {
+    if(point) {
+        catchedPoint = point;
+        return;
+    }
     const cursor = getCursor();
     catchedPoint = selectPoints(cursor.x, cursor.y, true, cursor.z);
 }
 export function RemoveCatchPoint(x, y) {
+    selectPoint(catchedPoint);
     catchedPoint = undefined;
 }
 export function MoveToTopCursor(){
     if(top !== 0) return;
 
-    top = -step * (5/3);
+    top = -step;
     setIntervalForMoving();
 }
 export function MoveToDownCursor(){
     if(top !== 0) return;
 
-    top = step*(5/3);
+    top = step;
     setIntervalForMoving();
 }
 export function MoveToFrontCursor(){

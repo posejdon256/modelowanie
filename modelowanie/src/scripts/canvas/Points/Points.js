@@ -1,5 +1,6 @@
 import { getCursor } from '../Cursor/Cursor';
 import Redraw from '../Draw/Redraw';
+import { CatchPoint, RemoveCatchPoint } from '../Move/MoveCursor';
 
 const points = [];
 let pointNumber = 1;
@@ -40,6 +41,11 @@ export function updatePoint(id, xDiff, yDiif, zDiff) {
 export function selectPoint(id) {
     for(let i = 0; i < points.length; i ++) {
         if(points[i].id === id) {
+            if(!points[i].selected === true) {
+                CatchPoint(points[i]);
+            } else {
+                RemoveCatchPoint();
+            }
             points[i].selected = !points[i].selected;
         } else if(points[i].selected) {
              points[i].selected = false;
@@ -60,6 +66,5 @@ export function addPoint() {
     };
     pointNumber ++;
     points.push(newPoint);
-
     Redraw();
 }

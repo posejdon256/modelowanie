@@ -9,7 +9,7 @@ export function selectPoints(x, y, byCursor, z) {
     let translatedPoints = Translate({});
     translatedPoints = getStereoscopy() ? translatedPoints.left : translatedPoints;
     for(let i = 0; i < points.length; i ++) {
-        if(byCursor && Math.sqrt(Math.pow(points[i].x - x, 2) + Math.pow(points[i].y - y, 2) + Math.pow(points[i].z - z, 2)) < 0.1) {
+        if(byCursor && Math.sqrt(Math.pow(points[i].x - x, 2) + Math.pow(points[i].y - y, 2) + Math.pow(points[i].z - z, 2)) < 0.05) {
             selectPoint(points[i].id);
             Redraw();
             return points[i];
