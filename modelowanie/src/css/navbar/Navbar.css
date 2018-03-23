@@ -54,3 +54,14 @@ label {
     outline: none;
     cursor: pointer;
 }
+.ab-curve-chain-label{
+    position: absolute;
+    top: 7px;
+    left: 200px;
+}
+.ab-point-list-checkbox{
+    position: absolute;
+    top: 0;
+    left: 300px;
+    height: 30px;
+}

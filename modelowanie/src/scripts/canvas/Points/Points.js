@@ -1,6 +1,7 @@
 import { getCursor } from '../Cursor/Cursor';
 import Redraw from '../Draw/Redraw';
 import { CatchPoint, RemoveCatchPoint } from '../Move/MoveCursor';
+import { getAddCurveState, addPointToCurve, getSelectedCurveId } from '../Bezier/Bezier';
 
 const points = [];
 let pointNumber = 1;
@@ -11,6 +12,7 @@ export function getPoints(){
 export function removePoint(id) {
     for(let i = 0; i < points.length; i ++) {
         if(points[i].id === id) {
+            points[i].deleted = true;
             points.splice(i, 1);
             break;
         }
@@ -47,8 +49,6 @@ export function selectPoint(id) {
                 RemoveCatchPoint();
             }
             points[i].selected = !points[i].selected;
-        } else if(points[i].selected) {
-             points[i].selected = false;
         }
     }
     Redraw();
@@ -62,9 +62,14 @@ export function addPoint() {
         z: cursor.z,
         name: "Punkt " + pointNumber,
         id: pointNumber,
-        selected: false
+        selected: false,
+        curves: []
     };
     pointNumber ++;
+    if(getAddCurveState()) {
+        newPoint.curves.push(getSelectedCurveId());
+        addPointToCurve(newPoint);
+    }
     points.push(newPoint);
     Redraw();
 }

@@ -28,7 +28,7 @@ export function _DrawPoints(points, _ctx, _ctxStereo, _ctxStereo2) {
             drawPoint(point.x, point.y, img, _ctxStereo, rgb);
         });
         _ctxStereo.putImageData(img, 0, 0);
-        rgb = {r: 0, g: 249, b: 0};
+        rgb = {r: 0, g: 249, b: 247};
         img = _ctxStereo2.getImageData(0, 0, _canvas.width, _canvas.height);
         right.forEach(point => {
             drawPoint(point.x, point.y, img, _ctxStereo2, rgb);

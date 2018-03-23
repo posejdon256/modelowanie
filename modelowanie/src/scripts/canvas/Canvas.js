@@ -48,7 +48,7 @@ export default class Canvas extends Component {
         KeyboardCenter(event, this.props.refreshNavbar);
     }
     mouseFunction(event) {
-        MouseCenter(event);
+        MouseCenter(event, this.props.refreshNavbar);
     }
     render(){
         return(

@@ -2,11 +2,12 @@ import { StartRotation, StopRoatation, TakeMouseMove } from "../Rotate/Rotate";
 import { selectPoints } from "./SelectPoint";
 import { getCanvas } from "../Draw/Draw";
 
-export default function MouseCenter(event) {
+export default function MouseCenter(event, refresh) {
     if(event.type === 'mousedown') {
         MouseDown(event);
     } else if(event.type === 'mouseup') {
         MouseUp(event);
+        refresh();
     } else if(event.type === 'mousemove') {
         MouseMove(event);
     }

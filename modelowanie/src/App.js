@@ -12,6 +12,7 @@ import Header from './scripts/header/Header';
 import { addPoint, getPoints } from './scripts/canvas/Points/Points';
 import { toggleTorus, getTorusVisibility } from './scripts/canvas/Torus/Torus';
 import Redraw from './scripts/canvas/Draw/Redraw';
+import { addBezierCurve, getCurves, setAddCurveState } from './scripts/canvas/Bezier/Bezier';
 
 class App extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class App extends Component {
     this.updateChecked = this.updateChecked.bind(this);
     this.addPoint = this.addPoint.bind(this);
     this.refreshNavbar = this.refreshNavbar.bind(this);
+    this.addCurve = this.addCurve.bind(this);
   }
   toggleTorus() {
     toggleTorus();
@@ -39,11 +41,17 @@ class App extends Component {
   }
   refreshNavbar() {
     this.setState({
-      points: getPoints()
+      points: getPoints(),
+      curves: getCurves()
     });
   }
   addPoint() {
     addPoint();
+    this.refreshNavbar();
+  }
+  addCurve() {
+    addBezierCurve();
+    setAddCurveState(true);
     this.refreshNavbar();
   }
   updateChecked(stereoscopy) {
@@ -67,6 +75,7 @@ class App extends Component {
         <Header 
           toggleTorus={this.toggleTorus} 
           addPoint={this.addPoint} 
+          addCurve={this.addCurve}
         />
         <label>{this.state.eyes}</label>
         <div className="ab-canvas-navbar-container">
@@ -82,6 +91,7 @@ class App extends Component {
             updateYGrid={this.updateYGrid}
             updateChecked={this.updateChecked}
             points={this.state.points}
+            curves={this.state.curves}
           />
         </div>
       </div>

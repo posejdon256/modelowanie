@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../../css/navbar/Navbar.css';
 import List from './NavbarPoints/List';
 import { getCursor } from '../canvas/Cursor/Cursor';
+import { addCurveBySelectedPoints } from '../canvas/Bezier/Bezier';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -10,6 +11,7 @@ export default class Navbar extends Component {
         this.updateXGrid = this.updateXGrid.bind(this);
         this.updateYGrid = this.updateYGrid.bind(this);
         this.updateChecked = this.updateChecked.bind(this);
+        this.addCurve = this.addCurve.bind(this);
 
         const cursor = getCursor();
         this.state = {
@@ -39,6 +41,10 @@ export default class Navbar extends Component {
     updateChecked(event) {
         this.props.updateChecked(event.target.checked);
     }
+    addCurve() {
+        addCurveBySelectedPoints();
+        this.forceUpdate();
+    }
     render(){
         return(
         <div className="ab-navbar">
@@ -54,7 +60,7 @@ export default class Navbar extends Component {
                 <label htmlFor="3dTorus">Stereoskopia</label>
                 <input id="3dTorus" type="checkbox" onChange={this.updateChecked} />
             </div>
-            <List points={this.props.points}/>
+            <List points={this.props.points} curves={this.props.curves}/>
             <div>
                 <label>Pozycja kursora:</label>
                 <label>{"x: " + this.state.cursorX + " y: " + this.state.cursorY + " z: " + this.state.cursorZ}</label>
@@ -62,6 +68,9 @@ export default class Navbar extends Component {
             <div>
                 <label>Współrzędne ekranowe:</label>
                 <label>{"x: " + this.state.cursorPosX + " y: " + this.state.cursorPosY}</label>
+            </div>
+            <div>
+                <button onClick={this.addCurve}>Dodaj krzywą Beziera z punktów</button>
             </div>
         </div>);
     }

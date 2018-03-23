@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import '../../css/header/Header.css';
 import torus from '../../pictures/torus.png';
 import point from '../../pictures/point.png';
+import bezier from '../../pictures/bezier.png';
+import { getAddCurveState, setAddCurveState } from '../canvas/Bezier/Bezier';
 
 export default class Header extends Component {
     constructor(props) {
@@ -9,12 +11,20 @@ export default class Header extends Component {
         
         this.toggleTorus = this.toggleTorus.bind(this);
         this.addPoint = this.addPoint.bind(this);
+        this.addCurve = this.addCurve.bind(this);
     }
     toggleTorus(){
         this.props.toggleTorus();
     }
     addPoint(){
         this.props.addPoint();
+    }
+    addCurve(){
+        if(getAddCurveState()) {
+            setAddCurveState(false);
+            return;
+        }
+        this.props.addCurve();
     }
     render(){
         return(
@@ -24,6 +34,9 @@ export default class Header extends Component {
             </button>
             <button className="ab-torus-button" onClick={this.addPoint}>
                 <img className="ab-point-image" src={point} alt="point" />
+            </button>
+            <button className="ab-torus-button" onClick={this.addCurve}>
+                <img className="ab-point-image" src={bezier} alt="point" />
             </button>
         </div>);
     }
