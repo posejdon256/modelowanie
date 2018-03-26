@@ -10,7 +10,6 @@ export default function KeyboardCenter(event, refresh) {
     }
 }
 function KeyDown(event) {
-    console.log(event.keyCode);
     switch(event.keyCode) {
         case 87: //W
             MoveToTop();

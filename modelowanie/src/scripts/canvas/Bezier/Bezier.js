@@ -145,7 +145,9 @@ function countCircumfrence(curve) {
         if(i !== biggest)
             ret += lengths[i];
     }
-    return ret;
+    if(ret > 5000) 
+        return 5000;
+    return 2*ret;
 }
 function nAfterI(n, i) {
     return factorial(n)/(factorial(i)*factorial(n-i));

@@ -8,15 +8,15 @@ let front = 0;
 let left = 0;
 let top = 0;
 let step = 0.01;
-let catchedPoint = undefined;
+let catchedPoints = [];
 let stillMove = false;
 
 function interval1() {
     if(!stillMove) 
         return;
     updateCursor(left, top, front);
-    if(catchedPoint !== undefined)
-        updatePoint(catchedPoint.id, left, top, front);
+    for(let i = 0; i < catchedPoints.length; i ++)
+        updatePoint(catchedPoints[i].id, left, top, front);
     Redraw();
     setTimeout(function(){
         requestAnimationFrame(interval1);
@@ -34,15 +34,25 @@ function removeIntervalForMoving(){
 }
 export function CatchPoint(point) {
     if(point) {
-        catchedPoint = point;
+        catchedPoints.push(point);
         return;
     }
     const cursor = getCursor();
-    catchedPoint = selectPoints(cursor.x, cursor.y, true, cursor.z);
+    catchedPoints.push(selectPoints(cursor.x, cursor.y, true, cursor.z));
 }
-export function RemoveCatchPoint(x, y) {
-    selectPoint(catchedPoint);
-    catchedPoint = undefined;
+export function RemoveCatchPoint(point) {
+    if(!point) {
+        selectPoint(catchedPoints[0]);
+        return;
+    }
+    if(catchedPoints.length === 0)
+        return;
+    for(let i = 0; i < catchedPoints.length; i ++) {
+        if(catchedPoints[i].id === point.id) {
+            catchedPoints.splice(i, 1);
+            return;
+        }
+    }
 }
 export function MoveToTopCursor(){
     if(top !== 0) return;

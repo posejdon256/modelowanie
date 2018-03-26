@@ -46,7 +46,7 @@ export function selectPoint(id) {
             if(!points[i].selected === true) {
                 CatchPoint(points[i]);
             } else {
-                RemoveCatchPoint();
+                RemoveCatchPoint(points[i]);
             }
             points[i].selected = !points[i].selected;
         }
