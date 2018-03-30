@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import '../../css/navbar/Navbar.css';
 import List from './NavbarPoints/List';
+import ListPointsInCurve from './NavbarPoints/ListPointsInCurve';
 import { getCursor } from '../canvas/Cursor/Cursor';
-import { addCurveBySelectedPoints } from '../canvas/Bezier/Bezier';
+import { addCurveBySelectedPoints, getCurveById } from '../canvas/Bezier/Bezier';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -12,6 +13,7 @@ export default class Navbar extends Component {
         this.updateYGrid = this.updateYGrid.bind(this);
         this.updateChecked = this.updateChecked.bind(this);
         this.addCurve = this.addCurve.bind(this);
+        this.updateCurvePoints = this.updateCurvePoints.bind(this);
 
         const cursor = getCursor();
         this.state = {
@@ -19,7 +21,8 @@ export default class Navbar extends Component {
             cursorY: 0.00,
             cursorZ: 0.00,
             cursorPosX: cursor.screenX,
-            cursorPosY: cursor.screenY
+            cursorPosY: cursor.screenY,
+            curvePoints: []
         };
     }
     updateXGrid(event) {
@@ -32,7 +35,8 @@ export default class Navbar extends Component {
                 cursorY: cursor.y.toFixed(2),
                 cursorZ: cursor.z.toFixed(2),
                 cursorPosX: cursor.screenX,
-                cursorPosY: cursor.screenY
+                cursorPosY: cursor.screenY,
+                curvePoints: props.curvePoints !== undefined ? props.curvePoints : this.state.curvePoints
             });
     }
     updateYGrid(event) {
@@ -41,8 +45,14 @@ export default class Navbar extends Component {
     updateChecked(event) {
         this.props.updateChecked(event.target.checked);
     }
+    updateCurvePoints(points) {
+        this.setState({
+            curvePoints: points
+        });
+    }
     addCurve() {
-        addCurveBySelectedPoints();
+        const curveId = addCurveBySelectedPoints();
+        this.updateCurvePoints(getCurveById(curveId).points);
         this.forceUpdate();
     }
     render(){
@@ -60,7 +70,8 @@ export default class Navbar extends Component {
                 <label htmlFor="3dTorus">Stereoskopia</label>
                 <input id="3dTorus" type="checkbox" onChange={this.updateChecked} />
             </div>
-            <List points={this.props.points} curves={this.props.curves}/>
+            <List points={this.props.points} curves={this.props.curves} updateCurvePoints={this.updateCurvePoints}/>
+            <ListPointsInCurve points={this.state.curvePoints} />
             <div>
                 <label>Pozycja kursora:</label>
                 <label>{"x: " + this.state.cursorX + " y: " + this.state.cursorY + " z: " + this.state.cursorZ}</label>

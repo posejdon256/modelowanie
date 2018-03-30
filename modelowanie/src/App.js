@@ -12,7 +12,7 @@ import Header from './scripts/header/Header';
 import { addPoint, getPoints } from './scripts/canvas/Points/Points';
 import { toggleTorus, getTorusVisibility } from './scripts/canvas/Torus/Torus';
 import Redraw from './scripts/canvas/Draw/Redraw';
-import { addBezierCurve, getCurves, setAddCurveState } from './scripts/canvas/Bezier/Bezier';
+import { addBezierCurve, getCurves, setAddCurveState, getCurveById } from './scripts/canvas/Bezier/Bezier';
 
 class App extends Component {
   constructor(props) {
@@ -42,7 +42,8 @@ class App extends Component {
   refreshNavbar() {
     this.setState({
       points: getPoints(),
-      curves: getCurves()
+      curves: getCurves(),
+      curvePoints: getCurveById().points
     });
   }
   addPoint() {
@@ -92,6 +93,7 @@ class App extends Component {
             updateChecked={this.updateChecked}
             points={this.state.points}
             curves={this.state.curves}
+            curvePoints={this.state.curvePoints}
           />
         </div>
       </div>

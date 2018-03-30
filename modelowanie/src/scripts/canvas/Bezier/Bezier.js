@@ -12,11 +12,32 @@ let selectedCurveId = undefined;
 export function getCurves(){
     return curves;
 }
+export function updateCurveName(id, name) {
+    curves.find(x => x.id === id).name = name;
+    return curves;
+}
 export function turnOnChain(id) {
     const curve = curves.find(x => x.id === id);
     curve.chain = !curve.chain;
     Redraw();
     return curves;
+}
+export function unpinPoint(pointId) {
+    const curve = curves.find(x => x.id === selectedCurveId);
+    for(let i = 0; i < curve.points.length; i ++) {
+        if(pointId === curve.points[i].id) {
+            curve.points.splice(i, 1);
+            break;
+        }
+    }
+    Redraw();
+    return curve.points;
+}
+export function getCurveById(id){
+    const _id = id ? id : selectedCurveId;
+    if(!_id)
+        return {points: []};
+    return curves.find(x => x.id === _id);
 }
 export function selectCurve(id) {
     for(let i = 0; i < curves.length; i  ++) {
@@ -26,6 +47,7 @@ export function selectCurve(id) {
                 selectedCurveId = id;
             }
             else {
+                setAddCurveState(false);
                 selectedCurveId = undefined;
             }
         }
@@ -90,6 +112,7 @@ export function addCurveBySelectedPoints() {
             addPointToCurve(points[i]);
     }
     Redraw();
+    return selectedCurveId;
 }
 export function getCurvesPoints(){
     clearArray();
