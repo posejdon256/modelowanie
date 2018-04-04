@@ -15,42 +15,71 @@ export function _DrawCurves(ctx, ctxS1, ctxS2) {
         const { right, left} = translated;
         let img = ctxS1.getImageData(0, 0, canvas.width, canvas.height);
         rgb = {r: 236, g: 4, b: 0};
-        for(let i = 0; i < left.length; i ++) {
-            const x = (left[i].x + 1) * 500;
-            const y = (left[i].y + 1) * 300;
-            const z = left[i].z;
-            if(x < 0 || y < 0 || x > 1000 || y > 700 || z < -100 || z > 100)
+        ctxS1.strokeStyle = "rgba(236, 4, 0, 1)";
+        ctxS2.strokeStyle = "rgba(0, 249, 247, 1)";
+        ctxS1.beginPath();
+        ctxS2.beginPath();
+        for(let i = 1; i < left.length; i ++) {
+            const x1 = (left[i - 1].x + 1) * 500;
+            const y1 = (left[i - 1].y + 1) * 300;
+            const z1 = left[i - 1].z;
+
+            const x2 = (left[i].x + 1) * 500;
+            const y2 = (left[i].y + 1) * 300;
+            const z2 = left[i].z;
+
+            if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -100 || z1 > 100
+            || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -100 || z2 > 100)
                 continue;
-            drawPixel(x, y, img, ctxS1, rgb);
+            drawLine(x1, y1, x2, y2, ctxS1);
+            //drawPixel(x, y, img, ctxS1, rgb);
         }
         ctxS1.putImageData(img, 0, 0);
         img = ctxS2.getImageData(0, 0, canvas.width, canvas.height);
         rgb = {r: 0, g: 249, b: 247};
-        for(let i = 0; i < right.length; i ++) {
-            const x = (right[i].x + 1) * 500;
-            const y = (right[i].y + 1) * 300;
-            const z = right[i].z;
-            if(x < 0 || y < 0 || x > 1000 || y > 700 || z < -100 || z > 100)
+        for(let i = 1; i < right.length; i ++) {
+            const x1 = (right[i - 1].x + 1) * 500;
+            const y1 = (right[i - 1].y + 1) * 300;
+            const z1 = right[i - 1].z;
+
+            const x2 = (right[i].x + 1) * 500;
+            const y2 = (right[i].y + 1) * 300;
+            const z2 = right[i].z;
+
+            if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -100 || z1 > 100
+                || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -100 || z2 > 100)
                 continue;
-            drawPixel(x, y, img, ctxS2, rgb);
+            drawLine(x1, y1, x2, y2, ctxS2);
         }
-        ctxS2.putImageData(img, 0, 0);
-        stereoscopyDraw();
+        ctxS1.stroke();
+        ctxS2.stroke()
+        //stereoscopyDraw();
     } else {
         const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        for(let i = 0; i < translated.length; i ++) {
-            const x = (translated[i].x + 1) * 500;
-            const y = (translated[i].y + 1) * 300;
-            const z = translated[i].z;
-            if(x < 0 || y < 0 || x > 1000 || y > 700 || z < -100 || z > 100)
+        ctx.strokeStyle = "rgba(255, 0, 0, 1)";
+        ctx.beginPath();
+        for(let i = 1; i < translated.length; i ++) {
+            const x1 = (translated[i - 1].x + 1) * 500;
+            const y1 = (translated[i - 1].y + 1) * 300;
+            const z1 = translated[i - 1].z;
+
+            const x2 = (translated[i].x + 1) * 500;
+            const y2 = (translated[i].y + 1) * 300;
+            const z2 = translated[i].z;
+            if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -100 || z1 > 100
+                || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -100 || z2 > 100)
                 continue;
             if(points[i].selected)
                 rgb = {r: 255, g: 0, b: 0, a: 1};
             else 
                 rgb = {r: 255, g: 255, b: 255, a: 255}
-            drawPixel(x, y, img, ctx, rgb);
+            if(points[i].break) {
+                continue;
+            }
+            drawLine(x1, y1, x2, y2, ctx);
         }
-        ctx.putImageData(img, 0, 0);
+        ctx.stroke();
+       // ctx.putImageData(img, 0, 0);
     }
 }
 

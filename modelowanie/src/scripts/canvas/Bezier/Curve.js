@@ -1,6 +1,7 @@
 import Redraw from "../Draw/Redraw";
 import { setAddBezierState, getBezierPoints } from "./Bezier";
-import { getSplinePoints, getAddingC2State, addBsplinePoint } from "./BSpline";
+import { getSplinePoints, getAddingC2State, addBsplinePoint, rebuildVirtualPoints, rebuildVirtualPointsForSingleCurve } from "./BSpline";
+import { removePoint } from "../Points/Points";
 
 const curves = [];
 let curveCounter = 1;
@@ -21,10 +22,17 @@ export function unpinPoint(pointId) {
     const points = curve.type === "C2" ? curve.pointsBspline : curve.points;
     for(let i = 0; i < points.length; i ++) {
         if(pointId === points[i].id) {
+            for(let j = 0; j < points.length; j ++) {
+                for(let k = 0; k < points[j].virtualPoints.length; k ++) {
+                    removePoint(points[j].virtualPoints[k].id);
+                }
+                points[j].virtualPoints = [];
+            }
             points.splice(i, 1);
             break;
         }
     }
+    rebuildVirtualPointsForSingleCurve(curve.id);
     Redraw();
     return getCurvesControlPoints(curve.id);
 }
@@ -40,6 +48,8 @@ export function getCurveById(id){
 }
 export function getCurvesControlPoints(_id) {
     const id = _id !== undefined ? _id : selectedCurveId;
+        if(id === undefined)
+    return [];
     const curve = curves.find(x => x.id === id);
     if(curve.type === "C2") {
         return curve.pointsBspline;

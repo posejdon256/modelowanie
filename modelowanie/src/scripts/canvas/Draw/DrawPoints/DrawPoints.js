@@ -47,10 +47,12 @@ export function _DrawPoints(points, _ctx, _ctxStereo, _ctxStereo2) {
         for(let i = 0; i < translatedPoints.length; i ++ ) {
             if(points[i].selected) {
                 rgb = {r: 255, g: 0, b: 0};
+            }  else if(points[i].c2Bezier) {
+                rgb = {r: 0, g: 255, b: 0};
             } else {
                 rgb = {r: 255, g: 255, b: 255};
             }
-            if((!points[i].c2Bezier && !points[i].c2BSpline) || (points[i].c2BSpline && !c2BezierVisible) || (points[i].c2Bezier && c2BezierVisible)) {
+            if((!points[i].c2Bezier) || (points[i].c2Bezier && c2BezierVisible)) {
                 drawPoint(translatedPoints[i].x, translatedPoints[i].y, img, _ctx, rgb);
             }
         }

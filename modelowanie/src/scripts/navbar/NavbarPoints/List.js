@@ -3,7 +3,7 @@ import '../../../css/navbar/Navbar.css';
 import trash from '../../../pictures/trash.png';
 import select from '../../../pictures/select.png';
 import selectedRed from '../../../pictures/select_red.png';
-import { removePoint, updatePointName, selectPoint } from '../../canvas/Points/Points';
+import { removePoint, updatePointName, selectPoint, removePointWithRedraw } from '../../canvas/Points/Points';
 import { removeBezierCurve, turnOnChain } from '../../canvas/Bezier/Bezier';
 import { updateCurveName, getCurveById, selectCurve, getCurvesControlPoints } from '../../canvas/Bezier/Curve';
 
@@ -39,7 +39,7 @@ export default class List extends Component {
     }
     removePoint(id){
         this.setState({
-            points: removePoint(id)
+            points: removePointWithRedraw(id)
         });
         this.props.updateCurvePoints(getCurvesControlPoints());
     }

@@ -11,6 +11,11 @@ let pointNumber = 1;
 export function getPoints(){
     return points;
 }
+export function removePointWithRedraw(id) {
+    removePoint(id);
+    Redraw();
+    return points;
+}
 export function removePoint(id) {
     for(let i = 0; i < points.length; i ++) {
         if(points[i].id === id) {
@@ -24,8 +29,6 @@ export function removePoint(id) {
             break;
         }
     }
-    Redraw();
-    return points;
 }
 export function updatePointName(id, newName) {
     for(let i = 0; i < points.length; i ++) {
@@ -80,8 +83,9 @@ export function addPoint(x, y, z) {
     pointNumber ++;
     if((getAddBezierState() || getAddingC2State())) {
         newPoint.curves.push(getSelectedCurveId());
-        if(x === undefined)
+        if(x === undefined) {
             addPointToCurve(newPoint);
+        }
     }
     points.push(newPoint);
     Redraw();
