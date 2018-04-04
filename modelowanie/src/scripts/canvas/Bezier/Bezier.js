@@ -3,80 +3,40 @@ import Translate, { setTranslationPoints } from "../Translation/TranslationCente
 import Redraw from "../Draw/Redraw";
 import { getPoints } from "../Points/Points";
 import { getStereoscopy } from "../Stereoscopy/Stereoscopy";
+import { getCurves, getSelectedCurveId, addNewCurve, selectCurve, deselectCurve, addPointToCurve, getCurvesControlPoints } from "./Curve";
 
-const curves = [];
-let curveCounter = 1;
 let addCurveState = false;
-let selectedCurveId = undefined;
 
-export function getCurves(){
-    return curves;
-}
-export function updateCurveName(id, name) {
-    curves.find(x => x.id === id).name = name;
-    return curves;
-}
 export function turnOnChain(id) {
+    const curves = getCurves();
     const curve = curves.find(x => x.id === id);
     curve.chain = !curve.chain;
     Redraw();
     return curves;
 }
-export function unpinPoint(pointId) {
-    const curve = curves.find(x => x.id === selectedCurveId);
-    for(let i = 0; i < curve.points.length; i ++) {
-        if(pointId === curve.points[i].id) {
-            curve.points.splice(i, 1);
-            break;
-        }
-    }
-    Redraw();
-    return curve.points;
-}
-export function getCurveById(id){
-    const _id = id ? id : selectedCurveId;
-    if(!_id)
-        return {points: []};
-    return curves.find(x => x.id === _id);
-}
-export function selectCurve(id) {
-    for(let i = 0; i < curves.length; i  ++) {
-        if(curves[i].id === id){
-            curves[i].selected = !curves[i].selected;
-            if(curves[i].selected){
-                selectedCurveId = id;
-            }
-            else {
-                setAddCurveState(false);
-                selectedCurveId = undefined;
-            }
-        }
-        else {
-            curves[i].selected = false;
-        }
-    }
-    Redraw();
-    return curves;
-}
 export function addBezierCurve() {
     const curve = {
-        name: "Krzywa " + curveCounter,
         objectType: "curve",
-        id: curveCounter,
         points: [],
         selected: false,
         chain: false
     };
-    curves.push(curve);
-    selectCurve(curve.id);
-    curveCounter ++;
-    return curve;
+    return addNewCurve("C0", curve);
+}
+export function setAddBezierState(state) {
+    addCurveState = state;
+    if(!state)
+        deselectCurve();
+}
+export function getAddBezierState() {
+    return addCurveState;
 }
 export function removeBezierCurve(id) {
+    const curves = getCurves("C0");
     for(let i = 0; i < curves.length; i ++) {
-        if(curves[i]. id === id) {
+        if(curves[i].id === id) {
             curves.splice(i, 1);
-            selectedCurveId = undefined;
+            selectCurve()
             addCurveState = false;
             break;
         }
@@ -84,26 +44,9 @@ export function removeBezierCurve(id) {
     Redraw();
     return curves;
 }
-export function addPointToCurve(point) {
-    if(selectedCurveId === undefined) 
-        throw new Error('Couldnt find a curve');
-    const curve = curves.find(x => x.id === selectedCurveId);
-    if(curve.points.find(x => x.id === point.id) === undefined)
-        curve.points.push(point);
-}
-export function setAddCurveState(state) {
-    addCurveState = state;
-    if(!state)
-        selectedCurveId = undefined;
-}
-export function getAddCurveState() {
-    return addCurveState;
-}
-export function getSelectedCurveId(){
-    return selectedCurveId;
-}
 export function addCurveBySelectedPoints() {
     const points = getPoints();
+    const selectedCurveId = getSelectedCurveId();
     if (selectedCurveId === undefined) {
         addBezierCurve();
     }
@@ -114,13 +57,19 @@ export function addCurveBySelectedPoints() {
     Redraw();
     return selectedCurveId;
 }
-export function getCurvesPoints(){
-    clearArray();
+export function getBezierPoints(_curves){
+    const curves = _curves ? _curves : getCurves("C0");
+    clearArray(curves);
     const points = [];
     const berstainsNAfterI = countBerstainNAfterI();
     for(let i = 0; i < curves.length; i ++) {
-        for(let l = 0; l < curves[i].points.length; l += 3) {
-            const curvePart = curves[i].points.slice(l, l + 4);
+        for(let l = 0; l < curves[i].points.length;) {
+            let curvePart;
+            if(curves[i].type === "C2" && (l === 0 || curves[i].points.length < l + 3)) {
+                curvePart = curves[i].points.slice(l, l + 3);
+            } else {
+                curvePart = curves[i].points.slice(l, l + 4);
+            }
             const divisions = parseInt(countCircumfrence(curvePart), 10);
             for(let j = 0; j < divisions; j ++) {
                 const point = {x: 0, y: 0, z: 0, selected: curves[i].selected};
@@ -134,6 +83,11 @@ export function getCurvesPoints(){
                     point.z += (value * curvePart[k].z);
                 }
                 points.push(point);
+            }
+            if(curves[i].type === "C2" && (l === 0 || curves[i].points.length < l + 3)) {
+                l += 2;
+            } else  {
+                l += 3;
             }
         }
     }
@@ -186,7 +140,7 @@ function countBerstainNAfterI() {
     }
     return ret;
 }
-function clearArray() {
+function clearArray(curves) {
     for(let i = 0; i < curves.length; i ++) {
         for(let j = 0; j < curves[i].points.length; j ++) {
             if(curves[i].points[j].deleted)

@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import '../../../css/navbar/Navbar.css';
 import unpin from '../../../pictures/unpin.png';
-import { unpinPoint } from '../../canvas/Bezier/Bezier';
+import { unpinPoint } from '../../canvas/Bezier/Curve';
 
 export default class ListPointsInCurve extends Component {
 
@@ -30,14 +30,14 @@ export default class ListPointsInCurve extends Component {
                 <ul className="ab-ul-points">
                 {
                     points.map(point => {
-                        return (
+                        return !point.c2Bezier ? (
                         <li key={point.id} className="ab-point-list-li">
                             <label className="ab-point-for-curve-list-label">{point.name}</label>
                             <button className="ab-delete-point-button" onClick={(e) => this.unpinPoint(point.id)}>
                                 <img className="ab-delete-point" src={unpin} alt="unpin" />
                             </button>
                         </li>
-                        );
+                        ): '';
                     })
                 }
                 </ul>

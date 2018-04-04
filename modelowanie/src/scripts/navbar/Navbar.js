@@ -3,7 +3,9 @@ import '../../css/navbar/Navbar.css';
 import List from './NavbarPoints/List';
 import ListPointsInCurve from './NavbarPoints/ListPointsInCurve';
 import { getCursor } from '../canvas/Cursor/Cursor';
-import { addCurveBySelectedPoints, getCurveById } from '../canvas/Bezier/Bezier';
+import { addCurveBySelectedPoints } from '../canvas/Bezier/Bezier';
+import { setAddingC2Type } from '../canvas/Bezier/BSpline';
+import { getCurveById, getCurvesControlPoints } from '../canvas/Bezier/Curve';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -14,6 +16,7 @@ export default class Navbar extends Component {
         this.updateChecked = this.updateChecked.bind(this);
         this.addCurve = this.addCurve.bind(this);
         this.updateCurvePoints = this.updateCurvePoints.bind(this);
+        this.updateAddingC2Type = this.updateAddingC2Type.bind(this);
 
         const cursor = getCursor();
         this.state = {
@@ -24,6 +27,9 @@ export default class Navbar extends Component {
             cursorPosY: cursor.screenY,
             curvePoints: []
         };
+    }
+    updateAddingC2Type(event) {
+        setAddingC2Type(event.target.checked);
     }
     updateXGrid(event) {
         this.props.updateXGrid(parseInt(event.target.value, 10));
@@ -52,7 +58,7 @@ export default class Navbar extends Component {
     }
     addCurve() {
         const curveId = addCurveBySelectedPoints();
-        this.updateCurvePoints(getCurveById(curveId).points);
+        this.updateCurvePoints(getCurvesControlPoints(curveId));
         this.forceUpdate();
     }
     render(){
@@ -82,6 +88,10 @@ export default class Navbar extends Component {
             </div>
             <div>
                 <button onClick={this.addCurve}>Dodaj krzywą Beziera z punktów</button>
+            </div>
+            <div>
+                <label>Dodawanie krzywej C2 w bazie Beziera:</label>
+                <input type="checkbox" onChange={this.updateAddingC2Type}/>
             </div>
         </div>);
     }

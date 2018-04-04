@@ -1,7 +1,7 @@
 import Translate, { setTranslationPoints } from "../../Translation/TranslationCenter/TranslationCenter";
-import { getCurvesPoints, getCurves } from "../../Bezier/Bezier";
 import { drawPixel, getCanvas, drawLine, stereoscopyDraw } from "../Draw";
 import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
+import { getCurves, getCurvesPoints } from "../../Bezier/Curve";
 
 export function _DrawCurves(ctx, ctxS1, ctxS2) {
     const points = getCurvesPoints();

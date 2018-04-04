@@ -12,7 +12,10 @@ import Header from './scripts/header/Header';
 import { addPoint, getPoints } from './scripts/canvas/Points/Points';
 import { toggleTorus, getTorusVisibility } from './scripts/canvas/Torus/Torus';
 import Redraw from './scripts/canvas/Draw/Redraw';
-import { addBezierCurve, getCurves, setAddCurveState, getCurveById } from './scripts/canvas/Bezier/Bezier';
+import { addBezierCurve, setAddBezierState } from './scripts/canvas/Bezier/Bezier';
+import { addBsplineCurve, setAddingC2State } from './scripts/canvas/Bezier/BSpline';
+import { getCurves, getCurveById, getCurvesControlPoints } from './scripts/canvas/Bezier/Curve';
+import { turnOffAllStates } from './scripts/canvas/StatesCenter/StatesCenter';
 
 class App extends Component {
   constructor(props) {
@@ -43,16 +46,22 @@ class App extends Component {
     this.setState({
       points: getPoints(),
       curves: getCurves(),
-      curvePoints: getCurveById().points
+      curvePoints: getCurvesControlPoints()
     });
   }
   addPoint() {
     addPoint();
     this.refreshNavbar();
   }
-  addCurve() {
-    addBezierCurve();
-    setAddCurveState(true);
+  addCurve(type) {
+    turnOffAllStates();
+    if(type === "Bspline") {
+        addBsplineCurve();
+        setAddingC2State(true);
+    } else {
+      addBezierCurve();
+      setAddBezierState(true);
+    }
     this.refreshNavbar();
   }
   updateChecked(stereoscopy) {
