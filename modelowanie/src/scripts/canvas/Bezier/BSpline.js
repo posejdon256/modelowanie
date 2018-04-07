@@ -1,7 +1,6 @@
 import { addNewCurve, getCurves } from "./Curve";
 import { getBezierPoints } from "./Bezier";
-import { addPoint, removePoint } from "../Points/Points";
-import { updateCursor } from "../Cursor/Cursor";
+import { addPoint } from "../Points/Points";
 import Redraw from "../Draw/Redraw";
 
 let addingC2Type = false; //false - b-spline, true - bezier
@@ -22,6 +21,7 @@ export function addBsplineCurve() {
         pointsBspline: [],
         pointsBezier: [],
         selected: false,
+        type: "C2",
         chain: false,
         spline: true
     };
@@ -43,14 +43,14 @@ function rebuildVirtulaPoint(curve, j) {
     const points = curve.pointsBspline;
     if( j < 1 )
         return curve;
-    const a  = addPoint(points[j - 1].x + ((points[j].x - points[j - 1].x) / 3), points[j - 1].y + ((points[j].y - points[j - 1].y) / 3), points[j - 1].z + ((points[j].z - points[j - 1].z) / 3));
-    const b = addPoint(points[j - 1].x + ((points[j].x - points[j - 1].x) / (3/2)), points[j - 1].y + ((points[j].y - points[j - 1].y) / (3/2)), points[j - 1].z + ((points[j].z - points[j - 1].z) / (3/2)));
+    const a  = addPoint(points[j - 1].x + ((points[j].x - points[j - 1].x) / 3), points[j - 1].y + ((points[j].y - points[j - 1].y) / 3), points[j - 1].z + ((points[j].z - points[j - 1].z) / 3), "C2-bezier");
+    const b = addPoint(points[j - 1].x + ((points[j].x - points[j - 1].x) / (3/2)), points[j - 1].y + ((points[j].y - points[j - 1].y) / (3/2)), points[j - 1].z + ((points[j].z - points[j - 1].z) / (3/2)),  "C2-bezier");
     if(j > 1) {
         const c =  addPoint(
                 points[j - 2].x + (((points[j-1].x - points[j - 2].x) / (3/2)) + (points[j - 1].x + ((points[j].x - points[j - 1].x) / 3) - (points[j - 2].x + ((points[j-1].x - points[j - 2].x) / (3/2))))/ 2),
                 points[j - 2].y + (((points[j-1].y - points[j - 2].y) / (3/2)) + (points[j - 1].y + ((points[j].y - points[j - 1].y) / 3) - (points[j - 2].y + ((points[j-1].y - points[j - 2].y) / (3/2))))/ 2),
                 points[j - 2].z + (((points[j-1].z - points[j - 2].z) / (3/2)) + (points[j - 1].z + ((points[j].z - points[j - 1].z) / 3) - (points[j - 2].z + ((points[j-1].z - points[j - 2].z) / (3/2))))/ 2)
-            );
+                ,"C2-bezier");
             c.bSpline = { id: j, number: 2};
             curve.pointsBspline[j].virtualPoints.push(c);
     }
@@ -61,20 +61,21 @@ function rebuildVirtulaPoint(curve, j) {
     return curve;
 }
 export function rebuildVirtualPoints() {
-    const curves = getCurves("C2");
+    const curves = getCurves("C2").concat(getCurves("C2I"));
     for(let i = 0; i < curves.length; i ++) {
         rebuildVirtualPointsForSingleCurve(curves[i].id);
     }
 }
 export function rebuildVirtualPointsForSingleCurve(id) {
-    const curves = getCurves("C2");
+    const curves = getCurves();
     const curve = curves.find(x => x.id === id);
     for(let j = 0; j < curve.pointsBspline.length; j ++) {
         rebuildVirtulaPoint(curve, j);
     }
+    return curve;
 }
 export function cutBSpline() {
-    const curves = getCurves("C2");
+    const curves = getCurves("C2").concat(getCurves("C2I"));
     for(let i = 0; i < curves.length; i ++) {
         const points = curves[i].pointsBspline;
         if(points.length === 0)
@@ -134,16 +135,19 @@ export function carefullyCutBspline() {
                     curves[i].pointsBspline[points[j - 1].bSpline.id].z = curves[i].pointsBspline[points[j - 1].bSpline.id - 1].z + ((3/2)*(points[j - 1].z - curves[i].pointsBspline[points[j - 2].bSpline.id - 1].z));
                     break;
                 }
+                if(points[j].selected) {
+                    const cennterPointX = (curves[i].pointsBspline[points[j - 1].bSpline.id - 1].x + curves[i].pointsBspline[points[j - 1].bSpline.id + 1].x) / 2;
+                    const cennterPointY = (curves[i].pointsBspline[points[j - 1].bSpline.id - 1].y + curves[i].pointsBspline[points[j - 1].bSpline.id + 1].y) / 2;
+                    const cennterPointZ = (curves[i].pointsBspline[points[j - 1].bSpline.id - 1].z + curves[i].pointsBspline[points[j - 1].bSpline.id + 1].z) / 2;
+                    curves[i].pointsBspline[points[j - 1].bSpline.id].x = cennterPointX + ((3/2)*(points[j].x - cennterPointX));
+                    curves[i].pointsBspline[points[j - 1].bSpline.id].y = cennterPointY + ((3/2)*(points[j].y - cennterPointY));
+                    curves[i].pointsBspline[points[j - 1].bSpline.id].z = cennterPointZ + ((3/2)*(points[j].z - cennterPointZ));
+                   break;
+                }
             }
         }
     }
     return cutBSpline();
-}
-function updateDeBoors(curve){
-    const splines = curve.pointsBspline;
-    for(let i = 1; i < splines.length; i ++) {
-        const a1 = splines[i - 1] - splines[i]
-    }
 }
 function areC1(p1, p2, p3) {
     return (p3.x - p2.x).toFixed(6) === (p2.x - p1.x).toFixed(6) 
@@ -156,25 +160,18 @@ function areC2(p1, p2, p4, p5) {
     && (p5.z - (2 * p4.z)).toFixed(6) === (p1.z - (2 * p2.z)).toFixed(6);
 }
 export function getSplinePoints() {
-    clearArray(getCurves());
+    clearArray(getCurves("C2"));
     if(!addingC2Type) {
         return getBezierPoints(cutBSpline());
     } else {
         return getBezierPoints(carefullyCutBspline());
     }
 }
-function clearArray(curves) {
+export function clearArray(curves) {
     let deleted = false;
     for(let i = 0; i < curves.length; i ++) {
         for(let j = 0; j < curves[i].pointsBspline.length; j ++) {
-            const points = curves[i].pointsBspline[j].virtualPoints;
             if(curves[i].pointsBspline[j].deleted) {
-                for(let k = 0; k < curves[i].pointsBspline.length; k ++) {
-                    for(let l = 0; l < curves[i].pointsBspline[k].virtualPoints.length; l ++) {
-                        removePoint(curves[i].pointsBspline[k].virtualPoints[l].id);
-                    }
-                    curves[i].pointsBspline[k].virtualPoints = [];
-                }
                 curves[i].pointsBspline.splice(j, 1);
                 deleted = true;
                 continue;

@@ -3,9 +3,8 @@ import '../../css/navbar/Navbar.css';
 import List from './NavbarPoints/List';
 import ListPointsInCurve from './NavbarPoints/ListPointsInCurve';
 import { getCursor } from '../canvas/Cursor/Cursor';
-import { addCurveBySelectedPoints } from '../canvas/Bezier/Bezier';
 import { setAddingC2Type } from '../canvas/Bezier/BSpline';
-import { getCurveById, getCurvesControlPoints } from '../canvas/Bezier/Curve';
+import { getCurvesControlPoints, addCurveBySelectedPoints } from '../canvas/Bezier/Curve';
 
 export default class Navbar extends Component {
     constructor(props) {

@@ -1,6 +1,6 @@
 import { MoveToFront, MoveToLeft, MoveToRight, StopMovingLeft, StopMovingRight, MoveToTop, MoveToBack, StopMovingTop, StopMovingDown, MoveToDown, StopMovingFront, StopMovingBack } from "../Move/Move";
 import { MoveToFrontCursor, MoveToLeftCursor, MoveToTopCursor, MoveToDownCursor, MoveToRightCursor, StopMovingLeftCursor, StopMovingDownCursor, StopMovingRightCursor, StopMovingTopCursor, MoveToBackCursor, StopMovingFrontCursor, StopMovingBackCursor, RemoveCatchPoint, CatchPoint } from '../Move/MoveCursor';
-import { addPoint } from "../Points/Points";
+import { addPointWithRedraw } from "../Points/Points";
 export default function KeyboardCenter(event, refresh) {
     if(event.type === 'keydown') {
         KeyDown(event);
@@ -42,7 +42,7 @@ function KeyDown(event) {
             MoveToRightCursor()
             break;
         case 32: //space
-            addPoint();
+            addPointWithRedraw();
             event.preventDefault();
             break;
         case 38: //up

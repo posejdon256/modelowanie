@@ -14,8 +14,9 @@ import { toggleTorus, getTorusVisibility } from './scripts/canvas/Torus/Torus';
 import Redraw from './scripts/canvas/Draw/Redraw';
 import { addBezierCurve, setAddBezierState } from './scripts/canvas/Bezier/Bezier';
 import { addBsplineCurve, setAddingC2State } from './scripts/canvas/Bezier/BSpline';
-import { getCurves, getCurveById, getCurvesControlPoints } from './scripts/canvas/Bezier/Curve';
+import { getCurves, getCurvesControlPoints } from './scripts/canvas/Bezier/Curve';
 import { turnOffAllStates } from './scripts/canvas/StatesCenter/StatesCenter';
+import { setInterpolationState, addInterpolationCurve } from './scripts/canvas/Bezier/Interpolation';
 
 class App extends Component {
   constructor(props) {
@@ -58,7 +59,11 @@ class App extends Component {
     if(type === "Bspline") {
         addBsplineCurve();
         setAddingC2State(true);
-    } else {
+    } else if(type === "C2I") {
+        addInterpolationCurve();
+        setInterpolationState(true);
+    }
+    else {
       addBezierCurve();
       setAddBezierState(true);
     }

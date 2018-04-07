@@ -2,8 +2,9 @@ import { getCursor } from '../Cursor/Cursor';
 import Redraw from '../Draw/Redraw';
 import { CatchPoint, RemoveCatchPoint } from '../Move/MoveCursor';
 import { getAddBezierState } from '../Bezier/Bezier';
-import { getSelectedCurveId, addPointToCurve } from '../Bezier/Curve';
+import { getSelectedCurveId, addPointToCurve, getCurves } from '../Bezier/Curve';
 import { getAddingC2State } from '../Bezier/BSpline';
+import { getInterpolationState } from '../Bezier/Interpolation';
 
 const points = [];
 let pointNumber = 1;
@@ -17,16 +18,44 @@ export function removePointWithRedraw(id) {
     return points;
 }
 export function removePoint(id) {
+    let deleteVirtualPoints = false;
+    let deleteFromInterpolation= false;
+    let interpolationPoint = undefined;
     for(let i = 0; i < points.length; i ++) {
         if(points[i].id === id) {
             points[i].deleted = true;
             if(points[i].virtualPoints !== undefined) {
-                for(let j = 0; j < points[i].virtualPoints.length; j++) {
-                    points[i].virtualPoints[j].deleted = true;
-                }
+                deleteVirtualPoints = true;
+            }
+            if(points[i].interpolation) {
+                deleteFromInterpolation = true;
+                interpolationPoint = points[i];
             }
             points.splice(i, 1);
             break;
+        }
+    }
+    if(deleteVirtualPoints) {
+        for(let i = 0; i < points.length; i ++) {
+            if(points[i].c2Bezier) {
+                points.splice(i, 1);
+                i --;
+            }
+            if(points[i].virtualPoints && points[i].virtualPoints.length > 1) {
+                points[i].virtualPoints = [];
+            }
+        }
+    }
+    if(deleteFromInterpolation) {
+        const curves = getCurves("C2I");
+        for(let i = 0; i < curves.length; i ++) {
+            for(let j = 0; j < curves[i].interpolationPoints.length; j ++) {
+                if(curves[i].interpolationPoints[j].id === interpolationPoint.id) {
+                    curves[i].interpolationPoints.splice(j,1);
+                    curves[i].pointsBspline[j].deleted = true;
+                    break;
+                }
+            }
         }
     }
 }
@@ -64,8 +93,8 @@ export function selectPoint(id) {
     Redraw();
     return points;
 }
-export function addPoint(x, y, z) {
-    const cursor = x === undefined ? getCursor() : {x: x, y: y, z: z};
+export function addPoint(x, y, z, type) {
+    const cursor = type === undefined ? getCursor() : {x: x, y: y, z: z};
     const newPoint = {
         x: cursor.x,
         y: cursor.y,
@@ -73,21 +102,25 @@ export function addPoint(x, y, z) {
         name: "Punkt " + pointNumber,
         id: pointNumber,
         selected: false,
-        c2Bezier: x !== undefined ? true : false,
+        c2Bezier: type === "C2-bezier" ? true : false,
         c2BSpline: getAddingC2State() && x === undefined ? true : false,
         curves: []
     };
-    if(newPoint.c2BSpline) {
+    if(getAddingC2State() || getInterpolationState()) {
         newPoint.virtualPoints = [];
     }
     pointNumber ++;
-    if((getAddBezierState() || getAddingC2State())) {
+    if((getAddBezierState() || getAddingC2State()) || getInterpolationState()) {
         newPoint.curves.push(getSelectedCurveId());
-        if(x === undefined) {
+        if(type !== "C2-bezier" && type !== "C2i-boor") {
             addPointToCurve(newPoint);
         }
     }
     points.push(newPoint);
+    return newPoint;
+}
+export function addPointWithRedraw() {
+    const newPoint = addPoint();
     Redraw();
     return newPoint;
 }

@@ -4,8 +4,10 @@ import torus from '../../pictures/torus.png';
 import point from '../../pictures/point.png';
 import bezierc1 from '../../pictures/bezierc1.png';
 import bezierc2 from '../../pictures/bezierc2.png';
+import bezierc2I from '../../pictures/bezierc2i.png';
 import { getAddBezierState, setAddBezierState } from '../canvas/Bezier/Bezier';
 import { getAddingC2State, setAddingC2State } from '../canvas/Bezier/BSpline';
+import { getInterpolationState, setInterpolationState } from '../canvas/Bezier/Interpolation';
 
 export default class Header extends Component {
     constructor(props) {
@@ -15,6 +17,7 @@ export default class Header extends Component {
         this.addPoint = this.addPoint.bind(this);
         this.addCurve = this.addCurve.bind(this);
         this.addBesplineCurve = this.addBesplineCurve.bind(this);
+        this.addInterpolationCurve = this.addInterpolationCurve.bind(this);
     }
     toggleTorus(){
         this.props.toggleTorus();
@@ -36,6 +39,13 @@ export default class Header extends Component {
         }
         this.props.addCurve();
     }
+    addInterpolationCurve() {
+        if(getInterpolationState()) {
+            setInterpolationState(false);
+            return;
+        }
+        this.props.addCurve("C2I");
+    }
     render(){
         return(
         <div className="ab-header">
@@ -46,10 +56,13 @@ export default class Header extends Component {
                 <img className="ab-point-image" src={point} alt="point" />
             </button>
             <button className="ab-torus-button" onClick={this.addCurve}>
-                <img className="ab-point-image" src={bezierc1} alt="point" />
+                <img className="ab-point-image" src={bezierc1} alt="bezier" />
             </button>
             <button className="ab-torus-button" onClick={this.addBesplineCurve}>
-                <img className="ab-point-image" src={bezierc2} alt="point" />
+                <img className="ab-point-image" src={bezierc2} alt="bezier" />
+            </button>
+            <button className="ab-torus-button" onClick={this.addInterpolationCurve}>
+                <img className="ab-point-image" src={bezierc2I} alt="bezier" />
             </button>
         </div>);
     }

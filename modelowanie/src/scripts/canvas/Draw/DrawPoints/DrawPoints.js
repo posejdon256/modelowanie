@@ -1,8 +1,7 @@
 import Translate, { setTranslationPoints } from "../../Translation/TranslationCenter/TranslationCenter";
 import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
 import { drawPixel, stereoscopyDraw, getCanvas } from "../Draw";
-import { getAddingC2State, getAddingC2type } from "../../Bezier/BSpline";
-import { getAddBezierState } from "../../Bezier/Bezier";
+import { getAddingC2type } from "../../Bezier/BSpline";
 
 let img;
 function drawPoint(x, y, img, ctx, rgb) {
@@ -52,7 +51,7 @@ export function _DrawPoints(points, _ctx, _ctxStereo, _ctxStereo2) {
             } else {
                 rgb = {r: 255, g: 255, b: 255};
             }
-            if((!points[i].c2Bezier) || (points[i].c2Bezier && c2BezierVisible)) {
+            if(((!points[i].c2Bezier) || (points[i].c2Bezier && c2BezierVisible)) && (points[i].visible !== false)) {
                 drawPoint(translatedPoints[i].x, translatedPoints[i].y, img, _ctx, rgb);
             }
         }

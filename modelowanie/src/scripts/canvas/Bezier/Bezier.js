@@ -1,9 +1,8 @@
 import { factorial } from "../../Helpers/Helpers";
 import Translate, { setTranslationPoints } from "../Translation/TranslationCenter/TranslationCenter";
 import Redraw from "../Draw/Redraw";
-import { getPoints } from "../Points/Points";
 import { getStereoscopy } from "../Stereoscopy/Stereoscopy";
-import { getCurves, getSelectedCurveId, addNewCurve, selectCurve, deselectCurve, addPointToCurve, getCurvesControlPoints } from "./Curve";
+import { getCurves, addNewCurve, deselectCurve } from "./Curve";
 
 let addCurveState = false;
 
@@ -19,6 +18,7 @@ export function addBezierCurve() {
         objectType: "curve",
         points: [],
         selected: false,
+        type: "C0",
         chain: false
     };
     return addNewCurve("C0", curve);
@@ -31,32 +31,6 @@ export function setAddBezierState(state) {
 export function getAddBezierState() {
     return addCurveState;
 }
-export function removeBezierCurve(id) {
-    const curves = getCurves("C0");
-    for(let i = 0; i < curves.length; i ++) {
-        if(curves[i].id === id) {
-            curves.splice(i, 1);
-            selectCurve()
-            addCurveState = false;
-            break;
-        }
-    }
-    Redraw();
-    return curves;
-}
-export function addCurveBySelectedPoints() {
-    const points = getPoints();
-    const selectedCurveId = getSelectedCurveId();
-    if (selectedCurveId === undefined) {
-        addBezierCurve();
-    }
-    for(let i = 0; i < points.length; i ++) {
-        if(points[i].selected)
-            addPointToCurve(points[i]);
-    }
-    Redraw();
-    return selectedCurveId;
-}
 export function getBezierPoints(_curves){
     const curves = _curves ? _curves : getCurves("C0");
     clearArray(curves);
@@ -65,7 +39,7 @@ export function getBezierPoints(_curves){
     for(let i = 0; i < curves.length; i ++) {
         for(let l = 0; l < curves[i].points.length;) {
             let curvePart;
-            if(curves[i].type === "C2" && (l === 0 || curves[i].points.length < l + 3)) {
+            if((curves[i].type === "C2" || curves[i].type === "C2I") && (l === 0 || curves[i].points.length < l + 3)) {
                 curvePart = curves[i].points.slice(l, l + 3);
             } else {
                 curvePart = curves[i].points.slice(l, l + 4);
@@ -86,7 +60,7 @@ export function getBezierPoints(_curves){
                 }
                 points.push(point);
             }
-            if(curves[i].type === "C2" && (l === 0 || curves[i].points.length < l + 3)) {
+            if((curves[i].type === "C2" || curves[i].type === "C2I") && (l === 0 || curves[i].points.length < l + 3)) {
                 l += 2;
             } else  {
                 l += 3;

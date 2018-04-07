@@ -3,9 +3,9 @@ import '../../../css/navbar/Navbar.css';
 import trash from '../../../pictures/trash.png';
 import select from '../../../pictures/select.png';
 import selectedRed from '../../../pictures/select_red.png';
-import { removePoint, updatePointName, selectPoint, removePointWithRedraw } from '../../canvas/Points/Points';
-import { removeBezierCurve, turnOnChain } from '../../canvas/Bezier/Bezier';
-import { updateCurveName, getCurveById, selectCurve, getCurvesControlPoints } from '../../canvas/Bezier/Curve';
+import { updatePointName, selectPoint, removePointWithRedraw } from '../../canvas/Points/Points';
+import { turnOnChain } from '../../canvas/Bezier/Bezier';
+import { updateCurveName, getCurveById, selectCurve, getCurvesControlPoints, removeCurve } from '../../canvas/Bezier/Curve';
 
 export default class List extends Component {
 
@@ -45,7 +45,7 @@ export default class List extends Component {
     }
     removeCurve(id) {
         this.setState({
-            curves: removeBezierCurve(id)
+            curves: removeCurve(id)
         });
         this.props.updateCurvePoints([]);
     }
@@ -67,7 +67,7 @@ export default class List extends Component {
         if(!curve.selected)
             this.props.updateCurvePoints([]);
         else
-            this.props.updateCurvePoints(id);
+            this.props.updateCurvePoints(curve.type === "C2" ? curve.pointsBspline : (curve.type === "C2I" ? curve.interpolationPoints : curve.points));
     }
     render() {
         const points  = this.state.points;
@@ -78,7 +78,7 @@ export default class List extends Component {
                 <ul className="ab-ul-points">
                 {
                     points.map(point => {
-                        return (!point.c2Bezier ?(
+                        return (point.visible !== false && !point.c2Bezier ?(
                         <li key={"point" + point.id} className="ab-point-list-li">
                             <input className="ab-point-list-input" type="text" value={point.name} onChange={(e) => this.updatePointName(point.id, e.target.value)}/>
                             <label className="ab-points-list-datas">{"x: " + point.x.toFixed(2) + " y: " + point.y.toFixed(2) + " z: " + point.z.toFixed(2) + " "}</label>
