@@ -37,17 +37,29 @@ export function addPointToInterpolationCurve(curve, point) {
 function updateInterpolationCurves() {
     const curves = getCurves("C2I");
     for(let i = 0; i < curves.length; i ++) {
-        const interpolationPoints = curves[i].interpolationPoints;
-        const bSplinePoints = curves[i].pointsBspline;
+        let interpolationPoints = curves[i].interpolationPoints.slice();
+        let bSplinePoints = curves[i].pointsBspline.slice();
         const T = [];
         let max = - 10;
         let sum = 0;
         T.push(0);
-        T.push(0);
-        T.push(0);
+        T.push(0.001);
+        T.push(0.002);
+        const epsilon = 0.001;
+        if(interpolationPoints.length < 2)
+            continue;
+
+        const leftAddInter = [interpolationPoints[0], interpolationPoints[0]];
+        const rightAddInter =[interpolationPoints[interpolationPoints.length - 1], interpolationPoints[interpolationPoints.length - 1]];
+        interpolationPoints = (leftAddInter.concat(interpolationPoints)).concat(rightAddInter);
+
+        const leftAddBSpline = [bSplinePoints[0], bSplinePoints[0]];
+        const rightAddBSpline =[bSplinePoints[bSplinePoints.length - 1], bSplinePoints[bSplinePoints.length - 1]];
+        bSplinePoints = (leftAddBSpline.concat(bSplinePoints)).concat(rightAddBSpline);
+        const bla = 1 / interpolationPoints.length;
         for(let j = 1; j < interpolationPoints.length; j ++) {
-            const vectorLength = getVectorLength(interpolationPoints[j], interpolationPoints[j - 1]);
-            sum += vectorLength;
+            const vectorLength = bla + epsilon;//getVectorLength(interpolationPoints[j], interpolationPoints[j - 1]) + epsilon;//bla + epsilon;
+            sum += Math.sqrt(vectorLength);
             T.push(sum);
             if(vectorLength > max) {
                 max = vectorLength;
@@ -55,13 +67,12 @@ function updateInterpolationCurves() {
         }
         T.push(sum);
         T.push(sum);
+        sum = Math.sqrt(sum);
         for(let j = 0; j < T.length; j ++) {
             T[j] = (T[j]/(sum));
         }
         const interpolationArray = {left:[], middle:[], right: []};
         interpolationArray.left.push(0);
-        if(interpolationPoints.length < 2)
-        return;
         for(let j = 2; j < T.length - 2; j ++) {
             const NForCurrentJ = deBoorAlgorithm(j, T, T[j]);
             if(j !== 2) {
@@ -102,6 +113,7 @@ function updateInterpolationCurves() {
             bSplinePoints[j].y = (dPrim[j].y - (cPrim[j] * bSplinePoints[j + 1].y));
             bSplinePoints[j].z = (dPrim[j].z - (cPrim[j] * bSplinePoints[j + 1].z));
         }
+        curves[i].pointsBspline = bSplinePoints.splice(2, curves[i].pointsBspline.length);
     }
 }
 function AnnaBujakAlgorithm(i, T, t) {
@@ -122,7 +134,6 @@ function AnnaBujakAlgorithm(i, T, t) {
 function deBoorAlgorithm(i, T, t) {
     const N = [];
     N.push(undefined);
-    N.push(1);
     const A = {};
     const B = {};
     N.push(1);
