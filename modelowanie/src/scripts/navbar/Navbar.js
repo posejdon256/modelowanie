@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import '../../css/navbar/Navbar.css';
 import List from './NavbarPoints/List';
 import ListPointsInCurve from './NavbarPoints/ListPointsInCurve';
+import BiCubicNavbar from './BiCubicNavbar/BiCubicNavbar';
+
 import { getCursor } from '../canvas/Cursor/Cursor';
 import { setAddingC2Type } from '../canvas/Bezier/BSpline';
 import { getCurvesControlPoints, addCurveBySelectedPoints } from '../canvas/Bezier/Curve';
@@ -92,6 +94,7 @@ export default class Navbar extends Component {
                 <label>Dodawanie krzywej C2 w bazie Beziera:</label>
                 <input type="checkbox" onChange={this.updateAddingC2Type}/>
             </div>
+            <BiCubicNavbar />
         </div>);
     }
 }

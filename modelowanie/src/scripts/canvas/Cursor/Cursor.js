@@ -17,3 +17,8 @@ export function setScreenPlace(x, y) {
     cursor.screenX = x;
     cursor.screenY = y;
 }
+export function setCursor(xDiff, yDiif, zDiff) {
+    cursor.x = xDiff;
+    cursor.y = yDiif;
+    cursor.z = zDiff;
+}

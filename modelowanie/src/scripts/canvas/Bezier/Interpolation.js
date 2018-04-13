@@ -1,7 +1,6 @@
 import { addNewCurve, getCurves } from "./Curve";
-import { getVectorLength } from "../../Helpers/Helpers";
 import { addPoint } from "../Points/Points";
-import { rebuildVirtualPointsForSingleCurve, cutBSpline, addBsplinePoint, clearArray } from "./BSpline";
+import { cutBSpline, addBsplinePoint, clearArray } from "./BSpline";
 import { getBezierPoints } from "./Bezier";
 
 let interpolationState = false;
@@ -115,21 +114,6 @@ function updateInterpolationCurves() {
         }
         curves[i].pointsBspline = bSplinePoints.splice(2, curves[i].pointsBspline.length);
     }
-}
-function AnnaBujakAlgorithm(i, T, t) {
-    const N = [];
-    const A = {};
-    const B = {};
-    N.push(1);
-    for(let j = 1; j <= 3; j ++) {
-        A[j] = (T[i + j - 1] - t)/(T[i + j] - T[i]);
-        B[j] = (t - T[i - 1])/(T[i + j - 1] - T[i - 1]);
-        const NPrim = N.slice();
-        for(let k = 1; k <= j + 1 ; k ++) {
-            N[k] = (A[k] && NPrim[k] ? A[k] * NPrim[k] : 0) + (B[k - 1] && NPrim[k - 1] ? B[k - 1] * NPrim[ k - 1] : 0);
-        }
-    }
-    return N.splice(2, 4);
 }
 function deBoorAlgorithm(i, T, t) {
     const N = [];

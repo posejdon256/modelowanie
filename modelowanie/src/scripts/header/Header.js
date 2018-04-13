@@ -5,9 +5,11 @@ import point from '../../pictures/point.png';
 import bezierc1 from '../../pictures/bezierc1.png';
 import bezierc2 from '../../pictures/bezierc2.png';
 import bezierc2I from '../../pictures/bezierc2i.png';
+import platekC0 from '../../pictures/platek.png';
 import { getAddBezierState, setAddBezierState } from '../canvas/Bezier/Bezier';
 import { getAddingC2State, setAddingC2State } from '../canvas/Bezier/BSpline';
 import { getInterpolationState, setInterpolationState } from '../canvas/Bezier/Interpolation';
+import { createSurface } from '../canvas/Surface/Surface';
 
 export default class Header extends Component {
     constructor(props) {
@@ -18,6 +20,7 @@ export default class Header extends Component {
         this.addCurve = this.addCurve.bind(this);
         this.addBesplineCurve = this.addBesplineCurve.bind(this);
         this.addInterpolationCurve = this.addInterpolationCurve.bind(this);
+        this.addSurfaceC0 = this.addSurfaceC0.bind(this);
     }
     toggleTorus(){
         this.props.toggleTorus();
@@ -46,6 +49,9 @@ export default class Header extends Component {
         }
         this.props.addCurve("C2I");
     }
+    addSurfaceC0(){
+        createSurface();
+    }
     render(){
         return(
         <div className="ab-header">
@@ -63,6 +69,9 @@ export default class Header extends Component {
             </button>
             <button className="ab-torus-button" onClick={this.addInterpolationCurve}>
                 <img className="ab-point-image" src={bezierc2I} alt="bezier" />
+            </button>
+            <button className="ab-torus-button" onClick={this.addSurfaceC0}>
+                <img className="ab-point-image" src={platekC0} alt="surface c0" />
             </button>
         </div>);
     }

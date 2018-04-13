@@ -95,6 +95,11 @@ export function getCurvesControlPoints(_id) {
 
 }
 export function selectCurve(id) {
+    selectCurveWithoutRedraw(id);
+    Redraw();
+    return curves;
+}
+export function selectCurveWithoutRedraw(id) {
     for(let i = 0; i < curves.length; i  ++) {
         if(curves[i].id === id){
             curves[i].selected = !curves[i].selected;
@@ -110,8 +115,6 @@ export function selectCurve(id) {
             curves[i].selected = false;
         }
     }
-    Redraw();
-    return curves;
 }
 export function deselectCurve() {
     selectedCurveId = undefined;
@@ -138,7 +141,11 @@ export function addNewCurve(type, newCurve) {
             break;
     }
     curves.push(newCurve);
-    selectCurve(newCurve.id);
+    if(newCurve.surface) {
+        selectCurveWithoutRedraw(newCurve.id);
+    } else {
+        selectCurve(newCurve.id);
+    }
     curveCounter ++
     return newCurve;
 }
@@ -148,7 +155,7 @@ export function addPointToCurve(point) {
     if(selectedCurveId === undefined) 
         throw new Error('Couldnt find a curve');
     let curve = curves.find(x => x.id === selectedCurveId);
-    if(!getAddingC2State() && !getInterpolationState() && curve.points.find(x => x.id === point.id) === undefined){
+    if(!getAddingC2State() && !getInterpolationState()){
         curve.points.push(point);
     } else if(getAddingC2State() && curve.pointsBspline.find(x => x.id === point.id) === undefined) {
         point.virtualPoints = [];

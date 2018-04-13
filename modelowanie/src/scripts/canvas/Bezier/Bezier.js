@@ -13,7 +13,7 @@ export function turnOnChain(id) {
     Redraw();
     return curves;
 }
-export function addBezierCurve() {
+export function addBezierCurve(conf) {
     const curve = {
         objectType: "curve",
         points: [],
@@ -21,6 +21,9 @@ export function addBezierCurve() {
         type: "C0",
         chain: false
     };
+    if(conf && conf.surface) {
+        curve.surface = true;
+    }
     return addNewCurve("C0", curve);
 }
 export function setAddBezierState(state) {

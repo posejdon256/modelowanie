@@ -65,3 +65,7 @@ label {
     left: 300px;
     height: 30px;
 }
+.ab-bicubic{
+    border: 2px white solid;
+    max-width: 300px;
+}
