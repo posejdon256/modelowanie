@@ -1,7 +1,8 @@
 import { updateCursor, getCursor, setCursor } from "../../Cursor/Cursor";
 import { setAddBezierState, addBezierCurve } from "../../Bezier/Bezier";
 import { addPoint } from "../../Points/Points";
-import { addPointToCurve } from "../../Bezier/Curve";
+import { addPointToCurve, selectCurve } from "../../Bezier/Curve";
+import { turnOffAllStates } from "../../StatesCenter/StatesCenter";
 
 const length = 0.5;
 let sinus = 0;
@@ -48,8 +49,9 @@ export function makeSurfaceC0(surface) {
         }
         surface.curves.push(curve);
     }
+    selectCurve(surface.curves[surface.curves.length - 1]);
     setAddBezierState(false);
-    console.log(surface.pointsMap);
+    turnOffAllStates();
 }
 function makeFlake(_length, j, surface, k) {
     const diff = _length/4;
@@ -57,6 +59,7 @@ function makeFlake(_length, j, surface, k) {
         if(j === 0 || i !== 0) {
             if(j === width - 1 && surface.cylinder && i === 3) {
                 addPointToCurve(surface.curves[surface.curves.length - 1].points[0]);
+                surface.pointsMap[k].push(surface.curves[surface.curves.length - 1].points[0]);
                 return;
             }
             const y = surface.cylinder ? (r * Math.cos((2*((j*width) + i) * Math.PI) / sinus)) / 64 : diff;

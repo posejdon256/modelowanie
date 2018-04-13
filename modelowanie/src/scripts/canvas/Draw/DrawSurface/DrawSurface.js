@@ -10,19 +10,40 @@ export function _DrawSurfaces(ctx, ctxS1, ctxS2){
     for(let i = 0; i < surfaces.length; i ++) {
         const map = surfaces[i].pointsMap;
         for(let j = 0; j < map.length - 1; j ++) {
-            const knots = [];
-            for(let k = 0; k < map[j].length - 1; k ++) {
                 const n = surfaces[i].px / 3;
                 for(let m = 0; m < n; m ++) {
-                    const point = {
-                        x : map[j][k].x + (((map[j][k + 1].x -  map[j][k].x) * m) / n),
-                        y : map[j][k].y + (((map[j][k + 1].y -  map[j][k].y) * m) / n),
-                        z : map[j][k].z +(((map[j][k + 1].z -  map[j][k].z) * m) / n),
+                    const knots = [];
+                    for(let k = 0; k < map[j].length; k ++) {
+                        let point;
+                        if(j !== map.length -1) {
+                            point = {
+                                x : map[j][k].x + ((m*(map[j + 1][k].x - map[j][k].x))/(n)),
+                                y : map[j][k].y +  ((m * (map[j + 1][k].y - map[j][k].y))/n),
+                                z : map[j][k].z + ((m*(map[j + 1][k].z - map[j][k].z))/(n))
+                            }
+                        }
+                        knots.push(point);
                     }
-                    knots.push(point);
+                    points = points.concat(getBezierPointsFromKnots(knots));
                 }
-            }
-            points = points.concat(getBezierPointsFromKnots(knots));
+        }
+    }
+    for(let i = 0; i < surfaces.length; i ++) {
+        const map = surfaces[i].pointsMap;
+        for(let k = 0; k < map[0].length - 1; k ++) {
+                const n = surfaces[i].py / 3;
+                for(let m = 0; m < n; m ++) {
+                    const knots = [];
+                    for(let j = 0; j < map.length; j ++) {
+                        const point = {
+                            x : map[j][k].x + ((m*(map[j][k + 1].x - map[j][k].x))/(n)),
+                            y : map[j][k].y +  ((m * (map[j][k + 1].y - map[j][k].y))/n),
+                            z : map[j][k].z + ((m*(map[j][k + 1].z - map[j][k].z))/(n))
+                        }
+                        knots.push(point);
+                    }
+                    points = points.concat(getBezierPointsFromKnots(knots));
+                }
         }
     }
     _DrawCurveInSurface(ctx, ctxS1, ctxS2, points)

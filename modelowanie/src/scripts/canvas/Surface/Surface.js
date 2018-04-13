@@ -10,6 +10,8 @@ let height = 1;
 let width = 1;
 const surfaces = [];
 let surfacesIterator = 0;
+let gridX = 4;
+let gridY = 4;
 let addingSurface = false;
 export function getSurfaces() {
     return surfaces;
@@ -52,6 +54,20 @@ export function selectSurface(id) {
     surface.selected = !surface.selected;
     return surfaces;
 }
+export function setGridX(_gridX) {
+    gridX = TryParseInt(_gridX,gridX);
+}
+export function setGridY(_gridY) {
+    gridY = TryParseInt(_gridY, gridY);
+}
+export function updateSelectedCurveGrid() {
+    const _surfaces = surfaces.filter(x => x.selected === true);
+    for(let i = 0; i < _surfaces.length; i ++) {
+        _surfaces[i].px = gridX;
+        _surfaces[i].py = gridY;
+    }
+    Redraw();
+}
 export function turnOnSurfaceChain(id) {
     const surface = surfaces.find(x => x.id === id);
     surface.chain = !surface.chain;
@@ -75,8 +91,8 @@ export function createSurface() {
         height: height,
         cylinder: cylinder,
         curves: [],
-        px: 9,
-        py: 9
+        px: gridX,
+        py: gridY
     }
     surfacesIterator ++;
     surfaces.push(surface);

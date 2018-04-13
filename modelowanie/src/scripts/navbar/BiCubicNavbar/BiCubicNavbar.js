@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../../../css/navbar/Navbar.css';
-import { setCylinder, setWidth, setHeight } from '../../canvas/Surface/Surface';
+import { setCylinder, setWidth, setHeight, updateSelectedCurveGrid, setGridX, setGridY } from '../../canvas/Surface/Surface';
 
 export default class BiCubicNavbar extends Component {
     constructor(props) {
@@ -8,6 +8,9 @@ export default class BiCubicNavbar extends Component {
         this.updateHeight = this.updateHeight.bind(this);
         this.updateWidth = this.updateWidth.bind(this);
         this.updateCylinder = this.updateCylinder.bind(this);
+        this.updateGridOnSelectedSurface = this.updateGridOnSelectedSurface.bind(this);
+        this.setGridX = this.setGridX.bind(this);
+        this.setGridY = this.setGridY.bind(this);
     }
     updateHeight(event){
         setHeight(event.target.value);
@@ -17,6 +20,15 @@ export default class BiCubicNavbar extends Component {
     }
     updateCylinder(event){
         setCylinder(event.target.checked);
+    }
+    updateGridOnSelectedSurface(event) {
+        updateSelectedCurveGrid();
+    }
+    setGridX(event){
+        setGridX(event.target.value);
+    }
+    setGridY(event) {
+        setGridY(event.target.value);
     }
     render(){
         return(
@@ -33,6 +45,17 @@ export default class BiCubicNavbar extends Component {
                 <div>
                     <label htmlFor="bicuBicCheckbox">Płaski/walec</label>
                     <input id="bicuBicCheckbox" type="checkbox" onChange={this.updateCylinder}/>
+                </div>
+                <div>
+                    <label>Siatka po X: </label>
+                    <input type="text" onChange={this.setGridX} defaultValue={4}/>
+                </div>
+                <div>
+                    <label>Siatka po Y: </label>
+                    <input type="text"  onChange={this.setGridY} defaultValue={4}/>
+                </div>
+                <div>
+                    <button onClick={this.updateGridOnSelectedSurface}>Podmień siatki zaznaczonych płatków</button>
                 </div>
             </div>
         );
