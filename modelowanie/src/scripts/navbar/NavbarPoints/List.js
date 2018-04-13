@@ -6,6 +6,7 @@ import selectedRed from '../../../pictures/select_red.png';
 import { updatePointName, selectPoint, removePointWithRedraw } from '../../canvas/Points/Points';
 import { turnOnChain } from '../../canvas/Bezier/Bezier';
 import { updateCurveName, getCurveById, selectCurve, getCurvesControlPoints, removeCurve } from '../../canvas/Bezier/Curve';
+import { removeSurface, updateSurfaceName, turnOnSurfaceChain, selectSurface } from '../../canvas/Surface/Surface';
 
 export default class List extends Component {
 
@@ -16,15 +17,21 @@ export default class List extends Component {
         this.selectCurve = this.selectCurve.bind(this);
         this.removeCurve = this.removeCurve.bind(this);
         this.updateCurveName = this.updateCurveName.bind(this);
+        this.updateSurfaceName = this.updateSurfaceName.bind(this);
+        this.removeSurface = this.removeSurface.bind(this);
+        this.selectSurface = this.selectSurface.bind(this);
+        this.turnOnChainSurface = this.turnOnChainSurface.bind(this);
         this.state = {
             points: [],
-            curves: []
+            curves: [],
+            surfaces: []
         }
     }
     componentWillReceiveProps(props) {
         this.setState({
             points: props.points,
-            curves: props.curves
+            curves: props.curves,
+            surfaces: props.surfaces
         });
     }
     updatePointName(id, name) {
@@ -35,6 +42,26 @@ export default class List extends Component {
     updateCurveName(id, name) {
         this.setState({
             curves: updateCurveName(id, name)
+        });
+    }
+    updateSurfaceName(id, name) {
+        this.setState({
+            surfaces: updateSurfaceName(id, name)
+        });
+    }
+    selectSurface(id) {
+        this.setState({
+            surfaces: selectSurface(id)
+        });
+    }
+    removeSurface(id) {
+        this.setState({
+            surfaces: removeSurface(id)
+        });
+    }
+    turnOnChainSurface(id) {
+        this.setState({
+            surfaces: turnOnSurfaceChain(id)
         });
     }
     removePoint(id){
@@ -72,10 +99,28 @@ export default class List extends Component {
     render() {
         const points  = this.state.points;
         const curves = this.state.curves;
+        const surfaces = this.state.surfaces;
         return(
             <div>
                 <label>Obiekty sceny:</label>
                 <ul className="ab-ul-points">
+                {
+                    surfaces.map(surface => {
+                        return (
+                        <li key={"point" + surface.id} className="ab-point-list-li">
+                            <input className="ab-point-list-input" type="text" value={surface.name} onChange={(e) => this.updateSurfaceName(surface.id, e.target.value)}/>
+                            <label className="ab-curve-chain-label">Włącz łamaną</label>
+                            <input className="ab-point-list-checkbox" key={surface.id} type="checkbox" checked={surface.chain} onChange={(e) => this.turnOnChainSurface(surface.id)}/>
+                            <button className="ab-delete-point-button" onClick={(e) => this.removeSurface(surface.id)}>
+                                <img className="ab-delete-point" src={trash} alt="trash" />
+                            </button>
+                            <button className="ab-points-list-select-button" onClick={(e) => this.selectSurface(surface.id)}>
+                                <img className="ab-select-point" src={surface.selected ? selectedRed : select} alt="select" />
+                            </button>
+                        </li>
+                        );
+                    })
+                }
                 {
                     points.map(point => {
                         return (point.visible !== false && !point.c2Bezier ?(
@@ -94,7 +139,7 @@ export default class List extends Component {
                 }
                 {
                     curves.map(curve => {
-                        return (
+                        return (!curve.surface ? (
                         <li key={"curve" + curve.id} className="ab-point-list-li">
                             <input className="ab-point-list-input" type="text" value={curve.name} onChange={(e) => this.updateCurveName(curve.id, e.target.value)}/>
                             <label className="ab-curve-chain-label">Włącz łamaną</label>
@@ -105,7 +150,7 @@ export default class List extends Component {
                             <button className="ab-points-list-select-button" onClick={(e) => this.selectCurve(curve.id)}>
                                 <img className="ab-select-point" src={curve.selected ? selectedRed : select} alt="select" />
                             </button>
-                        </li>
+                        </li>) : ''
                         ); 
                 })
             }

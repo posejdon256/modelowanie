@@ -17,6 +17,7 @@ import { addBsplineCurve, setAddingC2State } from './scripts/canvas/Bezier/BSpli
 import { getCurves, getCurvesControlPoints } from './scripts/canvas/Bezier/Curve';
 import { turnOffAllStates } from './scripts/canvas/StatesCenter/StatesCenter';
 import { setInterpolationState, addInterpolationCurve } from './scripts/canvas/Bezier/Interpolation';
+import { getSurfaces } from './scripts/canvas/Surface/Surface';
 
 class App extends Component {
   constructor(props) {
@@ -25,7 +26,8 @@ class App extends Component {
       torusVisible: false,
       gridX: 18,
       gridY: 18,
-      points: []
+      points: [],
+      surfaces: []
     };
 
     this.toggleTorus = this.toggleTorus.bind(this);
@@ -47,6 +49,7 @@ class App extends Component {
     this.setState({
       points: getPoints(),
       curves: getCurves(),
+      surfaces: getSurfaces(),
       curvePoints: getCurvesControlPoints()
     });
   }
@@ -107,6 +110,7 @@ class App extends Component {
             updateChecked={this.updateChecked}
             points={this.state.points}
             curves={this.state.curves}
+            surfaces={this.state.surfaces}
             curvePoints={this.state.curvePoints}
           />
         </div>

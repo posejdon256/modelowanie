@@ -72,6 +72,32 @@ export function getBezierPoints(_curves){
     }
     return points;
 }
+export function getBezierPointsFromKnots(knots) {
+    const berstainsNAfterI = countBerstainNAfterI();
+    const points = [];
+    for(let l = 0; l < knots.length;) {
+        let curvePart;
+        curvePart = knots.slice(l, l + 4);
+        const divisions = parseInt(countCircumfrence(curvePart), 10);
+        for(let j = 0; j < divisions; j ++) {
+            const point = {x: 0, y: 0, z: 0};
+            if(l === 0 && j === 0)
+                point.break = true;
+            const n = curvePart.length - 1;
+            for(let k = 0; k < n + 1; k ++) {
+                const first = n === 0 ? 1 : Math.pow(j/(divisions-1), k);
+                const second = n - k === 0 ? 1 : Math.pow(1 - (j/(divisions-1)) , n - k);
+                const value = berstainsNAfterI[n][k] * first * second;
+                point.x += (value * curvePart[k].x);
+                point.y += (value * curvePart[k].y);
+                point.z += (value * curvePart[k].z);
+            }
+            points.push(point);
+        }
+        l += 3;
+    }
+    return points;
+}
 function countCircumfrence(curve) {
     const lengths = [];
     let k = 0;

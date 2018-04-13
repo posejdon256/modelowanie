@@ -5,6 +5,7 @@ import { getAddBezierState } from '../Bezier/Bezier';
 import { getSelectedCurveId, addPointToCurve, getCurves } from '../Bezier/Curve';
 import { getAddingC2State } from '../Bezier/BSpline';
 import { getInterpolationState } from '../Bezier/Interpolation';
+import { getAddingSurfaceState } from '../Surface/Surface';
 
 const points = [];
 let pointNumber = 1;
@@ -23,6 +24,10 @@ export function removePoint(id) {
     let interpolationPoint = undefined;
     for(let i = 0; i < points.length; i ++) {
         if(points[i].id === id) {
+            if(points[i].surface) {
+                alert("Ten punkt należy do płatka bikubicznego i nie da się go usunąć!");
+                return;
+            }
             points[i].deleted = true;
             if(points[i].virtualPoints !== undefined) {
                 deleteVirtualPoints = true;
@@ -106,6 +111,9 @@ export function addPoint(x, y, z, type) {
         c2BSpline: getAddingC2State() && x === undefined ? true : false,
         curves: []
     };
+    if(getAddingSurfaceState()) {
+        newPoint.surface = true;
+    }
     if(getAddingC2State() || getInterpolationState()) {
         newPoint.virtualPoints = [];
     }

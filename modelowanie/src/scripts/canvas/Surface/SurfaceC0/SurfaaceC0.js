@@ -21,6 +21,10 @@ export function makeSurfaceC0(surface) {
     } else {
         sinus = 0;
     }
+    surface.pointsMap = [];
+    for(let i = 0; i < curvesCount; i ++) {
+        surface.pointsMap.push([]);
+    }
     for(let i = 0; i < curvesCount; i ++) {
         const cursorPosition1 = getCursor();
         const y = cursorPosition1.y;
@@ -29,7 +33,7 @@ export function makeSurfaceC0(surface) {
         const curve = addBezierCurve({surface: true});
         surface.curves.push(curve);
         for(let j = 0; j < width; j ++) {
-            makeFlake(length / width, j, surface);
+            makeFlake(length / width, j, surface, i);
         }
         const cursorPosition2 = getCursor();
         setCursor(cursorPosition2.x, y, z);
@@ -44,8 +48,10 @@ export function makeSurfaceC0(surface) {
         }
         surface.curves.push(curve);
     }
+    setAddBezierState(false);
+    console.log(surface.pointsMap);
 }
-function makeFlake(_length, j, surface) {
+function makeFlake(_length, j, surface, k) {
     const diff = _length/4;
     for(let i = 0; i < 4; i ++) {
         if(j === 0 || i !== 0) {
@@ -58,6 +64,7 @@ function makeFlake(_length, j, surface) {
             updateCursor(0, y, z);
             const point = addPoint();
             addPointToCurve(point);
+            surface.pointsMap[k].push(point);
         }
     }
 }
