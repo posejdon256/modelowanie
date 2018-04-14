@@ -1,5 +1,5 @@
 .ab-navbar{
-    background: #370037;
+    background: rgba(55, 0, 55, 0.7);
     width: 30%;
     height: 100%;;
     padding: 10px;
@@ -9,6 +9,9 @@
 }
 label {
     color: white;
+}
+.ab-small-input{
+    width: 30px;
 }
 .ab-ul-points{
     max-height: 200px;

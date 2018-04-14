@@ -68,12 +68,11 @@ export function _DrawCurves(ctx, ctxS1, ctxS2) {
                 || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -100 || z2 > 100)
                 continue;
             if(points[i].break) {
-                ctx.stroke();
+                ctx.closePath();
                 if(i !== points.length - 1 && points[i + 1].selected)
                     ctx.strokeStyle = "rgba(255, 0, 0, 1)";
                 else
                     ctx.strokeStyle = "rgba(255, 255, 255, 1)";
-                ctx.beginPath();
                 continue;
             }
             drawLine(x1, y1, x2, y2, ctx);

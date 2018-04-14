@@ -28,19 +28,38 @@ export function makeSurfaceC0(surface) {
     }
     for(let i = 0; i < curvesCount; i ++) {
         const cursorPosition1 = getCursor();
-        const y = cursorPosition1.y;
-        const z = cursorPosition1.z;
-        updateCursor(length / curvesCount, 0, 0);
+        let y = cursorPosition1.y;
+        let z = cursorPosition1.z;
+        let x = cursorPosition1.x;
         const curve = addBezierCurve({surface: true});
         surface.curves.push(curve);
         for(let j = 0; j < width; j ++) {
             makeFlake(length / width, j, surface, i);
         }
         const cursorPosition2 = getCursor();
-        setCursor(cursorPosition2.x, y, z);
+        let xPrim = cursorPosition2.x;
+        let yPrim = cursorPosition2.y;
+        let zPrim = cursorPosition2.z;
+        if(surface.direction === 1) {
+            xPrim = x;
+            zPrim = z;
+        } else if(surface.direction === 2) {
+            xPrim = x;
+            yPrim = y;
+        } else if(surface.direction === 0) {
+            yPrim = y;
+            zPrim = z;
+        }
+        setCursor(xPrim, yPrim, zPrim);
+        if(surface.direction === 0) {
+            updateCursor(length / curvesCount, 0, 0);
+        } else if(surface.direction === 1) {
+            updateCursor(0, length / curvesCount, 0);
+        } else {
+            updateCursor(0, 0, length / curvesCount);
+        }
         //updateCursor(0, -(surface.cylinder ? (r * Math.cos(2*Math.PI))/64 : sum) , 0);
     }
-    updateCursor(-length, 0, 0);
     const curvesLen = surface.curves.length;
     for(let i = 0; i < surface.curves[0].points.length; i ++) {
         const curve = addBezierCurve({surface: true});
@@ -62,11 +81,21 @@ function makeFlake(_length, j, surface, k) {
                 surface.pointsMap[k].push(surface.curves[surface.curves.length - 1].points[0]);
                 return;
             }
-            const y = surface.cylinder ? (r * Math.cos((2*((j*width) + i) * Math.PI) / sinus)) / 64 : diff;
-            const z = surface.cylinder ? (r * Math.sin((2*((j*width) + i) * Math.PI) / sinus)) / 64 : 0;
-            updateCursor(0, y, z);
+            let y = surface.cylinder ? (r * Math.cos((2*((j*width) + i) * Math.PI) / sinus)) / 64 : diff;
+            let z = surface.cylinder ? (r * Math.sin((2*((j*width) + i) * Math.PI) / sinus)) / 64 : 0;
+            let x = 0;
+            if(surface.direction === 1) {
+                let temp = x;
+                x = y;
+                y = temp;
+            } else if(surface.direction === 2) {
+                let temp = x;
+                x = z;
+                z = temp;
+            }
+            updateCursor(x, y, z);
             const point = addPoint();
-            addPointToCurve(point);
+            //addPointToCurve(point);
             surface.pointsMap[k].push(point);
         }
     }

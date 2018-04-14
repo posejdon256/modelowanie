@@ -6,20 +6,33 @@ import { _DrawPoints } from "./DrawPoints/DrawPoints";
 import { _DrawCursor } from "./DrawCursor/DrawCursor";
 import { clearCanvas, getContexts } from "./Draw";
 import { _DrawCurves } from "./DrawCurve/DrawCurve";
-import { _DrawSurfaces } from "./DrawSurface/DrawSurface";
+import { _DrawSurfaces, _DrawSurfaceWithoutRedraw } from "./DrawSurface/DrawSurface";
 
 export default function Redraw(){
     clearCanvas();
-
+    console.log('redraw');
     if(getTorusVisibility()) {
         const torus = getTorusVertices();
         setTranslationPoints(torus);  
         DrawTorus(Translate({}));
     }
     DrawCursor();
+    DrawSurfaces();
     DrawCurves();
     DrawPoints(getPoints());
-    DrawSurfaces()
+}
+export function RedrawWithoutChangingScene() {
+    clearCanvas();
+    console.log('redraw');
+    if(getTorusVisibility()) {
+        const torus = getTorusVertices();
+        setTranslationPoints(torus);  
+        DrawTorus(Translate({}));
+    }
+    DrawCursor();
+    DrawSurfacesWithoutBezier();
+    DrawCurves();
+    DrawPoints(getPoints());
 }
 function DrawTorus(points) {
     const { ctx, ctxS1, ctxS2 } = getContexts();
@@ -28,6 +41,10 @@ function DrawTorus(points) {
 function DrawSurfaces(){
     const { ctx, ctxS1, ctxS2 } = getContexts();
     _DrawSurfaces(ctx, ctxS1, ctxS2);
+}
+function DrawSurfacesWithoutBezier() {
+    const { ctx, ctxS1, ctxS2 } = getContexts();
+    _DrawSurfaceWithoutRedraw(ctx, ctxS1, ctxS2);
 }
 function DrawPoints(points) {
     const { ctx, ctxS1, ctxS2 } = getContexts();

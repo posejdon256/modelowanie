@@ -129,7 +129,7 @@ function countCircumfrence(curve) {
     }
     if(ret > 5000) 
         return 5000;
-    return 2*ret;
+    return ret;
 }
 function nAfterI(n, i) {
     return factorial(n)/(factorial(i)*factorial(n-i));

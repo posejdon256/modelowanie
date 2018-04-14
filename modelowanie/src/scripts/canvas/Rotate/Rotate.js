@@ -1,5 +1,5 @@
 import Translate from "../Translation/TranslationCenter/TranslationCenter";
-import Redraw from "../Draw/Redraw";
+import Redraw, { RedrawWithoutChangingScene } from "../Draw/Redraw";
 
 let lastX;
 let lastY;
@@ -23,7 +23,7 @@ export function StopRoatation(isZ){
         rotationXY = false;
 }
 export function TakeMouseMove(x, y){
-    if(!rotationZ && !rotationXY) {
+    if((!rotationZ && !rotationXY) || (lastX === x && lastY === y)) {
         return;
     }
     let translationObject = {};
@@ -45,5 +45,5 @@ export function TakeMouseMove(x, y){
     lastX = x;
     lastY = y;
     Translate(translationObject);
-    Redraw();
+    RedrawWithoutChangingScene();
 }

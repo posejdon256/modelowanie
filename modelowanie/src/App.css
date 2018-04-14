@@ -28,7 +28,7 @@
 }
 .ab-main-div {
   width: 1920px;
-  background: #333366;
+  background: url('pictures/stars.png');
   height: 1000px;
 }
 .ab-canvas-navbar-container {

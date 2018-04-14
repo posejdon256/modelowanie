@@ -4,13 +4,14 @@ import Translate, { setTranslationPoints } from "../../Translation/TranslationCe
 import { getCanvas, drawLine } from "../Draw";
 import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
 
+let lastPoints = [];
 export function _DrawSurfaces(ctx, ctxS1, ctxS2){
     const surfaces = getSurfaces();
     let points = [];
     for(let i = 0; i < surfaces.length; i ++) {
         const map = surfaces[i].pointsMap;
         for(let j = 0; j < map.length - 1; j ++) {
-                const n = surfaces[i].px / 3;
+                const n = parseInt(surfaces[i].px / (map.length - 1), 10);
                 for(let m = 0; m < n; m ++) {
                     const knots = [];
                     for(let k = 0; k < map[j].length; k ++) {
@@ -31,7 +32,7 @@ export function _DrawSurfaces(ctx, ctxS1, ctxS2){
     for(let i = 0; i < surfaces.length; i ++) {
         const map = surfaces[i].pointsMap;
         for(let k = 0; k < map[0].length - 1; k ++) {
-                const n = surfaces[i].py / 3;
+                const n = parseInt(surfaces[i].py / (map[0].length - 1), 10);
                 for(let m = 0; m < n; m ++) {
                     const knots = [];
                     for(let j = 0; j < map.length; j ++) {
@@ -46,9 +47,12 @@ export function _DrawSurfaces(ctx, ctxS1, ctxS2){
                 }
         }
     }
+    lastPoints = points;
     _DrawCurveInSurface(ctx, ctxS1, ctxS2, points)
 }
-
+export function _DrawSurfaceWithoutRedraw(ctx, ctxS1, ctxS2) {
+    _DrawCurveInSurface(ctx, ctxS1, ctxS2, lastPoints);
+}
 export function _DrawCurveInSurface(ctx, ctxS1, ctxS2, points) {
     const stereoscopy = getStereoscopy();
     setTranslationPoints(points);
@@ -109,8 +113,7 @@ export function _DrawCurveInSurface(ctx, ctxS1, ctxS2, points) {
                 || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -100 || z2 > 100)
                 continue;
             if(points[i].break) {
-                ctx.stroke();
-                ctx.beginPath();
+                ctx.closePath();
                 continue;
             }
             drawLine(x1, y1, x2, y2, ctx);

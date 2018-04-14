@@ -172,14 +172,17 @@ export function getCurvesPoints() {
     return getBezierPoints().concat(getSplinePoints()).concat(getInterpolationPoints());
 }
 export function removeCurve(id) {
+    removeCurveWithourRedraw(id);
+    Redraw();
+    return curves;
+}
+export function removeCurveWithourRedraw(id) {
     for(let i = 0; i < curves.length; i ++) {
         if(curves[i].id === id) {
             curves.splice(i, 1);
-            selectCurve()
             turnOffAllStates();
             break;
         }
     }
-    Redraw();
     return curves;
 }

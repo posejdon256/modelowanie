@@ -1,5 +1,5 @@
 import Translate from "../Translation/TranslationCenter/TranslationCenter";
-import Redraw from "../Draw/Redraw";
+import Redraw, { RedrawWithoutChangingScene } from "../Draw/Redraw";
 
 
 let front = 0;
@@ -19,7 +19,7 @@ function setIntervalForMoving(){
             }
             Translate(trasnlationObject);
             Translate(trasnlationObject);
-            Redraw();
+            RedrawWithoutChangingScene();
         }, 5);
     }
 }

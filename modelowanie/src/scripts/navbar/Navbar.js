@@ -7,6 +7,7 @@ import BiCubicNavbar from './BiCubicNavbar/BiCubicNavbar';
 import { getCursor } from '../canvas/Cursor/Cursor';
 import { setAddingC2Type } from '../canvas/Bezier/BSpline';
 import { getCurvesControlPoints, addCurveBySelectedPoints } from '../canvas/Bezier/Curve';
+import { updateSelectedPoints } from '../canvas/Points/Points';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -18,7 +19,7 @@ export default class Navbar extends Component {
         this.addCurve = this.addCurve.bind(this);
         this.updateCurvePoints = this.updateCurvePoints.bind(this);
         this.updateAddingC2Type = this.updateAddingC2Type.bind(this);
-
+        this.updateSelectedPoints = this.updateSelectedPoints.bind(this);
         const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
@@ -34,6 +35,9 @@ export default class Navbar extends Component {
     }
     updateXGrid(event) {
         this.props.updateXGrid(parseInt(event.target.value, 10));
+    }
+    updateSelectedPoints(event) {
+        updateSelectedPoints(this.refs.changeX.value, this.refs.changeY.value, this.refs.changeZ.value);
     }
     componentWillReceiveProps(props) {     
         const cursor = getCursor();
@@ -78,6 +82,24 @@ export default class Navbar extends Component {
                 <input id="3dTorus" type="checkbox" onChange={this.updateChecked} />
             </div>
             <List points={this.props.points} curves={this.props.curves} surfaces={this.props.surfaces} updateCurvePoints={this.updateCurvePoints}/>
+            <div>
+                <label>Ustaw położenia zaznaczonych punktów</label>
+                <div>
+                    <div>
+                        <label>X: </label>
+                        <input className="ab-small-input" ref="changeX" type="text" defaultValue="0"/>
+                    </div>
+                    <div>
+                        <label>Y: </label>
+                        <input className="ab-small-input" ref="changeY" type="text" defaultValue="0"/>
+                    </div>
+                    <div>
+                        <label>Z: </label>
+                        <input className="ab-small-input" ref="changeZ" type="text" defaultValue="0"/>
+                    </div>
+                </div>
+                <button onClick={this.updateSelectedPoints}>Zamień</button>
+            </div>
             <ListPointsInCurve points={this.state.curvePoints} />
             <div>
                 <label>Pozycja kursora:</label>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../../../css/navbar/Navbar.css';
-import { setCylinder, setWidth, setHeight, updateSelectedCurveGrid, setGridX, setGridY } from '../../canvas/Surface/Surface';
+import { setCylinder, setWidth, setHeight, updateSelectedCurveGrid, setGridX, setGridY, setCylinderDirection } from '../../canvas/Surface/Surface';
 
 export default class BiCubicNavbar extends Component {
     constructor(props) {
@@ -11,6 +11,7 @@ export default class BiCubicNavbar extends Component {
         this.updateGridOnSelectedSurface = this.updateGridOnSelectedSurface.bind(this);
         this.setGridX = this.setGridX.bind(this);
         this.setGridY = this.setGridY.bind(this);
+        this.setDirection = this.setDirection.bind(this);
     }
     updateHeight(event){
         setHeight(event.target.value);
@@ -29,6 +30,9 @@ export default class BiCubicNavbar extends Component {
     }
     setGridY(event) {
         setGridY(event.target.value);
+    }
+    setDirection() {
+        setCylinderDirection(this.refs.selectDirection.value);
     }
     render(){
         return(
@@ -57,6 +61,11 @@ export default class BiCubicNavbar extends Component {
                 <div>
                     <button onClick={this.updateGridOnSelectedSurface}>Podmień siatki zaznaczonych płatków</button>
                 </div>
+                <select ref="selectDirection" onChange={this.setDirection}>
+                    <option value="X">Walec po X</option>
+                    <option value="Y">Walec po Y</option>
+                    <option value="Z">Walec po Z</option>
+                </select>
             </div>
         );
     }

@@ -2,7 +2,7 @@ import { TryParseInt } from "../../Helpers/Helpers";
 import { makeSurfaceC0 } from "./SurfaceC0/SurfaaceC0";
 import Redraw from "../Draw/Redraw";
 import { removePoint } from "../Points/Points";
-import { removeCurve } from "../Bezier/Curve";
+import { removeCurve, removeCurveWithourRedraw } from "../Bezier/Curve";
 
 
 let cylinder = false;
@@ -13,8 +13,24 @@ let surfacesIterator = 0;
 let gridX = 4;
 let gridY = 4;
 let addingSurface = false;
+let direction = 0; // 0 - X, 1 - Y, 2 - Z
 export function getSurfaces() {
     return surfaces;
+}
+export function setCylinderDirection(dir) {
+    switch (dir) {
+        case 'X':
+            direction = 0;
+            break;
+        case 'Y':
+            direction = 1;
+            break;
+        case 'Z':
+            direction = 2;
+            break;
+        default:
+            break;
+    }
 }
 export function setCylinder(_cylinder) {
     cylinder = _cylinder;
@@ -38,7 +54,7 @@ export function removeSurface(id) {
             surface.curves[i].points[j].surface = false;
             removePoint(surface.curves[i].points[j].id);
         }
-        removeCurve(surface.curves[i].id);
+        removeCurveWithourRedraw(surface.curves[i].id);
     }
     for(let i = 0; i < surfaces.length; i ++) {
         if(surface.id === surfaces[i].id) {
@@ -92,7 +108,8 @@ export function createSurface() {
         cylinder: cylinder,
         curves: [],
         px: gridX,
-        py: gridY
+        py: gridY,
+        direction: direction
     }
     surfacesIterator ++;
     surfaces.push(surface);

@@ -6,6 +6,7 @@ import { getSelectedCurveId, addPointToCurve, getCurves } from '../Bezier/Curve'
 import { getAddingC2State } from '../Bezier/BSpline';
 import { getInterpolationState } from '../Bezier/Interpolation';
 import { getAddingSurfaceState } from '../Surface/Surface';
+import { TryParseInt, TryParseFloat } from '../../Helpers/Helpers';
 
 const points = [];
 let pointNumber = 1;
@@ -94,6 +95,16 @@ export function selectPoint(id) {
             }
             points[i].selected = !points[i].selected;
         }
+    }
+    Redraw();
+    return points;
+}
+export function updateSelectedPoints(x, y, z) {
+    const selectedPoints = points.filter(x => x.selected);
+    for(let i = 0; i < selectedPoints.length; i ++) {
+        selectedPoints[i].x = TryParseFloat(x, selectedPoints[i].x);
+        selectedPoints[i].y = TryParseFloat(y, selectedPoints[i].y);
+        selectedPoints[i].z = TryParseFloat(z, selectedPoints[i].z);
     }
     Redraw();
     return points;
