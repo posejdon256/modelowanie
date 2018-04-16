@@ -92,6 +92,7 @@ function drawChaines(ctx, ctxS1, ctxS2) {
         const translated = Translate({});
         
         if(!stereoscopy) {
+            ctx.strokeStyle = "rgba(0, 0, 255, 1)";
             ctx.beginPath();
             for(let j = 0; j < curves[i].points.length-1; j ++) {
                 drawLine(parseInt((translated[j].x + 1) * 500, 10), parseInt((translated[j].y + 1) * 300, 10), parseInt((translated[j + 1].x + 1) * 500, 10), parseInt((translated[j + 1].y + 1) *300, 10), ctx);

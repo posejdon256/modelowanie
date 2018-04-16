@@ -4,7 +4,7 @@ import { addPoint } from "../../Points/Points";
 import { addPointToCurve, selectCurve } from "../../Bezier/Curve";
 import { turnOffAllStates } from "../../StatesCenter/StatesCenter";
 
-const length = 0.5;
+const _lengthPrim = 0.1;
 let sinus = 0;
 let width;
 let r;
@@ -16,7 +16,7 @@ export function makeSurfaceC0(surface) {
         width = surface.width;
     }
     setAddBezierState(true);
-    const curvesCount = surface.height * 4;
+    const curvesCount = (surface.height * 3) + 1;
     if(surface.cylinder) {
         sinus = width * 4;
     } else {
@@ -26,6 +26,8 @@ export function makeSurfaceC0(surface) {
     for(let i = 0; i < curvesCount; i ++) {
         surface.pointsMap.push([]);
     }
+    let length = _lengthPrim * (width * 4);
+    let length2 = _lengthPrim * curvesCount;
     for(let i = 0; i < curvesCount; i ++) {
         const cursorPosition1 = getCursor();
         let y = cursorPosition1.y;
@@ -52,11 +54,11 @@ export function makeSurfaceC0(surface) {
         }
         setCursor(xPrim, yPrim, zPrim);
         if(surface.direction === 0) {
-            updateCursor(length / curvesCount, 0, 0);
+            updateCursor(length2 / curvesCount, 0, 0);
         } else if(surface.direction === 1) {
-            updateCursor(0, length / curvesCount, 0);
+            updateCursor(0, length2 / curvesCount, 0);
         } else {
-            updateCursor(0, 0, length / curvesCount);
+            updateCursor(0, 0, length2 / curvesCount);
         }
         //updateCursor(0, -(surface.cylinder ? (r * Math.cos(2*Math.PI))/64 : sum) , 0);
     }

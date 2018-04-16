@@ -3,6 +3,7 @@ import { makeSurfaceC0 } from "./SurfaceC0/SurfaaceC0";
 import Redraw from "../Draw/Redraw";
 import { removePoint } from "../Points/Points";
 import { removeCurve, removeCurveWithourRedraw } from "../Bezier/Curve";
+import { turnOffAllStates } from "../StatesCenter/StatesCenter";
 
 
 let cylinder = false;
@@ -99,6 +100,7 @@ export function updateSurfaceName(id, name) {
     return surfaces;
 }
 export function createSurface() {
+    turnOffAllStates();
     addingSurface = true;
     const surface = {
         name: "Powierzchnia " + surfacesIterator,

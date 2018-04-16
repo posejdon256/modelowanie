@@ -3,6 +3,7 @@ import { getBezierPointsFromKnots } from "../../Bezier/Bezier";
 import Translate, { setTranslationPoints } from "../../Translation/TranslationCenter/TranslationCenter";
 import { getCanvas, drawLine } from "../Draw";
 import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
+import { deCastiljau } from "../../Bezier/DeCastiljau";
 
 let lastPoints = [];
 export function _DrawSurfaces(ctx, ctxS1, ctxS2){
@@ -10,18 +11,17 @@ export function _DrawSurfaces(ctx, ctxS1, ctxS2){
     let points = [];
     for(let i = 0; i < surfaces.length; i ++) {
         const map = surfaces[i].pointsMap;
-        for(let j = 0; j < map.length - 1; j ++) {
-                const n = parseInt(surfaces[i].px / (map.length - 1), 10);
-                for(let m = 0; m < n; m ++) {
+        for(let j = 0; j < map.length - 2; j += 3) {
+                const n = parseInt(surfaces[i].px, 10) - 1;
+                for(let m = 0; m <= n; m ++) {
                     const knots = [];
                     for(let k = 0; k < map[j].length; k ++) {
                         let point;
-                        if(j !== map.length -1) {
-                            point = {
-                                x : map[j][k].x + ((m*(map[j + 1][k].x - map[j][k].x))/(n)),
-                                y : map[j][k].y +  ((m * (map[j + 1][k].y - map[j][k].y))/n),
-                                z : map[j][k].z + ((m*(map[j + 1][k].z - map[j][k].z))/(n))
-                            }
+                        const newBezier1 = deCastiljau(m/n ,map[j][k], map[j + 1][k], map[j + 2][k], map[j + 3][k]);
+                        point = {
+                            x : newBezier1.x,
+                            y : newBezier1.y,
+                            z : newBezier1.z
                         }
                         knots.push(point);
                     }
@@ -31,15 +31,16 @@ export function _DrawSurfaces(ctx, ctxS1, ctxS2){
     }
     for(let i = 0; i < surfaces.length; i ++) {
         const map = surfaces[i].pointsMap;
-        for(let k = 0; k < map[0].length - 1; k ++) {
-                const n = parseInt(surfaces[i].py / (map[0].length - 1), 10);
-                for(let m = 0; m < n; m ++) {
+        for(let k = 0; k < map[0].length - 2; k += 3) {
+                const n = parseInt(surfaces[i].py, 10) - 1;
+                for(let m = 0; m <= n; m ++) {
                     const knots = [];
                     for(let j = 0; j < map.length; j ++) {
+                        const newBezier1 = deCastiljau(m/n ,map[j][k], map[j][k + 1], map[j][k + 2], map[j][k + 3]);
                         const point = {
-                            x : map[j][k].x + ((m*(map[j][k + 1].x - map[j][k].x))/(n)),
-                            y : map[j][k].y +  ((m * (map[j][k + 1].y - map[j][k].y))/n),
-                            z : map[j][k].z + ((m*(map[j][k + 1].z - map[j][k].z))/(n))
+                            x : newBezier1.x,
+                            y : newBezier1.y,
+                            z : newBezier1.z
                         }
                         knots.push(point);
                     }

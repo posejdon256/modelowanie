@@ -40,6 +40,9 @@ export function getBezierPoints(_curves){
     const points = [];
     const berstainsNAfterI = countBerstainNAfterI();
     for(let i = 0; i < curves.length; i ++) {
+        if(curves[i].surface) {
+            continue;
+        }
         for(let l = 0; l < curves[i].points.length;) {
             let curvePart;
             if((curves[i].type === "C2" || curves[i].type === "C2I") && (l === 0 || curves[i].points.length < l + 3)) {
