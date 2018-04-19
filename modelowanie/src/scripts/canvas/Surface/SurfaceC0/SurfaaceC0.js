@@ -4,7 +4,7 @@ import { addPoint } from "../../Points/Points";
 import { addPointToCurve, selectCurve } from "../../Bezier/Curve";
 import { turnOffAllStates } from "../../StatesCenter/StatesCenter";
 
-const _lengthPrim = 0.1;
+const _lengthPrim = 0.05;
 let sinus = 0;
 let width;
 let r;
@@ -95,8 +95,8 @@ function makeFlake(_length, j, surface, k) {
                 x = z;
                 z = temp;
             }
-            updateCursor(x, y, z);
             const point = addPoint();
+            updateCursor(x, y, z);
             //addPointToCurve(point);
             surface.pointsMap[k].push(point);
         }

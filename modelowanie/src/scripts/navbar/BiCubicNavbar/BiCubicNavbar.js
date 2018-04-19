@@ -47,7 +47,7 @@ export default class BiCubicNavbar extends Component {
                     <input type="text"  onChange={this.updateWidth} defaultValue={1}/>
                 </div>
                 <div>
-                    <label htmlFor="bicuBicCheckbox">Płaski/walec</label>
+                    <label htmlFor="bicuBicCheckbox">Walec</label>
                     <input id="bicuBicCheckbox" type="checkbox" onChange={this.updateCylinder}/>
                 </div>
                 <div>

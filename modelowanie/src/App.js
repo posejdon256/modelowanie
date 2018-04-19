@@ -27,6 +27,7 @@ class App extends Component {
       gridX: 18,
       gridY: 18,
       points: [],
+      curves: [],
       surfaces: []
     };
 
