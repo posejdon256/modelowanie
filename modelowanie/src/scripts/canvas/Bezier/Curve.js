@@ -5,10 +5,14 @@ import { removePoint, getPoints } from "../Points/Points";
 import { turnOffAllStates } from '../StatesCenter/StatesCenter';
 import { addPointToInterpolationCurve, getInterpolationState, getInterpolationPoints } from "./Interpolation";
 
-const curves = [];
+let curves = [];
 let curveCounter = 1;
 let selectedCurveId = undefined;
 
+export function clearCurves() {
+    curveCounter = 1;
+    curves = [];
+}
 export function getCurves(type){
     switch(type) {
         case "C0":
@@ -157,7 +161,7 @@ export function addPointToCurve(point) {
     let curve = curves.find(x => x.id === selectedCurveId);
     if(!getAddingC2State() && !getInterpolationState()){
         curve.points.push(point);
-    } else if(getAddingC2State() && curve.pointsBspline.find(x => x.id === point.id) === undefined) {
+    } else if(getAddingC2State()) {
         point.virtualPoints = [];
         point.c2BSpline = true;
         curve = addBsplinePoint(curve, point);

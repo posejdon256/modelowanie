@@ -6,10 +6,15 @@ import bezierc1 from '../../pictures/bezierc1.png';
 import bezierc2 from '../../pictures/bezierc2.png';
 import bezierc2I from '../../pictures/bezierc2i.png';
 import platekC0 from '../../pictures/platek.png';
+import platekC2 from '../../pictures/platekc2.png';
+import load from '../../pictures/helicopter.png';
+import save from '../../pictures/safebox.png';
 import { getAddBezierState, setAddBezierState } from '../canvas/Bezier/Bezier';
 import { getAddingC2State, setAddingC2State } from '../canvas/Bezier/BSpline';
 import { getInterpolationState, setInterpolationState } from '../canvas/Bezier/Interpolation';
 import { createSurface } from '../canvas/Surface/Surface';
+import { Save } from '../Save/Save';
+import { Load } from '../Load/Load';
 
 export default class Header extends Component {
     constructor(props) {
@@ -21,9 +26,19 @@ export default class Header extends Component {
         this.addBesplineCurve = this.addBesplineCurve.bind(this);
         this.addInterpolationCurve = this.addInterpolationCurve.bind(this);
         this.addSurfaceC0 = this.addSurfaceC0.bind(this);
+        this.addSurfaceC2 = this.addSurfaceC2.bind(this);
+        this.loadFile = this.loadFile.bind(this);
+        this.saveFile = this.saveFile.bind(this);
     }
     toggleTorus(){
+        //Save();
         this.props.toggleTorus();
+    }
+    loadFile() {
+        Load();
+    }
+    saveFile(){
+        Save();
     }
     addPoint(){
         this.props.addPoint();
@@ -50,7 +65,10 @@ export default class Header extends Component {
         this.props.addCurve("C2I");
     }
     addSurfaceC0(){
-        createSurface();
+        createSurface("C0");
+    }
+    addSurfaceC2(){
+        createSurface("C2");
     }
     render(){
         return(
@@ -73,6 +91,15 @@ export default class Header extends Component {
             <button className="ab-torus-button" onClick={this.addSurfaceC0}>
                 <img className="ab-point-image" src={platekC0} alt="surface c0" />
             </button>
+            <button className="ab-torus-button" onClick={this.addSurfaceC2}>
+                <img className="ab-point-image" src={platekC2} alt="surface c2" />
+            </button>    
+            <button className="ab-torus-button" onClick={this.saveFile}>
+                <img className="ab-point-image" src={save} alt="surface c0" />
+            </button>
+            <button className="ab-torus-button" onClick={this.loadFile}>
+                <img className="ab-point-image" src={load} alt="surface c2" />
+            </button>  
         </div>);
     }
 }

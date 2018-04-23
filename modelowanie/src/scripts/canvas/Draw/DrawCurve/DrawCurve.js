@@ -88,7 +88,11 @@ function drawChaines(ctx, ctxS1, ctxS2) {
     for(let i = 0; i < curves.length; i ++) {
         if(!curves[i].chain)
             continue;
-        setTranslationPoints(curves[i].points);
+        if(curves[i].surface && curves[i].type === "C2") {
+                setTranslationPoints(curves[i].pointsBspline);
+        } else {
+               setTranslationPoints(curves[i].points);
+        }
         const translated = Translate({});
         
         if(!stereoscopy) {

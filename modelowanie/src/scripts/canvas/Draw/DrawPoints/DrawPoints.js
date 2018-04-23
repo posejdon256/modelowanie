@@ -6,7 +6,7 @@ import { getAddingC2type } from "../../Bezier/BSpline";
 let img;
 function drawPoint(x, y, img, ctx, rgb) {
     const xPrim = ((x + 1) * 500);
-    const yPrim = (((y + 1) )* 300);
+    const yPrim = (((y + 1) )* 350);
     if(xPrim < 0 || yPrim < 0 || xPrim > 1000 || yPrim > 700)
         return;
     for(let i = 0; i < 2; i ++) {

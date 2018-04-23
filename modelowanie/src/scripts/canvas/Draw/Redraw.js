@@ -6,7 +6,7 @@ import { _DrawPoints } from "./DrawPoints/DrawPoints";
 import { _DrawCursor } from "./DrawCursor/DrawCursor";
 import { clearCanvas, getContexts } from "./Draw";
 import { _DrawCurves } from "./DrawCurve/DrawCurve";
-import { _DrawSurfaces, _DrawSurfaceWithoutRedraw } from "./DrawSurface/DrawSurface";
+import { _DrawSurfaceWithoutRedraw, _DrawSurfacesC2, _DrawSurfacesC0 } from "./DrawSurface/DrawSurface";
 
 export default function Redraw(){
     clearCanvas();
@@ -40,7 +40,8 @@ function DrawTorus(points) {
 }
 function DrawSurfaces(){
     const { ctx, ctxS1, ctxS2 } = getContexts();
-    _DrawSurfaces(ctx, ctxS1, ctxS2);
+    _DrawSurfacesC2(ctx, ctxS1, ctxS2);
+    _DrawSurfacesC0(ctx, ctxS1, ctxS2);
 }
 function DrawSurfacesWithoutBezier() {
     const { ctx, ctxS1, ctxS2 } = getContexts();

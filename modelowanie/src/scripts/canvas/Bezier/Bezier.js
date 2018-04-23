@@ -45,16 +45,19 @@ export function getBezierPoints(_curves){
         }
         for(let l = 0; l < curves[i].points.length;) {
             let curvePart;
-            if((curves[i].type === "C2" || curves[i].type === "C2I") && (l === 0 || curves[i].points.length < l + 3)) {
+            if((curves[i].type === "C2") && (l === 2 && curves[i].points.length < l + 3)) {
                 curvePart = curves[i].points.slice(l, l + 3);
+            } else if((curves[i].type === "C2" || curves[i].type === "C2I") && (l === 0 || curves[i].points.length <= l + 3)) {
+                l += 2;
+                continue;
             } else {
                 curvePart = curves[i].points.slice(l, l + 4);
             }
             const divisions = parseInt(countCircumfrence(curvePart), 10);
             for(let j = 0; j < divisions; j ++) {
                 const point = {x: 0, y: 0, z: 0, selected: curves[i].selected};
-                if(l === 0 && j === 0)
-                    point.break = true;
+                if((curves[i].type === "C0" && l === 0 && j === 0) ||(curves[i].type === "C2" && l=== 2 && j === 0))
+                point.break = true;
                 const n = curvePart.length - 1;
                 for(let k = 0; k < n + 1; k ++) {
                     const first = n === 0 ? 1 : Math.pow(j/(divisions-1), k);
@@ -75,16 +78,23 @@ export function getBezierPoints(_curves){
     }
     return points;
 }
-export function getBezierPointsFromKnots(knots) {
+export function getBezierPointsFromKnots(knots, type) {
     const berstainsNAfterI = countBerstainNAfterI();
     const points = [];
     for(let l = 0; l < knots.length;) {
         let curvePart;
-        curvePart = knots.slice(l, l + 4);
+        if(type === "C2" && l === 2 && knots.length < l + 3) {
+            curvePart = knots.slice(l, l + 3);
+        } else if((type === "C2") && (l === 0 || knots.length <= l + 3)) {
+            l += 2;
+            continue;
+        } else {
+            curvePart = knots.slice(l, l + 4);
+        }
         const divisions = parseInt(countCircumfrence(curvePart), 10);
         for(let j = 0; j < divisions; j ++) {
             const point = {x: 0, y: 0, z: 0};
-            if(l === 0 && j === 0)
+            if((type === "C0" && l === 0 && j === 0) ||(type === "C2" && l=== 2 && j === 0))
                 point.break = true;
             const n = curvePart.length - 1;
             for(let k = 0; k < n + 1; k ++) {
@@ -97,7 +107,11 @@ export function getBezierPointsFromKnots(knots) {
             }
             points.push(point);
         }
-        l += 3;
+        if((type === "C2") && (l === 0 || knots.length < l + 3)) {
+            l += 2;
+        } else  {
+            l += 3;
+        }
     }
     return points;
 }

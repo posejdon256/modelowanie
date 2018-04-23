@@ -27,9 +27,9 @@ export function _DrawCursor(_ctx, _ctxStereo, _ctxStereo2) {
     setTranslationPoints(cursorPos);
     const cursorPosTrans = Translate({});
     if(!stereoscopy)
-        setScreenPlace(Math.round((cursorPosTrans[0].x + 1) * 500), Math.round((cursorPosTrans[0].y + 1) * 300));
+        setScreenPlace(Math.round((cursorPosTrans[0].x + 1) * 500), Math.round((cursorPosTrans[0].y + 1) * 350));
     else
-        setScreenPlace(Math.round((cursorPosTrans.left[0].x + 1) * 500), Math.round((cursorPosTrans.left[0].y + 1) * 300));
+        setScreenPlace(Math.round((cursorPosTrans.left[0].x + 1) * 500), Math.round((cursorPosTrans.left[0].y + 1) * 350));
     if(stereoscopy) {
         const { left, right } = translatedPoints;
         _ctxStereo.strokeStyle = "rgba(236, 4, 0, 1)";
@@ -40,8 +40,8 @@ export function _DrawCursor(_ctx, _ctxStereo, _ctxStereo2) {
             if(left[i].z < 1 && left[i].z > -blaZ && left[i].x < bla && left[i].x > -bla
                 && left[i].y < bla  && left[i].y > -bla && left[i + 1].z < 1 && left[i + 1].z > -blaZ && left[i + 1].x < bla && left[i + 1].x > -bla
                 && left[i + 1].y < bla && left[i + 1].y > -bla) {
-                drawLine((left[i].x + 1) * 500,(left[i].y + 1) * 300, (left[i + 1].x + 1) * 500,(left[i + 1].y + 1) * 300, _ctxStereo);
-                drawLine((right[i].x + 1) * 500,(right[i].y + 1) * 300, (right[i + 1].x + 1) * 500,(right[i + 1].y + 1) * 300, _ctxStereo2);
+                drawLine((left[i].x + 1) * 500,(left[i].y + 1) * 350, (left[i + 1].x + 1) * 500,(left[i + 1].y + 1) * 350, _ctxStereo);
+                drawLine((right[i].x + 1) * 500,(right[i].y + 1) * 350, (right[i + 1].x + 1) * 500,(right[i + 1].y + 1) * 350, _ctxStereo2);
                 }
         }
         _ctxStereo.stroke();
@@ -54,7 +54,7 @@ export function _DrawCursor(_ctx, _ctxStereo, _ctxStereo2) {
                 && translatedPoints[i + 1].y < bla && translatedPoints[i + 1].y > -bla) {
                 _ctx.beginPath();
                 _ctx.strokeStyle = i === 0 ? "rgba(255, 0, 0, 1)" : (i === 2 ? "rgba(0, 255, 0, 1)" : "rgba(0, 0, 255, 1)");
-                drawLine((translatedPoints[i].x + 1) * 500,(translatedPoints[i].y + 1) * 300, (translatedPoints[i + 1].x + 1) * 500,(translatedPoints[i + 1].y + 1) * 300);
+                drawLine((translatedPoints[i].x + 1) * 500,(translatedPoints[i].y + 1) * 350, (translatedPoints[i + 1].x + 1) * 500,(translatedPoints[i + 1].y + 1) * 350);
                 _ctx.stroke();
                 }
         }

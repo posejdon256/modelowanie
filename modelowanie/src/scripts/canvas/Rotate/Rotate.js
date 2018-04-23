@@ -1,5 +1,5 @@
 import Translate from "../Translation/TranslationCenter/TranslationCenter";
-import Redraw, { RedrawWithoutChangingScene } from "../Draw/Redraw";
+import { RedrawWithoutChangingScene } from "../Draw/Redraw";
 
 let lastX;
 let lastY;

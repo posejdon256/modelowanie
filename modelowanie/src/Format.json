@@ -1,0 +1,87 @@
+{
+    "points": [
+        {
+            "name": "My favourite point <3",
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        {
+            "name": "My hated point",
+            "x": 0.5,
+            "y": 0,
+            "z": -1.2
+        }
+    ],
+    "curvesC0": [
+        {
+            "name": "My favourite curve C0",
+            "pointsId": [0, 1]
+        }
+    ],
+    "curvesC2": [
+        {
+            "name": "My favourite curve C2",
+            "pointsId": [1, 0]
+        }
+    ],
+    "curvesC2I": [
+        {
+            "name": "My favourite interpolation bezier curve",
+            "pointsId": [1, 0, 1]
+        }
+    ],
+    "surfacesC0": [
+        {
+            "name": "My favourite surface C0",
+            "u": 4,
+            "v": 7,
+            "flakeU": 1,
+            "flakeV": 1,
+            "points": [
+                [ 0, 1, 1, 1],
+                [ 1, 0, 1, 1],
+                [ 0, 0, 1, 1],
+                [ 1, 1, 1, 1]
+            ]
+        }
+    ],
+    "surfacesC2": [
+        {
+            "name": "My favourite surface C2",
+            "u": 4,
+            "v": 7,
+            "flakeU": 1,
+            "flakeV": 1,
+            "points": [
+                [ 0, 1, 1, 1],
+                [ 1, 0, 1, 1],
+                [ 0, 0, 1, 1],
+                [ 1, 1, 1, 1]
+            ]
+        }
+    ],
+    "toruses": [
+        {
+            "r": 2,
+            "R": 4,
+            "u": 10,
+            "v": 30,
+            "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "rotation": {
+                "x": 0,
+                "y": 0.6,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            }
+        }
+    ]
+}

@@ -6,9 +6,9 @@ import { getSelectedCurveId, addPointToCurve, getCurves } from '../Bezier/Curve'
 import { getAddingC2State } from '../Bezier/BSpline';
 import { getInterpolationState } from '../Bezier/Interpolation';
 import { getAddingSurfaceState } from '../Surface/Surface';
-import { TryParseInt, TryParseFloat } from '../../Helpers/Helpers';
+import { TryParseFloat } from '../../Helpers/Helpers';
 
-const points = [];
+let points = [];
 let pointNumber = 1;
 
 export function getPoints(){
@@ -47,7 +47,7 @@ export function removePoint(id) {
                 points.splice(i, 1);
                 i --;
             }
-            if(points[i].virtualPoints && points[i].virtualPoints.length > 1) {
+            else if(points[i].virtualPoints && points[i].virtualPoints.length > 1) {
                 points[i].virtualPoints = [];
             }
         }
@@ -142,4 +142,8 @@ export function addPointWithRedraw() {
     const newPoint = addPoint();
     Redraw();
     return newPoint;
+}
+export function clearPoints() {
+    points = [];
+    pointNumber = 1;
 }

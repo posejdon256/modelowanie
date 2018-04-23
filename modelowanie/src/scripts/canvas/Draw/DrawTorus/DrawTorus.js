@@ -12,7 +12,7 @@ function drawTorusLines(lines, ctx, points) {
             && points[line[0]].y < bla  && points[line[0]].y > -bla && points[line[1]].z < 1 && points[line[1]].z > -blaZ && points[line[1]].x < bla && points[line[1]].x > -bla
             && points[line[1]].y < bla && points[line[1]].y > -bla) {
             //console.log(points[line[0]].z, points[line[1]].x);
-             drawLine(points[line[0]].x * (rs.R + rs.r) + (500), points[line[0]].y * (rs.R + rs.r)+ (300), points[line[1]].x * (rs.R + rs.r)+ (500), points[line[1]].y * (rs.R + rs.r)+ (300), ctx);
+             drawLine(points[line[0]].x * (rs.R + rs.r) + (500), points[line[0]].y * (rs.R + rs.r)+ (350), points[line[1]].x * (rs.R + rs.r)+ (500), points[line[1]].y * (rs.R + rs.r)+ (350), ctx);
          }
     });
     ctx.stroke();
