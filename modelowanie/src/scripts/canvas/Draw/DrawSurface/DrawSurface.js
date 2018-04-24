@@ -56,18 +56,19 @@ export function _DrawSurfacesC0(ctx, ctxS1, ctxS2, surface) {
 export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
     const surfaces = getSurfaces("C2");
     let points = [];
-    for(let i = 0; i < surfaces.length; i ++) {
-        for(let j = 4; j < (surfaces[i].cylinder ? 4 + ((surfaces[i].height * 3 + 1)*3) : (surfaces[i].width) * 3 + 1 + (surfaces[i].height * 3 + 1)); j ++) {
+    var i, j, k, m;
+    for(i = 0; i < surfaces.length; i ++) {
+        for(j = (surfaces[i].cylinder ? (3 * surfaces[i].height) + 1 : (surfaces[i].height * 3 + 1)); j < (surfaces[i].cylinder ? (3 * surfaces[i].height) + 1 + 16 : (surfaces[i].width) * 3 + 1 + (surfaces[i].height * 3 + 1)); j ++) {
             rebuildVirtualPointsForSingleCurve(surfaces[i].curves[j].id);
         }
         const map = surfaces[i].pointsMap;
-        for(let j = 2; j < map.length - 1; j += 1) {
+        for(j = 2; j < map.length - 1; j += 1) {
                 const n = parseInt(surfaces[i].px, 10) - 1;
-                for(let m = 0; m <= n; m ++) {
+                for(m = 0; m <= n; m ++) {
                     const knots = [];
                    // if(m/n < (1/3) || m/n > 2/3)
                     //    continue;
-                    for(let k = 0; k < map[j].length; k ++) {
+                    for(k = 0; k < map[j].length; k ++) {
                         let point;
                         const newBezier1 = deCastiljau(m/n ,map[j][k].virtualPoints[0], map[j][k].virtualPoints[1], map[j][k].virtualPoints[2], map[j + 1][k].virtualPoints[0]);
                         point = {
@@ -81,16 +82,16 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
                 }
         }
     }
-    for(let i = 0; i < surfaces.length; i ++) {
-        for(let j = 0; j < (surfaces[i].cylinder ? 4 : (surfaces[i].height) * 3 + 1); j ++) {
+    for(i = 0; i < surfaces.length; i ++) {
+        for(j = 0; j < (surfaces[i].cylinder ? (3 * surfaces[i].height) + 1 : (surfaces[i].height * 3 + 1)); j ++) {
             rebuildVirtualPointsForSingleCurve(surfaces[i].curves[j].id);
         }
         const map = surfaces[i].pointsMap;
-        for(let k = 2; k < map[0].length - 1; k += 1) {
+        for(k = 2; k < map[0].length - 1; k += 1) {
                 const n = parseInt(surfaces[i].py, 10) - 1;
-                for(let m = 0; m <= n; m ++) {
+                for(m = 0; m <= n; m ++) {
                     const knots = [];
-                    for(let j = 0; j < map.length; j ++) {
+                    for(j = 0; j < map.length; j ++) {
                         const newBezier1 = deCastiljau(m/n ,map[j][k].virtualPoints[0], map[j][k].virtualPoints[1], map[j][k].virtualPoints[2], map[j][k + 1].virtualPoints[0]);
                         const point = {
                             x : newBezier1.x,
@@ -180,5 +181,38 @@ export function _DrawCurveInSurface(ctx, ctxS1, ctxS2, points) {
         }
         ctx.stroke();
        // ctx.putImageData(img, 0, 0);
+    }
+    drawChainForC2CubicFlake(ctx, ctxS1, ctxS2);
+}
+function drawChainForC2CubicFlake(ctx, ctxS1, ctxS2) {
+    const surfaces = getSurfaces("C2");
+    ctx.strokeStyle = "rgba(0, 0, 255, 1)";
+    for(let i = 0; i < surfaces.length; i ++) {
+        if(!surfaces[i].chain) {
+            continue;
+        }
+        for(let j = 0; j < surfaces[i].pointsMap.length; j ++) {
+            setTranslationPoints(surfaces[i].pointsMap[j]);
+            let translated = Translate({});
+            ctx.beginPath();
+            for(let k = 1; k < translated.length; k ++) {
+                drawLine(parseInt((translated[k - 1].x + 1) * 500, 10), parseInt((translated[k - 1].y + 1) * 350, 10), parseInt((translated[k].x + 1) * 500, 10), parseInt((translated[k].y + 1) * 350, 10), ctx);
+            }
+            ctx.stroke();
+        }
+        for(let m = 0; m < surfaces[i].pointsMap[0].length; m ++) {
+            const _points = [];
+            for(let k = 0; k <surfaces[i].pointsMap.length; k ++) {
+                _points.push(surfaces[i].pointsMap[k][m]);
+               // _points.push(surfaces[i].pointsMap[k][m]);
+            }
+            setTranslationPoints(_points);
+            let translated = Translate({});
+            ctx.beginPath();
+            for(let k = 1; k < translated.length; k ++) {
+                drawLine(parseInt((translated[k - 1].x + 1) * 500, 10), parseInt((translated[k - 1].y + 1) * 350, 10), parseInt((translated[k].x + 1) * 500, 10), parseInt((translated[k].y + 1) * 350, 10), ctx);
+            }
+            ctx.stroke();
+        }
     }
 }

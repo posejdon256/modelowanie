@@ -48,7 +48,7 @@ class App extends Component {
   }
   refreshNavbar() {
     this.setState({
-      points: getPoints(),
+      points: getPoints("on-scene"),
       curves: getCurves(),
       surfaces: getSurfaces(),
       curvePoints: getCurvesControlPoints()

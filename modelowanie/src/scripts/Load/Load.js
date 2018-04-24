@@ -63,15 +63,26 @@ export function Load() {
     turnOffAllStates();
     json.surfacesC2.forEach(surface => {
         setAddingSurfaceState(true);
-        let _surface = addSurface(surface.width, surface.height, false, surface.u, surface.v, "C2");
+        setAddingC2State(true);
+        let _surface = addSurface(surface.flakeU, surface.flakeV, surface.cylinder, surface.u, surface.v, "C2");
         _surface.pointsMap = [];
         surface.points.forEach(pointRow => {
             _surface.pointsMap.push([]);
+            const curve = addBsplineCurve({surface: true});
+            _surface.curves.push(curve);
             for(let i = 0; i < pointRow.length; i ++) {
                 let len = _surface.pointsMap.length - 1;
                 _surface.pointsMap[len].push(_points.find(x => x.id === json.points[surface.points[len][i]].id));
+                addPointToCurve(_surface.pointsMap[len][i]);
             }
         });
+        for(var i = 0; i < surface.points[0].length; i ++) {
+            const curve = addBsplineCurve({surface: true});
+            _surface.curves.push(curve);
+            for(var j = 0; j < surface.points.length; j ++) {
+                addPointToCurve(_surface.pointsMap[j][i]);
+            }
+        }
     });
     turnOffAllStates();
     Redraw();

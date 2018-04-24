@@ -4,7 +4,6 @@ import { addPointToCurve, selectCurve } from "../../Bezier/Curve";
 import { turnOffAllStates } from "../../StatesCenter/StatesCenter";
 import { setAddingC2State, addBsplineCurve, rebuildVirtualPoints } from "../../Bezier/BSpline";
 
-const _lengthPrim = 0.05;
 let sinus = 0;
 let width;
 let r;
@@ -26,8 +25,8 @@ export function makeSurfaceC2(surface) {
     for(let i = 0; i < curvesCount; i ++) {
         surface.pointsMap.push([]);
     }
-    let length = _lengthPrim * (width * 4);
-    let length2 = _lengthPrim * curvesCount;
+    let length = surface.absoluteWidth * (width * 4);
+    let length2 = surface.absoluteHeight * curvesCount;
     for(let i = 0; i < curvesCount; i ++) {
         const cursorPosition1 = getCursor();
         let y = cursorPosition1.y;
@@ -83,9 +82,11 @@ function makeFlake(_length, j, surface, k) {
                 addPointToCurve(surface.curves[surface.curves.length - 1].pointsBspline[0]);
                 addPointToCurve(surface.curves[surface.curves.length - 1].pointsBspline[1]);
                 addPointToCurve(surface.curves[surface.curves.length - 1].pointsBspline[2]);
+                addPointToCurve(surface.curves[surface.curves.length - 1].pointsBspline[3]);
                 surface.pointsMap[k].push(surface.curves[surface.curves.length - 1].pointsBspline[0]);
                 surface.pointsMap[k].push(surface.curves[surface.curves.length - 1].pointsBspline[1]);
                 surface.pointsMap[k].push(surface.curves[surface.curves.length - 1].pointsBspline[2]);
+                surface.pointsMap[k].push(surface.curves[surface.curves.length - 1].pointsBspline[3]);
                 return;
             }
             let y = surface.cylinder ? (r * Math.cos((2*((j*width) + i) * Math.PI) / sinus)) / 64 : diff;

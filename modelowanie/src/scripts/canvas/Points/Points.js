@@ -11,7 +11,10 @@ import { TryParseFloat } from '../../Helpers/Helpers';
 let points = [];
 let pointNumber = 1;
 
-export function getPoints(){
+export function getPoints(filter){
+    if(filter === "on-scene") {
+        return points.filter(x => x.visible !== false && !x.c2Bezier);
+    }
     return points;
 }
 export function removePointWithRedraw(id) {

@@ -91,6 +91,7 @@ export function Save() {
             v: surfacesC2[i].py,
             flakeU: surfacesC2[i].width,
             flakeV: surfacesC2[i].height,
+            cylinder: surfacesC2[i].cylinder,
             points: []
         });
         ret.surfacesC2[i].points = [];

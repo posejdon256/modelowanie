@@ -4,7 +4,7 @@ import List from './NavbarPoints/List';
 import ListPointsInCurve from './NavbarPoints/ListPointsInCurve';
 import BiCubicNavbar from './BiCubicNavbar/BiCubicNavbar';
 
-import { getCursor } from '../canvas/Cursor/Cursor';
+import { getCursor, setCursor } from '../canvas/Cursor/Cursor';
 import { setAddingC2Type } from '../canvas/Bezier/BSpline';
 import { getCurvesControlPoints, addCurveBySelectedPoints } from '../canvas/Bezier/Curve';
 import { updateSelectedPoints } from '../canvas/Points/Points';
@@ -20,6 +20,7 @@ export default class Navbar extends Component {
         this.updateCurvePoints = this.updateCurvePoints.bind(this);
         this.updateAddingC2Type = this.updateAddingC2Type.bind(this);
         this.updateSelectedPoints = this.updateSelectedPoints.bind(this);
+        this.setCursorToStart = this.setCursorToStart.bind(this);
         const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
@@ -66,9 +67,15 @@ export default class Navbar extends Component {
         this.updateCurvePoints(getCurvesControlPoints(curveId));
         this.forceUpdate();
     }
+    setCursorToStart() {
+        setCursor(0,0,0, true);// with redraw
+    }
     render(){
         return(
         <div className="ab-navbar">
+                <div>
+                <button onClick={this.setCursorToStart}>Ustaw Kursor w (0,0,0)</button>
+            </div>
             <div>
                 <label>Siatka pozioma</label>
                 <input type="range" min="2" max="100" onChange={this.updateXGrid} />

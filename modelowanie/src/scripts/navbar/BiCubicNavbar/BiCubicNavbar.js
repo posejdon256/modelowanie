@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../../../css/navbar/Navbar.css';
-import { setCylinder, setWidth, setHeight, updateSelectedCurveGrid, setGridX, setGridY, setCylinderDirection } from '../../canvas/Surface/Surface';
+import { setCylinder, setWidth, setHeight, updateSelectedCurveGrid, setGridX, setGridY, setCylinderDirection, setAbsoluteHeight, setAbsoluteWidth } from '../../canvas/Surface/Surface';
 
 export default class BiCubicNavbar extends Component {
     constructor(props) {
@@ -12,12 +12,20 @@ export default class BiCubicNavbar extends Component {
         this.setGridX = this.setGridX.bind(this);
         this.setGridY = this.setGridY.bind(this);
         this.setDirection = this.setDirection.bind(this);
+        this.updateAbsoluteHeight = this.updateAbsoluteHeight.bind(this);
+        this.updateAbsoluteWidth = this.updateAbsoluteWidth.bind(this);
     }
     updateHeight(event){
         setHeight(event.target.value);
     }
     updateWidth(event){
         setWidth(event.target.value);
+    }
+    updateAbsoluteHeight(event) {
+        setAbsoluteHeight(event.target.value);
+    }
+    updateAbsoluteWidth(event) {
+        setAbsoluteWidth(event.target.value);
     }
     updateCylinder(event){
         setCylinder(event.target.checked);
@@ -57,6 +65,14 @@ export default class BiCubicNavbar extends Component {
                 <div>
                     <label>Siatka po Y: </label>
                     <input type="text"  onChange={this.setGridY} defaultValue={4}/>
+                </div>
+                <div>
+                    <label>Stała wysokość: </label>
+                    <input type="text" onChange={this.updateAbsoluteHeight} defaultValue={5}/>
+                </div>
+                <div>
+                    <label>Stała szerokość: </label>
+                    <input type="text"  onChange={this.updateAbsoluteWidth} defaultValue={5}/>
                 </div>
                 <div>
                     <button onClick={this.updateGridOnSelectedSurface}>Podmień siatki zaznaczonych płatków</button>

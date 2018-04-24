@@ -1,4 +1,4 @@
-import { TryParseInt } from "../../Helpers/Helpers";
+import { TryParseInt, TryParseFloat2 } from "../../Helpers/Helpers";
 import { makeSurfaceC0 } from "./SurfaceC0/SurfaaceC0";
 import Redraw from "../Draw/Redraw";
 import { removePoint } from "../Points/Points";
@@ -16,6 +16,20 @@ let gridX = 4;
 let gridY = 4;
 let addingSurface = false;
 let direction = 0; // 0 - X, 1 - Y, 2 - Z
+let absoluteWidth = 0.05;
+let absoluteHeight = 0.05;
+export function setAbsoluteWidth(_width) {
+    const _absoluteWidth = TryParseFloat2(_width);
+    if(_absoluteWidth !== undefined) {
+        absoluteWidth = 0.01 * _absoluteWidth;
+    }
+}
+export function setAbsoluteHeight(_height) {
+    const _absoluteHeight = TryParseFloat2(_height);
+    if(_absoluteHeight !== undefined) {
+        absoluteHeight = 0.01 * _absoluteHeight;
+    }
+}
 export function getSurfaces(type) {
     switch (type) {
         case "C0":
@@ -84,6 +98,17 @@ export function removeSurface(id) {
 export function selectSurface(id) {
     const surface = surfaces.find(x => x.id === id);
     surface.selected = !surface.selected;
+    surface.curves.forEach(curve => {
+        curve.points.forEach(point => {
+            point.selected = surface.selected;
+        });
+        if(curve.pointsBspline) {
+            curve.pointsBspline.forEach(point => {
+                point.selected = surface.selected;
+            });
+        }
+    });
+    if(surface)
     return surfaces;
 }
 export function setGridX(_gridX) {
@@ -124,8 +149,11 @@ export function addSurface(_width, _height, _cylinder, _u, _v, _type) {
         curves: [],
         px: _u,
         py: _v,
-        type : _type
+        type : _type,
+        absoluteHeight: absoluteHeight,
+        absoluteWidth: absoluteWidth
     }
+    surfacesIterator ++;
     surfaces.push(surface);
     return surface;
 }
@@ -142,7 +170,9 @@ export function createSurface(type) {
         px: gridX,
         py: gridY,
         direction: direction,
-        type : type
+        type : type,
+        absoluteHeight: absoluteHeight,
+        absoluteWidth: absoluteWidth
     }
     surfacesIterator ++;
     surfaces.push(surface);

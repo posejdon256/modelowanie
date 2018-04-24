@@ -36,7 +36,7 @@ export default class List extends Component {
     }
     updatePointName(id, name) {
         this.setState({
-            points: updatePointName(id, name)
+            points: updatePointName(id, name).filter(x => x.visible !== false && !x.c2Bezier)
         });
     }
     updateCurveName(id, name) {
@@ -66,7 +66,7 @@ export default class List extends Component {
     }
     removePoint(id){
         this.setState({
-            points: removePointWithRedraw(id)
+            points: removePointWithRedraw(id).filter(x => x.visible !== false && !x.c2Bezier)
         });
         this.props.updateCurvePoints(getCurvesControlPoints());
     }
@@ -78,7 +78,7 @@ export default class List extends Component {
     }
     selectPoint(id) {
         this.setState({
-            points:selectPoint(id)
+            points:selectPoint(id).filter(x => x.visible !== false && !x.c2Bezier)
         });
     }
     turnOnChain(id) {
