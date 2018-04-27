@@ -12,6 +12,23 @@ let points = [];
 let pointNumber = 1;
 
 export function getPoints(filter){
+    if(points.length > 1000) {
+        let promise = new Promise(function(resolve, reject) {
+            try {
+            for(let i = 0; i < points.length; i ++) {
+                if(points[i].deleted) {
+                    points.splice(i, 1);
+                    i --;
+                }
+            }
+            }
+            catch(e) {
+                reject(e);
+            }
+            console.log(points.length);
+            resolve('wow!');
+        });
+    } 
     if(filter === "on-scene") {
         return points.filter(x => x.visible !== false && !x.c2Bezier);
     }
@@ -51,6 +68,9 @@ export function removePoint(id) {
                 i --;
             }
             else if(points[i].virtualPoints && points[i].virtualPoints.length > 1) {
+                points[i].virtualPoints.forEach(p => {
+                    p.deleted = true;
+                });
                 points[i].virtualPoints = [];
             }
         }

@@ -162,6 +162,11 @@ export function addPointToCurve(point) {
     if(!getAddingC2State() && !getInterpolationState()){
         curve.points.push(point);
     } else if(getAddingC2State()) {
+        if(point.virtualPoints) {
+            point.virtualPoints.forEach(p => {
+                p.deleted = true;
+            });
+        }
         point.virtualPoints = [];
         point.c2BSpline = true;
         curve = addBsplinePoint(curve, point);

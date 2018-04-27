@@ -58,7 +58,9 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
     let points = [];
     var i, j, k, m;
     for(i = 0; i < surfaces.length; i ++) {
-        for(j = (surfaces[i].cylinder ? (3 * surfaces[i].height) + 1 : (surfaces[i].height * 3 + 1)); j < (surfaces[i].cylinder ? (3 * surfaces[i].height) + 1 + 16 : (surfaces[i].width) * 3 + 1 + (surfaces[i].height * 3 + 1)); j ++) {
+        for(j = (surfaces[i].cylinder ? (3 * surfaces[i].height) + 1 : (surfaces[i].height * 3 + 1));
+         j < surfaces[i].curves.length;
+         j ++) {
             rebuildVirtualPointsForSingleCurve(surfaces[i].curves[j].id);
         }
         const map = surfaces[i].pointsMap;
@@ -66,8 +68,6 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
                 const n = parseInt(surfaces[i].px, 10) - 1;
                 for(m = 0; m <= n; m ++) {
                     const knots = [];
-                   // if(m/n < (1/3) || m/n > 2/3)
-                    //    continue;
                     for(k = 0; k < map[j].length; k ++) {
                         let point;
                         const newBezier1 = deCastiljau(m/n ,map[j][k].virtualPoints[0], map[j][k].virtualPoints[1], map[j][k].virtualPoints[2], map[j + 1][k].virtualPoints[0]);
@@ -79,7 +79,13 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
                         knots.push(point);
                     }
                     points = points.concat(getBSplinePointsFromKnots(knots, "C2"));
+                    knots.forEach(knot => {
+                        knot.virtualPoints.forEach(vp => {
+                            vp.deleted = true;
+                        });
+                    });
                 }
+            
         }
     }
     for(i = 0; i < surfaces.length; i ++) {
@@ -105,6 +111,11 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
                     } else {
                         points = points.concat(getBSplinePointsFromKnots(knots));
                     }
+                    knots.forEach(knot => {
+                        knot.virtualPoints.forEach(vp => {
+                            vp.deleted = true;
+                        });
+                    });
                 }
         }
     }

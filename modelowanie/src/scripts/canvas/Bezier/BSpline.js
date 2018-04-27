@@ -73,6 +73,9 @@ export function rebuildVirtualPointsForSingleCurve(id) {
     const curves = getCurves();
     const curve = curves.find(x => x.id === id);
     for(let j = 0; j < curve.pointsBspline.length; j ++) {
+        curve.pointsBspline[j].virtualPoints.forEach(p => {
+            p.deleted = true;
+        });
         curve.pointsBspline[j].virtualPoints = [];
         rebuildVirtulaPoint(curve, j);
     }

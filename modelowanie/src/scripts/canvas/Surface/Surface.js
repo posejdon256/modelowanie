@@ -1,10 +1,13 @@
-import { TryParseInt, TryParseFloat2 } from "../../Helpers/Helpers";
+import { TryParseInt, TryParseFloat2, TryParseFloat } from "../../Helpers/Helpers";
 import { makeSurfaceC0 } from "./SurfaceC0/SurfaaceC0";
 import Redraw from "../Draw/Redraw";
-import { removePoint } from "../Points/Points";
+import { removePoint, addPoint } from "../Points/Points";
 import { removeCurveWithourRedraw } from "../Bezier/Curve";
 import { turnOffAllStates } from "../StatesCenter/StatesCenter";
 import { makeSurfaceC2 } from "./SurfaceC2/SurfaceC2";
+import { addBezierCurve } from "../Bezier/Bezier";
+import { addBsplineCurve } from "../Bezier/BSpline";
+import { updateCursor } from "../Cursor/Cursor";
 
 
 let cylinder = false;
@@ -43,13 +46,13 @@ export function getSurfaces(type) {
 export function setCylinderDirection(dir) {
     switch (dir) {
         case 'X':
-            direction = 0;
+            direction = 2;
             break;
         case 'Y':
             direction = 1;
             break;
         case 'Z':
-            direction = 2;
+            direction = 0;
             break;
         default:
             break;
@@ -59,10 +62,10 @@ export function setCylinder(_cylinder) {
     cylinder = _cylinder;
 }
 export function setHeight(_height) {
-    height = TryParseInt(_height, height)
+    height = TryParseFloat(_height, height)
 }
 export function setWidth(_width) {
-    width = TryParseInt(_width, width);
+    width = TryParseFloat(_width, width);
 }
 export function getAddingSurfaceState() {
     return addingSurface;
@@ -169,6 +172,7 @@ export function createSurface(type) {
         curves: [],
         px: gridX,
         py: gridY,
+        pointsMap: [],
         direction: direction,
         type : type,
         absoluteHeight: absoluteHeight,
@@ -183,6 +187,46 @@ export function createSurface(type) {
     }
     addingSurface = false;
     Redraw();
+}
+function makeSurface(surface) {
+    for(var i = 0; i < surface.height; i ++) {
+        const curve = surface.type === "C0" ? addBezierCurve({surface: true}) : addBsplineCurve({surface: true});
+        for(let j = 0; j < surface.width; j ++) {
+            if(surface.cylinder) {
+                makeNormalStripes(j, surface);
+            }
+        }
+    }
+}
+function makeNormalStripes(stripeNumber, surface) {
+    const len = surface.absoluteWidth / 4;
+    const d = surface.direction;
+    for(let i = 0; i < 4; i ++) {
+        for(let j = 0; j < 4; j ++) {
+            if(stripeNumber === 0 && i === 0) {
+                addPoint();
+            } else {
+                if(d === 0) {
+                    updateCursor(len, 0, 0);
+                } else if(d == 1) {
+                    updateCursor(0, 0, len)
+                } else {
+                    updateCursor(0, len, 0);
+                }
+                const point = addPoint();
+            }
+        }
+        if(d === 0) {
+            updateCursor(-surface.absoluteWidth, surface.absoluteHeight / 4, 0);
+        } else if(d == 1) {
+            updateCursor(surface.absoluteHeight / 4, 0, -surface.absoluteWidth)
+        } else {
+            updateCursor(0, -surface.absoluteWidth, surface.absoluteHeight / 4);
+        }
+    }
+}
+function makeCylinderStripes(stripeNumber, surface) {
+
 }
 export function clearSurfaces() {
     surfaces = [];
