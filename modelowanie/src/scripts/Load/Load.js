@@ -1,5 +1,5 @@
 import { clearCurves, addPointToCurve } from "../canvas/Bezier/Curve";
-import { clearPoints, addPoint, updatePointName, getPoints } from "../canvas/Points/Points";
+import { clearPoints, addPoint, updatePointName, getPoints, removePoint } from "../canvas/Points/Points";
 import { clearSurfaces, addSurface, setAddingSurfaceState } from "../canvas/Surface/Surface";
 import { addBezierCurve, setAddBezierState } from "../canvas/Bezier/Bezier";
 import { addBsplineCurve, setAddingC2State } from "../canvas/Bezier/BSpline";
@@ -82,6 +82,11 @@ export function Load() {
             for(var j = 0; j < surface.points.length; j ++) {
                 addPointToCurve(_surface.pointsMap[j][i]);
             }
+        }
+    });
+    json.points.forEach(point => {
+        if(point.remove) {
+            removePoint(point.id);
         }
     });
     turnOffAllStates();

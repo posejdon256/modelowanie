@@ -26,6 +26,9 @@ export function Save() {
     const curvesC0 = getCurves("C0");
     ret.curvesC0 = [];
     for(let i = 0; i < curvesC0.length; i ++) {
+        if(curvesC0[i].surface) {
+            continue;
+        }
         ret.curvesC0.push({
             name: curvesC0[i].name
         });
@@ -39,6 +42,9 @@ export function Save() {
     const curvesC2 = getCurves("C2");
     ret.curvesC2 = [];
     for(let i = 0; i < curvesC2.length; i ++) {
+        if(curvesC2[i].surface) {
+            continue;
+        }
         ret.curvesC2.push({
             name: curvesC2[i].name
         });
@@ -102,7 +108,7 @@ export function Save() {
             }
         }
     }
-
+    clean(ret);
     // delete points ids
     ret.points.forEach(point => {
         delete point.id;
@@ -112,6 +118,57 @@ export function Save() {
     ret.toruses = toruses;
 
     saveToFile(ret);
+}
+function clean(ret) {
+    for(let i = 0; i < ret.points.length; i ++) {
+        for(let j = i + 1; j < ret.points.length; j ++) {
+            if(ret.points[i].x === ret.points[j].x &&
+                ret.points[i].y === ret.points[j].y &&
+                ret.points[i].z === ret.points[j].z
+            ) {
+                ret.curvesC0.forEach(c => {
+                    for(let k = 0; k < c.pointsId.length; k ++) {
+                        if(c.pointsId[k] === j) {
+                            c.pointsId[k] = i;
+                        }
+                    }
+                });
+                ret.curvesC2.forEach(c => {
+                    for(let k = 0; k < c.pointsId.length; k ++) {
+                        if(c.pointsId[k] === j) {
+                            c.pointsId[k] = i;
+                        }
+                    }
+                });
+                ret.curvesC2I.forEach(c => {
+                    for(let k = 0; k < c.pointsId.length; k ++) {
+                        if(c.pointsId[k] === j) {
+                            c.pointsId[k] = i;
+                        }
+                    }
+                });
+                ret.surfacesC0.forEach(s => {
+                    s.points.forEach(pRow => {
+                        for(let k = 0; k < pRow.length; k ++) {
+                            if(pRow[k] === j) {
+                                pRow[k] = i;
+                            }
+                        }
+                    });
+                });
+                ret.surfacesC2.forEach(s => {
+                    s.points.forEach(pRow => {
+                        for(let k = 0; k < pRow.length; k ++) {
+                            if(pRow[k] === j) {
+                                pRow[k] = i;
+                            }
+                        }
+                    });
+                });
+                ret.points[j].remove = true;
+            }
+        }
+    }
 }
 function saveToFile(json) { 
         var file = new Blob([JSON.stringify(json)], {type: 'json'});

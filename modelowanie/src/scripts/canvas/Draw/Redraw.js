@@ -16,7 +16,7 @@ export default function Redraw(){
         setTranslationPoints(torus);  
         DrawTorus(Translate({}));
     }
-   //DrawRectangle();
+//   DrawRectangle();
     DrawCursor();
     DrawSurfaces();
     DrawCurves();
@@ -39,7 +39,7 @@ export function RedrawWithoutChangingScene() {
 function DrawRectangle() {
         //TODO
         const {ctx} = getContexts();
-        setTranslationPoints([{x: -0.5, y: -0.5, z: 0}, {x: 0.5, y: 0.5, z: 0}, {x: -0.5, y: 0.5, z: 0}, {x: 0.5, y: -0.5, z: 0}]);
+        setTranslationPoints([{x: -0.3, y: -0.4, z: 0}, {x: 0.45, y: 0.4, z: 0}, {x: -0.3, y: 0.4, z: 0}, {x: 0.45, y: -0.4, z: 0}]);
         const rect = Translate({});
         ctx.beginPath();
         ctx.fillStyle = "rgba(125, 125, 125, 1)";
