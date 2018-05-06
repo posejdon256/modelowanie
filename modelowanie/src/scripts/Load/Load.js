@@ -15,7 +15,7 @@ export function Load() {
     clearPoints();
     clearSurfaces();
     json.points.forEach(point => {
-        let p = addPoint(point.x, point.y, point.z, "load");
+        let p = addPoint(point.x/10, point.y/10, point.z/10, "load");
         point.id = p.id;
         updatePointName(p.id, point.name);
     });

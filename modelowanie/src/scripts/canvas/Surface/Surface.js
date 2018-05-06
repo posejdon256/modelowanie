@@ -8,6 +8,7 @@ import { makeSurfaceC2 } from "./SurfaceC2/SurfaceC2";
 import { addBezierCurve } from "../Bezier/Bezier";
 import { addBsplineCurve } from "../Bezier/BSpline";
 import { updateCursor } from "../Cursor/Cursor";
+import { CatchPoint, RemoveCatchPoint } from "../Move/MoveCursor";
 
 
 let cylinder = false;
@@ -104,10 +105,20 @@ export function selectSurface(id) {
     surface.curves.forEach(curve => {
         curve.points.forEach(point => {
             point.selected = surface.selected;
+            if(surface.selected === true) {
+                CatchPoint(point);
+            } else {
+                RemoveCatchPoint(point);
+            }
         });
         if(curve.pointsBspline) {
             curve.pointsBspline.forEach(point => {
                 point.selected = surface.selected;
+                if(surface.selected === true) {
+                    CatchPoint(point);
+                } else {
+                    RemoveCatchPoint(point);
+                }
             });
         }
     });

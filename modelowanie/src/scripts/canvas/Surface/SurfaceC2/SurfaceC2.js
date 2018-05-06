@@ -17,9 +17,9 @@ export function makeSurfaceC2(surface) {
         width = surface.width;
     }
     setAddingC2State(true);
-    const curvesCount = (surface.height * 3) + 1;
+    const curvesCount = surface.cylinder ? 4 + (surface.width - 1) : 4 + (surface.height - 1);
     if(surface.cylinder) {
-        sinus = (surface.width * 3) - 1;
+        sinus = 4 + (surface.height - 1);
     } else {
         sinus = 0;
     }
@@ -54,7 +54,7 @@ export function makeSurfaceC2(surface) {
         const curve = addBsplineCurve({surface: true});
         surface.curves.push(curve);
         for(let j = 0; j < width; j ++) {
-            makeFlake(length / width, j, surface, i);
+            makeFlake(length, j, surface, i);
         }
         const cursorPosition2 = getCursor();
         let xPrim = cursorPosition2.x;
@@ -72,11 +72,16 @@ export function makeSurfaceC2(surface) {
         }
        // setCursor(xPrim, yPrim, zPrim);
         if(surface.direction === 0) {
-            updateCursor(length2 / curvesCount, 0, 0);
+            if(surface.cylinder) {
+                updateCursor(length2 / curvesCount, 0, 0);
+            } else {
+                updateCursor(length2 / curvesCount, - (4 *length) - ((width-1) * length) , 0);
+                startCursor = JSON.parse(JSON.stringify(getCursor()));
+            }
         } else if(surface.direction === 1) {
             updateCursor(0, length2 / curvesCount, 0);
         } else {
-            updateCursor(0, 0, length2 / curvesCount);
+            updateCursor(length2 / curvesCount, 0, 0);
         }
         //updateCursor(0, -(surface.cylinder ? (r * Math.cos(2*Math.PI))/64 : sum) , 0);
     }
@@ -94,23 +99,11 @@ export function makeSurfaceC2(surface) {
     turnOffAllStates();
 }
 function makeFlake(_length, j, surface, k) {
-    const diff = _length/4;
-    let counter = 0;
-    for(let i = 0; i < 4; i ++) {
-        if(j === 0 || i !== 0) {
-            if(j === width - 1 && surface.cylinder && i === 3) {
-                //Redraw();
-                addPointToCurve(surface.curves[surface.curves.length - 1].pointsBspline[0]);
-                addPointToCurve(surface.curves[surface.curves.length - 1].pointsBspline[1]);
-                addPointToCurve(surface.curves[surface.curves.length - 1].pointsBspline[2]);
-                surface.pointsMap[k].push(surface.curves[surface.curves.length - 1].pointsBspline[0]);
-                surface.pointsMap[k].push(surface.curves[surface.curves.length - 1].pointsBspline[1]);
-                surface.pointsMap[k].push(surface.curves[surface.curves.length - 1].pointsBspline[2]);
-                return;
-            }
+    const diff = _length;
+    for(let i = 0; i < (j === 0 ? 4 : 1); i ++) {
             const _cursor = getCursor();
-            let y = surface.cylinder ? (r * Math.cos((2*((j*3) + counter) * Math.PI) / sinus)) : diff;
-            let z = surface.cylinder ? (r * Math.sin((2*((j*3) + counter) * Math.PI) / sinus)) : 0;
+            let y = surface.cylinder ? (r * Math.cos((2*((j === 0 ? 0 : 3 + j) + i) * Math.PI) / sinus)) : diff;
+            let z = surface.cylinder ? (r * Math.sin((2*((j === 0 ? 0 : 3 + j) + i) * Math.PI) / sinus)) : 0;
             let x = 0;
             if(surface.direction === 1) {
                 let temp = x;
@@ -124,15 +117,27 @@ function makeFlake(_length, j, surface, k) {
                 y += startCursor.y;
             } else {
                 x += _cursor.x;
-                y += startCursor.y;
+                if(!surface.cylinder) {
+                    y += _cursor.y;
+                } else {
+                    y += startCursor.y;
+                }
                 z += startCursor.z;
             }
             setCursor(x, y, z);
             const point = addPoint();
             //addPointToCurve(point);
             surface.pointsMap[k].push(point);
-            counter ++;
-        }
+            if(j === width - 1 && surface.cylinder) {
+                //Redraw();
+                addPointToCurve(surface.curves[surface.curves.length - 1].pointsBspline[0]);
+                addPointToCurve(surface.curves[surface.curves.length - 1].pointsBspline[1]);
+                addPointToCurve(surface.curves[surface.curves.length - 1].pointsBspline[2]);
+                surface.pointsMap[k].push(surface.curves[surface.curves.length - 1].pointsBspline[0]);
+                surface.pointsMap[k].push(surface.curves[surface.curves.length - 1].pointsBspline[1]);
+                surface.pointsMap[k].push(surface.curves[surface.curves.length - 1].pointsBspline[2]);
+                return;
+            }
     }
    // if(j !== width - 1)
      //   updateCursor(0, -2*diff, 0);

@@ -47,11 +47,11 @@ export default class BiCubicNavbar extends Component {
             <div className="ab-bicubic">
                 <label>Parametry łączonego płata</label>
                 <div>
-                    <label>Wysokość: </label>
+                    <label>Szerokość: </label>
                     <input type="text" onChange={this.updateHeight} defaultValue={1}/>
                 </div>
                 <div>
-                    <label>Szerokość: </label>
+                    <label>Wysokość: </label>
                     <input type="text"  onChange={this.updateWidth} defaultValue={1}/>
                 </div>
                 <div>
@@ -67,11 +67,11 @@ export default class BiCubicNavbar extends Component {
                     <input type="text"  onChange={this.setGridY} defaultValue={4}/>
                 </div>
                 <div>
-                    <label>Stała wysokość: </label>
+                    <label>Stała Szerokość: </label>
                     <input type="text" onChange={this.updateAbsoluteHeight} defaultValue={5}/>
                 </div>
                 <div>
-                    <label>Stała szerokość: </label>
+                    <label>Stała Wysokość: </label>
                     <input type="text"  onChange={this.updateAbsoluteWidth} defaultValue={5}/>
                 </div>
                 <div>

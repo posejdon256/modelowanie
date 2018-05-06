@@ -16,7 +16,7 @@ export default function Redraw(){
         setTranslationPoints(torus);  
         DrawTorus(Translate({}));
     }
-//   DrawRectangle();
+  // DrawRectangle();
     DrawCursor();
     DrawSurfaces();
     DrawCurves();
@@ -30,7 +30,7 @@ export function RedrawWithoutChangingScene() {
         setTranslationPoints(torus);  
         DrawTorus(Translate({}));
     }
-   // DrawRectangle();
+  //  DrawRectangle();
     DrawCursor();
     DrawSurfacesWithoutBezier();
     DrawCurves();
