@@ -74,8 +74,9 @@ export function Save() {
             name: surfacesC0[i].name,
             u: surfacesC0[i].px,
             v: surfacesC0[i].py,
-            flakeU: (surfacesC0[i].pointsMap.length - 1) / 3,
-            flakeV: (surfacesC0[i].pointsMap[0].length - 1) / 3,
+            flakeU: (surfacesC0[i].pointsMap[0].length - 1) / 3,
+            flakeV: (surfacesC0[i].pointsMap.length - 1) / 3,
+            cylinder: surfacesC0[i].cylinder,
             points: []
         });
         ret.surfacesC0[i].points = [];
@@ -95,8 +96,8 @@ export function Save() {
             name: surfacesC2[i].name,
             u: surfacesC2[i].px,
             v: surfacesC2[i].py,
-            flakeU: surfacesC2[i].pointsMap.length - 3,
-            flakeV: surfacesC2[i].pointsMap[0].length - 3,
+            flakeU: surfacesC2[i].pointsMap[0].length - 3,
+            flakeV: surfacesC2[i].pointsMap.length - 3,
             cylinder: surfacesC2[i].cylinder,
             points: []
         });

@@ -47,11 +47,11 @@ export default class BiCubicNavbar extends Component {
             <div className="ab-bicubic">
                 <label>Parametry łączonego płata</label>
                 <div>
-                    <label>Szerokość: </label>
+                    <label>Wysokość: </label>
                     <input type="text" onChange={this.updateHeight} defaultValue={1}/>
                 </div>
                 <div>
-                    <label>Wysokość: </label>
+                    <label>Szerokość: </label>
                     <input type="text"  onChange={this.updateWidth} defaultValue={1}/>
                 </div>
                 <div>

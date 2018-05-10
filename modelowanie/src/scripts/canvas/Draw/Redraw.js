@@ -30,7 +30,7 @@ export function RedrawWithoutChangingScene() {
         setTranslationPoints(torus);  
         DrawTorus(Translate({}));
     }
-  //  DrawRectangle();
+   // DrawRectangle();
     DrawCursor();
     DrawSurfacesWithoutBezier();
     DrawCurves();

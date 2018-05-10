@@ -11,15 +11,15 @@ let r;
 let startCursor;
 export function makeSurfaceC2(surface) {
     if(surface.cylinder) {
-        width = Math.max(3, surface.height);
+        width = Math.max(3, surface.width);
         r = surface.absoluteWidth;
     } else {
-        width = surface.width;
+        width = surface.height;
     }
     setAddingC2State(true);
-    const curvesCount = surface.cylinder ? 4 + (surface.width - 1) : 4 + (surface.height - 1);
+    const curvesCount = surface.cylinder ? 4 + (surface.height - 1) : 4 + (surface.width - 1);
     if(surface.cylinder) {
-        sinus = 4 + (surface.height - 1);
+        sinus = 4 + (surface.width - 1);
     } else {
         sinus = 0;
     }
@@ -28,7 +28,7 @@ export function makeSurfaceC2(surface) {
         surface.pointsMap.push([]);
     }
     let length = surface.absoluteWidth * (width);
-    let length2 = surface.absoluteHeight * curvesCount;
+    let length2 = surface.absoluteHeight * (surface.height * 4);
     if(!surface.cylinder) {
         if(surface.direction === 0)
             updateCursor(- 3 * length / 8, -  3 * length / 8, 0);
@@ -39,12 +39,7 @@ export function makeSurfaceC2(surface) {
         }
     } else {
          if(surface.direction === 0)
-             updateCursor(- 3 * length2 / 8, 0,  0);
-        // else if(surface.direction === 1) {
-        //     updateCursor(- r, - 3 * length2 / 8,  - r);
-        // } else if(surface.direction === 2) {
-        //     updateCursor(-r, -r,  - 3 * length2 / 8);
-        // }
+             updateCursor(- 3 * length / 8, 0,  0);
     }
     startCursor = JSON.parse(JSON.stringify(getCursor()));
     for(let i = 0; i < curvesCount; i ++) {
@@ -139,6 +134,4 @@ function makeFlake(_length, j, surface, k) {
                 return;
             }
     }
-   // if(j !== width - 1)
-     //   updateCursor(0, -2*diff, 0);
 }
