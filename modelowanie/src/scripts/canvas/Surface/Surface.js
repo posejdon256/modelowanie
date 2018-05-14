@@ -165,7 +165,7 @@ export function addSurface(_width, _height, _cylinder, _u, _v, _type) {
         py: _v,
         type : _type,
         absoluteHeight: absoluteHeight,
-        absoluteWidth: absoluteWidth
+        absoluteWidth: absoluteWidth,
     }
     surfacesIterator ++;
     surfaces.push(surface);

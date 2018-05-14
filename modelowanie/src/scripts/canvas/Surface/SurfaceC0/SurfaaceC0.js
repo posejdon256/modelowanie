@@ -76,7 +76,7 @@ export function makeSurfaceC0(surface) {
             if(surface.cylinder) {
                 updateCursor(length2 / curvesCount, 0, 0);
             } else {
-                updateCursor(length2 / curvesCount, - (4 *length) - ((width-1) * length) , 0);
+                updateCursor(length2 / curvesCount, - ((3 *length * width) + length)  , 0);
                 startCursor = JSON.parse(JSON.stringify(getCursor()));
             }
         } else if(surface.direction === 1) {

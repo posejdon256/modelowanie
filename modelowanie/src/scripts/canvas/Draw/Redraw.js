@@ -4,7 +4,7 @@ import Translate, { setTranslationPoints } from "../Translation/TranslationCente
 import { _DrawTorus } from "./DrawTorus/DrawTorus";
 import { _DrawPoints } from "./DrawPoints/DrawPoints";
 import { _DrawCursor } from "./DrawCursor/DrawCursor";
-import { clearCanvas, getContexts, drawLine } from "./Draw";
+import { clearCanvas, getContexts, drawLine, getCanvas } from "./Draw";
 import { _DrawCurves } from "./DrawCurve/DrawCurve";
 import { _DrawSurfaceWithoutRedraw, _DrawSurfacesC2, _DrawSurfacesC0 } from "./DrawSurface/DrawSurface";
 
@@ -21,6 +21,7 @@ export default function Redraw(){
     DrawSurfaces();
     DrawCurves();
     DrawPoints(getPoints());
+    getCanvas().focus();
 }
 export function RedrawWithoutChangingScene() {
     clearCanvas();
@@ -35,6 +36,7 @@ export function RedrawWithoutChangingScene() {
     DrawSurfacesWithoutBezier();
     DrawCurves();
     DrawPoints(getPoints());
+    getCanvas().focus();
 }
 function DrawRectangle() {
         //TODO

@@ -8,6 +8,7 @@ import { getCursor, setCursor } from '../canvas/Cursor/Cursor';
 import { setAddingC2Type } from '../canvas/Bezier/BSpline';
 import { getCurvesControlPoints, addCurveBySelectedPoints } from '../canvas/Bezier/Curve';
 import { updateSelectedPoints } from '../canvas/Points/Points';
+import { uniteTwoPoints } from '../canvas/Gregory/Claps';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -21,6 +22,7 @@ export default class Navbar extends Component {
         this.updateAddingC2Type = this.updateAddingC2Type.bind(this);
         this.updateSelectedPoints = this.updateSelectedPoints.bind(this);
         this.setCursorToStart = this.setCursorToStart.bind(this);
+        this.uniteTwoPoints = this.uniteTwoPoints.bind(this);
         const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
@@ -69,6 +71,9 @@ export default class Navbar extends Component {
     }
     setCursorToStart() {
         setCursor(0,0,0, true);// with redraw
+    }
+    uniteTwoPoints() {
+        uniteTwoPoints();
     }
     render(){
         return(
@@ -122,6 +127,9 @@ export default class Navbar extends Component {
             <div>
                 <label>Dodawanie krzywej C2 w bazie Beziera:</label>
                 <input type="checkbox" onChange={this.updateAddingC2Type}/>
+            </div>
+            <div>
+                <button onClick={this.uniteTwoPoints}>Scal dwa punkty</button>
             </div>
             <BiCubicNavbar />
         </div>);

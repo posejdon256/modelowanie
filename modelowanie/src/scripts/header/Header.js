@@ -7,6 +7,7 @@ import bezierc2 from '../../pictures/bezierc2.png';
 import bezierc2I from '../../pictures/bezierc2i.png';
 import platekC0 from '../../pictures/platek.png';
 import platekC2 from '../../pictures/platekc2.png';
+import platekG from '../../pictures/platekG.png';
 import load from '../../pictures/helicopter.png';
 import save from '../../pictures/safebox.png';
 import { getAddBezierState, setAddBezierState } from '../canvas/Bezier/Bezier';
@@ -15,6 +16,7 @@ import { getInterpolationState, setInterpolationState } from '../canvas/Bezier/I
 import { createSurface } from '../canvas/Surface/Surface';
 import { Save } from '../Save/Save';
 import { Load } from '../Load/Load';
+import { MakeGregory } from '../canvas/Gregory/Gregory';
 
 export default class Header extends Component {
     constructor(props) {
@@ -29,6 +31,7 @@ export default class Header extends Component {
         this.addSurfaceC2 = this.addSurfaceC2.bind(this);
         this.loadFile = this.loadFile.bind(this);
         this.saveFile = this.saveFile.bind(this);
+        this.addGregory = this.addGregory.bind(this);
     }
     toggleTorus(){
         //Save();
@@ -42,6 +45,9 @@ export default class Header extends Component {
     }
     addPoint(){
         this.props.addPoint();
+    }
+    addGregory() {
+        MakeGregory();
     }
     addBesplineCurve() {
         if(getAddingC2State()) {
@@ -93,7 +99,10 @@ export default class Header extends Component {
             </button>
             <button className="ab-torus-button" onClick={this.addSurfaceC2}>
                 <img className="ab-point-image" src={platekC2} alt="surface c2" />
-            </button>    
+            </button>   
+            <button className="ab-torus-button" onClick={this.addGregory}>
+                <img className="ab-point-image" src={platekG} alt="surface c2" />
+            </button>   
             <button className="ab-torus-button" onClick={this.saveFile}>
                 <img className="ab-point-image" src={save} alt="surface c0" />
             </button>

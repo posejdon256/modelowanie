@@ -42,3 +42,31 @@ export function TryParseFloat2(str) {
     }
     return retValue;
 }
+export function DiffPoints(p1, p2) {
+    const ret = {};
+    ret.x = p1.x - p2.x;
+    ret.y = p1.y - p2.y;
+    ret.z = p1.z - p2.z;
+    return ret;
+}
+export function SumPoints(p1, p2) {
+    const ret = {};
+    ret.x = p1.x + p2.x;
+    ret.y = p1.y + p2.y;
+    ret.z = p1.z + p2.z;
+    return ret;
+}
+export function DividePoint(p1, number) {
+    const ret = {};
+    ret.x = p1.x / number;
+    ret.y = p1.y / number;
+    ret.z = p1.z / number;
+    return ret;
+}
+export function MultiplyPoint(p1, number) {
+    const ret = {};
+    ret.x = p1.x * number;
+    ret.y = p1.y * number;
+    ret.z = p1.z * number;
+    return ret;
+}
