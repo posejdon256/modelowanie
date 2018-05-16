@@ -1,19 +1,42 @@
 import { findConnection, findPoint1Array } from "./Connection";
 import { getSurfaces } from "../Surface/Surface";
-import { DiffPoints, SumPoints, DividePoint, MultiplyPoint } from "../../Helpers/Helpers";
+import { DiffPoints, SumPoints, DividePoint, MultiplyPoint, UpdatePointsForCanvas } from "../../Helpers/Helpers";
 import { addPoint } from "../Points/Points";
 import { DrawGregoryVector } from "../Draw/DrawGregory/DrawGregory";
 import { countBerstainNAfterI, getBezierPoints } from "../Bezier/Bezier";
 import { multiplyVectorAndMatrix } from "../../MatrixOperations/Multiply/Multiply";
 import { deCastiljau } from "../Bezier/DeCastiljau";
+import Redraw from "../Draw/Redraw";
+import { getContexts, drawLine } from "../Draw/Draw";
+import Translate, { setTranslationPoints } from "../Translation/TranslationCenter/TranslationCenter";
 
-const GregoryVectors = [];
+let GregoryVectors = [];
+const Gregories = [];
 let GregoryPoints = [];
+let index = 0;
 export function getGregoryVectors() {
     return GregoryVectors;
 }
 export function getGregoryPoints() {
     return GregoryPoints;
+}
+export function selectGrzegorz(id) {
+    const greg = Gregories.find(x => x.id === id);
+    greg.selected = !greg.selected;
+    return Gregories;
+}
+export function getGrzegorzys() {
+    return Gregories;
+}
+export function setGregoryName(id, name) {
+    Gregories.find(x => x.id === id).name = name;
+    return Gregories;
+}
+export function turnOnNormals(id) {
+    const greg = Gregories.find(x => x.id === id);
+    greg.normals = !greg.normals;
+    Redraw();
+    return Gregories;
 }
 export function MakeGregory() {
     const points = findConnection();
@@ -22,23 +45,33 @@ export function MakeGregory() {
     }
     GregoryPoints = [];
     const surfaces = getSurfaces("C0").filter(x => x.selected);
-
     const importantArrays = [];
     importantArrays.push(findPoint1Array(surfaces, points[0], points[1]));
     importantArrays.push(findPoint1Array(surfaces, points[1], points[2]));
     importantArrays.push(findPoint1Array(surfaces, points[2], points[0]));
+    RebuildGregory(importantArrays, points, 4, 4);
+    Gregories.push({
+        name: "Gregory " + index,
+        importantArrays: importantArrays,
+        points: points,
+        normals: false,
+        u: 4,
+        v: 4
+    });
+    index ++;
 
-    const vecs = [];
+}
+export function RebuildGregory(importantArrays, points, u, v) {
+
+    GregoryPoints = [];
+    GregoryVectors = [];
     const p3 = [];
-    for(let i = 0; i < 3; i ++) {
-        vecs.push(findVector(importantArrays[i], 1/2));
-        p3.push(findP3(importantArrays[i]));
-    }
     const p2 = [];
     for(let i = 0; i < 3; i ++) {
-        p2.push(SumPoints(p3[i], vecs[i]));
+        const help = findP3(importantArrays[i]);
+        p3.push(help.P3);
+        p2.push(help.P2);
         GregoryVectors.push([p2[i], p3[i]]);
-        //addPoint(p2)
     }
     const q = [];
     for(let i = 0; i < 3; i ++) {
@@ -48,17 +81,10 @@ export function MakeGregory() {
     const p1 = [];
     for(let i = 0; i < 3; i ++) {
         p1.push(findP1(q[i], p));
-         GregoryVectors.push([p2[i], p1[i]]);
-         GregoryVectors.push([p1[i], p]);
+        // GregoryVectors.push([p2[i], p1[i]]);
+        // GregoryVectors.push([p1[i], p]);
     }
-    //  for(let i = 0; i < 1; i ++) {
-    //      addPoint(p1[i].x, p1[i].y, p1[i].z, "Greg");
-    //      addPoint(p2[i].x, p2[i].y, p2[i].z, "Greg");
-    //      addPoint(p3[i].x, p3[i].y, p3[i].z, "Greg");
-    //  }
-    // addPoint(p.x, p.y, p.z);
     
-
     const PArrs = [];
     PArrs.push([points[1], p3[0], p, p3[1]]);
     PArrs.push([points[2], p3[1], p, p3[2]]);
@@ -68,41 +94,26 @@ export function MakeGregory() {
     vvArrs.push([p2[0], p1[0], p1[1], p2[1]]);
     vvArrs.push([p2[1], p1[1], p1[2], p2[2]]);
     vvArrs.push([p2[2], p1[2], p1[0], p2[0]]);
+    const importantArrays2 = [];
+    importantArrays2.push(importantArrays[1]);
+    importantArrays2.push(importantArrays[2]);
+    importantArrays2.push(importantArrays[0]);
 
-    createSmallPatch(PArrs[0], vvArrs[0], importantArrays[0], importantArrays[1]);
-    createSmallPatch(PArrs[1], vvArrs[1], importantArrays[1], importantArrays[2]);
-    createSmallPatch(PArrs[2], vvArrs[2], importantArrays[2], importantArrays[0]);
+    createSmallPatch(PArrs[0], vvArrs[0], importantArrays[0], importantArrays[1], u, v);
+    createSmallPatch(PArrs[1], vvArrs[1], importantArrays[1], importantArrays[2], u, v);
+    createSmallPatch(PArrs[2], vvArrs[2], importantArrays[2], importantArrays[0], u, v);
 }
-function createSmallPatch(P, vv, ia1, ia2) {
-    const a = [];
-    const b = [];
-    const aPrim = [];
-    const bPrim = [];
+export function createSmallPatch(P, vv, ia1, ia2, u, v) {
     const cPrim = [];
     const dPrim = [];
+    const { a, b, aPrim, bPrim } = findAB(ia1, ia2);
 
-    a.push(deCastiljau(5/6, ia1[0][0], ia1[0][1], ia1[0][2], ia1[0][3]));
-    a.push(deCastiljau(1/6, ia2[0][0], ia2[0][1], ia2[0][2], ia2[0][3]));
-
-    b.push(deCastiljau(4/6, ia1[0][0], ia1[0][1], ia1[0][2], ia1[0][3]));
-    b.push(deCastiljau(2/6, ia2[0][0], ia2[0][1], ia2[0][2], ia2[0][3]));
-   // a.push(findPointInImportantArray(ia2, 0, 1, 4/6, 2/6));
-
-    b.push(findPointInImportantArray(ia1, 1, 2, 2/6, 4/6));
-    b.push(findPointInImportantArray(ia2, 1, 2, 4/6, 2/6));
     GregoryVectors.push([P[1], b[0]]);
-     GregoryVectors.push([b[0], a[0]]);
-     GregoryVectors.push([a[0], P[0]]);
-     GregoryVectors.push([P[0], a[1]]);
-     GregoryVectors.push([a[1], b[1]]);
-     GregoryVectors.push([b[1], P[3]]);
-
-    aPrim.push(SumPoints(a[0], findvectorOnBack(ia1, 2, 3, 2/6, 4/6)));
-    aPrim.push(SumPoints(a[1], findvectorOnBack(ia2, 0, 1, 4/6, 2/6)));
-
-
-    bPrim.push(SumPoints(b[0], findvectorOnBack(ia1, 1, 2, 2/6, 4/6)));
-    bPrim.push(SumPoints(b[1], findvectorOnBack(ia2, 1, 2, 4/6, 2/6)));
+    GregoryVectors.push([b[0], a[0]]);
+    GregoryVectors.push([a[0], P[0]]);
+    GregoryVectors.push([P[0], a[1]]);
+    GregoryVectors.push([a[1], b[1]]);
+    GregoryVectors.push([b[1], P[3]]);
 
     cPrim.push(SumPoints(findCPrim(DiffPoints(b[0], P[1]), DiffPoints(vv[2], P[2]), 2/3, 1/3), vv[0]));
     cPrim.push(SumPoints(findCPrim(DiffPoints(b[1], P[3]), DiffPoints(vv[1], P[2]), 2/3, 1/3), vv[3]));
@@ -116,11 +127,11 @@ function createSmallPatch(P, vv, ia1, ia2) {
    dPrim.push(SumPoints(findCPrim(DiffPoints(b[0], P[1]), DiffPoints(vv[2], P[2]), 1/3, 2/3), vv[1]));
    dPrim.push(SumPoints(findCPrim(DiffPoints(b[1], P[3]), DiffPoints(vv[1], P[2]), 1/3, 2/3), vv[2]));
 
-     GregoryVectors.push([cPrim[0], vv[0]]);
-     GregoryVectors.push([cPrim[1], vv[3]]);
+    //  GregoryVectors.push([cPrim[0], vv[0]]);
+    //  GregoryVectors.push([cPrim[1], vv[3]]);
 
-     GregoryVectors.push([dPrim[0], vv[1]]);
-     GregoryVectors.push([dPrim[1], vv[2]]);
+    //  GregoryVectors.push([dPrim[0], vv[1]]);
+    //  GregoryVectors.push([dPrim[1], vv[2]]);
 
     const preG = [];
     for(let i = 0; i < 4; i ++) {
@@ -142,10 +153,10 @@ function createSmallPatch(P, vv, ia1, ia2) {
     preG[3].push(vv[0]);
     preG[3].push(vv[1]);
     preG[3].push(P[2]);
-    GregoryPoints = GregoryPoints.concat(getPoints(preG, aPrim, bPrim, cPrim, dPrim));
+    GregoryPoints = GregoryPoints.concat(getPoints(preG, aPrim, bPrim, cPrim, dPrim, u, v));
 }
-function getPoints(preG, aPrim, bPrim, cPrim, dPrim) {
-    const ret = [];
+function getPoints(preG, aPrim, bPrim, cPrim, dPrim, _u, _v) {
+    let ret = [];
     const Gx = [], Gy = [], Gz = [];
     for(let i = 0; i < 4; i ++) {
         Gx.push([]);
@@ -165,14 +176,41 @@ function getPoints(preG, aPrim, bPrim, cPrim, dPrim) {
             Gz[i].push(preG[i][j].z);
         }
     }
-    for(let u = 0.01; u < 1; u += 0.02) {
-        for(let v = 0.01; v < 1; v += 0.02) {
+    const { ctx } = getContexts();
+    let i = 0;
+    for(let u = 0; u <= 1.02; u += (1.0 / _u)) {
+        ctx.beginPath()
+        for(let v = 0; v <= 1.02; v += 0.02) {
             const p = {};
             p.x = getQuv(Gx, u, v, aPrim, bPrim, cPrim, dPrim, "X");
             p.y = getQuv(Gy, u, v, aPrim, bPrim, cPrim, dPrim, "Y");
             p.z = getQuv(Gz, u, v, aPrim, bPrim, cPrim, dPrim, "Z");
-            ret.push(p);
+            setTranslationPoints([p]);
+            ret.push(UpdatePointsForCanvas(Translate({}))[0]);
+            if(v !== 0) {
+                drawLine(ret[i].x, ret[i].y, ret[i - 1].x, ret[i - 1].y, ctx);
+            }
+            i ++;
         }
+        ctx.stroke();
+    }
+    i = 0;
+    ret = [];
+    for(let v = 0; v <= 1.02; v += (1.0 / _v)) {
+        ctx.beginPath()
+        for(let u = 0; u <= 1.02; u += 0.02) {
+            const p = {};
+            p.x = getQuv(Gx, u, v, aPrim, bPrim, cPrim, dPrim, "X");
+            p.y = getQuv(Gy, u, v, aPrim, bPrim, cPrim, dPrim, "Y");
+            p.z = getQuv(Gz, u, v, aPrim, bPrim, cPrim, dPrim, "Z");
+            setTranslationPoints([p]);
+            ret.push(UpdatePointsForCanvas(Translate({}))[0]);
+            if(u !== 0) {
+                drawLine(ret[i].x, ret[i].y, ret[i - 1].x, ret[i - 1].y, ctx);
+            }
+            i ++;
+        }
+        ctx.stroke();
     }
     return ret;
 }
@@ -181,19 +219,19 @@ function getQuv(G, u, v, aPrim, bPrim, cPrim, dPrim, axis) {
     // GregoryPoints.push(cPrim[0]);
     if(axis === "X") {
         G[1][1] = getF0(aPrim[1], aPrim[0], u, v).x;
-        G[1][2] = getF0(bPrim[0], cPrim[0], u, v).x;
-        G[2][1] = getF0(dPrim[0], dPrim[1], u, v).x;
-        G[2][2] = getF0(cPrim[1], bPrim[1], u, v).x;
+        G[1][2] = getF1(bPrim[0], cPrim[0], u, v).x;
+        G[2][1] = getF2(dPrim[0], dPrim[1], u, v).x;
+        G[2][2] = getF3(cPrim[1], bPrim[1], u, v).x;
     } else if(axis === "Y") {
         G[1][1] = getF0(aPrim[1], aPrim[0], u, v).y;
-        G[1][2] = getF0(bPrim[0], cPrim[0], u, v).y;
-        G[2][1] = getF0(dPrim[0], dPrim[1], u, v).y;
-        G[2][2] = getF0(cPrim[1], bPrim[1], u, v).y;
+        G[1][2] = getF1(bPrim[0], cPrim[0], u, v).y;
+        G[2][1] = getF2(dPrim[0], dPrim[1], u, v).y;
+        G[2][2] = getF3(cPrim[1], bPrim[1], u, v).y;
     } else if(axis === "Z") {
         G[1][1] = getF0(aPrim[1], aPrim[0], u, v).z;
-        G[1][2] = getF0(bPrim[0], cPrim[0], u, v).z;
-        G[2][1] = getF0(dPrim[0], dPrim[1], u, v).z;
-        G[2][2] = getF0(cPrim[1], bPrim[1], u, v).z;
+        G[1][2] = getF1(bPrim[0], cPrim[0], u, v).z;
+        G[2][1] = getF2(dPrim[0], dPrim[1], u, v).z;
+        G[2][2] = getF3(cPrim[1], bPrim[1], u, v).z;
     }
     const vec = multiplyVectorAndMatrix(G, getBezierVector(v));
     const bezierV = getBezierVector(u);
@@ -208,16 +246,16 @@ function getBezierVector(number) {
     return ret;
 }
 function getF0(f0, f1, u, v) {
-    return DividePoint(SumPoints(MultiplyPoint(f1, u), MultiplyPoint(f0, v)), u + v);
+    return DividePoint(SumPoints(MultiplyPoint(f1, u), MultiplyPoint(f0, v)), u + v !== 0 ? u + v : 0.0001);
 }
 function getF1(f0, f1, u, v) {
-    return DividePoint(SumPoints(MultiplyPoint(f0, 1 - u), MultiplyPoint(f1, v)), 1 - u + v);
+    return DividePoint(SumPoints(MultiplyPoint(f0, 1 - u), MultiplyPoint(f1, v)), (1 - u + v) === 0 ? + 0.0001 : (1 - u + v));
 }
 function getF2(f0, f1, u, v){
-    return DividePoint(SumPoints(MultiplyPoint(f1, 1 - u), MultiplyPoint(f0, 1 - v)), 2 - u - v);
+    return DividePoint(SumPoints(MultiplyPoint(f1, 1 - u), MultiplyPoint(f0, 1 - v)), 2 - u - v === 0 ? 0.0001 : 2 - u - v);
 }
 function getF3(f0, f1, u, v){
-    return DividePoint(SumPoints(MultiplyPoint(f0, u), MultiplyPoint(f1, 1 - v)), 1 + u - v);
+    return DividePoint(SumPoints(MultiplyPoint(f0, u), MultiplyPoint(f1, 1 - v)), 1 + u - v === 0 ? 0.0001 : 1 + u - v);
 }
 function findCPrim(p1, center, prom1, prom2) {
     return SumPoints(MultiplyPoint(p1, prom1), MultiplyPoint(center, prom2));
@@ -229,7 +267,69 @@ function findCenter(q1, q2, q3) {
     return DividePoint(SumPoints(SumPoints(q1, q2), q3), 3);
 }
 function findP3(importantArray) {
-    return deCastiljau(1/2, importantArray[0][0], importantArray[0][1], importantArray[0][2], importantArray[0][3]);
+
+    const firstCut = [];
+    const secondCut = [];
+    for(let i = 0; i < 2; i ++) {
+        firstCut.push([]);
+        secondCut.push([]);
+    }
+
+    for(let i = 0; i < 3; i ++) {
+        for(let j = 0; j < 2; j ++) {
+            firstCut[j].push(DividePoint(SumPoints(importantArray[j][i], importantArray[j][i + 1]), 2));
+        }
+    }
+
+    for(let i = 0; i < 2; i ++) {
+        for(let j = 0; j < 2; j ++) {
+            secondCut[j].push(DividePoint(SumPoints(firstCut[j][i], firstCut[j][i + 1]), 2));
+        }
+    }
+    const P3 = DividePoint(SumPoints(secondCut[0][0], secondCut[0][1]), 2);
+    return {
+        P3: P3,
+        P2: SumPoints(P3, DiffPoints(P3, DividePoint(SumPoints(secondCut[1][0], secondCut[1][1]), 2))),
+    }
+}
+function findAB(importantArray1, importantArray2) {
+    const firstCut1 = [];
+    const secondCut1 = [];
+    const firstCut2 = [];
+    const secondCut2 = [];
+    for(let i = 0; i < 2; i ++) {
+        firstCut1.push([]);
+        secondCut1.push([]);
+        firstCut2.push([]);
+        secondCut2.push([]);
+    }
+
+    for(let i = 0; i < 3; i ++) {
+        for(let j = 0; j < 2; j ++) {
+            firstCut1[j].push(DividePoint(SumPoints(importantArray1[j][i], importantArray1[j][i + 1]), 2));
+            firstCut2[j].push(DividePoint(SumPoints(importantArray2[j][i], importantArray2[j][i + 1]), 2));
+        }
+    }
+
+    for(let i = 0; i < 2; i ++) {
+        for(let j = 0; j < 2; j ++) {
+            secondCut1[j].push(DividePoint(SumPoints(firstCut1[j][i], firstCut1[j][i + 1]), 2));
+            secondCut2[j].push(DividePoint(SumPoints(firstCut2[j][i], firstCut2[j][i + 1]), 2));
+        }
+    }
+    const a = [];
+    const b = [];
+    const aPrim = [];
+    const bPrim = [];
+    a.push(firstCut1[0][2]);
+    a.push(firstCut2[0][0]);
+    b.push(secondCut1[0][1]);
+    b.push(secondCut2[0][0]);
+    aPrim.push(SumPoints(DiffPoints(a[0],firstCut1[1][2]), a[0]));
+    aPrim.push(SumPoints(DiffPoints(a[1],firstCut2[1][0]), a[1]));
+    bPrim.push(SumPoints(DiffPoints(b[0],secondCut1[0][1]), b[0]));
+    bPrim.push(SumPoints(DiffPoints(b[1],secondCut2[0][0]), b[1]));
+    return {a: a, b: b, aPrim: aPrim, bPrim: bPrim};
 }
 function findQ(p2, p3) {
     return DividePoint(DiffPoints(MultiplyPoint(p2, 3), p3), 2);

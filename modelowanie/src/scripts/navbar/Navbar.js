@@ -93,7 +93,13 @@ export default class Navbar extends Component {
                 <label htmlFor="3dTorus">Stereoskopia</label>
                 <input id="3dTorus" type="checkbox" onChange={this.updateChecked} />
             </div>
-            <List points={this.props.points} curves={this.props.curves} surfaces={this.props.surfaces} updateCurvePoints={this.updateCurvePoints}/>
+            <List 
+                points={this.props.points}
+                curves={this.props.curves}
+                surfaces={this.props.surfaces}
+                gregories={this.props.gregories}
+                updateCurvePoints={this.updateCurvePoints}
+            />
             <div>
                 <label>Ustaw położenia zaznaczonych punktów</label>
                 <div>

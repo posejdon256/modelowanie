@@ -9,6 +9,7 @@ import { addBezierCurve } from "../Bezier/Bezier";
 import { addBsplineCurve } from "../Bezier/BSpline";
 import { updateCursor } from "../Cursor/Cursor";
 import { CatchPoint, RemoveCatchPoint } from "../Move/MoveCursor";
+import { getGrzegorzys } from "../Gregory/Gregory";
 
 
 let cylinder = false;
@@ -133,9 +134,14 @@ export function setGridY(_gridY) {
 }
 export function updateSelectedCurveGrid() {
     const _surfaces = surfaces.filter(x => x.selected === true);
+    const gregs = getGrzegorzys().filter(x => x.selected === true);
     for(let i = 0; i < _surfaces.length; i ++) {
         _surfaces[i].px = gridX;
         _surfaces[i].py = gridY;
+    }
+    for(let i = 0; i < gregs.length; i ++) {
+        gregs[i].u = gridX;
+        gregs[i].v = gridY;
     }
     Redraw();
 }

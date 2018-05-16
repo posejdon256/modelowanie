@@ -7,6 +7,7 @@ import { updatePointName, selectPoint, removePointWithRedraw } from '../../canva
 import { turnOnChain } from '../../canvas/Bezier/Bezier';
 import { updateCurveName, getCurveById, selectCurve, getCurvesControlPoints, removeCurve } from '../../canvas/Bezier/Curve';
 import { removeSurface, updateSurfaceName, turnOnSurfaceChain, selectSurface } from '../../canvas/Surface/Surface';
+import { turnOnNormals, setGregoryName, selectGrzegorz } from '../../canvas/Gregory/Gregory';
 
 export default class List extends Component {
 
@@ -21,22 +22,32 @@ export default class List extends Component {
         this.removeSurface = this.removeSurface.bind(this);
         this.selectSurface = this.selectSurface.bind(this);
         this.turnOnChainSurface = this.turnOnChainSurface.bind(this);
+        this.turnOnNormals = this.turnOnNormals.bind(this);
+        this.updateGregoryName = this.updateGregoryName.bind(this);
+        this.selectGrzegorz = this.selectGrzegorz.bind(this);
         this.state = {
             points: [],
             curves: [],
-            surfaces: []
+            surfaces: [],
+            gregories:[]
         }
     }
     componentWillReceiveProps(props) {
         this.setState({
             points: props.points,
             curves: props.curves,
-            surfaces: props.surfaces
+            surfaces: props.surfaces,
+            gregories: props.gregories
         });
     }
     updatePointName(id, name) {
         this.setState({
             points: updatePointName(id, name).filter(x => x.visible !== false && !x.c2Bezier)
+        });
+    }
+    updateGregoryName(id, name) {
+        this.setState({
+            gregories: setGregoryName(id, name)
         });
     }
     updateCurveName(id, name) {
@@ -64,6 +75,11 @@ export default class List extends Component {
             surfaces: turnOnSurfaceChain(id)
         });
     }
+    turnOnNormals(id) {
+        this.setState({
+            gregories: turnOnNormals(id)
+        });
+    }
     removePoint(id){
         this.setState({
             points: removePointWithRedraw(id).filter(x => x.visible !== false && !x.c2Bezier)
@@ -86,6 +102,11 @@ export default class List extends Component {
             curves: turnOnChain(id)
         });
     }
+    selectGrzegorz(id) {
+        this.setState({
+            gregories: selectGrzegorz(id)
+        });
+    }
     selectCurve(id) {
         this.setState({
             curves:selectCurve(id)
@@ -100,10 +121,25 @@ export default class List extends Component {
         const points  = this.state.points;
         const curves = this.state.curves;
         const surfaces = this.state.surfaces;
+        const gregories = this.state.gregories;
         return(
             <div>
                 <label>Obiekty sceny:</label>
                 <ul className="ab-ul-points">
+                {
+                    gregories.map(gregory => {
+                        return (
+                        <li key={"point" + gregory.id} className="ab-point-list-li">
+                            <input className="ab-point-list-input" type="text" value={gregory.name} onChange={(e) => this.updateGregoryName(gregory.id, e.target.value)}/>
+                            <label className="ab-curve-chain-label">Włącz normalne</label>
+                            <input className="ab-point-list-checkbox" key={gregory.id} type="checkbox" checked={gregory.normals} onChange={(e) => this.turnOnNormals(gregory.id)}/>
+                            <button className="ab-points-list-select-button" onClick={(e) => this.selectGrzegorz(gregory.id)}>
+                                <img className="ab-select-point" src={gregory.selected ? selectedRed : select} alt="select" />
+                            </button>
+                        </li>
+                        );
+                    })
+                }
                 {
                     surfaces.map(surface => {
                         return (

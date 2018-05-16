@@ -18,6 +18,7 @@ import { getCurves, getCurvesControlPoints } from './scripts/canvas/Bezier/Curve
 import { turnOffAllStates } from './scripts/canvas/StatesCenter/StatesCenter';
 import { setInterpolationState, addInterpolationCurve } from './scripts/canvas/Bezier/Interpolation';
 import { getSurfaces } from './scripts/canvas/Surface/Surface';
+import { getGrzegorzys } from './scripts/canvas/Gregory/Gregory';
 
 class App extends Component {
   constructor(props) {
@@ -28,7 +29,8 @@ class App extends Component {
       gridY: 18,
       points: [],
       curves: [],
-      surfaces: []
+      surfaces: [],
+      gregories: []
     };
 
     this.toggleTorus = this.toggleTorus.bind(this);
@@ -51,7 +53,8 @@ class App extends Component {
       points: getPoints("on-scene"),
       curves: getCurves(),
       surfaces: getSurfaces(),
-      curvePoints: getCurvesControlPoints()
+      curvePoints: getCurvesControlPoints(),
+      gregories: getGrzegorzys()
     });
   }
   addPoint() {
@@ -112,6 +115,7 @@ class App extends Component {
             points={this.state.points}
             curves={this.state.curves}
             surfaces={this.state.surfaces}
+            gregories={this.state.gregories}
             curvePoints={this.state.curvePoints}
           />
         </div>
