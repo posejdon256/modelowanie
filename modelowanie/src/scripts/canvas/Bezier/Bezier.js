@@ -151,7 +151,7 @@ function countCircumfrence(curve) {
 function nAfterI(n, i) {
     return factorial(n)/(factorial(i)*factorial(n-i));
 }
-function countBerstainNAfterI() {
+export function countBerstainNAfterI() {
     const ret = [];
     for(let i = 0; i < 4; i ++) {
         const berstains = [];

@@ -7,6 +7,7 @@ import { _DrawCursor } from "./DrawCursor/DrawCursor";
 import { clearCanvas, getContexts, drawLine, getCanvas } from "./Draw";
 import { _DrawCurves } from "./DrawCurve/DrawCurve";
 import { _DrawSurfaceWithoutRedraw, _DrawSurfacesC2, _DrawSurfacesC0 } from "./DrawSurface/DrawSurface";
+import { DrawGregor } from "./DrawGregory/DrawGregory";
 
 export default function Redraw(){
     clearCanvas();
@@ -21,6 +22,7 @@ export default function Redraw(){
     DrawSurfaces();
     DrawCurves();
     DrawPoints(getPoints());
+    DrawGregor();
     getCanvas().focus();
 }
 export function RedrawWithoutChangingScene() {
@@ -36,6 +38,7 @@ export function RedrawWithoutChangingScene() {
     DrawSurfacesWithoutBezier();
     DrawCurves();
     DrawPoints(getPoints());
+    DrawGregor();
     getCanvas().focus();
 }
 function DrawRectangle() {

@@ -1,6 +1,7 @@
 import { getPoints, removePoint } from "../Points/Points";
 import { getSurfaces } from "../Surface/Surface";
 import Redraw from "../Draw/Redraw";
+import { RemoveCatchPoint } from "../Move/MoveCursor";
 
 export function uniteTwoPoints() {
     const points = getPoints();
@@ -40,6 +41,8 @@ export function uniteTwoPoints() {
                 foundPoints[0].y = (foundPoints[0].y + p.y) / 2;
                 foundPoints[0].z = (foundPoints[0].z + p.z) / 2;
                 p.surface = false;
+                foundPoints[0].selected = false;
+                RemoveCatchPoint(foundPoints[0]);
                 removePoint(p.id);
                 break;
             }
