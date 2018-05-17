@@ -7,7 +7,7 @@ import { updatePointName, selectPoint, removePointWithRedraw } from '../../canva
 import { turnOnChain } from '../../canvas/Bezier/Bezier';
 import { updateCurveName, getCurveById, selectCurve, getCurvesControlPoints, removeCurve } from '../../canvas/Bezier/Curve';
 import { removeSurface, updateSurfaceName, turnOnSurfaceChain, selectSurface } from '../../canvas/Surface/Surface';
-import { turnOnNormals, setGregoryName, selectGrzegorz } from '../../canvas/Gregory/Gregory';
+import { turnOnNormals, setGregoryName, selectGrzegorz, removeGregory } from '../../canvas/Gregory/Gregory';
 
 export default class List extends Component {
 
@@ -25,6 +25,7 @@ export default class List extends Component {
         this.turnOnNormals = this.turnOnNormals.bind(this);
         this.updateGregoryName = this.updateGregoryName.bind(this);
         this.selectGrzegorz = this.selectGrzegorz.bind(this);
+        this.removeGrzegorz = this.removeGrzegorz.bind(this);
         this.state = {
             points: [],
             curves: [],
@@ -68,6 +69,11 @@ export default class List extends Component {
     removeSurface(id) {
         this.setState({
             surfaces: removeSurface(id)
+        });
+    }
+    removeGrzegorz(id) {
+        this.setState({
+            gregories: removeGregory(id)
         });
     }
     turnOnChainSurface(id) {
@@ -133,6 +139,9 @@ export default class List extends Component {
                             <input className="ab-point-list-input" type="text" value={gregory.name} onChange={(e) => this.updateGregoryName(gregory.id, e.target.value)}/>
                             <label className="ab-curve-chain-label">Włącz normalne</label>
                             <input className="ab-point-list-checkbox" key={gregory.id} type="checkbox" checked={gregory.normals} onChange={(e) => this.turnOnNormals(gregory.id)}/>
+                            <button className="ab-delete-point-button" onClick={(e) => this.removeGrzegorz(gregory.id)}>
+                                <img className="ab-delete-point" src={trash} alt="trash" />
+                            </button>
                             <button className="ab-points-list-select-button" onClick={(e) => this.selectGrzegorz(gregory.id)}>
                                 <img className="ab-select-point" src={gregory.selected ? selectedRed : select} alt="select" />
                             </button>

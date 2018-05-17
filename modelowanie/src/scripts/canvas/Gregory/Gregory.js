@@ -25,6 +25,16 @@ export function selectGrzegorz(id) {
     greg.selected = !greg.selected;
     return Gregories;
 }
+export function removeGregory(id) {
+    for(let i = 0; i < Gregories.length; i ++) {
+        if(id === Gregories[i].id) {
+            Gregories.splice(i, 1);
+            break;
+        }
+    }
+    Redraw();
+    return Gregories;
+}
 export function getGrzegorzys() {
     return Gregories;
 }
@@ -108,13 +118,6 @@ export function createSmallPatch(P, vv, ia1, ia2, u, v) {
     const dPrim = [];
     const { a, b, aPrim, bPrim } = findAB(ia1, ia2);
 
-    GregoryVectors.push([P[1], b[0]]);
-    GregoryVectors.push([b[0], a[0]]);
-    GregoryVectors.push([a[0], P[0]]);
-    GregoryVectors.push([P[0], a[1]]);
-    GregoryVectors.push([a[1], b[1]]);
-    GregoryVectors.push([b[1], P[3]]);
-
     cPrim.push(SumPoints(findCPrim(DiffPoints(b[0], P[1]), DiffPoints(vv[2], P[2]), 2/3, 1/3), vv[0]));
     cPrim.push(SumPoints(findCPrim(DiffPoints(b[1], P[3]), DiffPoints(vv[1], P[2]), 2/3, 1/3), vv[3]));
     
@@ -137,6 +140,12 @@ export function createSmallPatch(P, vv, ia1, ia2, u, v) {
     for(let i = 0; i < 4; i ++) {
         preG.push([]);
     }
+    // addPoint(P[0].x, P[0].y, P[0].z, "greg");
+    // addPoint(a[1].x, a[1].y, a[1].z, "greg");
+    // addPoint(b[1].x, b[1].y, b[1].z, "greg");
+    // addPoint(P[3].x, P[3].y, P[3].z, "greg");
+    // addPoint(a[0].x, a[0].y, a[0].z, "greg");
+    // addPoint(vv[2].x, vv[2].y, vv[2].z, "greg");
     preG[0].push(P[0]);
     preG[0].push(a[1]);
     preG[0].push(b[1]);
@@ -178,7 +187,7 @@ function getPoints(preG, aPrim, bPrim, cPrim, dPrim, _u, _v) {
     }
     const { ctx } = getContexts();
     let i = 0;
-    for(let u = 0; u <= 1.02; u += (1.0 / _u)) {
+    for(let u = 0; u <= 1.02; u += (1.0 / (_u - 1))) {
         ctx.beginPath()
         for(let v = 0; v <= 1.02; v += 0.02) {
             const p = {};
@@ -196,7 +205,7 @@ function getPoints(preG, aPrim, bPrim, cPrim, dPrim, _u, _v) {
     }
     i = 0;
     ret = [];
-    for(let v = 0; v <= 1.02; v += (1.0 / _v)) {
+    for(let v = 0; v <= 1.02; v += (1.0 / (_v - 1))) {
         ctx.beginPath()
         for(let u = 0; u <= 1.02; u += 0.02) {
             const p = {};
@@ -219,19 +228,19 @@ function getQuv(G, u, v, aPrim, bPrim, cPrim, dPrim, axis) {
     // GregoryPoints.push(cPrim[0]);
     if(axis === "X") {
         G[1][1] = getF0(aPrim[1], aPrim[0], u, v).x;
-        G[1][2] = getF1(bPrim[0], cPrim[0], u, v).x;
-        G[2][1] = getF2(dPrim[0], dPrim[1], u, v).x;
-        G[2][2] = getF3(cPrim[1], bPrim[1], u, v).x;
+        G[2][1] = getF1(bPrim[0], cPrim[0], u, v).x;
+        G[2][2] = getF2(dPrim[0], dPrim[1], u, v).x;
+        G[1][2] = getF3(cPrim[1], bPrim[1], u, v).x;
     } else if(axis === "Y") {
         G[1][1] = getF0(aPrim[1], aPrim[0], u, v).y;
-        G[1][2] = getF1(bPrim[0], cPrim[0], u, v).y;
-        G[2][1] = getF2(dPrim[0], dPrim[1], u, v).y;
-        G[2][2] = getF3(cPrim[1], bPrim[1], u, v).y;
+        G[2][1] = getF1(bPrim[0], cPrim[0], u, v).y;
+        G[2][2] = getF2(dPrim[0], dPrim[1], u, v).y;
+        G[1][2] = getF3(cPrim[1], bPrim[1], u, v).y;
     } else if(axis === "Z") {
         G[1][1] = getF0(aPrim[1], aPrim[0], u, v).z;
-        G[1][2] = getF1(bPrim[0], cPrim[0], u, v).z;
-        G[2][1] = getF2(dPrim[0], dPrim[1], u, v).z;
-        G[2][2] = getF3(cPrim[1], bPrim[1], u, v).z;
+        G[2][1] = getF1(bPrim[0], cPrim[0], u, v).z;
+        G[2][2] = getF2(dPrim[0], dPrim[1], u, v).z;
+        G[1][2] = getF3(cPrim[1], bPrim[1], u, v).z;
     }
     const vec = multiplyVectorAndMatrix(G, getBezierVector(v));
     const bezierV = getBezierVector(u);
@@ -289,7 +298,7 @@ function findP3(importantArray) {
     const P3 = DividePoint(SumPoints(secondCut[0][0], secondCut[0][1]), 2);
     return {
         P3: P3,
-        P2: SumPoints(P3, DiffPoints(P3, DividePoint(SumPoints(secondCut[1][0], secondCut[1][1]), 2))),
+        P2: SumPoints(P3, MultiplyPoint(DiffPoints(P3, DividePoint(SumPoints(secondCut[1][0], secondCut[1][1]), 2)), 0.4)),
     }
 }
 function findAB(importantArray1, importantArray2) {
