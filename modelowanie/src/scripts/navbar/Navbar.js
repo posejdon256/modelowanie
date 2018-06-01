@@ -98,6 +98,8 @@ export default class Navbar extends Component {
                 curves={this.props.curves}
                 surfaces={this.props.surfaces}
                 gregories={this.props.gregories}
+                toruses={this.props.toruses}
+                cuttingCurves={this.props.cuttingCurves}
                 updateCurvePoints={this.updateCurvePoints}
             />
             <div>

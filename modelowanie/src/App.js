@@ -10,7 +10,6 @@ import Header from './scripts/header/Header';
 
 //additional dependencies
 import { addPoint, getPoints } from './scripts/canvas/Points/Points';
-import { toggleTorus, getTorusVisibility } from './scripts/canvas/Torus/Torus';
 import Redraw from './scripts/canvas/Draw/Redraw';
 import { addBezierCurve, setAddBezierState } from './scripts/canvas/Bezier/Bezier';
 import { addBsplineCurve, setAddingC2State } from './scripts/canvas/Bezier/BSpline';
@@ -19,21 +18,24 @@ import { turnOffAllStates } from './scripts/canvas/StatesCenter/StatesCenter';
 import { setInterpolationState, addInterpolationCurve } from './scripts/canvas/Bezier/Interpolation';
 import { getSurfaces } from './scripts/canvas/Surface/Surface';
 import { getGrzegorzys } from './scripts/canvas/Gregory/Gregory';
+import { addTorus, getToruses, setTorusMesh } from './scripts/canvas/Torus/Torus';
+import { getCuttingCurves } from './scripts/canvas/CuttingCurve/CuttingCurve';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      torusVisible: false,
       gridX: 18,
       gridY: 18,
       points: [],
       curves: [],
       surfaces: [],
-      gregories: []
+      gregories: [],
+      toruses: [],
+      cuttingCurves:[],
     };
 
-    this.toggleTorus = this.toggleTorus.bind(this);
+    this.addTorus = this.addTorus.bind(this);
     this.updateXGrid = this.updateXGrid.bind(this);
     this.updateYGrid = this.updateYGrid.bind(this);
     this.updateChecked = this.updateChecked.bind(this);
@@ -41,11 +43,8 @@ class App extends Component {
     this.refreshNavbar = this.refreshNavbar.bind(this);
     this.addCurve = this.addCurve.bind(this);
   }
-  toggleTorus() {
-    toggleTorus();
-    this.setState({
-      torusVisible: getTorusVisibility()
-    });
+  addTorus() {
+    addTorus();
     Redraw();
   }
   refreshNavbar() {
@@ -54,7 +53,9 @@ class App extends Component {
       curves: getCurves(),
       surfaces: getSurfaces(),
       curvePoints: getCurvesControlPoints(),
-      gregories: getGrzegorzys()
+      gregories: getGrzegorzys(),
+      cuttingCurves: getCuttingCurves(),
+      toruses: getToruses()
     });
   }
   addPoint() {
@@ -82,11 +83,13 @@ class App extends Component {
     });
   }
   updateXGrid(gridNumber) {
+    setTorusMesh(gridNumber, this.state.gridY);
     this.setState({
       gridX: gridNumber
     });
   }
   updateYGrid(gridNumber) {
+    setTorusMesh(this.state.gridX, gridNumber);
     this.setState({
       gridY: gridNumber
     });
@@ -116,7 +119,9 @@ class App extends Component {
             curves={this.state.curves}
             surfaces={this.state.surfaces}
             gregories={this.state.gregories}
+            toruses={this.state.toruses}
             curvePoints={this.state.curvePoints}
+            cuttingCurves={this.state.cuttingCurves}
           />
         </div>
       </div>

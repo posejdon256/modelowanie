@@ -1,10 +1,10 @@
 import { getPoints } from "../canvas/Points/Points";
 import { getCurves } from "../canvas/Bezier/Curve";
 import { getSurfaces } from "../canvas/Surface/Surface";
+import { getToruses } from "../canvas/Torus/Torus";
 
 
 export function Save() {
-    const toruses = [];
     const ret = {};
 
     //points
@@ -116,7 +116,20 @@ export function Save() {
     });
 
     //toruses TODO
-    ret.toruses = toruses;
+    const toruses = getToruses();
+    ret.toruses = [];
+    toruses.forEach(torus => {
+        const _torus = {
+            r: torus.r,
+            R: torus.R,
+            u: torus.gridX,
+            v: torus.gridY,
+            center: torus.center,
+            rotation: torus.rotation,
+            scale: torus.scale
+        };  
+        ret.toruses.push(_torus);
+    });
 
     saveToFile(ret);
 }

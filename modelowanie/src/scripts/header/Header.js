@@ -17,12 +17,13 @@ import { createSurface } from '../canvas/Surface/Surface';
 import { Save } from '../Save/Save';
 import { Load } from '../Load/Load';
 import { MakeGregory } from '../canvas/Gregory/Gregory';
+import { addTorus } from '../canvas/Torus/Torus';
 
 export default class Header extends Component {
     constructor(props) {
         super(props);
         
-        this.toggleTorus = this.toggleTorus.bind(this);
+        this.addTorus = this.addTorus.bind(this);
         this.addPoint = this.addPoint.bind(this);
         this.addCurve = this.addCurve.bind(this);
         this.addBesplineCurve = this.addBesplineCurve.bind(this);
@@ -33,9 +34,8 @@ export default class Header extends Component {
         this.saveFile = this.saveFile.bind(this);
         this.addGregory = this.addGregory.bind(this);
     }
-    toggleTorus(){
-        //Save();
-        this.props.toggleTorus();
+    addTorus() {
+        addTorus();
     }
     loadFile() {
         Load();
@@ -79,7 +79,7 @@ export default class Header extends Component {
     render(){
         return(
         <div className="ab-header">
-            <button className="ab-torus-button" onClick={this.toggleTorus}>
+            <button className="ab-torus-button" onClick={this.addTorus}>
                 <img className="ab-torus-image" src={torus} alt="torus" />
             </button>
             <button className="ab-torus-button" onClick={this.addPoint}>

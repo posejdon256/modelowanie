@@ -8,6 +8,8 @@ import { turnOnChain } from '../../canvas/Bezier/Bezier';
 import { updateCurveName, getCurveById, selectCurve, getCurvesControlPoints, removeCurve } from '../../canvas/Bezier/Curve';
 import { removeSurface, updateSurfaceName, turnOnSurfaceChain, selectSurface } from '../../canvas/Surface/Surface';
 import { turnOnNormals, setGregoryName, selectGrzegorz, removeGregory } from '../../canvas/Gregory/Gregory';
+import { removeTorus, updateTorusName, selectTorus } from '../../canvas/Torus/Torus';
+import { updateCuttingCurveName } from '../../canvas/CuttingCurve/CuttingCurve';
 
 export default class List extends Component {
 
@@ -26,11 +28,17 @@ export default class List extends Component {
         this.updateGregoryName = this.updateGregoryName.bind(this);
         this.selectGrzegorz = this.selectGrzegorz.bind(this);
         this.removeGrzegorz = this.removeGrzegorz.bind(this);
+        this.removeTorus = this.removeTorus.bind(this);
+        this.selectTorus = this.selectTorus.bind(this);
+        this.updateTorusName = this.updateTorusName.bind(this);
+        this.updateCuttingCurveName = this.updateCuttingCurveName.bind(this);
         this.state = {
             points: [],
             curves: [],
             surfaces: [],
-            gregories:[]
+            gregories:[],
+            toruses:[],
+            cuttingCurves:[]
         }
     }
     componentWillReceiveProps(props) {
@@ -38,7 +46,14 @@ export default class List extends Component {
             points: props.points,
             curves: props.curves,
             surfaces: props.surfaces,
-            gregories: props.gregories
+            gregories: props.gregories,
+            toruses: props.toruses,
+            cuttingCurves: props.cuttingCurves
+        });
+    }
+    updateCuttingCurveName(id, name) {
+        this.setState({
+            cuttingCurves: updateCuttingCurveName(id, name)
         });
     }
     updatePointName(id, name) {
@@ -54,6 +69,11 @@ export default class List extends Component {
     updateCurveName(id, name) {
         this.setState({
             curves: updateCurveName(id, name)
+        });
+    }
+    updateTorusName(id, name) {
+        this.setState({
+            toruses: updateTorusName(id, name)
         });
     }
     updateSurfaceName(id, name) {
@@ -92,6 +112,11 @@ export default class List extends Component {
         });
         this.props.updateCurvePoints(getCurvesControlPoints());
     }
+    removeTorus(id) {
+        this.setState({
+            toruses: removeTorus(id)
+        });
+    }
     removeCurve(id) {
         this.setState({
             curves: removeCurve(id)
@@ -113,6 +138,11 @@ export default class List extends Component {
             gregories: selectGrzegorz(id)
         });
     }
+    selectTorus(id) {
+        this.setState({
+            torus: selectTorus(id)
+        });
+    }
     selectCurve(id) {
         this.setState({
             curves:selectCurve(id)
@@ -128,10 +158,42 @@ export default class List extends Component {
         const curves = this.state.curves;
         const surfaces = this.state.surfaces;
         const gregories = this.state.gregories;
+        const toruses = this.state.toruses;
+        const cuttingCurves = this.state.cuttingCurves;
         return(
             <div>
                 <label>Obiekty sceny:</label>
                 <ul className="ab-ul-points">
+                {
+                    toruses.map(torus => {
+                        return (
+                        <li key={"point" + torus.id} className="ab-point-list-li">
+                            <input className="ab-point-list-input" type="text" value={torus.name} onChange={(e) => this.updateTorusName(torus.id, e.target.value)}/>
+                            <button className="ab-delete-point-button" onClick={(e) => this.removeTorus(torus.id)}>
+                                <img className="ab-delete-point" src={trash} alt="trash" />
+                            </button>
+                            <button className="ab-points-list-select-button" onClick={(e) => this.selectTorus(torus.id)}>
+                                <img className="ab-select-point" src={torus.selected ? selectedRed : select} alt="select" />
+                            </button>
+                        </li>
+                        );
+                    })
+                }
+                 {
+                    cuttingCurves.map(curve => {
+                        return (
+                        <li key={"point" + curve.id} className="ab-point-list-li">
+                            <input className="ab-point-list-input" type="text" value={curve.name} onChange={(e) => this.updateCuttingCurveName(curve.id, e.target.value)}/>
+                            {/* <button className="ab-delete-point-button" onClick={(e) => this.removeTorus(torus.id)}>
+                                <img className="ab-delete-point" src={trash} alt="trash" />
+                            </button>
+                            <button className="ab-points-list-select-button" onClick={(e) => this.selectTorus(torus.id)}>
+                                <img className="ab-select-point" src={torus.selected ? selectedRed : select} alt="select" />
+                            </button> */}
+                        </li>
+                        );
+                    })
+                }
                 {
                     gregories.map(gregory => {
                         return (

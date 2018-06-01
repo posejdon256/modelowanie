@@ -4,7 +4,7 @@ import { setPixelColor, setCanvas, setStereoscopyCanvases } from './Draw/Draw';
 import KeyboardCenter from './Keyboard/KeyboardCenter';
 import { setTranslationPoints } from './Translation/TranslationCenter/TranslationCenter';
 import MouseCenter from './Mouse/MouseCenter';
-import generateTorus, { getTorusVertices } from './Torus/Torus';
+import { getTorusVertices, setTorusMesh } from './Torus/Torus';
 import { setStereoscopy } from './Stereoscopy/Stereoscopy';
 import Redraw from './Draw/Redraw';
 
@@ -22,7 +22,7 @@ export default class Canvas extends Component {
         const canvas = this.refs.abCanvas;
         const canvasStereo = this.refs.stereoscopyHelpCanvas;
         const canvasStereo2 = this.refs.stereoscopyHelpCanvas2;
-        generateTorus(50.0, 200.0, this.props.gridX, this.props.gridY);
+        setTorusMesh(this.props.gridX, this.props.gridY);
         // settings
         setPixelColor(254, 254, 254, 254);
         setCanvas(canvas);
@@ -31,16 +31,8 @@ export default class Canvas extends Component {
         Redraw();
     }
     componentWillReceiveProps(props) {
-        
-        //DrawTorus
         if(props.stereoscopy !== this.props.stereoscopy) {
             setStereoscopy(props.stereoscopy);
-            Redraw();
-        }
-        if(props.visibleTorus) { 
-            generateTorus(50.0, 200.0, props.gridX, props.gridY);
-            const torus = getTorusVertices();
-            setTranslationPoints(torus);
             Redraw();
         }
     }

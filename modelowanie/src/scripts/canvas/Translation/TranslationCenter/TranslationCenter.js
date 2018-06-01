@@ -15,7 +15,7 @@ let lastTranslation = [
     [0, 0, 1, 0],
     [0, 0, 0, 1]
 ];
-export default function Translate(translationObject) {
+export default function Translate(translationObject, type) {
     const {front, left, top, axisX, axisY, alphaX, alphaY, alphaZ, axisZ} = translationObject;
     let translationMatrix = lastTranslation;
     //rotation
@@ -49,21 +49,22 @@ export default function Translate(translationObject) {
         shiftVector.push(0);
     setShiftVector(shiftVector);
     translationMatrix = multiplyMatrices(getShiftMatrix(), translationMatrix);
-    lastTranslation = translationMatrix;
+    if(type !== "torus")
+        lastTranslation = translationMatrix;
 
     //projection
     if(!stereoscopy)
-        return normalTranslation();
+        return normalTranslation(translationMatrix);
     else
-        return stereoscopyTranslation();
+        return stereoscopyTranslation(translationMatrix);
 }
-function normalTranslation() {
-    const projectioMatrix = multiplyMatrices(getProjectionMatrix(3), lastTranslation);
+function normalTranslation(translationMatrix) {
+    const projectioMatrix = multiplyMatrices(getProjectionMatrix(3), translationMatrix);
     return generateTranslation(projectioMatrix);
 }
-function stereoscopyTranslation() {
-    const leftEye = multiplyMatrices(getProjectionMatrix(4), lastTranslation);
-    const rightEye = multiplyMatrices(getProjectionMatrix(5), lastTranslation);
+function stereoscopyTranslation(translationMatrix) {
+    const leftEye = multiplyMatrices(getProjectionMatrix(4), translationMatrix);
+    const rightEye = multiplyMatrices(getProjectionMatrix(5), translationMatrix);
 
     const leftEyeResult = generateTranslation(leftEye);
     const rightEyeResult = generateTranslation(rightEye);

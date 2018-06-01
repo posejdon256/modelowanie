@@ -6,6 +6,7 @@ import { addBsplineCurve, setAddingC2State } from "../canvas/Bezier/BSpline";
 import { addInterpolationCurve, setInterpolationState } from "../canvas/Bezier/Interpolation";
 import Redraw from "../canvas/Draw/Redraw";
 import { turnOffAllStates } from "../canvas/StatesCenter/StatesCenter";
+import { addTorus } from "../canvas/Torus/Torus";
 
 
 
@@ -88,6 +89,9 @@ export function Load() {
         if(point.remove) {
             removePoint(point.id);
         }
+    });
+    json.toruses.forEach(torus => {
+        addTorus(torus.r, torus.R, torus.u, torus.v, torus.center, torus.rotation, torus.scale);
     });
     turnOffAllStates();
     Redraw();

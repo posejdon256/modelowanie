@@ -1,71 +1,115 @@
+import Redraw from "../Draw/Redraw";
+import { getCursor } from "../Cursor/Cursor";
 
-let TorusVertices = [];
-let TorusLines = [];
-let _r = 0;
-let _R = 0;
-let _gridX = 0.3;
-let _gridY = 0.3;
-let visible = false;
+
+const toruses = [];
+let torusesCounter = 0;
+let gX = 10;
+let gY = 10;
+
 /**
  * Tworzy tablice z wierzchołkami torusa
  */
-function setTorusParameters(r, R, gridX, gridY) {
-    _r = r;
-    _R = R;
-    _gridX = gridX;
-    _gridY = gridY;
+export function addTorus(_r, _R, _gridX, _gridY, _center, _rotation, _scale) {
+    const center =_center ? _center : getCursor();
+    const rotation =_rotation ? _rotation : {x: 0, y: 0, z: 0};
+    const scale =_scale ? _scale : {x: 1, y: 1, z: 1};
+    const torus = {
+        id: torusesCounter,
+        name: "Torus " + torusesCounter,
+        r: _r? _r : 50,
+        R: _R? _R : 200,
+        gridX: _gridX ? _gridX : gX,
+        gridY: _gridY ? _gridY : gY,
+        center: {
+            x: center.x,
+            y: center.y,
+            z: center.z,
+        },
+        rotation: {
+            x: rotation.x,
+            y: rotation.y,
+            z: rotation.z,
+        },
+        scale: {
+            x: scale.x,
+            y: scale.y,
+            z: scale.z,
+        },
+        selected: false,
+        TorusLines: [],
+        TorusVertices: []
+    };
+    generateTorus(torus);
+    toruses.push(torus);
+    torusesCounter ++;
+    Redraw();
 }
-export function toggleTorus() {
-    visible = !visible;
+export function updateTorusName(id, name) {
+    toruses.find(x => x.id === id).name = name;
+    return toruses;
 }
-export function getTorusVisibility(){
-    return visible;
+export function selectTorus(id) {
+    const torus = toruses.find(x => x.id === id);
+    torus.selected = !torus.selected;
+    return toruses;
 }
-export default function generateTorus(r, R, gridX, gridY) {
-    if(TorusVertices.length !== 0 && gridX === _gridX && gridY === _gridY) {
-        console.log('Torus already exists!')
-        return TorusVertices;
+export function setTorusMesh(_gX, _gY) {
+    gX = _gX;
+    gY = _gY;
+}
+export function removeTorus(id) {
+    for(let i = 0; i < toruses.length; i ++) {
+        if(toruses[i].id === id) {
+            toruses.splice(i, 1);
+        }
     }
-    setTorusParameters(r, R, gridX, gridY);
-    const stepX = 6 / _gridX;
-    const stepY = 6/ _gridY;
+    Redraw();
+    return toruses;
+}
+function generateTorus(torus) {
+    const stepX = 6 / torus.gridX;
+    const stepY = 6/ torus.gridY;
     let counter = 0;
     let howMany = 0;
+    const { r, R, center } = torus;
     for(let i = 0.0; i <= 2 * Math.PI ; i += stepX) {
         howMany ++;
     }
-    TorusVertices = [];
-    TorusLines = [];
     for(let i = 0.0; i <= 2 * Math.PI ; i += stepY) {
         for(let j = 0.0; j <= 2 * Math.PI; j += stepX) {
-            TorusVertices.push({
-                x: (_R + (_r * Math.cos(j))) * Math.cos(i) / (_R + _r),
-                y: (_R + (_r * Math.cos(j))) * Math.sin(i) / (_R + _r),
-                z: _r * Math.sin(j) / (_R + _r)
+            torus.TorusVertices.push({
+                x: ((R + (r * Math.cos(j))) * Math.cos(i) / (R + r)) + center.x,
+                y: ((R + (r * Math.cos(j))) * Math.sin(i) / (R + r)) +  center.y,
+                z: (r * Math.sin(j) / (R + r)) + center.z
             });
             if(counter % howMany + 1 === howMany) {
-                TorusLines.push([counter, counter - howMany + 1])
+                torus.TorusLines.push([counter, counter - howMany + 1])
             } else {
-                TorusLines.push([counter, counter + 1]);
+                torus.TorusLines.push([counter, counter + 1]);
             }
-            TorusLines.push([counter, counter + howMany]);
+            torus.TorusLines.push([counter, counter + howMany]);
             counter ++;
         }
     }
     counter = 0;
     for(let i = 0.0; i <= 2 * Math.PI; i += stepX) {
-        TorusLines.push([counter, TorusVertices.length - howMany + counter]);
+        torus.TorusLines.push([counter, torus.TorusVertices.length - howMany + counter]);
         counter ++;
     }
 }
-export function getTorusVertices() {
-    return TorusVertices;
+export function getToruses() {
+    return toruses;
 }
-export function getTorusLines() {
-    return TorusLines;
+export function getTorusVertices(id) {
+    return toruses.find(x => x.id === id).TorusVertices;
 }
-export function getRAndr() {
-    return { r: _r, R: _R };
+export function getTorusLines(id) {
+    return toruses.find(x => x.id === id).TorusLines;
+}
+export function getRAndr(id) {
+    const torus = toruses.find(x => x.id === id);
+    return { r: torus.r, R: torus.R };
 }
 export function fetTorusCenter() {
     return {x: 2, y: 2};

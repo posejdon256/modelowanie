@@ -1,5 +1,5 @@
 import { getPoints } from "../Points/Points";
-import { getTorusVisibility, getTorusVertices } from "../Torus/Torus";
+import { getTorusVertices } from "../Torus/Torus";
 import Translate, { setTranslationPoints } from "../Translation/TranslationCenter/TranslationCenter";
 import { _DrawTorus } from "./DrawTorus/DrawTorus";
 import { _DrawPoints } from "./DrawPoints/DrawPoints";
@@ -11,12 +11,7 @@ import { DrawGregor } from "./DrawGregory/DrawGregory";
 
 export default function Redraw(){
     clearCanvas();
-    console.log('redraw');
-    if(getTorusVisibility()) {
-        const torus = getTorusVertices();
-        setTranslationPoints(torus);  
-        DrawTorus(Translate({}));
-    }
+    DrawTorus();
   // DrawRectangle();
     DrawCursor();
     DrawSurfaces();
@@ -28,11 +23,7 @@ export default function Redraw(){
 export function RedrawWithoutChangingScene() {
     clearCanvas();
     console.log('redraw');
-    if(getTorusVisibility()) {
-        const torus = getTorusVertices();
-        setTranslationPoints(torus);  
-        DrawTorus(Translate({}));
-    }
+    DrawTorus();
    // DrawRectangle();
     DrawCursor();
     DrawSurfacesWithoutBezier();
@@ -55,12 +46,12 @@ function DrawRectangle() {
         ctx.closePath();
         ctx.fill();
 }
-function DrawTorus(points) {
+function DrawTorus() {
     const { ctx, ctxS1, ctxS2 } = getContexts();
         //drawLine((rect[2].x + 1) * 500, (rect[2].y + 1) * 350, (rect[3].x + 1) * 500, (rect[3].y + 1) * 350, ctx);
        // ctx.stroke();
 
-    _DrawTorus(points, ctx, ctxS1, ctxS2);
+    _DrawTorus( ctx, ctxS1, ctxS2);
 }
 function DrawSurfaces(){
     const { ctx, ctxS1, ctxS2 } = getContexts();

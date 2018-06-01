@@ -134,7 +134,7 @@ export function createSmallPatch(P, vv, ia1, ia2, u, v) {
     let kh1 = countK0AndH0(gs[2], cs[2], b3);
     let dv0 = getDValue(1/3, gs, cs, kh0, kh1);
     let dv1 = getDValue(2/3, gs, cs, kh0, kh1);
-    GregoryVectors.push([vv[0], SumPoints(vv[0], dv0)]);
+   // GregoryVectors.push([vv[0], SumPoints(vv[0], dv0)]);
     cPrim.push(SumPoints(vv[0], dv0));
     dPrim.push(SumPoints(vv[1], dv1));
     // GregoryVectors.push([vv[0], SumPoints(vv[0], dv0)]);
@@ -153,8 +153,12 @@ export function createSmallPatch(P, vv, ia1, ia2, u, v) {
 
     cPrim.push(SumPoints(vv[3], dv0));
     dPrim.push(SumPoints(vv[2], dv1));
-    GregoryVectors.push([vv[3], SumPoints(vv[3], dv0)]);
-    GregoryVectors.push([vv[2], SumPoints(vv[2], dv1)]);
+  //  GregoryVectors.push([vv[3], SumPoints(vv[3], dv0)]);
+  GregoryVectors.push([b[0], bPrim[0]]);
+  GregoryVectors.push([b[1], bPrim[1]]);
+  GregoryVectors.push([a[0], aPrim[0]]);
+  GregoryVectors.push([a[1], aPrim[1]]);
+   // GregoryVectors.push([vv[2], SumPoints(vv[2], dv1)]);
 
     const preG = [];
     for(let i = 0; i < 4; i ++) {

@@ -44,8 +44,8 @@ function KeyDown(event) {
             MoveToRightCursor()
             break;
         case 32: //space
-            createSurface("C0");
-           // addPointWithRedraw();
+            //createSurface("C0");
+            addPointWithRedraw();
             event.preventDefault();
             break;
         case 38: //up
