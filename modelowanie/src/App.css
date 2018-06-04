@@ -30,6 +30,7 @@
   width: 1920px;
   background: url('pictures/stars.png');
   height: 1100px;
+  background-repeat-y: repeat;
 }
 .ab-canvas-navbar-container {
   height: 85%;

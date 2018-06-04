@@ -20,6 +20,7 @@ import { getSurfaces } from './scripts/canvas/Surface/Surface';
 import { getGrzegorzys } from './scripts/canvas/Gregory/Gregory';
 import { addTorus, getToruses, setTorusMesh } from './scripts/canvas/Torus/Torus';
 import { getCuttingCurves } from './scripts/canvas/CuttingCurve/CuttingCurve';
+import { RedrawVisualization } from './scripts/canvas/Draw/RedrawVisualisation/RedrawVisualization';
 
 class App extends Component {
   constructor(props) {
@@ -33,6 +34,7 @@ class App extends Component {
       gregories: [],
       toruses: [],
       cuttingCurves:[],
+      visualisate: false
     };
 
     this.addTorus = this.addTorus.bind(this);
@@ -42,6 +44,7 @@ class App extends Component {
     this.addPoint = this.addPoint.bind(this);
     this.refreshNavbar = this.refreshNavbar.bind(this);
     this.addCurve = this.addCurve.bind(this);
+    this.showVisualization = this.showVisualization.bind(this);
   }
   addTorus() {
     addTorus();
@@ -55,7 +58,7 @@ class App extends Component {
       curvePoints: getCurvesControlPoints(),
       gregories: getGrzegorzys(),
       cuttingCurves: getCuttingCurves(),
-      toruses: getToruses()
+      toruses: getToruses(),
     });
   }
   addPoint() {
@@ -88,6 +91,12 @@ class App extends Component {
       gridX: gridNumber
     });
   }
+  showVisualization() {
+    this.setState({
+      visualisate: true
+    });
+    RedrawVisualization();
+  }
   updateYGrid(gridNumber) {
     setTorusMesh(this.state.gridX, gridNumber);
     this.setState({
@@ -101,6 +110,7 @@ class App extends Component {
           toggleTorus={this.toggleTorus} 
           addPoint={this.addPoint} 
           addCurve={this.addCurve}
+          ShowVisualization={this.showVisualization}
         />
         <label>{this.state.eyes}</label>
         <div className="ab-canvas-navbar-container">
@@ -110,6 +120,7 @@ class App extends Component {
               gridY={this.state.gridY}
               stereoscopy={this.state.stereoscopy}
               refreshNavbar={this.refreshNavbar}
+              visualisate={this.state.visualisate}
               />
           <NavBar 
             updateXGrid={this.updateXGrid}

@@ -49,7 +49,7 @@ export function _DrawPoints(points, _ctx, _ctxStereo, _ctxStereo2) {
             }  else if(points[i].c2Bezier) {
                 rgb = {r: 0, g: 255, b: 0};
             } else {
-                rgb = {r: 255, g: 255, b: 255};
+                rgb = {r: 0, g: 255, b: 255};
             }
             if(((!points[i].c2Bezier) || (points[i].c2Bezier && c2BezierVisible)) && (points[i].visible !== false)) {
                 drawPoint(translatedPoints[i].x, translatedPoints[i].y, img, _ctx, rgb);

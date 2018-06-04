@@ -145,6 +145,9 @@ export function addPoint(x, y, z, type) {
         c2BSpline: getAddingC2State() && x === undefined ? true : false,
         curves: []
     };
+    if(type === "Newton") {
+        newPoint.visible = false;
+    }
     if(getAddingSurfaceState()) {
         newPoint.surface = true;
     }

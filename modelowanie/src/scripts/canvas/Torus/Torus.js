@@ -15,10 +15,11 @@ export function addTorus(_r, _R, _gridX, _gridY, _center, _rotation, _scale) {
     const rotation =_rotation ? _rotation : {x: 0, y: 0, z: 0};
     const scale =_scale ? _scale : {x: 1, y: 1, z: 1};
     const torus = {
+        type: "torus",
         id: torusesCounter,
         name: "Torus " + torusesCounter,
-        r: _r? _r : 50,
-        R: _R? _R : 200,
+        r: _r? _r : 0.1,
+        R: _R? _R : 0.5,
         gridX: _gridX ? _gridX : gX,
         gridY: _gridY ? _gridY : gY,
         center: {
@@ -79,9 +80,9 @@ function generateTorus(torus) {
     for(let i = 0.0; i <= 2 * Math.PI ; i += stepY) {
         for(let j = 0.0; j <= 2 * Math.PI; j += stepX) {
             torus.TorusVertices.push({
-                x: ((R + (r * Math.cos(j))) * Math.cos(i) / (R + r)) + center.x,
-                y: ((R + (r * Math.cos(j))) * Math.sin(i) / (R + r)) +  center.y,
-                z: (r * Math.sin(j) / (R + r)) + center.z
+                x: ((R + (r * Math.cos(j))) * Math.cos(i)) + center.x,
+                y: ((R + (r * Math.cos(j))) * Math.sin(i) ) +  center.y,
+                z: (r * Math.sin(j)) + center.z
             });
             if(counter % howMany + 1 === howMany) {
                 torus.TorusLines.push([counter, counter - howMany + 1])
@@ -107,10 +108,46 @@ export function getTorusVertices(id) {
 export function getTorusLines(id) {
     return toruses.find(x => x.id === id).TorusLines;
 }
-export function getRAndr(id) {
-    const torus = toruses.find(x => x.id === id);
-    return { r: torus.r, R: torus.R };
+export function EvaluateTorus(id, u, v) {
+    const _u = u * (2 * Math.PI);
+    const _v = v * (2 * Math.PI);
+    const t = toruses.find(x => x.id === id);
+    // x: ((R + (r * Math.cos(j))) * Math.cos(i) / (R + r)) + center.x,
+    // y: ((R + (r * Math.cos(j))) * Math.sin(i) / (R + r)) +  center.y,
+    // z: (r * Math.sin(j) / (R + r)) + center.z
+    return {
+        x: (t.R + t.r * Math.cos(_u)) * Math.cos(_v) + t.center.x,
+        y: (t.R + t.r * Math.cos(_u)) * Math.sin(_v) + t.center.y,
+        z: (t.r * Math.sin(_u)) + t.center.z
+    };
 }
-export function fetTorusCenter() {
-    return {x: 2, y: 2};
+export function EvaluateTorusDU(id, u, v) {
+    const _u = u * (2 * Math.PI);
+    const _v = v * (2 * Math.PI);
+    const t = toruses.find(x => x.id === id);
+    return {
+        x: - t.r * Math.sin(_u) * Math.cos(_v) ,
+        y: - t.r * Math.sin(_u) * Math.sin(_v),
+        z: t.r * Math.cos(_u)
+    };
+}
+export function EvaluateTorusDV(id, u, v) {
+    const _u = u * (2 * Math.PI);
+    const _v = v * (2 * Math.PI);
+    const t = toruses.find(x => x.id === id);
+    return {
+        x: - Math.sin(_v) * (t.r * Math.cos(_u) + t.R),
+        y: Math.cos(_v) * (t.r * Math.cos(_u) + t.R),
+        z: 0
+    };
+}
+export function EvaluateTorusNormal(id, u, v) {
+    const _u = u * (2 * Math.PI);
+    const _v = v * (2 * Math.PI);
+    const t = toruses.find(x => x.id === id);
+    return {
+        x: Math.cos(_u) * Math.cos(_v) + t.center.x,
+        y: Math.cos(_u) * Math.sin(_v) + t.center.y,
+        z: Math.sin(_u) + t.center.z
+    }
 }

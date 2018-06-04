@@ -8,6 +8,7 @@ import bezierc2I from '../../pictures/bezierc2i.png';
 import platekC0 from '../../pictures/platek.png';
 import platekC2 from '../../pictures/platekc2.png';
 import platekG from '../../pictures/platekG.png';
+import scissors from '../../pictures/scissors.png';
 import load from '../../pictures/helicopter.png';
 import save from '../../pictures/safebox.png';
 import { getAddBezierState, setAddBezierState } from '../canvas/Bezier/Bezier';
@@ -18,6 +19,7 @@ import { Save } from '../Save/Save';
 import { Load } from '../Load/Load';
 import { MakeGregory } from '../canvas/Gregory/Gregory';
 import { addTorus } from '../canvas/Torus/Torus';
+import { findObjectToIntersectionAndIntersection } from '../canvas/CuttingCurve/FindIntersection';
 
 export default class Header extends Component {
     constructor(props) {
@@ -33,6 +35,7 @@ export default class Header extends Component {
         this.loadFile = this.loadFile.bind(this);
         this.saveFile = this.saveFile.bind(this);
         this.addGregory = this.addGregory.bind(this);
+        this.addIntersection = this.addIntersection.bind(this);
     }
     addTorus() {
         addTorus();
@@ -62,6 +65,10 @@ export default class Header extends Component {
             return;
         }
         this.props.addCurve();
+    }
+    addIntersection(){
+        findObjectToIntersectionAndIntersection();
+        this.props.ShowVisualization();
     }
     addInterpolationCurve() {
         if(getInterpolationState()) {
@@ -108,6 +115,9 @@ export default class Header extends Component {
             </button>
             <button className="ab-torus-button" onClick={this.loadFile}>
                 <img className="ab-point-image" src={load} alt="surface c2" />
+            </button>  
+            <button className="ab-torus-button" onClick={this.addIntersection}>
+                <img className="ab-point-image" src={scissors} alt="intersection curve" />
             </button>  
         </div>);
     }

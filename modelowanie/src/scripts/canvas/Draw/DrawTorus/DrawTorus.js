@@ -1,19 +1,18 @@
-import { getRAndr, getTorusLines, getToruses, getTorusVertices } from "../../Torus/Torus";
+import { getTorusLines, getToruses, getTorusVertices } from "../../Torus/Torus";
 import { drawLine, getPixelColor, stereoscopyDraw } from "../Draw";
 import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
 import Translate, { setTranslationPoints } from "../../Translation/TranslationCenter/TranslationCenter";
 
 function drawTorusLines(lines, id, ctx, points) {
-    const rs = getRAndr(id);
     ctx.beginPath();
     lines.forEach(line => {
         let bla = 10;
         let blaZ = 100;
-        if(line[1] < points.length && line[0] < points.length && points[line[0]].z < 1 && points[line[0]].z > -blaZ && points[line[0]].x < bla && points[line[0]].x > -bla
+        if(line[1] < points.length 
+        && line[0] < points.length && points[line[0]].z > -blaZ && points[line[0]].x < bla && points[line[0]].x > -bla
             && points[line[0]].y < bla  && points[line[0]].y > -bla && points[line[1]].z < 1 && points[line[1]].z > -blaZ && points[line[1]].x < bla && points[line[1]].x > -bla
             && points[line[1]].y < bla && points[line[1]].y > -bla) {
-            //console.log(points[line[0]].z, points[line[1]].x);
-             drawLine(points[line[0]].x * (rs.R + rs.r) + (500), points[line[0]].y * (rs.R + rs.r)+ (350), points[line[1]].x * (rs.R + rs.r)+ (500), points[line[1]].y * (rs.R + rs.r)+ (350), ctx);
+             drawLine((points[line[0]].x + 1) * (500), (points[line[0]].y + 1) * (350), (points[line[1]].x + 1) * (500), (points[line[1]].y + 1) * (350), ctx);
          }
     });
     ctx.stroke();
@@ -36,7 +35,7 @@ export function _DrawTorus(_ctx, _ctxStereo, _ctxStereo2){
             confObject.axisZ = true;
             confObject.alphaZ = torus.rotation.z;
         }
-        const translated = Translate(confObject, "torus");
+        const translated = Translate({});
         drawTorus(translated, torus.id, _ctx, _ctxStereo, _ctxStereo2);
     });
     if(stereoscopy){

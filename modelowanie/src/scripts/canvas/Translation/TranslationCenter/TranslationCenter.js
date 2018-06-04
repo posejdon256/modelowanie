@@ -25,9 +25,6 @@ export default function Translate(translationObject, type) {
     if(axisY) {
         translationMatrix = ShiftWithRotation(translationMatrix, 0, alphaY);
     }
-    if(axisZ) {
-        translationMatrix = ShiftWithRotation(translationMatrix, 2, alphaZ);
-    }
     //shift
     const shiftVector = [];
     if(left !== undefined && left !== 0) {
@@ -49,8 +46,8 @@ export default function Translate(translationObject, type) {
         shiftVector.push(0);
     setShiftVector(shiftVector);
     translationMatrix = multiplyMatrices(getShiftMatrix(), translationMatrix);
-    if(type !== "torus")
-        lastTranslation = translationMatrix;
+    // if(type !== "torus")
+         lastTranslation = translationMatrix;
 
     //projection
     if(!stereoscopy)
