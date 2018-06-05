@@ -6,6 +6,7 @@
     "chalk": "^2.0.1",
     "fs": "0.0.1-security",
     "jsonfile": "^4.0.0",
+    "mathjs": "^4.4.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.1.1",

@@ -46,7 +46,7 @@ export default function Translate(translationObject, type) {
         shiftVector.push(0);
     setShiftVector(shiftVector);
     translationMatrix = multiplyMatrices(getShiftMatrix(), translationMatrix);
-    // if(type !== "torus")
+    if(type !== "torus")
          lastTranslation = translationMatrix;
 
     //projection
@@ -56,7 +56,7 @@ export default function Translate(translationObject, type) {
         return stereoscopyTranslation(translationMatrix);
 }
 function normalTranslation(translationMatrix) {
-    const projectioMatrix = multiplyMatrices(getProjectionMatrix(3), translationMatrix);
+    const projectioMatrix = multiplyMatrices(getProjectionMatrix(3), translationMatrix);//3
     return generateTranslation(projectioMatrix);
 }
 function stereoscopyTranslation(translationMatrix) {

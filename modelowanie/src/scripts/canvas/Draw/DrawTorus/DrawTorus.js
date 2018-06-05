@@ -35,7 +35,7 @@ export function _DrawTorus(_ctx, _ctxStereo, _ctxStereo2){
             confObject.axisZ = true;
             confObject.alphaZ = torus.rotation.z;
         }
-        const translated = Translate({});
+        const translated = Translate(confObject, "torus");
         drawTorus(translated, torus.id, _ctx, _ctxStereo, _ctxStereo2);
     });
     if(stereoscopy){
