@@ -67,8 +67,9 @@ export default class Header extends Component {
         this.props.addCurve();
     }
     addIntersection(){
-        findObjectToIntersectionAndIntersection();
-        this.props.ShowVisualization();
+        if(findObjectToIntersectionAndIntersection()){
+            this.props.ShowVisualization();
+        }
     }
     addInterpolationCurve() {
         if(getInterpolationState()) {

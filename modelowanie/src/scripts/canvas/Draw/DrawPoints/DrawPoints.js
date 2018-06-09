@@ -9,8 +9,8 @@ function drawPoint(x, y, img, ctx, rgb) {
     const yPrim = (((y + 1) )* 350);
     if(xPrim < 0 || yPrim < 0 || xPrim > 1000 || yPrim > 700)
         return;
-    for(let i = 0; i < 2; i ++) {
-        for(let j = 0; j < 2; j ++) {
+    for(let i = 0; i < 4; i ++) {
+        for(let j = 0; j < 4; j ++) {
             img = drawPixel(xPrim + i , yPrim + j, img, ctx, rgb);
 
         }
@@ -48,8 +48,14 @@ export function _DrawPoints(points, _ctx, _ctxStereo, _ctxStereo2) {
                 rgb = {r: 255, g: 0, b: 0};
             }  else if(points[i].c2Bezier) {
                 rgb = {r: 0, g: 255, b: 0};
-            } else {
-                rgb = {r: 0, g: 255, b: 255};
+            } else if(points[i].type === "Pink"){
+                rgb = {r: 128, g: 0, b: 128};
+            }
+            else if(points[i].type === "Orange"){
+                rgb = {r: 255, g: 140, b: 0};
+            }
+            else {
+                rgb = {r: 255, g: 255, b: 255};
             }
             if(((!points[i].c2Bezier) || (points[i].c2Bezier && c2BezierVisible)) && (points[i].visible !== false)) {
                 drawPoint(translatedPoints[i].x, translatedPoints[i].y, img, _ctx, rgb);

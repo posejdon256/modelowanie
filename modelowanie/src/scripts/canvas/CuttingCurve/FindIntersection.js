@@ -3,7 +3,7 @@ import { getVectorLength, DiffPoints, scalarMultiply, MultiplyPoint } from "../.
 import { getCursor } from "../Cursor/Cursor";
 import { addPoint } from "../Points/Points";
 import Redraw from "../Draw/Redraw";
-import { getSurfaces } from "../Surface/Surface";
+import { getSurfaces, EvaluateSurface, EvaluateSurfaceDU, EvaluateSurfaceDV } from "../Surface/Surface";
 import { goGoNewton } from "./NewtonMethod";
 
 function findIntersection(_objects) {
@@ -31,18 +31,22 @@ function findIntersection(_objects) {
             }
         }
     }
-    // const p1 = evaluate(_objects[0], best.point1.u, best.point1.v);
-    // const p2 = evaluate(_objects[1], best.point2.u, best.point2.v);
-    // addPoint(p1.x, p1.y, p1.z, "sfdsdfsdf");
-    // addPoint(p2.x, p2.y, p2.z, "sfdsdfsdf");
+    //  const p1 = evaluate(_objects[0], best.point1.u, best.point1.v);
+    //  const p2 = evaluate(_objects[1], best.point2.u, best.point2.v);
+    //  addPoint(p1.x, p1.y, p1.z, "Orange");
+    //  addPoint(p2.x, p2.y, p2.z, "Orange");
     countGradientMethod(_objects[0], _objects[1], best);
-    Redraw();
+   // Redraw();
 }
 function countGradientMethod(ob1, ob2, best){
     const interation = 10;
     let u = [best.point1.u, best.point2.u];
     let v = [best.point1.v, best.point2.v];
-    for(let i = 0; i < 100; i ++) {
+    let p1 = evaluate(ob1, u[0], v[0]);
+    let p2 = evaluate(ob2, u[1], v[1]);
+    addPoint(p1.x, p1.y, p1.z, "Orange");
+    addPoint(p2.x, p2.y, p2.z, "Orange");
+    for(let i = 0; i < 300; i ++) {
         const help = {
             point1: {u: u[0], v: v[0]},
             point2: {u: u[1], v: v[1]}
@@ -56,14 +60,18 @@ function countGradientMethod(ob1, ob2, best){
 
         u = [uPrev[0] - betterPoint[0], uPrev[1] - betterPoint[2]];
         v = [vPrev[0] - betterPoint[1], vPrev[1] - betterPoint[3]];
+        const p1 = evaluate(ob1, u[0], v[0]);
+        const p2 = evaluate(ob2, u[1], v[1]);
+        addPoint(p1.x, p1.y, p1.z, "sfdsdfsdf");
+        addPoint(p2.x, p2.y, p2.z, "sfdsdfsdf");
         if(u[0] > 1 || u[1] > 1 || v[0] > 1 || v[1] > 1) {
             console.log(u, v);
         }
     }
-    const p1 = evaluate(ob1, u[0], v[0]);
-    const p2 = evaluate(ob2, u[1], v[1]);
-    addPoint(p1.x, p1.y, p1.z, "sfdsdfsdf");
-    addPoint(p2.x, p2.y, p2.z, "sfdsdfsdf");
+    p1 = evaluate(ob1, u[0], v[0]);
+    p2 = evaluate(ob2, u[1], v[1]);
+    addPoint(p1.x, p1.y, p1.z, "Pink");
+    addPoint(p2.x, p2.y, p2.z, "Pink");
     if(getVectorLength(p1, p2) > 0.1) {
         alert("Nie znaleziono przecięcia!");
         return;
@@ -101,7 +109,7 @@ export function findObjectToIntersectionAndIntersection(){
     const _objects = [];
     if(surfaces.length  + toruses.length !== 2) {
         alert("Niepoprawna liczba obiektów jest wybrana!");
-        return;
+        return false;
     }
     for(let i = 0; i < surfaces.length; i ++) {
         _objects.push(surfaces[i]);
@@ -110,19 +118,26 @@ export function findObjectToIntersectionAndIntersection(){
         _objects.push(toruses[i]);
     }
     findIntersection(_objects);
+    return true;//TODO
 }
 export function evaluate(object, u, v) {
     if(object.type === "torus") {
        return EvaluateTorus(object.id, u, v);
+    } else if(object.type === "C0") {
+        return EvaluateSurface(object.id, u, v);
     }
 }
 export function evaluateDU(object, u, v) {
     if(object.type === "torus") {
        return EvaluateTorusDU(object.id, u, v);
+    } else if(object.type === "C0") {
+        return EvaluateSurfaceDU(object.id, u, v);
     }
 }
 export function evaluateDV(object, u, v) {
     if(object.type === "torus") {
        return EvaluateTorusDV(object.id, u, v);
+    } else if(object.type === "C0") {
+        return EvaluateSurfaceDV(object.id, u, v);
     }
 }

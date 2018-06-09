@@ -7,7 +7,7 @@ function drawTorusLines(lines, id, ctx, points) {
     ctx.beginPath();
     lines.forEach(line => {
         let bla = 10;
-        let blaZ = 100;
+        let blaZ = 5;
         if(line[1] < points.length 
         && line[0] < points.length && points[line[0]].z > -blaZ && points[line[0]].x < bla && points[line[0]].x > -bla
             && points[line[0]].y < bla  && points[line[0]].y > -bla && points[line[1]].z < 1 && points[line[1]].z > -blaZ && points[line[1]].x < bla && points[line[1]].x > -bla

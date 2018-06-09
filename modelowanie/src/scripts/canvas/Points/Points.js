@@ -143,7 +143,8 @@ export function addPoint(x, y, z, type) {
         selected: false,
         c2Bezier: type === "C2-bezier" ? true : false,
         c2BSpline: getAddingC2State() && x === undefined ? true : false,
-        curves: []
+        curves: [],
+        type: type
     };
     if(type === "Newton") {
         newPoint.visible = false;

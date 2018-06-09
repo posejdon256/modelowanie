@@ -108,10 +108,14 @@ export function getTorusVertices(id) {
 export function getTorusLines(id) {
     return toruses.find(x => x.id === id).TorusLines;
 }
-export function EvaluateTorus(id, u, v) {
-    const _u = u * (2 * Math.PI);
-    const _v = v * (2 * Math.PI);
+export function EvaluateTorus(id, u, v, help) {
+    let _u = u * (2 * Math.PI);
+    let _v = v * (2 * Math.PI);
     const t = toruses.find(x => x.id === id);
+    if(help) {
+        
+        _u = _u * (t.r / t.R);
+    }
     // x: ((R + (r * Math.cos(j))) * Math.cos(i) / (R + r)) + center.x,
     // y: ((R + (r * Math.cos(j))) * Math.sin(i) / (R + r)) +  center.y,
     // z: (r * Math.sin(j) / (R + r)) + center.z
@@ -123,7 +127,7 @@ export function EvaluateTorus(id, u, v) {
 }
 export function EvaluateTorusDU(id, u, v) {
     const _u = u * (2 * Math.PI);
-    const _v = v * (2 * Math.PI);
+    let _v = v * (2 * Math.PI);
     const t = toruses.find(x => x.id === id);
     return {
         x: - t.r * Math.sin(_u) * Math.cos(_v) ,
