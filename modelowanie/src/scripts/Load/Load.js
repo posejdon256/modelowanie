@@ -51,7 +51,7 @@ export function Load() {
     turnOffAllStates();
     json.surfacesC0.forEach(surface => {// cylinder - TODO
         setAddingSurfaceState(true);
-        let _surface = addSurface(surface.width, surface.height, false, surface.u, surface.v, "C0");
+        let _surface = addSurface(surface.flakeU, surface.flakeV, false, surface.u, surface.v, "C0");
         _surface.pointsMap = [];
         surface.points.forEach(pointRow => {
             _surface.pointsMap.push([]);

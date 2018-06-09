@@ -17,11 +17,16 @@ export function goGoNewton(best) {
     let lastU = [u[0], u[1]], lastV = [v[0], v[1]];
     let uPrev = [uStart[0], uStart[1]];
     let vPrev = [vStart[0], vStart[1]];
-
+    let betterPoint;
     let alpha = 0.002;
-    for(let j1= 0; j1 < 10000; j1 ++) {
+    for(let j1= 0; j1 < 200; j1 ++) {
         for(let i = 0; i < 3; i ++) {
-            const betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, alpha);
+            try{
+                betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, alpha);
+            } catch(e) {
+                alert("Nie zbiega :( " + e);
+                return;
+            }
               for(let m = 0; m < 4; m ++) {
                  betterPoint[m] = (betterPoint[m]) * 0.002;
               }
@@ -29,9 +34,11 @@ export function goGoNewton(best) {
             let helpU2 = u[1] - betterPoint[2]; 
             let helpV1 = v[0] - betterPoint[1];
             let helpV2 = v[1] - betterPoint[3]; 
+            console.log(helpU1, helpU2, helpV1, helpV2);
             if((helpU1 < 0 || helpU2 < 0 || helpV1 < 0 || helpV2 < 0
-                || helpU1 > 1 || helpU2 > 1 || helpV1 > 1 || helpV2 > 1) && ob1.type !== "torus") {
+                || helpU1 >= ob[0].width || helpU2 >= ob[0].height || helpV1 >= ob[1].width  || helpV2 >= ob[1].height ) && ob1.type !== "torus") {
                     alpha = -alpha;
+                    
                     u = [uStart[0], uStart[1]];
                     v = [vStart[0], vStart[1]];
                     uPrev = [uStart[0], uStart[1]];
@@ -78,8 +85,8 @@ export function goGoNewton(best) {
         const p1 = evaluate(ob1, u[0], v[0]);
         const p2 = evaluate(ob2, u[1], v[1]);
 
-         updateIn1Visualisation(cuttingCurve.id, u[0] - parseInt(u[0], 10), v[0] - parseInt(v[0], 10));
-         updateIn2Visualisation(cuttingCurve.id, u[1] - parseInt(u[1], 10), v[1] - parseInt(v[1], 10));
+         updateIn1Visualisation(cuttingCurve.id, u[0], v[0]);
+         updateIn2Visualisation(cuttingCurve.id, u[1], v[1]);
        // if(j1 > 60)
         addPoint(p1.x, p1.y, p1.z, "Orange");
         //addPoint(p2.x, p2.y, p2.z, "Orange");

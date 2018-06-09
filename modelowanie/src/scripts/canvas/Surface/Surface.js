@@ -245,50 +245,62 @@ function makeNormalStripes(stripeNumber, surface) {
 }
 export function EvaluateSurface(id, u, v) {
     const s = surfaces.find(x => x.id === id);
-    const _u = Math.floor(u * s.pointsMap.length / 4);
-    const _v = Math.floor(v * s.pointsMap[0].length / 4);
-    if(_u > 1 || _u < 0 || _v > 1 || _v < 0 || isNaN(_v) || isNaN(_u)) {
-        return 0;
+    const _u = Math.floor(v) * 3;
+    const _v = Math.floor(u) * 3;
+    const _u1 =  u - Math.floor(u);
+    const _v1 = v - Math.floor(v) ;
+    if(u < 0 ||  v < 0 || isNaN(v) || isNaN(u)) {
+        alert("Problem z evalem");
+        //console.log(_u, _v);
+        return {x: 1, y: 0, z: 0};
     }
     const knots = [];
     for(let i = 0; i < 4; i ++) {
-        knots.push(deCastiljau(u, s.pointsMap[_u + i][_v + 0], s.pointsMap[_u + i][_v + 1], s.pointsMap[_u + i][_v + 2], s.pointsMap[_u + i][_v + 3]));
+        knots.push(deCastiljau(_u1, s.pointsMap[_u + i][_v + 0], s.pointsMap[_u + i][_v + 1], s.pointsMap[_u + i][_v + 2], s.pointsMap[_u + i][_v + 3]));
     }
-    return deCastiljau(v, knots[0], knots[1], knots[2], knots[3]);
+    return deCastiljau(_v1, knots[0], knots[1], knots[2], knots[3]);
 }
 export function EvaluateSurfaceDV(id, u, v) {
     const s = surfaces.find(x => x.id === id);
-    const _u = Math.floor(u * s.pointsMap.length / 4);
-    const _v = Math.floor(v * s.pointsMap[0].length / 4);
-    if(_u > 1 || _u < 0 || _v > 1 || _v < 0 || isNaN(_v) || isNaN(_u)) {
-        return 0;
+    const _u = Math.floor(v) * 3;
+    const _v = Math.floor(u) * 3;
+    const _u1 =  u - Math.floor(u);
+    const _v1 = v - Math.floor(v) ;
+    if(u < 0 ||  v < 0 || isNaN(v) || isNaN(u)) {
+        alert("Problem z evalemDV");
+        //console.log(_u, _v);
+        return {x: 1, y: 1, z:1};
     }
     const knots = [];
     for(let i = 0; i < 4; i ++) {
-        knots.push(deCastiljau(u, s.pointsMap[_u + i][_v + 0], s.pointsMap[_u + i][_v + 1], s.pointsMap[_u + i][_v + 2], s.pointsMap[_u + i][_v + 3]));
+        knots.push(deCastiljau(_u1, s.pointsMap[_u + i][_v + 0], s.pointsMap[_u + i][_v + 1], s.pointsMap[_u + i][_v + 2], s.pointsMap[_u + i][_v + 3]));
     }
     const derKnots = [];
     for(let i = 0; i <3; i++) {
         derKnots.push(MultiplyPoint(DiffPoints(knots[i + 1] , knots[i]), 3));
     }
-    return deCastiljau3(v, derKnots[0], derKnots[1], derKnots[2]);
+    return deCastiljau3(_v1, derKnots[0], derKnots[1], derKnots[2]);
 }
 export function EvaluateSurfaceDU(id, u, v) {
     const s = surfaces.find(x => x.id === id);
-    const _u = Math.floor(u * s.pointsMap.length / 4);
-    const _v = Math.floor(v * s.pointsMap[0].length / 4);
+    const _u = Math.floor(v) * 3;
+    const _v = Math.floor(u) * 3;
+    const _u1 =  u - Math.floor(u);
+    const _v1 = v - Math.floor(v) ;
     const knots = [];
-    if(_u > 1 || _u < 0 || _v > 1 || _v < 0 || isNaN(_v) || isNaN(_u)) {
-        return 0;
+    if(u < 0 ||  v < 0 || isNaN(v) || isNaN(u)) {
+        alert("Problem z evalemDU");
+        //console.log(_u, _v);
+        return {x: 1, y: 1, z:1};
     }
     for(let i = 0; i < 4; i ++) {
-        knots.push(deCastiljau(v, s.pointsMap[_u + 0][_v + i], s.pointsMap[_u + 1][_v + i], s.pointsMap[_u + 2][_v + i], s.pointsMap[_u + 3][_v + i]));
+        knots.push(deCastiljau(_v1, s.pointsMap[_u + 0][_v + i], s.pointsMap[_u + 1][_v + i], s.pointsMap[_u + 2][_v + i], s.pointsMap[_u + 3][_v + i]));
     }
     const derKnots = [];
     for(let i = 0; i <3; i++) {
         derKnots.push(MultiplyPoint(DiffPoints(knots[i + 1] , knots[i]), 3));
     }
-    return deCastiljau3(u, derKnots[0], derKnots[1], derKnots[2]);
+    return deCastiljau3(_u1, derKnots[0], derKnots[1], derKnots[2]);
 }
 export function clearSurfaces() {
     surfaces = [];

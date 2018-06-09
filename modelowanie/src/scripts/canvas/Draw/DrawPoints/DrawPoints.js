@@ -53,6 +53,9 @@ export function _DrawPoints(points, _ctx, _ctxStereo, _ctxStereo2) {
             }
             else if(points[i].type === "Orange"){
                 rgb = {r: 255, g: 140, b: 0};
+            }  
+            else if(points[i].type === "Blue"){
+                rgb = {r: 0, g: 0, b: 255};
             }
             else {
                 rgb = {r: 255, g: 255, b: 255};

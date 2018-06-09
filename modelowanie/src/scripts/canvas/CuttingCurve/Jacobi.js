@@ -10,6 +10,12 @@ function generateJacobi(ob, u, v, uNew, vNew, alpha) {
     let dV1 =  evaluateDV(ob[0], u[0], v[0]);
     let dU2 =  evaluateDU(ob[1], u[1], v[1]);
     let dV2 =  evaluateDV(ob[1], u[1], v[1]);
+    if(dU1.x === 0 && dU1.y === 0 && dU1.z === 0) {
+        dU1 =  evaluateDU(ob[0], u[0], v[0]);
+        dV1 =  evaluateDV(ob[0], u[0], v[0]);
+        dU2 =  evaluateDU(ob[1], u[1], v[1]);
+        dV2 =  evaluateDV(ob[1], u[1], v[1]);
+    }
     const t = getT(dU1, dU2, dV1, dV2);
     dU1 =  evaluateDU(ob[0], uNew[0], vNew[0]);
     dV1 =  evaluateDV(ob[0], uNew[0], vNew[0]);
@@ -50,9 +56,6 @@ function getFforJacobi(ob, u, v, uNew, vNew, alpha) {
     const dU2 = evaluateDU(ob[1], u[1], v[1]);
     const dV2 = evaluateDV(ob[1], u[1], v[1]);
     const t = getT(dU1, dU2, dV1, dV2, alpha);
-    if(alpha < 0) {
-        console.log(t);
-    }
     // setTranslationPoints([P0,  SumPoints(P0, MultiplyPoint(t, 0.1))]);
     // const {ctx} = getContexts();
     // const points = Translate({});

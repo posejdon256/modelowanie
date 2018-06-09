@@ -14,10 +14,11 @@ function findIntersection(_objects) {
         point1: {},
         point2: {}
     };
-    for(let i = 0.0; i < 1; i += 1.0/interation) {
-        for(let j = 0.0; j < 1; j += 1.0/interation) {
-            for(let k = 0.0; k < 1; k += 1.0/interation) {
-                for(let m = 0.0; m < 1; m += 1.0/interation) {
+    const sizes = getSizes(_objects);
+    for(let i = 0.0; i < sizes.o1x; i += 1.0/interation) {
+        for(let j = 0.0; j < sizes.o1y; j += 1.0/interation) {
+            for(let k = 0.0; k < sizes.o2x; k += 1.0/interation) {
+                for(let m = 0.0; m < sizes.o2y; m += 1.0/interation) {
                     const ev1 = evaluate(_objects[0], i, j);
                     const ev2 = evaluate(_objects[1], k, m);
                     const trans = [ev1, ev2];
@@ -27,16 +28,28 @@ function findIntersection(_objects) {
                         best.point2 = {u: k, v: m};
                         best.lenght = _lenght;
                     }
+                        //  const p1 = evaluate(_objects[0], best.point1.u, best.point1.v);
+                        //  const p2 = evaluate(_objects[1], best.point2.u, best.point2.v);
+                        //  addPoint(p1.x, p1.y, p1.z, "Orange");
+                        //  addPoint(p2.x, p2.y, p2.z, "Orange")
                 }
             }
         }
     }
-    //  const p1 = evaluate(_objects[0], best.point1.u, best.point1.v);
-    //  const p2 = evaluate(_objects[1], best.point2.u, best.point2.v);
-    //  addPoint(p1.x, p1.y, p1.z, "Orange");
-    //  addPoint(p2.x, p2.y, p2.z, "Orange");
+     const p1 = evaluate(_objects[0], best.point1.u, best.point1.v);
+     const p2 = evaluate(_objects[1], best.point2.u, best.point2.v);
+     addPoint(p1.x, p1.y, p1.z, "Orange");
+     addPoint(p2.x, p2.y, p2.z, "Orange");
     countGradientMethod(_objects[0], _objects[1], best);
    // Redraw();
+}
+function getSizes(_objects) {
+    const sizes = {};
+    sizes.o1x = _objects[0].type === "torus" ? 1 : _objects[0].width;
+    sizes.o1y = _objects[0].type === "torus" ? 1 : _objects[0].height;
+    sizes.o2x = _objects[0].type === "torus" ? 1 : _objects[1].width;
+    sizes.o2y = _objects[0].type === "torus" ? 1 : _objects[1].height;
+    return sizes;
 }
 function countGradientMethod(ob1, ob2, best){
     const interation = 10;
@@ -60,13 +73,21 @@ function countGradientMethod(ob1, ob2, best){
 
         u = [uPrev[0] - betterPoint[0], uPrev[1] - betterPoint[2]];
         v = [vPrev[0] - betterPoint[1], vPrev[1] - betterPoint[3]];
+        console.log(u[0], v[0], u[1], v[1]);
+        // u[0] = u[0] > 1 ? u[0] - 1 : u[0];
+        // u[1] = u[1] > 1 ? u[1] - 1 : u[1];
+        // v[0] = v[0] > 1 ? v[0] - 1 : v[0];
+        // v[1] = v[1] > 1 ? v[1] - 1 : v[1];
+
+        // u[0] = u[0] < 0 ? u[0] + 1 : u[0];
+        // u[1] = u[1] < 0 ? u[1] + 1 : u[1];
+        // v[0] = v[0] < 0 ? v[0] + 1 : v[0];
+        // v[1] = v[1] < 0 ? v[1] + 1 : v[1];
+
         const p1 = evaluate(ob1, u[0], v[0]);
         const p2 = evaluate(ob2, u[1], v[1]);
         addPoint(p1.x, p1.y, p1.z, "sfdsdfsdf");
         addPoint(p2.x, p2.y, p2.z, "sfdsdfsdf");
-        if(u[0] > 1 || u[1] > 1 || v[0] > 1 || v[1] > 1) {
-            console.log(u, v);
-        }
     }
     p1 = evaluate(ob1, u[0], v[0]);
     p2 = evaluate(ob2, u[1], v[1]);
