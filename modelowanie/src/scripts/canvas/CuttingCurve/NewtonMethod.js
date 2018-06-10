@@ -19,8 +19,8 @@ export function goGoNewton(best) {
     let vPrev = [vStart[0], vStart[1]];
     let betterPoint;
     let alpha = 0.002;
-    for(let j1= 0; j1 < 200; j1 ++) {
-        for(let i = 0; i < 3; i ++) {
+    for(let j1= 0; j1 < 1000; j1 ++) {
+        for(let i = 0; i < 4; i ++) {
             try{
                 betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, alpha);
             } catch(e) {
@@ -35,34 +35,30 @@ export function goGoNewton(best) {
             let helpV1 = v[0] - betterPoint[1];
             let helpV2 = v[1] - betterPoint[3]; 
             console.log(helpU1, helpU2, helpV1, helpV2);
-            if((helpU1 < 0 || helpU2 < 0 || helpV1 < 0 || helpV2 < 0
-                || helpU1 >= ob[0].width || helpU2 >= ob[0].height || helpV1 >= ob[1].width  || helpV2 >= ob[1].height ) && ob1.type !== "torus") {
-                    alpha = -alpha;
-                    
+            if(notInRange([helpU1, helpU2], [helpV1, helpV2], ob) && ob1.type !== "torus" && !ob1.cylinder) {
+                    alpha = -alpha;          
                     u = [uStart[0], uStart[1]];
                     v = [vStart[0], vStart[1]];
                     uPrev = [uStart[0], uStart[1]];
                     vPrev = [vStart[0], vStart[1]];
                     continue;
             }
-            // helpU1 = helpU1 < 0 ? helpU1 + 1.0 : helpU1;
-            // helpU2 = helpU2 < 0 ? helpU2 + 1.0 : helpU2;
-            // helpV1 = helpV1 < 0 ? helpV1 + 1.0 : helpV1;
-            // helpV2 = helpV2 < 0 ? helpV2 + 1.0 : helpV2;
+            if(notInRange([helpU1, helpU2], [helpV1, helpV2], ob) && ob1.cylinder) {
+                helpU1 = helpU1 < 0 ? helpU1 + ob[0].width : helpU1;
+                helpU2 = helpU2 < 0 ? helpU2 + ob[1].width : helpU2;
+                helpV1 = helpV1 < 0 ? helpV1 + ob[0].height : helpV1;
+                helpV2 = helpV2 < 0 ? helpV2 + ob[1].height : helpV2;
 
-            // helpU1 = helpU1 > 1 ? helpU1 - 1.0 : helpU1;
-            // helpU2 = helpU2 > 1 ? helpU2 - 1.0 : helpU2;
-            // helpV1 = helpV1 > 1 ? helpV1 - 1.0 : helpV1;
-            // helpV2 = helpV2 > 1 ? helpV2 - 1.0 : helpV2;
-            // if(jump) {
-            //     lastU = [helpU1 , helpU2];
-            //     lastV = [helpV1, helpV2];
-
-            //     uPrev = [helpU1 , helpU2];
-            //     vPrev = [helpV1, helpV2];
-            // } else {
+                helpU1 = helpU1 > ob[0].width ? helpU1 - ob[0].width : helpU1;
+                helpU2 = helpU2 > ob[1].width ? helpU2 - ob[1].width : helpU2;
+                helpV1 = helpV1 > ob[0].height ? helpV1 - ob[0].height : helpV1;
+                helpV2 = helpV2 > ob[1].height ? helpV2 - ob[1].height : helpV2;
+                u = [helpU1 , helpU2];
+                v = [helpV1, helpV2];
+            } else {
                 lastU = [u[0], u[1]];
                 lastV = [v[0], v[1]];
+            }
            // }
             u = [helpU1 , helpU2];
             v = [helpV1, helpV2];
@@ -89,7 +85,7 @@ export function goGoNewton(best) {
          updateIn2Visualisation(cuttingCurve.id, u[1], v[1]);
        // if(j1 > 60)
         addPoint(p1.x, p1.y, p1.z, "Orange");
-        //addPoint(p2.x, p2.y, p2.z, "Orange");
+        addPoint(p2.x, p2.y, p2.z, "Blue");
         if(u[0] + 1.2 < uStart[0] || u[1] + 1.2 < uStart[1] || v[0] - 1 > vStart[0] || v[1] - 1 > vStart[1]) {
             setInterpolationState(false);
         }
@@ -97,16 +93,12 @@ export function goGoNewton(best) {
     }
     setInterpolationState(false);
  }
- function makeAbs(uv) {
-     console.log(uv);
-    //  if(uv - 1 > - 0.1) {
-    //      return 0.2;
-    //  }
-    //  if(uv + 1 < 0.9) {
-    //      return 0.8;
-    //  }
-     return uv;
+ function notInRange(u, v, ob) {
+     return (u[0] < 0 || u[1] < 0 || v[0] < 0 || v[1] < 0 || u[0] >= ob[0].width || u[1] >= ob[1].width || v[0] >= ob[0].height  || v[1] >= ob[1].height );
  }
+function updateCylinder(u, v) {
+
+}
 function updateBoundry(bestNewSolution) {
 
 }

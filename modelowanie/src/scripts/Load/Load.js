@@ -49,9 +49,9 @@ export function Load() {
         });
     });
     turnOffAllStates();
-    json.surfacesC0.forEach(surface => {// cylinder - TODO
+    json.surfacesC0.forEach(surface => {
         setAddingSurfaceState(true);
-        let _surface = addSurface(surface.flakeU, surface.flakeV, false, surface.u, surface.v, "C0");
+        let _surface = addSurface(surface.flakeU, surface.flakeV, surface.cylinder, surface.u, surface.v, "C0");
         _surface.pointsMap = [];
         surface.points.forEach(pointRow => {
             _surface.pointsMap.push([]);

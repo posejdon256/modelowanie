@@ -3,7 +3,7 @@ import { getVectorLength, DiffPoints, scalarMultiply, MultiplyPoint } from "../.
 import { getCursor } from "../Cursor/Cursor";
 import { addPoint } from "../Points/Points";
 import Redraw from "../Draw/Redraw";
-import { getSurfaces, EvaluateSurface, EvaluateSurfaceDU, EvaluateSurfaceDV } from "../Surface/Surface";
+import { getSurfaces, EvaluateSurface, EvaluateSurfaceDU, EvaluateSurfaceDV, EvaluateSurfaceC2 } from "../Surface/Surface";
 import { goGoNewton } from "./NewtonMethod";
 
 function findIntersection(_objects) {
@@ -14,6 +14,11 @@ function findIntersection(_objects) {
         point1: {},
         point2: {}
     };
+    // const p1A = evaluate(_objects[0], 0.99, 0.0);
+    // const p2A = evaluate(_objects[1], 0.99, 0.0);
+    // addPoint(p1A.x, p1A.y, p1A.z, "Orange");
+    // addPoint(p2A.x, p2A.y, p2A.z, "Orange")
+    // return;
     const sizes = getSizes(_objects);
     for(let i = 0.0; i < sizes.o1x; i += 1.0/interation) {
         for(let j = 0.0; j < sizes.o1y; j += 1.0/interation) {
@@ -144,7 +149,10 @@ export function findObjectToIntersectionAndIntersection(){
 export function evaluate(object, u, v) {
     if(object.type === "torus") {
        return EvaluateTorus(object.id, u, v);
-    } else if(object.type === "C0") {
+    } else if(object.type === "C2") {
+        return EvaluateSurfaceC2(object.id, u, v);
+    }
+    else if(object.type === "C0") {
         return EvaluateSurface(object.id, u, v);
     }
 }
@@ -154,11 +162,17 @@ export function evaluateDU(object, u, v) {
     } else if(object.type === "C0") {
         return EvaluateSurfaceDU(object.id, u, v);
     }
+    else if(object.type === "C2") {
+        return EvaluateSurfaceDU(object.id, u, v);
+    }
 }
 export function evaluateDV(object, u, v) {
     if(object.type === "torus") {
        return EvaluateTorusDV(object.id, u, v);
     } else if(object.type === "C0") {
+        return EvaluateSurfaceDV(object.id, u, v);
+    }
+    else if(object.type === "C2") {
         return EvaluateSurfaceDV(object.id, u, v);
     }
 }

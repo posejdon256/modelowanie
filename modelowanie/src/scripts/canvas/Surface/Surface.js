@@ -6,7 +6,7 @@ import { removeCurveWithourRedraw } from "../Bezier/Curve";
 import { turnOffAllStates } from "../StatesCenter/StatesCenter";
 import { makeSurfaceC2 } from "./SurfaceC2/SurfaceC2";
 import { addBezierCurve } from "../Bezier/Bezier";
-import { addBsplineCurve } from "../Bezier/BSpline";
+import { addBsplineCurve, rebuildVirtualPoints } from "../Bezier/BSpline";
 import { updateCursor } from "../Cursor/Cursor";
 import { CatchPoint, RemoveCatchPoint } from "../Move/MoveCursor";
 import { getGrzegorzys } from "../Gregory/Gregory";
@@ -250,13 +250,35 @@ export function EvaluateSurface(id, u, v) {
     const _u1 =  u - Math.floor(u);
     const _v1 = v - Math.floor(v) ;
     if(u < 0 ||  v < 0 || isNaN(v) || isNaN(u)) {
-        alert("Problem z evalem");
-        //console.log(_u, _v);
+        console.log("Problem z evalem "+ u + " " + v);
         return {x: 1, y: 0, z: 0};
     }
     const knots = [];
     for(let i = 0; i < 4; i ++) {
         knots.push(deCastiljau(_u1, s.pointsMap[_u + i][_v + 0], s.pointsMap[_u + i][_v + 1], s.pointsMap[_u + i][_v + 2], s.pointsMap[_u + i][_v + 3]));
+    }
+    return deCastiljau(_v1, knots[0], knots[1], knots[2], knots[3]);
+}
+export function EvaluateSurfaceC2(id, u, v) {
+    const s = surfaces.find(x => x.id === id);
+    const _u = Math.floor(v) * 3;
+    const _v = Math.floor(u) * 3;
+    const _u1 =  u - Math.floor(u);
+    const _v1 = v - Math.floor(v) ;
+    let j;
+    for(j = (s.cylinder ? s.height + 3 : s.width  + 3);
+        j < s.curves.length;
+        j ++) {
+        rebuildVirtualPoints(s.curves[j].id);
+   }
+   if(u < 0 ||  v < 0 || isNaN(v) || isNaN(u)) {
+    console.log("Problem z evalem "+ u + " " + v);
+    return {x: 1, y: 0, z: 0};
+    }   
+   const map = s.pointsMap;
+   const knots = [];
+   for(j = 0; j < 4; j ++) {
+        knots.push(deCastiljau(_u + j / 3, map[_u + 2][_v + 2].virtualPoints[0], map[_u + 2][_v + 2].virtualPoints[1], map[_u + 2][_v].virtualPoints[2], map[_u + 3][_v + 2].virtualPoints[0]));
     }
     return deCastiljau(_v1, knots[0], knots[1], knots[2], knots[3]);
 }
