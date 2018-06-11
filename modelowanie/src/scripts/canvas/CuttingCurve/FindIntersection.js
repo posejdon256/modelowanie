@@ -1,7 +1,6 @@
 import { EvaluateTorus, getToruses, EvaluateTorusDU, EvaluateTorusDV } from "../Torus/Torus";
 import { getVectorLength, DiffPoints, scalarMultiply, MultiplyPoint, TryParseFloat } from "../../Helpers/Helpers";
 import { getCursor } from "../Cursor/Cursor";
-import { addPoint } from "../Points/Points";
 import Redraw from "../Draw/Redraw";
 import { getSurfaces }  from  "../Surface/Surface";
 import { EvaluateSurface, EvaluateSurfaceDU, EvaluateSurfaceDV, EvaluateSurfaceC2, EvaluateSurfaceC2DU, EvaluateSurfaceC2DV } from "../Surface/EvaluateSurface";
@@ -19,15 +18,6 @@ function findIntersection(_objects) {
         point1: {},
         point2: {}
     };
-    // let p1A = evaluate(_objects[0], 0.0, 0.0);
-    // let p2A = evaluate(_objects[1], 0.0, 0.0);
-    // addPoint(p1A.x, p1A.y, p1A.z, "Orange");
-    // addPoint(p2A.x, p2A.y, p2A.z, "Orange")
-    // p1A = evaluate(_objects[0], 0.99, 0.99);
-    // p2A = evaluate(_objects[1], 0.99, 0.99);
-    // addPoint(p1A.x, p1A.y, p1A.z, "Blue");
-    // addPoint(p2A.x, p2A.y, p2A.z, "Blue")
-    // return;
     const sizes = getSizes(_objects);
     for(let i = 0.0; i < sizes.o1x; i += 1.0/interation) {
         for(let j = 0.0; j < sizes.o1y; j += 1.0/interation) {
@@ -42,20 +32,11 @@ function findIntersection(_objects) {
                         best.point2 = {u: k, v: m};
                         best.lenght = _lenght;
                     }
-                        //  const p1 = evaluate(_objects[0], best.point1.u, best.point1.v);
-                        //  const p2 = evaluate(_objects[1], best.point2.u, best.point2.v);
-                        //  addPoint(p1.x, p1.y, p1.z, "Orange");P
-                        //  addPoint(p2.x, p2.y, p2.z, "Orange")
                 }
             }
         }
     }
-     const p1 = evaluate(_objects[0], best.point1.u, best.point1.v);
-     const p2 = evaluate(_objects[1], best.point2.u, best.point2.v);
-     addPoint(p1.x, p1.y, p1.z, "Orange");
-     addPoint(p2.x, p2.y, p2.z, "Orange");
     return countGradientMethod(_objects[0], _objects[1], best);
-   // Redraw();
 }
 function getSizes(_objects) {
     const sizes = {};
@@ -71,8 +52,6 @@ function countGradientMethod(ob1, ob2, best){
     let v = [best.point1.v, best.point2.v];
     let p1 = evaluate(ob1, u[0], v[0]);
     let p2 = evaluate(ob2, u[1], v[1]);
-    addPoint(p1.x, p1.y, p1.z, "Orange");
-    addPoint(p2.x, p2.y, p2.z, "Orange");
     const eps = 0.001;
     let i = 0;
     while(getVectorLength(p1, p2) > eps) {
@@ -97,8 +76,6 @@ function countGradientMethod(ob1, ob2, best){
         }
         p1 = evaluate(ob1, u[0], v[0]);
         p2 = evaluate(ob2, u[1], v[1]);
-        addPoint(p1.x, p1.y, p1.z, "sfdsdfsdf");
-        addPoint(p2.x, p2.y, p2.z, "sfdsdfsdf");
         const uPrev = u;
         const vPrev = v;
 

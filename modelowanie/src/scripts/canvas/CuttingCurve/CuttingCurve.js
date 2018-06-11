@@ -4,14 +4,6 @@ const size = 250.0;
 export function addCuttingCurve(iCurve) {
     const intersectionVisualization1 = [];
     const intersectionVisualization2 = [];
-    for(let i = 0; i < size; i ++) {
-        intersectionVisualization1.push([]);
-        intersectionVisualization2.push([]);
-        for(let j = 0; j < size; j ++) {
-            intersectionVisualization1[i].push(0);
-            intersectionVisualization2[i].push(0);
-        }
-    }
     const curve = {
         id: numberOfIntersections,
         name: "Intersection curve " + numberOfIntersections,
@@ -24,23 +16,31 @@ export function addCuttingCurve(iCurve) {
 }
 export function updateIn1Visualisation(id, u, v) {
     const curve = curves.find(x => x.id === id);
+    if(u.break) {
+        curve.intersectionVisualization1.push({break: true});
+        return;
+    }
     const _u = (parseInt(u * size, 10) + size) % size;
     const _v = (parseInt(v * size, 10) + size) % size;
     if(_u < 0 || _v < 0) {
         console.log(u, v);
         return;
     }
-    curve.intersectionVisualization1[_u][_v] = size;
+    curve.intersectionVisualization1.push({u: _u, v: _v});
 }
 export function updateIn2Visualisation(id, u, v) {
     const curve = curves.find(x => x.id === id);
+    if(u.break) {
+        curve.intersectionVisualization2.push({break: true});
+        return;
+    }
     const _u = (parseInt(u * size, 10) + size) % size;
     const _v = (parseInt(v * size, 10) + size) % size;
     if(_u < 0 || _v < 0){
         console.log(u, v);
         return;
     }
-    curve.intersectionVisualization2[_u][_v] = size;
+    curve.intersectionVisualization2.push({u: _u, v: _v});
 }
 export function removeCuttingCurve() {
 

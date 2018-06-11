@@ -11,22 +11,36 @@ export function setVisualisationCanvases(c1, c2) {
 export function RedrawVisualization() {
     const ctx1 = canvas1.getContext("2d");
     const ctx2 = canvas2.getContext("2d");
+    ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+    ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
     img1 = ctx1.getImageData(0, 0, canvas1.width, canvas1.height);
+    ctx1.beginPath();
+    ctx2.beginPath();
+    ctx1.strokeStyle="#FF0000";
+    ctx2.strokeStyle="#FF0000";
     img2 = ctx2.getImageData(0, 0, canvas2.width, canvas2.height);
     const curve = getCuttingCurves()[0];
     const size = getCuttingCurvesSize();
-    for(let i = 0; i < size; i ++) {
-        for(let j = 0; j < size; j ++) {
-            const col1 = curve.intersectionVisualization1[i][j];
-            const col2 = curve.intersectionVisualization2[i][j];
-            const rgb1 = {r: col1, g: col1, b: col1};
-            const rgb2 = {r: col2, g: col2, b: col2};
-            img1 = drawPixel(i, j, img1, ctx1, rgb1);
-            img2 = drawPixel(i, j, img2, ctx2, rgb2);
+    ctx1.moveTo(curve.intersectionVisualization1[0].u, curve.intersectionVisualization1[0].v);
+    ctx2.moveTo(curve.intersectionVisualization2[0].u, curve.intersectionVisualization2[0].v);
+    for(let i = 1; i < curve.intersectionVisualization1.length; i ++) {
+        if(curve.intersectionVisualization1[i].break) {
+            ctx1.moveTo(curve.intersectionVisualization1[0].u, curve.intersectionVisualization1[0].v);
+        } else {
+            ctx1.lineTo(curve.intersectionVisualization1[i].u, curve.intersectionVisualization1[i].v);
         }
     }
-    ctx1.putImageData(img1, 0, 0);  
-    ctx2.putImageData(img2, 0, 0);  
+    for(let i = 1; i < curve.intersectionVisualization2.length; i ++) {
+        if(curve.intersectionVisualization1[i].break) {
+            ctx2.moveTo(curve.intersectionVisualization2[0].u, curve.intersectionVisualization2[0].v);
+        } else {
+            ctx2.lineTo(curve.intersectionVisualization2[i].u, curve.intersectionVisualization2[i].v);
+        }
+    }
+    ctx1.lineTo(curve.intersectionVisualization1[0].u, curve.intersectionVisualization1[0].v);
+    ctx2.lineTo(curve.intersectionVisualization2[0].u, curve.intersectionVisualization2[0].v);
+    ctx1.stroke();
+    ctx2.stroke();
 }
 function drawPixel(x, y, img, ctx, rgb) {
     const place = (parseInt((y), 10)* canvas1.width * 4) + (parseInt(x, 10) * 4);

@@ -10,7 +10,7 @@ import { getCurvesControlPoints, addCurveBySelectedPoints } from '../canvas/Bezi
 import { updateSelectedPoints } from '../canvas/Points/Points';
 import { uniteTwoPoints } from '../canvas/Gregory/Claps';
 import { setIntersectionStep } from '../canvas/CuttingCurve/FindIntersection';
-import { setNewtonAlpa } from '../canvas/CuttingCurve/NewtonMethod';
+import { setNewtonAlpa, setFinalEpsilon } from '../canvas/CuttingCurve/NewtonMethod';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -27,6 +27,7 @@ export default class Navbar extends Component {
         this.uniteTwoPoints = this.uniteTwoPoints.bind(this);
         this.setIntersectionStep = this.setIntersectionStep.bind(this);
         this.setNewton = this.setNewton.bind(this);
+        this.setFinalEpsilon = this.setFinalEpsilon.bind(this);
         const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
@@ -81,6 +82,9 @@ export default class Navbar extends Component {
     }
     setNewton(event) {
         setNewtonAlpa(event.target.value);
+    }
+    setFinalEpsilon(event) {
+        setFinalEpsilon(event.target.value);
     }
     uniteTwoPoints() {
         uniteTwoPoints();
@@ -140,7 +144,7 @@ export default class Navbar extends Component {
             </div>
             <div>
                 <label>Ustaw Epsilon warunku końcowego:</label>
-                <input type="text" onChange={this.setNewton}/>
+                <input type="text" onChange={this.setFinalEpsilon}/>
             </div>
             <ListPointsInCurve points={this.state.curvePoints} />
             <div>

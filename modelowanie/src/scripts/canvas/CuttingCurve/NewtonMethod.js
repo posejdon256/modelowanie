@@ -8,13 +8,17 @@ import { findNewNewtonPoint } from "./Jacobi";
 
 
 let alpha = 0.002;
+let finalEpsilon = 0.01;
 export function setNewtonAlpa(_alpha) {
     alpha = TryParseFloat(_alpha, alpha);
+}
+export function setFinalEpsilon(_eps) {
+    finalEpsilon = TryParseFloat(_eps, finalEpsilon);
 }
 export function goGoNewton(best) {
     const interpolation = addInterpolationCurve();
     const cuttingCurve = addCuttingCurve(interpolation);
-    //setInterpolationState(true);
+    setInterpolationState(true);
     let {ob1, ob2, u, v} = best;
     const ob = [ob1, ob2];
     const uStart = [u[0], u[1]];
@@ -23,15 +27,11 @@ export function goGoNewton(best) {
     let uPrev = [uStart[0], uStart[1]];
     let vPrev = [vStart[0], vStart[1]];
     let betterPoint;
-    let p1A = evaluate(ob[0], 0, 0);
-    let p2A = evaluate(ob[1], 0, 0);
-    addPoint(p1A.x, p1A.y, p1A.z, "Blue");
-    addPoint(p2A.x, p2A.y, p2A.z, "Blue");
-    // p1A = evaluate(ob[0], 1, 0.99);
-    // p2A = evaluate(ob[1], 1, 0.99);
-    // addPoint(p1A.x, p1A.y, p1A.z, "Blue");
-    // addPoint(p2A.x, p2A.y, p2A.z, "Blue");
-    for(let j1= 0; j1 < 200; j1 ++) {
+    let backed = false;
+    let pStart = evaluate(ob[0], uStart[0], vStart[0]);
+    let notFinishYet = 0;
+    let j1 = 0;
+    while(true) {
         for(let i = 0; i < 4; i ++) {
             try{
                 betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, alpha);
@@ -49,12 +49,16 @@ export function goGoNewton(best) {
             console.log(helpU1, helpU2, helpV1, helpV2);
             if((notInRange([helpU1, helpU2], [helpV1, helpV2], ob) && ob1.type !== "torus" && !ob1.cylinder && !ob2.cylinder) ||
             (notInVRange([helpV1, helpV2], ob) && (ob1.cylinder || ob2.cylinder))) {
-           // {
-                    alpha = -alpha;          
+                    alpha = -alpha;  
+                    if(!backed)    
+                        notFinishYet = 0;   
                     u = [uStart[0], uStart[1]];
                     v = [vStart[0], vStart[1]];
                     uPrev = [uStart[0], uStart[1]];
                     vPrev = [vStart[0], vStart[1]];
+                    updateIn1Visualisation(cuttingCurve.id, {break: true});
+                    updateIn2Visualisation(cuttingCurve.id, {break: true});
+                    backed = true; 
                     continue;
             }
             lastU = [u[0], u[1]];
@@ -62,33 +66,24 @@ export function goGoNewton(best) {
             u = [helpU1 , helpU2];
             v = [helpV1, helpV2];
 
-            const ev1 = evaluate(ob[0], lastU[0], lastV[0]);
-            const ev2 = evaluate(ob[1], lastU[1], lastV[1]);
-            const ev1New = evaluate(ob[0], u[0], v[0]);
-            const ev2New = evaluate(ob[1], u[1], v[1]);
-            // if(getVectorLength(ev1, ev2) < getVectorLength(ev1New, ev2New) && j1 !== 0 && i !== 0) {
-            //     alpha /= 2;
-            // }
-            const p1 = evaluate(ob1, u[0], v[0]);
-            const p2 = evaluate(ob2, u[1], v[1]);
-            addPoint(p1.x, p1.y, p1.z, "Blue");
-
         }
         uPrev = [u[0], u[1]];
         vPrev = [v[0], v[1]];
         const p1 = evaluate(ob1, u[0], v[0]);
-        const p2 = evaluate(ob2, u[1], v[1]);
 
-         updateIn1Visualisation(cuttingCurve.id, u[0], v[0]);
-         updateIn2Visualisation(cuttingCurve.id, u[1], v[1]);
-       // if(j1 > 60)
-        addPoint(p1.x, p1.y, p1.z, "Orange");
-        addPoint(p2.x, p2.y, p2.z, "Blue");
-        if(u[0] + 1.2 < uStart[0] || u[1] + 1.2 < uStart[1] || v[0] - 1 > vStart[0] || v[1] - 1 > vStart[1]) {
-            setInterpolationState(false);
+        updateIn1Visualisation(cuttingCurve.id, ob[0].type === "torus" ? u[0] :  u[0] / ob[0].width, ob[0].type === "torus" ? v[0] : v[0] / ob[0].height);
+        updateIn2Visualisation(cuttingCurve.id, ob[1].type === "torus" ? u[1] : u[1] / ob[1].width, ob[1].type === "torus" ? v[1] : v[1] / ob[1].height);
+        addPoint(p1.x, p1.y, p1.z, "Newton");
+        if(finalEpsilon > getVectorLength(pStart, p1) && notFinishYet > 20) {
+            break;
         }
-       // addPoint(p2.x, p2.y, p2.z, "sfdsdfsdf");
+        if(j1 > 2000) {
+            break;
+        }
+        notFinishYet ++;
+        j1 ++;
     }
+    addPoint(pStart.x, pStart.y, pStart.z, "Newton");
     setInterpolationState(false);
  }
  function notInRange(u, v, ob) {
