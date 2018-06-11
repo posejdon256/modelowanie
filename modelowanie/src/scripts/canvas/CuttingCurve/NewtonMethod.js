@@ -1,11 +1,16 @@
 import { EvaluateTorusNormal } from "../Torus/Torus";
-import { crossMultiply, SumPoints, DividePoint, scalarMultiply, DiffPoints, MultiplyPoint, getVectorLength } from "../../Helpers/Helpers";
+import { crossMultiply, SumPoints, DividePoint, scalarMultiply, DiffPoints, MultiplyPoint, getVectorLength, TryParseFloat } from "../../Helpers/Helpers";
 import { addPoint } from "../Points/Points";
 import { evaluate, evaluateDU, evaluateDV } from "./FindIntersection";
 import { addInterpolationCurve, setInterpolationState } from "../Bezier/Interpolation";
 import { addCuttingCurve, updateIn1Visualisation, updateIn2Visualisation } from "./CuttingCurve";
 import { findNewNewtonPoint } from "./Jacobi";
 
+
+let alpha = 0.002;
+export function setNewtonAlpa(_alpha) {
+    alpha = TryParseFloat(_alpha, alpha);
+}
 export function goGoNewton(best) {
     const interpolation = addInterpolationCurve();
     const cuttingCurve = addCuttingCurve(interpolation);
@@ -18,8 +23,15 @@ export function goGoNewton(best) {
     let uPrev = [uStart[0], uStart[1]];
     let vPrev = [vStart[0], vStart[1]];
     let betterPoint;
-    let alpha = 0.002;
-    for(let j1= 0; j1 < 1000; j1 ++) {
+    let p1A = evaluate(ob[0], 0, 0);
+    let p2A = evaluate(ob[1], 0, 0);
+    addPoint(p1A.x, p1A.y, p1A.z, "Blue");
+    addPoint(p2A.x, p2A.y, p2A.z, "Blue");
+    // p1A = evaluate(ob[0], 1, 0.99);
+    // p2A = evaluate(ob[1], 1, 0.99);
+    // addPoint(p1A.x, p1A.y, p1A.z, "Blue");
+    // addPoint(p2A.x, p2A.y, p2A.z, "Blue");
+    for(let j1= 0; j1 < 200; j1 ++) {
         for(let i = 0; i < 4; i ++) {
             try{
                 betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, alpha);
@@ -35,7 +47,9 @@ export function goGoNewton(best) {
             let helpV1 = v[0] - betterPoint[1];
             let helpV2 = v[1] - betterPoint[3]; 
             console.log(helpU1, helpU2, helpV1, helpV2);
-            if(notInRange([helpU1, helpU2], [helpV1, helpV2], ob) && ob1.type !== "torus" && !ob1.cylinder) {
+            if((notInRange([helpU1, helpU2], [helpV1, helpV2], ob) && ob1.type !== "torus" && !ob1.cylinder && !ob2.cylinder) ||
+            (notInVRange([helpV1, helpV2], ob) && (ob1.cylinder || ob2.cylinder))) {
+           // {
                     alpha = -alpha;          
                     u = [uStart[0], uStart[1]];
                     v = [vStart[0], vStart[1]];
@@ -43,23 +57,8 @@ export function goGoNewton(best) {
                     vPrev = [vStart[0], vStart[1]];
                     continue;
             }
-            if(notInRange([helpU1, helpU2], [helpV1, helpV2], ob) && ob1.cylinder) {
-                helpU1 = helpU1 < 0 ? helpU1 + ob[0].width : helpU1;
-                helpU2 = helpU2 < 0 ? helpU2 + ob[1].width : helpU2;
-                helpV1 = helpV1 < 0 ? helpV1 + ob[0].height : helpV1;
-                helpV2 = helpV2 < 0 ? helpV2 + ob[1].height : helpV2;
-
-                helpU1 = helpU1 > ob[0].width ? helpU1 - ob[0].width : helpU1;
-                helpU2 = helpU2 > ob[1].width ? helpU2 - ob[1].width : helpU2;
-                helpV1 = helpV1 > ob[0].height ? helpV1 - ob[0].height : helpV1;
-                helpV2 = helpV2 > ob[1].height ? helpV2 - ob[1].height : helpV2;
-                u = [helpU1 , helpU2];
-                v = [helpV1, helpV2];
-            } else {
-                lastU = [u[0], u[1]];
-                lastV = [v[0], v[1]];
-            }
-           // }
+            lastU = [u[0], u[1]];
+            lastV = [v[0], v[1]];
             u = [helpU1 , helpU2];
             v = [helpV1, helpV2];
 
@@ -67,13 +66,12 @@ export function goGoNewton(best) {
             const ev2 = evaluate(ob[1], lastU[1], lastV[1]);
             const ev1New = evaluate(ob[0], u[0], v[0]);
             const ev2New = evaluate(ob[1], u[1], v[1]);
-            if(getVectorLength(ev1, ev2) < getVectorLength(ev1New, ev2New) && j1 !== 0 && i !== 0) {
-                alpha /= 2;
-            }
+            // if(getVectorLength(ev1, ev2) < getVectorLength(ev1New, ev2New) && j1 !== 0 && i !== 0) {
+            //     alpha /= 2;
+            // }
             const p1 = evaluate(ob1, u[0], v[0]);
             const p2 = evaluate(ob2, u[1], v[1]);
-            //if(j1 > 60)
-              //  addPoint(p1.x, p1.y, p1.z, "Orange");
+            addPoint(p1.x, p1.y, p1.z, "Blue");
 
         }
         uPrev = [u[0], u[1]];
@@ -95,6 +93,12 @@ export function goGoNewton(best) {
  }
  function notInRange(u, v, ob) {
      return (u[0] < 0 || u[1] < 0 || v[0] < 0 || v[1] < 0 || u[0] >= ob[0].width || u[1] >= ob[1].width || v[0] >= ob[0].height  || v[1] >= ob[1].height );
+ }
+ function notInURange(u, ob) {
+    return (u[0] < 0 || u[1] < 0 || u[0] >= ob[0].width || u[1] >= ob[1].width);
+ }
+ function notInVRange(v, ob) {
+    return (v[0] < 0 || v[1] < 0 || v[0] >= ob[0].height || v[1] >= ob[1].height);
  }
 function updateCylinder(u, v) {
 

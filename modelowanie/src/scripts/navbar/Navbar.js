@@ -9,6 +9,8 @@ import { setAddingC2Type } from '../canvas/Bezier/BSpline';
 import { getCurvesControlPoints, addCurveBySelectedPoints } from '../canvas/Bezier/Curve';
 import { updateSelectedPoints } from '../canvas/Points/Points';
 import { uniteTwoPoints } from '../canvas/Gregory/Claps';
+import { setIntersectionStep } from '../canvas/CuttingCurve/FindIntersection';
+import { setNewtonAlpa } from '../canvas/CuttingCurve/NewtonMethod';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -23,6 +25,8 @@ export default class Navbar extends Component {
         this.updateSelectedPoints = this.updateSelectedPoints.bind(this);
         this.setCursorToStart = this.setCursorToStart.bind(this);
         this.uniteTwoPoints = this.uniteTwoPoints.bind(this);
+        this.setIntersectionStep = this.setIntersectionStep.bind(this);
+        this.setNewton = this.setNewton.bind(this);
         const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
@@ -72,6 +76,12 @@ export default class Navbar extends Component {
     setCursorToStart() {
         setCursor(0,0,0, true);// with redraw
     }
+    setIntersectionStep(event) {
+        setIntersectionStep(event.target.value);
+    }
+    setNewton(event) {
+        setNewtonAlpa(event.target.value);
+    }
     uniteTwoPoints() {
         uniteTwoPoints();
     }
@@ -119,6 +129,18 @@ export default class Navbar extends Component {
                     </div>
                 </div>
                 <button onClick={this.updateSelectedPoints}>Zamień</button>
+            </div>
+            <div>
+                <label>Ustaw krok znajdowania przecięcia:</label>
+                <input type="text" onChange={this.setIntersectionStep}/>
+            </div>
+            <div>
+                <label>Ustaw krok Newtona:</label>
+                <input type="text" onChange={this.setNewton}/>
+            </div>
+            <div>
+                <label>Ustaw Epsilon warunku końcowego:</label>
+                <input type="text" onChange={this.setNewton}/>
             </div>
             <ListPointsInCurve points={this.state.curvePoints} />
             <div>

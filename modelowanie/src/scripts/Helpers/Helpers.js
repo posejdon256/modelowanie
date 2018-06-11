@@ -96,3 +96,6 @@ export function crossMultiply(v1, v2) {
         z: v1.x * v2.y - v1.y * v2.x
     }
 }
+export function longVectorScalar(a, b) {
+    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
+}
