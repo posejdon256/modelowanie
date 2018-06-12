@@ -1,6 +1,6 @@
 import { getSurfaces } from "./Surface";
 import { deCastiljau, deCastiljau3 } from "../Bezier/DeCastiljau";
-import { MultiplyPoint, DiffPoints, scalarMultiply, longVectorScalar } from "../../Helpers/Helpers";
+import { MultiplyPoint, DiffPoints, longVectorScalar } from "../../Helpers/Helpers";
 import { multiplyVectorAndMatrix } from "../../MatrixOperations/Multiply/Multiply";
 
 function CurveC2Evaluate(x) {

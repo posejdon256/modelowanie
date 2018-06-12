@@ -11,7 +11,7 @@ import { updateSelectedPoints } from '../canvas/Points/Points';
 import { uniteTwoPoints } from '../canvas/Gregory/Claps';
 import { setIntersectionStep } from '../canvas/CuttingCurve/FindIntersection';
 import { setNewtonAlpa, setFinalEpsilon } from '../canvas/CuttingCurve/NewtonMethod';
-import { setOneProjectionPointState } from '../canvas/CuttingCurve/Projection';
+import { setOneProjectionPointState, setFirstNewtonIt } from '../canvas/CuttingCurve/Projection';
 import { setLocekdCamrea } from '../canvas/Move/Move';
 
 export default class Navbar extends Component {
@@ -32,6 +32,7 @@ export default class Navbar extends Component {
         this.setFinalEpsilon = this.setFinalEpsilon.bind(this);
         this.setOneProjectionPointState = this.setOneProjectionPointState.bind(this);
         this.lockUnlockCamera = this.lockUnlockCamera.bind(this);
+        this.showNewtonIt = this.showNewtonIt.bind(this);
         const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
@@ -99,6 +100,9 @@ export default class Navbar extends Component {
     lockUnlockCamera(event) {
         setLocekdCamrea(event.target.checked);
     }
+    showNewtonIt(event) {
+        setFirstNewtonIt(event.target.checked);
+    }
     render(){
         return(
         <div className="ab-navbar">
@@ -107,7 +111,7 @@ export default class Navbar extends Component {
             </div>
             <div>
                 <label>Zablokuj/Odblokuj kamerę:</label>
-                <input type="checkbox" onChange={this.lockUnlockCamera}/>
+                <input type="checkbox" onChange={this.lockUnlockCamera} defaultChecked={true}/>
             </div>
             <div>
                 <label>Siatka pozioma</label>
@@ -164,6 +168,10 @@ export default class Navbar extends Component {
                 <div>
                     <label>Włącz/wyłącz podgląd ze znajdowaniem punktu przecięcia:</label>
                     <input type="checkbox" onChange={this.setOneProjectionPointState}/>
+                </div>
+                <div>
+                    <label>Włącz/wyłącz widok pierwszych 20 iteracji Newtona:</label>
+                    <input type="checkbox" onChange={this.showNewtonIt} defaultChecked={true}/>
                 </div>
             </div>
             <ListPointsInCurve points={this.state.curvePoints} />

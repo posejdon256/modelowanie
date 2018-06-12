@@ -1,16 +1,9 @@
 import { findConnection, findPoint1Array } from "./Connection";
 import { getSurfaces } from "../Surface/Surface";
-import { DiffPoints, SumPoints, DividePoint, MultiplyPoint, UpdatePointsForCanvas } from "../../Helpers/Helpers";
-import { addPoint } from "../Points/Points";
-import { DrawGregoryVector } from "../Draw/DrawGregory/DrawGregory";
-import { countBerstainNAfterI, getBezierPoints } from "../Bezier/Bezier";
-import { multiplyVectorAndMatrix } from "../../MatrixOperations/Multiply/Multiply";
-import { deCastiljau } from "../Bezier/DeCastiljau";
+import { DiffPoints, SumPoints, DividePoint, MultiplyPoint } from "../../Helpers/Helpers";
 import Redraw from "../Draw/Redraw";
-import { getContexts, drawLine } from "../Draw/Draw";
-import Translate, { setTranslationPoints } from "../Translation/TranslationCenter/TranslationCenter";
 import { countK0AndH0 } from "./Determinant";
-import { findAB, findP3, findCenter, findQ, getF0, getF1, getF2, getF3, findP1, getPartialGregoryPoints } from "./Helper";
+import { findAB, findP3, findCenter, findQ, findP1, getPartialGregoryPoints } from "./Helper";
 
 let GregoryVectors = [];
 const Gregories = [];
@@ -181,11 +174,6 @@ export function createSmallPatch(P, vv, ia1, ia2, u, v) {
     preG[3].push(vv[1]);
     preG[3].push(P[2]);
     GregoryPoints = GregoryPoints.concat(getPartialGregoryPoints(preG, aPrim, bPrim, cPrim, dPrim, u, v));
-}
-function getf0(a1, a2, b1, b2, number) {
-    const g0 = SumPoints(a1, a2);
-    const g1 = SumPoints(b1, b2);
-    return MultiplyPoint(SumPoints(g0, g1), number);
 }
 function getBezier2(v) {
     const ret = [];

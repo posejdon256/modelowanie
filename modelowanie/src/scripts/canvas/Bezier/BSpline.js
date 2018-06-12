@@ -176,9 +176,6 @@ export function getSplinePoints() {
 }
 export function getBSplinePointsFromKnots(knots) {
         const points = knots;
-        const len = points.length - 1;
-       // points[0] = {x : points[0].x + ((points[1].x - points[0].x) / 3), y: points[0].y + ((points[1].y - points[0].y) / 3), z: points[0].z + ((points[1].z - points[0].z) / 3)};
-        //points[len] = {x :points[len - 1].x + ((points[len].x - points[len - 1].x) / (3/2)), Y: points[len - 1].y + ((points[len].y - points[len - 1].y) / (3/2)), z: points[len - 1].z + ((points[len].z - points[len - 1].z) / (3/2)) };
         for(let j = 0; j < points.length; j ++) {
             points[j].virtualPoints = [];
             if( j < 1 )

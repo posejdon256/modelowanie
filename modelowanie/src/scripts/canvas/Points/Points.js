@@ -13,7 +13,7 @@ let pointNumber = 1;
 
 export function getPoints(filter){
     if(points.length > 1000) {
-        let promise = new Promise(function(resolve, reject) {
+        new Promise(function(resolve, reject) {
             try {
             for(let i = 0; i < points.length; i ++) {
                 if(points[i].deleted) {

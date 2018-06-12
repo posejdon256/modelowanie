@@ -40,36 +40,13 @@ export function makeSurfaceC0(surface) {
     } else {
          if(surface.direction === 0)
              updateCursor(- 3 * length2 / 8, 0,  0);
-        // else if(surface.direction === 1) {
-        //     updateCursor(- r, - 3 * length2 / 8,  - r);
-        // } else if(surface.direction === 2) {
-        //     updateCursor(-r, -r,  - 3 * length2 / 8);
-        // }
     }
     startCursor = JSON.parse(JSON.stringify(getCursor()));
     for(let i = 0; i < curvesCount; i ++) {
-        const cursorPosition1 = getCursor();
-        let y = startCursor.y;
-        let z = startCursor.z;
-        let x = startCursor.x;
         const curve = addBezierCurve({surface: true}); 
         surface.curves.push(curve);
         for(let j = 0; j < width; j ++) {
             makeFlake(length, j, surface, i);
-        }
-        const cursorPosition2 = getCursor();
-        let xPrim = cursorPosition2.x;
-        let yPrim = cursorPosition2.y;
-        let zPrim = cursorPosition2.z;
-        if(surface.direction === 1) {
-            xPrim = x;
-            zPrim = z;
-        } else if(surface.direction === 2) {
-            xPrim = x;
-            yPrim = y;
-        } else if(surface.direction === 0) {
-            yPrim = y;
-            zPrim = z;
         }
        // setCursor(xPrim, yPrim, zPrim);
         if(surface.direction === 0) {

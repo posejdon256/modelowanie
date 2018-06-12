@@ -3,7 +3,6 @@ import { addPoint } from "../../Points/Points";
 import { addPointToCurve, selectCurve } from "../../Bezier/Curve";
 import { turnOffAllStates } from "../../StatesCenter/StatesCenter";
 import { setAddingC2State, addBsplineCurve, rebuildVirtualPoints } from "../../Bezier/BSpline";
-import Redraw from "../../Draw/Redraw";
 
 let sinus = 0;
 let width;
@@ -43,27 +42,10 @@ export function makeSurfaceC2(surface) {
     }
     startCursor = JSON.parse(JSON.stringify(getCursor()));
     for(let i = 0; i < curvesCount; i ++) {
-        let y = startCursor.y;
-        let z = startCursor.z;
-        let x = startCursor.x;
         const curve = addBsplineCurve({surface: true});
         surface.curves.push(curve);
         for(let j = 0; j < width; j ++) {
             makeFlake(length, j, surface, i);
-        }
-        const cursorPosition2 = getCursor();
-        let xPrim = cursorPosition2.x;
-        let yPrim = cursorPosition2.y;
-        let zPrim = cursorPosition2.z;
-        if(surface.direction === 1) {
-            xPrim = x;
-            zPrim = z;
-        } else if(surface.direction === 2) {
-            xPrim = x;
-            yPrim = y;
-        } else if(surface.direction === 0) {
-            yPrim = y;
-            zPrim = z;
         }
        // setCursor(xPrim, yPrim, zPrim);
         if(surface.direction === 0) {

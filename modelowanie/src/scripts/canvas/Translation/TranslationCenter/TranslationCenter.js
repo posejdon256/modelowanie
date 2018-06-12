@@ -20,7 +20,7 @@ let lastTranslation = [
     [0, 0, 0, 1]
 ];
 export default function Translate(translationObject, type) {
-    const {front, left, top, axisX, axisY, alphaX, alphaY, alphaZ, axisZ} = translationObject;
+    const {front, left, top, axisX, axisY, alphaX, alphaY} = translationObject;
     let translationMatrix = lastTranslation;
     //rotation
     if(axisX) {

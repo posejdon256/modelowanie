@@ -4,7 +4,7 @@ import Translate, { setTranslationPoints } from "../../Translation/TranslationCe
 import { getCanvas, drawLine } from "../Draw";
 import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
 import { deCastiljau } from "../../Bezier/DeCastiljau";
-import { getBSplinePointsFromKnots, rebuildVirtualPoints, rebuildVirtualPointsForSingleCurve } from "../../Bezier/BSpline";
+import { getBSplinePointsFromKnots, rebuildVirtualPointsForSingleCurve } from "../../Bezier/BSpline";
 
 let lastPointsC0 = [];
 let lastPointsC2 = [];

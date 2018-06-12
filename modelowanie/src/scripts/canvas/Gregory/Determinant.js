@@ -1,4 +1,4 @@
-import { DiffPoints } from "../../Helpers/Helpers";
+
 
 export function countK0AndH0(g, c, b) {
     let number = 0;

@@ -7,6 +7,7 @@ import { getVectorLength } from '../../Helpers/Helpers';
 
 let projectionState = false;
 let oneIntersectionPointState = false;
+let showIterations = false;
 export function setProjectionState(_state) {
     projectionState = _state;
 }
@@ -18,6 +19,12 @@ export function getOneProjectionPointState() {
 }
 export function getProjectionState() {
     return projectionState;
+}
+export function setFirstNewtonIt(_state) {
+    showIterations = _state;
+}
+export function getFirstNewtonIt() {
+    return showIterations;
 }
 function findIntersection(_objects) {
     const interation = 10.0;
@@ -39,7 +46,7 @@ function findIntersection(_objects) {
                     const ev2 = evaluate(_objects[1], k, m);
                     const trans = [ev1, ev2];
                     const _lenght = getVectorLength(trans[0], cursor) + getVectorLength(trans[1], cursor);
-                    if(_lenght < best.lenght && (!sameObjects || epsDistance.x < Math.abs(i - k) && epsDistance.y < Math.abs(j - m))) {
+                    if(_lenght < best.lenght && (!sameObjects || (epsDistance.x < Math.abs(i - k) && epsDistance.y < Math.abs(j - m)))) {
                         best.point1 = {u: i, v: j};
                         best.point2 = {u: k, v: m};
                         best.lenght = _lenght;
@@ -93,7 +100,6 @@ export function projectIntersectionPoints(){
     return true;//TODO
 }
 function countGradientMethod(ob1, ob2, best){
-    const interation = 10;
     const intersectionStep = getIntersectionStep();
     let u = [best.point1.u, best.point2.u];
     let v = [best.point1.v, best.point2.v];

@@ -1,8 +1,6 @@
 import { MoveToFront, MoveToLeft, MoveToRight, StopMovingLeft, StopMovingRight, MoveToTop, MoveToBack, StopMovingTop, StopMovingDown, MoveToDown, StopMovingFront, StopMovingBack } from "../Move/Move";
 import { MoveToFrontCursor, MoveToLeftCursor, MoveToTopCursor, MoveToDownCursor, MoveToRightCursor, StopMovingLeftCursor, StopMovingDownCursor, StopMovingRightCursor, StopMovingTopCursor, MoveToBackCursor, StopMovingFrontCursor, StopMovingBackCursor, RemoveCatchPoint, CatchPoint } from '../Move/MoveCursor';
 import { addPointWithRedraw } from "../Points/Points";
-import { makeSurfaceC0 } from "../Surface/SurfaceC0/SurfaaceC0";
-import { createSurface } from "../Surface/Surface";
 export default function KeyboardCenter(event, refresh) {
     if(event.type === 'keydown') {
         KeyDown(event);

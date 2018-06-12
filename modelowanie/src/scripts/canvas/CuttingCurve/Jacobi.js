@@ -1,9 +1,7 @@
 import { evaluateDU, evaluateDV, evaluate } from "./FindIntersection";
-import { MultiplyPoint, crossMultiply, normalize, scalarMultiply, DiffPoints, DividePoint, SumPoints } from "../../Helpers/Helpers";
+import { MultiplyPoint, crossMultiply, normalize, scalarMultiply, DiffPoints} from "../../Helpers/Helpers";
 import math from "mathjs";
 import { multiplyVectorAndMatrix } from "../../MatrixOperations/Multiply/Multiply";
-import Translate, { setTranslationPoints } from "../Translation/TranslationCenter/TranslationCenter";
-import { getContexts, drawLine } from "../Draw/Draw";
 
 function generateJacobi(ob, u, v, uNew, vNew, alpha) {
     let dU1 =  evaluateDU(ob[0], u[0], v[0]);

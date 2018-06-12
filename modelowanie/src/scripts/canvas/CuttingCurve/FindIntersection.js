@@ -1,7 +1,6 @@
 import { EvaluateTorus, getToruses, EvaluateTorusDU, EvaluateTorusDV } from "../Torus/Torus";
-import { getVectorLength, DiffPoints, scalarMultiply, MultiplyPoint, TryParseFloat } from "../../Helpers/Helpers";
+import { getVectorLength, DiffPoints, scalarMultiply, TryParseFloat } from "../../Helpers/Helpers";
 import { getCursor } from "../Cursor/Cursor";
-import Redraw from "../Draw/Redraw";
 import { getSurfaces }  from  "../Surface/Surface";
 import { EvaluateSurface, EvaluateSurfaceDU, EvaluateSurfaceDV, EvaluateSurfaceC2, EvaluateSurfaceC2DU, EvaluateSurfaceC2DV } from "../Surface/EvaluateSurface";
 import { goGoNewton } from "./NewtonMethod";
@@ -34,7 +33,7 @@ function findIntersection(_objects) {
                     const ev2 = evaluate(_objects[1], k, m);
                     const trans = [ev1, ev2];
                     const _lenght = getVectorLength(trans[0], cursor) + getVectorLength(trans[1], cursor);
-                    if(_lenght < best.lenght && (!sameObjects || epsDistance.x < Math.abs(i - k) && epsDistance.y < Math.abs(j - m))) {
+                    if(_lenght < best.lenght && (!sameObjects || (epsDistance.x < Math.abs(i - k) && epsDistance.y < Math.abs(j - m)))) {
                         best.point1 = {u: i, v: j};
                         best.point2 = {u: k, v: m};
                         best.lenght = _lenght;
@@ -54,7 +53,6 @@ function getSizes(_objects) {
     return sizes;
 }
 function countGradientMethod(ob1, ob2, best){
-    const interation = 10;
     let u = [best.point1.u, best.point2.u];
     let v = [best.point1.v, best.point2.v];
     let p1 = evaluate(ob1, u[0], v[0]);

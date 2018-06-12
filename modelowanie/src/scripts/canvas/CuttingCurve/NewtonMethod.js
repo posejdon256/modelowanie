@@ -1,7 +1,6 @@
-import { EvaluateTorusNormal } from "../Torus/Torus";
-import { crossMultiply, SumPoints, DividePoint, scalarMultiply, DiffPoints, MultiplyPoint, getVectorLength, TryParseFloat } from "../../Helpers/Helpers";
+import { getVectorLength, TryParseFloat } from "../../Helpers/Helpers";
 import { addPoint } from "../Points/Points";
-import { evaluate, evaluateDU, evaluateDV } from "./FindIntersection";
+import { evaluate } from "./FindIntersection";
 import { addInterpolationCurve, setInterpolationState } from "../Bezier/Interpolation";
 import { addCuttingCurve, updateIn1Visualisation, updateIn2Visualisation } from "./CuttingCurve";
 import { findNewNewtonPoint } from "./Jacobi";
@@ -22,7 +21,6 @@ export function goGoNewton(best) {
     const ob = [ob1, ob2];
     const uStart = [u[0], u[1]];
     const vStart = [v[0], v[1]];
-    let lastU = [u[0], u[1]], lastV = [v[0], v[1]];
     let uPrev = [uStart[0], uStart[1]];
     let vPrev = [vStart[0], vStart[1]];
     let betterPoint;
@@ -65,8 +63,6 @@ export function goGoNewton(best) {
                     backed = true; 
                     continue;
             }
-            lastU = [u[0], u[1]];
-            lastV = [v[0], v[1]];
             u = [helpU1 , helpU2];
             v = [helpV1, helpV2];
 
@@ -74,9 +70,6 @@ export function goGoNewton(best) {
         uPrev = [u[0], u[1]];
         vPrev = [v[0], v[1]];
         const p1 = evaluate(ob1, u[0], v[0]);
-        const p2 = evaluate(ob2, u[1], v[1]);
-        // addPoint(p1.x, p1.y, p1.z, "Blue");
-        // addPoint(p2.x, p2.y, p2.z, "Orange");
         
         pointsList.push(evaluate(ob1, u[0], v[0]));
 
@@ -116,8 +109,3 @@ export function goGoNewton(best) {
  function notInVRange(v, ob) {
     return (v[0] < 0 || v[1] < 0 || v[0] >= ob[0].height || v[1] >= ob[1].height);
  }
-function evaluateNormal(_ob, u, v) {
-    if(_ob.type === "torus") {
-        return EvaluateTorusNormal(_ob.id, u, v);
-     }
-}

@@ -1,16 +1,12 @@
-import { TryParseInt, TryParseFloat2, TryParseFloat, DiffPoints, MultiplyPoint } from "../../Helpers/Helpers";
+import { TryParseInt, TryParseFloat2, TryParseFloat } from "../../Helpers/Helpers";
 import { makeSurfaceC0 } from "./SurfaceC0/SurfaaceC0";
 import Redraw from "../Draw/Redraw";
-import { removePoint, addPoint } from "../Points/Points";
+import { removePoint } from "../Points/Points";
 import { removeCurveWithourRedraw } from "../Bezier/Curve";
 import { turnOffAllStates } from "../StatesCenter/StatesCenter";
 import { makeSurfaceC2 } from "./SurfaceC2/SurfaceC2";
-import { addBezierCurve } from "../Bezier/Bezier";
-import { addBsplineCurve, rebuildVirtualPoints } from "../Bezier/BSpline";
-import { updateCursor } from "../Cursor/Cursor";
 import { CatchPoint, RemoveCatchPoint } from "../Move/MoveCursor";
 import { getGrzegorzys } from "../Gregory/Gregory";
-import { deCastiljau, deCastiljau3 } from "../Bezier/DeCastiljau";
 
 
 let cylinder = false;
@@ -205,43 +201,6 @@ export function createSurface(type) {
     }
     addingSurface = false;
     Redraw();
-}
-function makeSurface(surface) {
-    for(var i = 0; i < surface.height; i ++) {
-        const curve = surface.type === "C0" ? addBezierCurve({surface: true}) : addBsplineCurve({surface: true});
-        for(let j = 0; j < surface.width; j ++) {
-            if(surface.cylinder) {
-                makeNormalStripes(j, surface);
-            }
-        }
-    }
-}
-function makeNormalStripes(stripeNumber, surface) {
-    const len = surface.absoluteWidth / 4;
-    const d = surface.direction;
-    for(let i = 0; i < 4; i ++) {
-        for(let j = 0; j < 4; j ++) {
-            if(stripeNumber === 0 && i === 0) {
-                addPoint();
-            } else {
-                if(d === 0) {
-                    updateCursor(len, 0, 0);
-                } else if(d == 1) {
-                    updateCursor(0, 0, len)
-                } else {
-                    updateCursor(0, len, 0);
-                }
-                const point = addPoint();
-            }
-        }
-        if(d === 0) {
-            updateCursor(-surface.absoluteWidth, surface.absoluteHeight / 4, 0);
-        } else if(d == 1) {
-            updateCursor(surface.absoluteHeight / 4, 0, -surface.absoluteWidth)
-        } else {
-            updateCursor(0, -surface.absoluteWidth, surface.absoluteHeight / 4);
-        }
-    }
 }
 export function clearSurfaces() {
     surfaces = [];

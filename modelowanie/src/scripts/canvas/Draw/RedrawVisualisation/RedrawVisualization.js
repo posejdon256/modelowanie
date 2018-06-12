@@ -1,7 +1,5 @@
-import { getCuttingCurves, getCuttingCurvesSize } from "../../CuttingCurve/CuttingCurve";
+import { getCuttingCurves } from "../../CuttingCurve/CuttingCurve";
 
-let img1;
-let img2;
 let canvas1;
 let canvas2;
 export function setVisualisationCanvases(c1, c2) {
@@ -13,14 +11,11 @@ export function RedrawVisualization() {
     const ctx2 = canvas2.getContext("2d");
     ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
     ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-    img1 = ctx1.getImageData(0, 0, canvas1.width, canvas1.height);
     ctx1.beginPath();
     ctx2.beginPath();
     ctx1.strokeStyle="#FF0000";
     ctx2.strokeStyle="#FF0000";
-    img2 = ctx2.getImageData(0, 0, canvas2.width, canvas2.height);
     const curve = getCuttingCurves()[0];
-    const size = getCuttingCurvesSize();
     ctx1.moveTo(curve.intersectionVisualization1[0].u, curve.intersectionVisualization1[0].v);
     ctx2.moveTo(curve.intersectionVisualization2[0].u, curve.intersectionVisualization2[0].v);
     for(let i = 1; i < curve.intersectionVisualization1.length; i ++) {
@@ -41,13 +36,4 @@ export function RedrawVisualization() {
     ctx2.lineTo(curve.intersectionVisualization2[0].u, curve.intersectionVisualization2[0].v);
     ctx1.stroke();
     ctx2.stroke();
-}
-function drawPixel(x, y, img, ctx, rgb) {
-    const place = (parseInt((y), 10)* canvas1.width * 4) + (parseInt(x, 10) * 4);
-    img.data[place] = rgb.r;
-    img.data[place + 1] = rgb.g;
-    img.data[place + 2] = rgb.b;
-    img.data[place + 3] = 255
-    return img;
-   // localContext.fillRect( parseInt(x,10), parseInt(y,10), 1, 1 );
 }

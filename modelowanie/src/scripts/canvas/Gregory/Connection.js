@@ -123,7 +123,6 @@ function findC1AndC2(corners, c1, c2, s1, s2) {
     }
 }
 function findPointConnectionsS(p, s) {
-    const pointsConnected = [];
     let ret = -1;
     if(s.pointsMap[0][0].id === p.id ){
         ret = 0;

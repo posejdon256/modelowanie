@@ -1,6 +1,6 @@
 import { getContexts, drawLine } from "../Draw";
 import Translate, { setTranslationPoints } from "../../Translation/TranslationCenter/TranslationCenter";
-import { getGregoryVectors, getGregoryPoints, getGrzegorzys, createSmallPatch, RebuildGregory } from "../../Gregory/Gregory";
+import { getGregoryVectors, getGrzegorzys, RebuildGregory } from "../../Gregory/Gregory";
 import { UpdatePointsForCanvas } from "../../../Helpers/Helpers";
 
 export function DrawGregoryVector(a, b) {

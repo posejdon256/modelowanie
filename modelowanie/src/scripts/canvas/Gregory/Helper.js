@@ -88,7 +88,7 @@ export function getPartialGregoryPoints(preG, aPrim, bPrim, cPrim, dPrim, _u, _v
             if(v !== 0) {
                 drawLine(ret[i].x, ret[i].y, ret[i - 1].x, ret[i - 1].y, ctx);
             }
-            if(v + 0.02 > 1.0 && v + 0.02 !== 1.0 && v != 1) {
+            if(v + 0.02 > 1.0 && v + 0.02 !== 1.0 && v !== 1) {
                 v = 1.0;
                 i ++;
                 const p = {};
@@ -119,7 +119,7 @@ export function getPartialGregoryPoints(preG, aPrim, bPrim, cPrim, dPrim, _u, _v
             if(u !== 0) {
                 drawLine(ret[i].x, ret[i].y, ret[i - 1].x, ret[i - 1].y, ctx);
             }
-            if(u + 0.02 > 1.0 && u + 0.02 !== 1.0 && u != 1.0) {
+            if(u + 0.02 > 1.0 && u + 0.02 !== 1.0 && u !== 1.0) {
                 u = 1.0;
                 i ++;
                 const p = {};
