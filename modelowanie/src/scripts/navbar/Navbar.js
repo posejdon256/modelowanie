@@ -11,7 +11,7 @@ import { updateSelectedPoints } from '../canvas/Points/Points';
 import { uniteTwoPoints } from '../canvas/Gregory/Claps';
 import { setIntersectionStep } from '../canvas/CuttingCurve/FindIntersection';
 import { setNewtonAlpa, setFinalEpsilon } from '../canvas/CuttingCurve/NewtonMethod';
-import { setOneProjectionPointState, setFirstNewtonIt } from '../canvas/CuttingCurve/Projection';
+import { setOneProjectionPointState, setFirstNewtonIt, setNewtonStep } from '../canvas/CuttingCurve/Projection';
 import { setLocekdCamrea } from '../canvas/Move/Move';
 
 export default class Navbar extends Component {
@@ -33,6 +33,7 @@ export default class Navbar extends Component {
         this.setOneProjectionPointState = this.setOneProjectionPointState.bind(this);
         this.lockUnlockCamera = this.lockUnlockCamera.bind(this);
         this.showNewtonIt = this.showNewtonIt.bind(this);
+        this.setNewtonStep = this.setNewtonStep.bind(this);
         const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
@@ -103,6 +104,9 @@ export default class Navbar extends Component {
     showNewtonIt(event) {
         setFirstNewtonIt(event.target.checked);
     }
+    setNewtonStep(event) {
+        setNewtonStep(event.target.value);
+    }
     render(){
         return(
         <div className="ab-navbar">
@@ -171,7 +175,11 @@ export default class Navbar extends Component {
                 </div>
                 <div>
                     <label>Włącz/wyłącz widok pierwszych 20 iteracji Newtona:</label>
-                    <input type="checkbox" onChange={this.showNewtonIt} defaultChecked={true}/>
+                    <input type="checkbox" onChange={this.showNewtonIt} defaultChecked={false}/>
+                </div>
+                <div>
+                    <label>Ustaw liczbę pokazywanych kroków Newtona:</label>
+                    <input type="text" onChange={this.setNewtonStep} defaultValue="20"/>
                 </div>
             </div>
             <ListPointsInCurve points={this.state.curvePoints} />

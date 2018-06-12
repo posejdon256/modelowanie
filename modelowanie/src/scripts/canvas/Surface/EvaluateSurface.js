@@ -57,8 +57,20 @@ export function EvaluateSurface(id, u, v) {
 export function EvaluateSurfaceC2(id, u, v) {
     const surfaces = getSurfaces();
     const s = surfaces.find(x => x.id === id);
-    const _u = s.cylinder ? Math.floor(u) : Math.floor(v);
-    const _v = s.cylinder ? Math.floor(v) : Math.floor(u);
+    if(u < 0 && s.cylinder) {
+        u += s.width;
+    }
+    if(v < 0 && s.cylinder) {
+        v += s.height;
+    }
+    if(u > s.width && s.cylinder) {
+        u -= s.width;
+    }
+    if(v > s.height && s.cylinder) {
+        v -= s.height;
+    }
+    const _u = Math.floor(u);
+    const _v = Math.floor(v);
     const _u1 =  u - Math.floor(u);
     const _v1 = v - Math.floor(v) ;
 
@@ -92,13 +104,25 @@ export function EvaluateSurfaceC2(id, u, v) {
 export function EvaluateSurfaceC2DV(id, u, v) {
     const surfaces = getSurfaces();
     const s = surfaces.find(x => x.id === id);
-    const _u = s.cylinder ? Math.floor(u) : Math.floor(v);
-    const _v = s.cylinder ? Math.floor(v) : Math.floor(u);
+    if(u < 0 && s.cylinder) {
+        u += s.height;
+    }
+    if(v < 0 && s.cylinder) {
+        v += s.width;
+    }
+    if(u > s.width && s.cylinder) {
+        u -= s.height;
+    }
+    if(v > s.height && s.cylinder) {
+        v -= s.width;
+    }
+    const _u = Math.floor(u);
+    const _v = Math.floor(v);
     const _u1 = u - Math.floor(u);
     const _v1 = v - Math.floor(v) ;
 
-    const bu = CurveC2EvaluateDerivative(_u1);
-    const bv = CurveC2Evaluate(_v1);
+    const bv = CurveC2Evaluate(_u1);
+    const bu = CurveC2EvaluateDerivative(_v1);
     const arrX = [];
     const arrY = [];
     const arrZ = [];
@@ -127,8 +151,20 @@ export function EvaluateSurfaceC2DV(id, u, v) {
 export function EvaluateSurfaceC2DU(id, u, v) {
     const surfaces = getSurfaces();
     const s = surfaces.find(x => x.id === id);
-    const _u = s.cylinder ? Math.floor(u) : Math.floor(v);
-    const _v = s.cylinder ? Math.floor(v) : Math.floor(u);
+    if(u < 0 && s.cylinder) {
+        u += s.width;
+    }
+    if(v < 0 && s.cylinder) {
+        v += s.height;
+    }
+    if(u > s.width && s.cylinder) {
+        u -= s.width;
+    }
+    if(v > s.height && s.cylinder) {
+        v -= s.height;
+    }
+    const _u = Math.floor(u);
+    const _v = Math.floor(v);
     const _u1 = u - Math.floor(u);
     const _v1 = v - Math.floor(v) ;
 

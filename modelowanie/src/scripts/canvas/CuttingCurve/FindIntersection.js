@@ -4,7 +4,6 @@ import { getCursor } from "../Cursor/Cursor";
 import { getSurfaces }  from  "../Surface/Surface";
 import { EvaluateSurface, EvaluateSurfaceDU, EvaluateSurfaceDV, EvaluateSurfaceC2, EvaluateSurfaceC2DU, EvaluateSurfaceC2DV } from "../Surface/EvaluateSurface";
 import { goGoNewton } from "./NewtonMethod";
-import { addPoint } from "../Points/Points";
 
 let intersectionStep = 3; //Needs to be updated for toruses and C0
 export function setIntersectionStep(_step) {
@@ -81,8 +80,6 @@ function countGradientMethod(ob1, ob2, best){
         }
         p1 = evaluate(ob1, u[0], v[0]);
         p2 = evaluate(ob2, u[1], v[1]);
-        addPoint(p1.x, p1.y, p1.z, "dsds");
-        addPoint(p2.x, p2.y, p2.z, "dsds");
         const uPrev = u;
         const vPrev = v;
 

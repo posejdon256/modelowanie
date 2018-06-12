@@ -100,26 +100,26 @@ export function removeSurface(id) {
 export function selectSurface(id) {
     const surface = surfaces.find(x => x.id === id);
     surface.selected = !surface.selected;
-    surface.curves.forEach(curve => {
-        curve.points.forEach(point => {
-            point.selected = surface.selected;
-            if(surface.selected === true) {
-                CatchPoint(point);
-            } else {
-                RemoveCatchPoint(point);
-            }
-        });
-        if(curve.pointsBspline) {
-            curve.pointsBspline.forEach(point => {
-                point.selected = surface.selected;
-                if(surface.selected === true) {
-                    CatchPoint(point);
-                } else {
-                    RemoveCatchPoint(point);
-                }
-            });
-        }
-    });
+    // surface.curves.forEach(curve => {
+    //     curve.points.forEach(point => {
+    //         point.selected = surface.selected;
+    //         if(surface.selected === true) {
+    //             CatchPoint(point);
+    //         } else {
+    //             RemoveCatchPoint(point);
+    //         }
+    //     });
+    //     if(curve.pointsBspline) {
+    //         curve.pointsBspline.forEach(point => {
+    //             point.selected = surface.selected;
+    //             if(surface.selected === true) {
+    //                 CatchPoint(point);
+    //             } else {
+    //                 RemoveCatchPoint(point);
+    //             }
+    //         });
+    //     }
+    // });
     if(surface)
     return surfaces;
 }

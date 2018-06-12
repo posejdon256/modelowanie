@@ -3,11 +3,16 @@ import { getSurfaces } from '../Surface/Surface';
 import { DrawPoint } from '../Draw/DrawPoints/DrawPoints';
 import { getCursor } from '../Cursor/Cursor';
 import { evaluate, getGradient, getIntersectionStep } from './FindIntersection';
-import { getVectorLength } from '../../Helpers/Helpers';
+import { getVectorLength, TryParseInt } from '../../Helpers/Helpers';
+import { goGoNewton } from './NewtonMethod';
 
 let projectionState = false;
 let oneIntersectionPointState = false;
 let showIterations = false;
+let newtonStep = 20;
+export function setNewtonStep(step) {
+    newtonStep = TryParseInt(step, newtonStep);
+}
 export function setProjectionState(_state) {
     projectionState = _state;
 }
@@ -143,6 +148,8 @@ function countGradientMethod(ob1, ob2, best){
         v: v,
     }
     DrawPoint(p1, "Red");
-   // goGoNewton(best);
+    if(showIterations) {
+        goGoNewton(best, newtonStep);
+    }
     return true;
 }

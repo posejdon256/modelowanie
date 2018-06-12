@@ -4,6 +4,7 @@ import { evaluate } from "./FindIntersection";
 import { addInterpolationCurve, setInterpolationState } from "../Bezier/Interpolation";
 import { addCuttingCurve, updateIn1Visualisation, updateIn2Visualisation } from "./CuttingCurve";
 import { findNewNewtonPoint } from "./Jacobi";
+import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
 
 
 let alpha = 0.002;
@@ -14,10 +15,14 @@ export function setNewtonAlpa(_alpha) {
 export function setFinalEpsilon(_eps) {
     finalEpsilon = TryParseFloat(_eps, finalEpsilon);
 }
-export function goGoNewton(best) {
+export function goGoNewton(best, iterations) {
     let {ob1, ob2, u, v} = best;
-    const interpolation = addInterpolationCurve();
-    const cuttingCurve = addCuttingCurve(interpolation);
+    let interpolation;
+    let cuttingCurve;
+    if(!iterations) {
+       interpolation = addInterpolationCurve();
+        cuttingCurve = addCuttingCurve(interpolation);
+    }
     const ob = [ob1, ob2];
     const uStart = [u[0], u[1]];
     const vStart = [v[0], v[1]];
@@ -28,13 +33,17 @@ export function goGoNewton(best) {
     let pStart = evaluate(ob[0], uStart[0], vStart[0]);
     let notFinishYet = 0;
     let pointsList = [];
+    let stop = iterations ? iterations : 1000;
     let j1 = 0;
     while(true) {
         for(let i = 0; i < 4; i ++) {
             try{
                 betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, alpha);
             } catch(e) {
-                alert("Nie zbiega :( " + e);
+                if(!iterations)
+                    alert("Nie zbiega :( " + e);
+                else
+                    console.log("Nie zbiega :( " + e);
                 return;
             }
               for(let m = 0; m < 4; m ++) {
@@ -46,8 +55,8 @@ export function goGoNewton(best) {
             let helpV2 = v[1] - betterPoint[3]; 
             console.log(helpU1, helpU2, helpV1, helpV2);
             if((notInRange([helpU1, helpU2], [helpV1, helpV2], ob) && ob1.type !== "torus" && !ob1.cylinder && !ob2.cylinder) ||
-            (notInVRange([helpV1, helpV2], ob) && (ob1.cylinder || ob2.cylinder))
-            || (notInURange([helpU1, helpU2], ob) && (ob1.cylinder || ob2.cylinder) && ob1.type === "C2" && ob2.type === "C2")) {
+            (notInURange([helpV1, helpV2], ob) && (ob1.cylinder || ob2.cylinder))) {
+           // || (notInURange([helpU1, helpU2], ob) && (ob1.cylinder || ob2.cylinder) && ob1.type === "C2" && ob2.type === "C2")) {
                     alpha = -alpha;  
                     if(!backed)    
                         notFinishYet = 0;   
@@ -55,8 +64,10 @@ export function goGoNewton(best) {
                     v = [vStart[0], vStart[1]];
                     uPrev = [uStart[0], uStart[1]];
                     vPrev = [vStart[0], vStart[1]];
-                    updateIn1Visualisation(cuttingCurve.id, {break: true});
-                    updateIn2Visualisation(cuttingCurve.id, {break: true});
+                    if(!iterations) {
+                        updateIn1Visualisation(cuttingCurve.id, {break: true});
+                        updateIn2Visualisation(cuttingCurve.id, {break: true});
+                    }
                     pointsList = pointsList.reverse();
 
                    // pointsList.push(evaluate(ob1, u[0], v[0]));
@@ -72,17 +83,25 @@ export function goGoNewton(best) {
         const p1 = evaluate(ob1, u[0], v[0]);
         
         pointsList.push(evaluate(ob1, u[0], v[0]));
-
-        updateIn1Visualisation(cuttingCurve.id, ob[0].type === "torus" ? u[0] :  u[0] / ob[0].width, ob[0].type === "torus" ? v[0] : v[0] / ob[0].height);
-        updateIn2Visualisation(cuttingCurve.id, ob[1].type === "torus" ? u[1] : u[1] / ob[1].width, ob[1].type === "torus" ? v[1] : v[1] / ob[1].height);
+        if(!iterations) {
+            updateIn1Visualisation(cuttingCurve.id, ob[0].type === "torus" ? u[0] :  u[0] / ob[0].width, ob[0].type === "torus" ? v[0] : v[0] / ob[0].height);
+            updateIn2Visualisation(cuttingCurve.id, ob[1].type === "torus" ? u[1] : u[1] / ob[1].width, ob[1].type === "torus" ? v[1] : v[1] / ob[1].height);
+        }
         if(finalEpsilon > getVectorLength(pStart, p1) && notFinishYet > 20) {
             break;
         }
-        if(j1 > 1000) {
+        if(j1 > stop) {
             break;
         }
         notFinishYet ++;
         j1 ++;
+    }
+    if(iterations) {
+        for(let i = 0; i < pointsList.length; i ++) {
+            DrawPoint(pointsList[i], "Red");
+            
+        }
+        return;
     }
     setInterpolationState(true);
     if(!backed) {
