@@ -5,29 +5,36 @@ import Redraw from "../Draw/Redraw";
 import { getSurfaces }  from  "../Surface/Surface";
 import { EvaluateSurface, EvaluateSurfaceDU, EvaluateSurfaceDV, EvaluateSurfaceC2, EvaluateSurfaceC2DU, EvaluateSurfaceC2DV } from "../Surface/EvaluateSurface";
 import { goGoNewton } from "./NewtonMethod";
+import { addPoint } from "../Points/Points";
 
 let intersectionStep = 3; //Needs to be updated for toruses and C0
 export function setIntersectionStep(_step) {
     intersectionStep = TryParseFloat(_step, intersectionStep);
 }
+export function getIntersectionStep() {
+    return intersectionStep;
+}
 function findIntersection(_objects) {
     const interation = 10.0;
     const cursor = getCursor();
+    const eps = 0.001;
     const best = {
         lenght: 10000,
         point1: {},
         point2: {}
     };
     const sizes = getSizes(_objects);
+    const epsDistance = { x: sizes.o1x * 0.1, y: sizes.o1y * 0.1 };
+    const sameObjects = _objects[0].id === _objects[1].id ? true : false;
     for(let i = 0.0; i < sizes.o1x; i += 1.0/interation) {
         for(let j = 0.0; j < sizes.o1y; j += 1.0/interation) {
-            for(let k = 0.0; k < sizes.o2x; k += 1.0/interation) {
-                for(let m = 0.0; m < sizes.o2y; m += 1.0/interation) {
+            for(let k = sizes.o2x - eps; k >= 0.0; k -= 1.0/interation) {
+                for(let m = sizes.o2y - eps; m >= 0.0; m -= 1.0/interation) {
                     const ev1 = evaluate(_objects[0], i, j);
                     const ev2 = evaluate(_objects[1], k, m);
                     const trans = [ev1, ev2];
                     const _lenght = getVectorLength(trans[0], cursor) + getVectorLength(trans[1], cursor);
-                    if(_lenght < best.lenght) {
+                    if(_lenght < best.lenght && (!sameObjects || epsDistance.x < Math.abs(i - k) && epsDistance.y < Math.abs(j - m))) {
                         best.point1 = {u: i, v: j};
                         best.point2 = {u: k, v: m};
                         best.lenght = _lenght;
@@ -42,8 +49,8 @@ function getSizes(_objects) {
     const sizes = {};
     sizes.o1x = _objects[0].type === "torus" ? 1 : _objects[0].width;
     sizes.o1y = _objects[0].type === "torus" ? 1 : _objects[0].height;
-    sizes.o2x = _objects[0].type === "torus" ? 1 : _objects[1].width;
-    sizes.o2y = _objects[0].type === "torus" ? 1 : _objects[1].height;
+    sizes.o2x = _objects[1].type === "torus" ? 1 : _objects[1].width;
+    sizes.o2y = _objects[1].type === "torus" ? 1 : _objects[1].height;
     return sizes;
 }
 function countGradientMethod(ob1, ob2, best){
@@ -76,6 +83,8 @@ function countGradientMethod(ob1, ob2, best){
         }
         p1 = evaluate(ob1, u[0], v[0]);
         p2 = evaluate(ob2, u[1], v[1]);
+        addPoint(p1.x, p1.y, p1.z, "dsds");
+        addPoint(p2.x, p2.y, p2.z, "dsds");
         const uPrev = u;
         const vPrev = v;
 
@@ -116,8 +125,13 @@ export function findObjectToIntersectionAndIntersection(){
     const toruses = getToruses().filter(x => x.selected ===  true);
     const _objects = [];
     if(surfaces.length  + toruses.length !== 2) {
-        alert("Niepoprawna liczba obiektów jest wybrana!");
-        return false;
+        if(surfaces.length === 1 && toruses.length === 0) {
+            _objects.push(surfaces[0]);
+            _objects.push(surfaces[0]);
+        } else {
+            alert("Niepoprawna liczba obiektów jest wybrana!");
+            return false;
+        }
     }
     for(let i = 0; i < surfaces.length; i ++) {
         _objects.push(surfaces[i]);

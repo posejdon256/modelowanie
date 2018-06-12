@@ -56,7 +56,7 @@ export function getBezierPoints(_curves){
             const divisions = parseInt(countCircumfrence(curvePart), 10);
             for(let j = 0; j < divisions; j ++) {
                 const point = {x: 0, y: 0, z: 0, selected: curves[i].selected};
-                if((curves[i].type === "C0" && l === 0 && j === 0) ||(curves[i].type === "C2" && l=== 2 && j === 0))
+                if((curves[i].type === "C0" && l === 0 && j === 0) ||((curves[i].type === "C2" || curves[i].type === "C2I") && l=== 2 && j === 0))
                 point.break = true;
                 const n = curvePart.length - 1;
                 for(let k = 0; k < n + 1; k ++) {

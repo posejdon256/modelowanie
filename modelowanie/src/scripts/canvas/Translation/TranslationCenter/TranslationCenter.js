@@ -6,6 +6,10 @@ import normalizeVector from "../../../Normalization/Normalize";
 
 let stereoscopy;
 let translationPoints = [];
+let _front = 1;
+export function getFront() {
+    return _front;
+}
 export function setTranslationPoints(_points) {
     translationPoints = _points;
 }
@@ -40,6 +44,7 @@ export default function Translate(translationObject, type) {
     if(front !== undefined && front !== 0) {
         shiftVector.push(0);
         translationMatrix = multiplyMatrices(getScaleMatrix(front), translationMatrix);
+        _front = _front * front;
         updateShift(front);
     }
     else

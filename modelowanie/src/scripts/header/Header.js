@@ -11,6 +11,7 @@ import platekG from '../../pictures/platekG.png';
 import scissors from '../../pictures/scissors.png';
 import load from '../../pictures/helicopter.png';
 import save from '../../pictures/safebox.png';
+import projektor from '../../pictures/projektor.png';
 import { getAddBezierState, setAddBezierState } from '../canvas/Bezier/Bezier';
 import { getAddingC2State, setAddingC2State } from '../canvas/Bezier/BSpline';
 import { getInterpolationState, setInterpolationState } from '../canvas/Bezier/Interpolation';
@@ -20,6 +21,7 @@ import { Load } from '../Load/Load';
 import { MakeGregory } from '../canvas/Gregory/Gregory';
 import { addTorus } from '../canvas/Torus/Torus';
 import { findObjectToIntersectionAndIntersection } from '../canvas/CuttingCurve/FindIntersection';
+import { setProjectionState, getProjectionState } from '../canvas/CuttingCurve/Projection';
 
 export default class Header extends Component {
     constructor(props) {
@@ -36,6 +38,7 @@ export default class Header extends Component {
         this.saveFile = this.saveFile.bind(this);
         this.addGregory = this.addGregory.bind(this);
         this.addIntersection = this.addIntersection.bind(this);
+        this.projectIntersection = this.projectIntersection.bind(this);
     }
     addTorus() {
         addTorus();
@@ -70,6 +73,9 @@ export default class Header extends Component {
         if(findObjectToIntersectionAndIntersection()){
             this.props.ShowVisualization();
         }
+    }
+    projectIntersection() {
+        setProjectionState(!getProjectionState());
     }
     addInterpolationCurve() {
         if(getInterpolationState()) {
@@ -116,6 +122,9 @@ export default class Header extends Component {
             </button>
             <button className="ab-torus-button" onClick={this.loadFile}>
                 <img className="ab-point-image" src={load} alt="surface c2" />
+            </button>  
+            <button className="ab-torus-button" onClick={this.projectIntersection}>
+                <img className="ab-point-image" src={projektor} alt="intersection curve projection" />
             </button>  
             <button className="ab-torus-button" onClick={this.addIntersection}>
                 <img className="ab-point-image" src={scissors} alt="intersection curve" />

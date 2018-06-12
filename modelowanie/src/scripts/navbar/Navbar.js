@@ -11,6 +11,8 @@ import { updateSelectedPoints } from '../canvas/Points/Points';
 import { uniteTwoPoints } from '../canvas/Gregory/Claps';
 import { setIntersectionStep } from '../canvas/CuttingCurve/FindIntersection';
 import { setNewtonAlpa, setFinalEpsilon } from '../canvas/CuttingCurve/NewtonMethod';
+import { setOneProjectionPointState } from '../canvas/CuttingCurve/Projection';
+import { setLocekdCamrea } from '../canvas/Move/Move';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -28,6 +30,8 @@ export default class Navbar extends Component {
         this.setIntersectionStep = this.setIntersectionStep.bind(this);
         this.setNewton = this.setNewton.bind(this);
         this.setFinalEpsilon = this.setFinalEpsilon.bind(this);
+        this.setOneProjectionPointState = this.setOneProjectionPointState.bind(this);
+        this.lockUnlockCamera = this.lockUnlockCamera.bind(this);
         const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
@@ -40,6 +44,9 @@ export default class Navbar extends Component {
     }
     updateAddingC2Type(event) {
         setAddingC2Type(event.target.checked);
+    }
+    setOneProjectionPointState(event) {
+        setOneProjectionPointState(event.target.checked);
     }
     updateXGrid(event) {
         this.props.updateXGrid(parseInt(event.target.value, 10));
@@ -89,11 +96,18 @@ export default class Navbar extends Component {
     uniteTwoPoints() {
         uniteTwoPoints();
     }
+    lockUnlockCamera(event) {
+        setLocekdCamrea(event.target.checked);
+    }
     render(){
         return(
         <div className="ab-navbar">
-                <div>
+            <div>
                 <button onClick={this.setCursorToStart}>Ustaw Kursor w (0,0,0)</button>
+            </div>
+            <div>
+                <label>Zablokuj/Odblokuj kamerę:</label>
+                <input type="checkbox" onChange={this.lockUnlockCamera}/>
             </div>
             <div>
                 <label>Siatka pozioma</label>
@@ -134,17 +148,23 @@ export default class Navbar extends Component {
                 </div>
                 <button onClick={this.updateSelectedPoints}>Zamień</button>
             </div>
-            <div>
-                <label>Ustaw krok znajdowania przecięcia:</label>
-                <input type="text" onChange={this.setIntersectionStep}/>
-            </div>
-            <div>
-                <label>Ustaw krok Newtona:</label>
-                <input type="text" onChange={this.setNewton}/>
-            </div>
-            <div>
-                <label>Ustaw Epsilon warunku końcowego:</label>
-                <input type="text" onChange={this.setFinalEpsilon}/>
+            <div className="ab-bicubic">
+                <div>
+                    <label>Ustaw krok znajdowania przecięcia:</label>
+                    <input type="text" onChange={this.setIntersectionStep} defaultValue="3"/>
+                </div>
+                <div>
+                    <label>Ustaw krok Newtona:</label>
+                    <input type="text" onChange={this.setNewton} defaultValue="0.002"/>
+                </div>
+                <div>
+                    <label>Ustaw Epsilon warunku końcowego:</label>
+                    <input type="text" onChange={this.setFinalEpsilon} defaultValue="0.001"/>
+                </div>
+                <div>
+                    <label>Włącz/wyłącz podgląd ze znajdowaniem punktu przecięcia:</label>
+                    <input type="checkbox" onChange={this.setOneProjectionPointState}/>
+                </div>
             </div>
             <ListPointsInCurve points={this.state.curvePoints} />
             <div>

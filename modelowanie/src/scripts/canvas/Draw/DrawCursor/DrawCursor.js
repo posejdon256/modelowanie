@@ -22,7 +22,7 @@ export function _DrawCursor(_ctx, _ctxStereo, _ctxStereo2) {
     setTranslationPoints(points);
     translatedPoints = Translate({});
     const cursorPos = [{x: cursor.x, y: cursor.y, z: cursor.z}];
-    const bla = 10;
+    const bla = 5;
     const blaZ = 100;
     setTranslationPoints(cursorPos);
     const cursorPosTrans = Translate({});

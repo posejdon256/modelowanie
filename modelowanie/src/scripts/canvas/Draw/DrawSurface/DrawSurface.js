@@ -146,8 +146,8 @@ export function _DrawCurveInSurface(ctx, ctxS1, ctxS2, points) {
             const y2 = (left[i].y + 1) * 350;
             const z2 = left[i].z;
 
-            if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -100 || z1 > 100
-            || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -100 || z2 > 100)
+            if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -5 || z1 > 5
+            || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -5 || z2 > 5)
                 continue;
             drawLine(x1, y1, x2, y2, ctxS1);
             //drawPixel(x, y, img, ctxS1, rgb);
@@ -162,8 +162,8 @@ export function _DrawCurveInSurface(ctx, ctxS1, ctxS2, points) {
             const y2 = (right[i].y + 1) * 350;
             const z2 = right[i].z;
 
-            if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -100 || z1 > 100
-                || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -100 || z2 > 100)
+            if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -5 || z1 > 5
+                || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -5 || z2 > 5)
                 continue;
             drawLine(x1, y1, x2, y2, ctxS2);
         }
@@ -181,8 +181,8 @@ export function _DrawCurveInSurface(ctx, ctxS1, ctxS2, points) {
             const x2 = (translated[i].x + 1) * 500;
             const y2 = (translated[i].y + 1) * 350;
             const z2 = translated[i].z;
-            if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -100 || z1 > 100
-                || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -100 || z2 > 100)
+            if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -5 || z1 > 5
+                || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -5 || z2 > 5)
                 continue;
             if(points[i].break) {
                 ctx.closePath();

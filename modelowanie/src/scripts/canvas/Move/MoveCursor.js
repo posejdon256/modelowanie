@@ -2,6 +2,7 @@ import { updateCursor, getCursor } from "../Cursor/Cursor";
 import Redraw from '../Draw/Redraw';
 import { selectPoints } from "../Mouse/SelectPoint";
 import { updatePoint, selectPoint } from "../Points/Points";
+import { projectIntersectionPoints } from "../CuttingCurve/Projection";
 
 
 let front = 0;
@@ -18,6 +19,7 @@ function interval1() {
     for(let i = 0; i < catchedPoints.length; i ++)
         updatePoint(catchedPoints[i].id, left, top, front);
     Redraw();
+    projectIntersectionPoints();    
     setTimeout(function(){
         requestAnimationFrame(interval1);
     }, 50);

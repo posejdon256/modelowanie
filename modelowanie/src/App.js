@@ -95,7 +95,11 @@ class App extends Component {
     this.setState({
       visualisate: true
     });
-    RedrawVisualization();
+    try{
+      RedrawVisualization();
+    } catch(e) {
+      alert("Problem z rysowaniem na canvasach " + e);
+    }
   }
   updateYGrid(gridNumber) {
     setTorusMesh(this.state.gridX, gridNumber);
