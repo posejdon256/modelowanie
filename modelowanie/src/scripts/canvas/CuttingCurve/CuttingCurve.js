@@ -11,6 +11,7 @@ export function addCuttingCurve(iCurve) {
         intersectionVisualization1: intersectionVisualization1,
         intersectionVisualization2: intersectionVisualization2
     }
+    numberOfIntersections++;
     curves.push(curve);
     return curve;
 }

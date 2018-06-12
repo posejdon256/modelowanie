@@ -58,6 +58,10 @@ export function goGoNewton(best) {
                     vPrev = [vStart[0], vStart[1]];
                     updateIn1Visualisation(cuttingCurve.id, {break: true});
                     updateIn2Visualisation(cuttingCurve.id, {break: true});
+                    
+                    addInterpolationCurve();
+                    const p1 = evaluate(ob1, u[0], v[0]);
+                    addPoint(p1.x, p1.y, p1.z, "Newton");
                     backed = true; 
                     continue;
             }
@@ -70,10 +74,10 @@ export function goGoNewton(best) {
         uPrev = [u[0], u[1]];
         vPrev = [v[0], v[1]];
         const p1 = evaluate(ob1, u[0], v[0]);
+        addPoint(p1.x, p1.y, p1.z, "Newton");
 
         updateIn1Visualisation(cuttingCurve.id, ob[0].type === "torus" ? u[0] :  u[0] / ob[0].width, ob[0].type === "torus" ? v[0] : v[0] / ob[0].height);
         updateIn2Visualisation(cuttingCurve.id, ob[1].type === "torus" ? u[1] : u[1] / ob[1].width, ob[1].type === "torus" ? v[1] : v[1] / ob[1].height);
-        addPoint(p1.x, p1.y, p1.z, "Newton");
         if(finalEpsilon > getVectorLength(pStart, p1) && notFinishYet > 20) {
             break;
         }
@@ -83,7 +87,9 @@ export function goGoNewton(best) {
         notFinishYet ++;
         j1 ++;
     }
-    addPoint(pStart.x, pStart.y, pStart.z, "Newton");
+    if(!backed) {
+        addPoint(pStart.x, pStart.y, pStart.z, "Newton");
+    }
     setInterpolationState(false);
  }
  function notInRange(u, v, ob) {
