@@ -44,8 +44,9 @@ export function goGoNewton(best, iterations) {
     let w2 = ob[1].type === "C2" && ob[1].cylinder ? ob[1].height : ob[1].width;
     w2 = ob[1].type === "torus" ? 1 : w2;
     let h2 = ob[1].type === "C2" && ob[1].cylinder ? ob[1].width : ob[1].height;
+    let finished = false;
     h2 = ob[1].type === "torus" ? 1 : h2;
-    while(true) {
+    while(!finished) {
         for(let i = 0; i < 10; i ++) {
             try{
                 betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, alpha);
@@ -77,7 +78,11 @@ export function goGoNewton(best, iterations) {
             (notInURange(helpU2, ob[1]) && ob[1].cylinder && ob[1].type === "C0")) {
                     alpha = -alpha;  
                     if(!backed)    
-                        notFinishYet = 0;   
+                        notFinishYet = 0;
+                    else {
+                        finished = true;
+                        break;
+                    }   
                     u = [uStart[0], uStart[1]];
                     v = [vStart[0], vStart[1]];
                     uPrev = [uStart[0], uStart[1]];

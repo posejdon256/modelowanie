@@ -6,6 +6,7 @@ import { cleanSurfaces } from "../Surface/Surface";
 import { cleanToruses } from "../Torus/Torus";
 import { setCursor } from "../Cursor/Cursor";
 import { cleanDrawSurfacePoints } from "../Draw/DrawSurface/DrawSurface";
+import Redraw from "../Draw/Redraw";
 
 export function cleanScene() {
     cleanCurves();
@@ -16,4 +17,5 @@ export function cleanScene() {
     cleanToruses();
     cleanDrawSurfacePoints();
     setCursor(0, 0, 0);
+    Redraw();
 }

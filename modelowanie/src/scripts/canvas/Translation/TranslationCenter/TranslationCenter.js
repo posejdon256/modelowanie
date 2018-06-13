@@ -20,6 +20,7 @@ let lastTranslation = [
     [0, 0, 0, 1]
 ];
 export default function Translate(translationObject, type) {
+    try{
     const {front, left, top, axisX, axisY, alphaX, alphaY} = translationObject;
     let translationMatrix = lastTranslation;
     //rotation
@@ -59,6 +60,12 @@ export default function Translate(translationObject, type) {
         return normalTranslation(translationMatrix);
     else
         return stereoscopyTranslation(translationMatrix);
+
+    }
+    catch(e) {
+        console.log("Ups, coś poszło nie tak...");
+        return [];
+    }
 }
 function normalTranslation(translationMatrix) {
     const projectioMatrix = multiplyMatrices(getProjectionMatrix(3), translationMatrix);//3

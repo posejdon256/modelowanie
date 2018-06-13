@@ -8,10 +8,15 @@ import Redraw from "../canvas/Draw/Redraw";
 import { turnOffAllStates } from "../canvas/StatesCenter/StatesCenter";
 import { addTorus } from "../canvas/Torus/Torus";
 
+let path ="Project.json";
 
-
+export function setPath(_path) {
+    path =_path.substr(12, _path.length - 12);
+}
 export function Load() {
-    const json = require("./../../Project.json");
+    console.log(path);
+   // console.log(require);
+    const json = require(`./../../DzialajaceTesty/${path}`);
     clearCurves();
     clearPoints();
     clearSurfaces();
