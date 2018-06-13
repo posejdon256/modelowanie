@@ -28,26 +28,7 @@ function CurveC2EvaluateDerivative(x) {
 export function EvaluateSurface(id, u, v) {
     const surfaces = getSurfaces();
     const s = surfaces.find(x => x.id === id);
-    if(u < 0 && s.cylinder) {
-        u += s.width;
-    }
-    if(v < 0 && s.cylinder) {
-        v += s.height;
-    }
-    if(u > s.width && s.cylinder) {
-        u -= s.width;
-    }
-    if(v > s.height && s.cylinder) {
-        v -= s.height;
-    }
-    const _u = Math.floor(v) * 3;
-    const _v = Math.floor(u) * 3;
-    const _u1 =  u - Math.floor(u);
-    const _v1 = v - Math.floor(v) ;
-    if(u < 0 ||  v < 0 || isNaN(v) || isNaN(u)) {
-        console.log("Problem z evalem "+ u + " " + v);
-        return {x: 1, y: 0, z: 0};
-    }
+    const {_u, _v, _u1, _v1} = getUVForC0(id, u, v);
     const knots = [];
     for(let i = 0; i < 4; i ++) {
         knots.push(deCastiljau(_u1, s.pointsMap[_u + i][_v + 0], s.pointsMap[_u + i][_v + 1], s.pointsMap[_u + i][_v + 2], s.pointsMap[_u + i][_v + 3]));
@@ -55,24 +36,8 @@ export function EvaluateSurface(id, u, v) {
     return deCastiljau(_v1, knots[0], knots[1], knots[2], knots[3]);
 }
 export function EvaluateSurfaceC2(id, u, v) {
-    const surfaces = getSurfaces();
-    const s = surfaces.find(x => x.id === id);
-    if(u < 0 && s.cylinder) {
-        u += s.width;
-    }
-    if(v < 0 && s.cylinder) {
-        v += s.height;
-    }
-    if(u > s.width && s.cylinder) {
-        u -= s.width;
-    }
-    if(v > s.height && s.cylinder) {
-        v -= s.height;
-    }
-    const _u = Math.floor(u);
-    const _v = Math.floor(v);
-    const _u1 =  u - Math.floor(u);
-    const _v1 = v - Math.floor(v) ;
+    const {_u, _v, _u1, _v1} = getUVForC2(id, u, v);
+    const s = getSurfaces("C2").find(x => x.id === id);
 
     const bu = CurveC2Evaluate(_u1);
     const bv = CurveC2Evaluate(_v1);
@@ -85,9 +50,9 @@ export function EvaluateSurfaceC2(id, u, v) {
         arrY.push([]);
         arrZ.push([]);
         for(let j = 0; j < 4; j ++) {
-            arrX[i].push(map[j + _v][i + _u].x);
-            arrY[i].push(map[j + _v][i + _u].y);
-            arrZ[i].push(map[j + _v][i + _u].z);
+            arrX[i].push(map[j + _u][i + _v].x);
+            arrY[i].push(map[j + _u][i + _v].y);
+            arrZ[i].push(map[j + _u][i + _v].z);
         }
     }
     const x = multiplyVectorAndMatrix(arrX, bu);
@@ -102,24 +67,8 @@ export function EvaluateSurfaceC2(id, u, v) {
     return ret;
 }
 export function EvaluateSurfaceC2DV(id, u, v) {
-    const surfaces = getSurfaces();
-    const s = surfaces.find(x => x.id === id);
-    if(u < 0 && s.cylinder) {
-        u += s.height;
-    }
-    if(v < 0 && s.cylinder) {
-        v += s.width;
-    }
-    if(u > s.width && s.cylinder) {
-        u -= s.height;
-    }
-    if(v > s.height && s.cylinder) {
-        v -= s.width;
-    }
-    const _u = Math.floor(u);
-    const _v = Math.floor(v);
-    const _u1 = u - Math.floor(u);
-    const _v1 = v - Math.floor(v) ;
+    const {_u, _v, _u1, _v1} = getUVForC2(id, u, v);
+    const s = getSurfaces("C2").find(x => x.id === id);
 
     const bv = CurveC2Evaluate(_u1);
     const bu = CurveC2EvaluateDerivative(_v1);
@@ -132,9 +81,9 @@ export function EvaluateSurfaceC2DV(id, u, v) {
         arrY.push([]);
         arrZ.push([]);
         for(let j = 0; j < 4; j ++) {
-            arrX[i].push(map[j + _v][i + _u].x);
-            arrY[i].push(map[j + _v][i + _u].y);
-            arrZ[i].push(map[j + _v][i + _u].z);
+            arrX[i].push(map[j + _u][i + _v].x);
+            arrY[i].push(map[j + _u][i + _v].y);
+            arrZ[i].push(map[j + _u][i + _v].z);
         }
     }
     const x = multiplyVectorAndMatrix(arrX, bv);
@@ -148,25 +97,54 @@ export function EvaluateSurfaceC2DV(id, u, v) {
     };
     return ret;
 }
-export function EvaluateSurfaceC2DU(id, u, v) {
+function getUVForC0(id, u, v) {
+    let vNew = v, uNew = u;
     const surfaces = getSurfaces();
     const s = surfaces.find(x => x.id === id);
     if(u < 0 && s.cylinder) {
-        u += s.width;
+        uNew += s.width;
     }
     if(v < 0 && s.cylinder) {
-        v += s.height;
+        vNew = s.height - 0.001;
     }
     if(u > s.width && s.cylinder) {
-        u -= s.width;
+        uNew -= s.width;
     }
     if(v > s.height && s.cylinder) {
-        v -= s.height;
+        vNew = 0;
     }
-    const _u = Math.floor(u);
-    const _v = Math.floor(v);
-    const _u1 = u - Math.floor(u);
-    const _v1 = v - Math.floor(v) ;
+    const _u = Math.floor(vNew) * 3;
+    const _v = Math.floor(uNew) * 3;
+    const _u1 =  uNew - Math.floor(uNew);
+    const _v1 = vNew - Math.floor(vNew) ;
+    //console.log(u, v, uNew, vNew, _u, _v);
+    return {_u: _u, _v: _v, _u1 : _u1, _v1: _v1};
+}
+function getUVForC2(id, u, v) {
+    let vNew = v, uNew = u;
+    const surfaces = getSurfaces();
+    const s = surfaces.find(x => x.id === id);
+    if(u < 0 && s.cylinder) {
+        uNew = s.height - 0.001;
+    }
+    if(v < 0 && s.cylinder) {
+        vNew = 0;
+    }
+    if(u > s.height && s.cylinder) {
+        uNew = 0;
+    }
+    if(v > s.width && s.cylinder) {
+        vNew = s.width - 0.001;
+    }
+    const _u = Math.floor(uNew);
+    const _v = Math.floor(vNew);
+    const _u1 = u - Math.floor(uNew);
+    const _v1 = v - Math.floor(vNew) ;
+    return {_u: _u, _v: _v, _u1 : _u1, _v1: _v1};
+}
+export function EvaluateSurfaceC2DU(id, u, v) {
+    const {_u, _v, _u1, _v1} = getUVForC2(id, u, v);
+    const s = getSurfaces("C2").find(x => x.id === id);
 
     const bu = CurveC2EvaluateDerivative(_u1);
     const bv = CurveC2Evaluate(_v1);
@@ -179,9 +157,9 @@ export function EvaluateSurfaceC2DU(id, u, v) {
         arrY.push([]);
         arrZ.push([]);
         for(let j = 0; j < 4; j ++) {
-            arrX[i].push(map[j + _v][i + _u].x);
-            arrY[i].push(map[j + _v][i + _u].y);
-            arrZ[i].push(map[j + _v][i + _u].z);
+            arrX[i].push(map[j + _u][i + _v].x);
+            arrY[i].push(map[j + _u][i + _v].y);
+            arrZ[i].push(map[j + _u][i + _v].z);
         }
     }
     const x = multiplyVectorAndMatrix(arrX, bu);
@@ -198,27 +176,7 @@ export function EvaluateSurfaceC2DU(id, u, v) {
 export function EvaluateSurfaceDV(id, u, v) {
     const surfaces = getSurfaces();
     const s = surfaces.find(x => x.id === id);
-    if(u < 0 && s.cylinder) {
-        u += s.width;
-    }
-    if(v < 0 && s.cylinder) {
-        v += s.height;
-    }
-    if(u > s.width && s.cylinder) {
-        u -= s.width;
-    }
-    if(v > s.height && s.cylinder) {
-        v -= s.height;
-    }
-    const _u = Math.floor(v) * 3;
-    const _v = Math.floor(u) * 3;
-    const _u1 =  u - Math.floor(u);
-    const _v1 = v - Math.floor(v) ;
-    if(u < 0 ||  v < 0 || isNaN(v) || isNaN(u)) {
-        console.log("Problem z evalemDV");
-        //console.log(_u, _v);
-        return {x: 1, y: 1, z:1};
-    }
+    const {_u, _v, _u1, _v1} = getUVForC0(id, u, v);
     const knots = [];
     for(let i = 0; i < 4; i ++) {
         knots.push(deCastiljau(_u1, s.pointsMap[_u + i][_v + 0], s.pointsMap[_u + i][_v + 1], s.pointsMap[_u + i][_v + 2], s.pointsMap[_u + i][_v + 3]));
@@ -232,28 +190,8 @@ export function EvaluateSurfaceDV(id, u, v) {
 export function EvaluateSurfaceDU(id, u, v) {
     const surfaces = getSurfaces();
     const s = surfaces.find(x => x.id === id);
-    if(u < 0 && s.cylinder) {
-        u += s.width;
-    }
-    if(v < 0 && s.cylinder) {
-        v += s.height;
-    }
-    if(u > s.width && s.cylinder) {
-        u -= s.width;
-    }
-    if(v > s.height && s.cylinder) {
-        v -= s.height;
-    }
-    const _u = Math.floor(v) * 3;
-    const _v = Math.floor(u) * 3;
-    const _u1 =  u - Math.floor(u);
-    const _v1 = v - Math.floor(v) ;
+    const {_u, _v, _u1, _v1} = getUVForC0(id, u, v);
     const knots = [];
-    if(u < 0 ||  v < 0 || isNaN(v) || isNaN(u)) {
-        console.log("Problem z evalemDU");
-        //console.log(_u, _v);
-        return {x: 1, y: 1, z:1};
-    }
     for(let i = 0; i < 4; i ++) {
         knots.push(deCastiljau(_v1, s.pointsMap[_u + 0][_v + i], s.pointsMap[_u + 1][_v + i], s.pointsMap[_u + 2][_v + i], s.pointsMap[_u + 3][_v + i]));
     }

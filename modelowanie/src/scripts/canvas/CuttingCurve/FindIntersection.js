@@ -49,6 +49,14 @@ function getSizes(_objects) {
     sizes.o1y = _objects[0].type === "torus" ? 1 : _objects[0].height;
     sizes.o2x = _objects[1].type === "torus" ? 1 : _objects[1].width;
     sizes.o2y = _objects[1].type === "torus" ? 1 : _objects[1].height;
+    if(_objects[0].type === "C2" && _objects[0].cylinder) {
+        sizes.o1x = _objects[0].height;
+        sizes.o1y = _objects[0].width
+    }
+    if(_objects[1].type === "C2" && _objects[1].cylinder) {
+        sizes.o2x = _objects[1].height;
+        sizes.o2y = _objects[1].width
+    }
     return sizes;
 }
 function countGradientMethod(ob1, ob2, best){

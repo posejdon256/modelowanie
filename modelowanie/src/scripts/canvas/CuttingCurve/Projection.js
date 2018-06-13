@@ -34,6 +34,8 @@ export function getFirstNewtonIt() {
 function findIntersection(_objects) {
     const interation = 10.0;
     const cursor = getCursor();
+    DrawPoint(evaluate(_objects[0], 0.5, 0.99), "Blue");
+    DrawPoint(evaluate(_objects[1], 0.5, 0.99), "Blue");
     const eps = 0.001;
     const best = {
         lenght: 10000,
@@ -75,6 +77,14 @@ function getSizes(_objects) {
     sizes.o1y = _objects[0].type === "torus" ? 1 : _objects[0].height;
     sizes.o2x = _objects[1].type === "torus" ? 1 : _objects[1].width;
     sizes.o2y = _objects[1].type === "torus" ? 1 : _objects[1].height;
+    if(_objects[0].type === "C2" && _objects[0].cylinder) {
+        sizes.o1x = _objects[0].height;
+        sizes.o1y = _objects[0].width
+    }
+    if(_objects[1].type === "C2" && _objects[1].cylinder) {
+        sizes.o2x = _objects[1].height;
+        sizes.o2y = _objects[1].width
+    }
     return sizes;
 }
 export function projectIntersectionPoints(){
@@ -99,8 +109,13 @@ export function projectIntersectionPoints(){
     for(let i = 0; i < toruses.length; i ++) {
         _objects.push(toruses[i]);
     }
-    if(!findIntersection(_objects)) {
-        return false
+    try {
+        if(!findIntersection(_objects)) {
+            return false
+        }
+    }  catch(e) {
+        console.log("Error: " + e);
+        return false;
     }
     return true;//TODO
 }

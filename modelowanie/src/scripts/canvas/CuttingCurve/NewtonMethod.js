@@ -33,10 +33,13 @@ export function goGoNewton(best, iterations) {
     let pStart = evaluate(ob[0], uStart[0], vStart[0]);
     let notFinishYet = 0;
     let pointsList = [];
+    let pointsList2 = [];
     let stop = iterations ? iterations : 1000;
     let j1 = 0;
+    const normalEps = 0.002;
+    const torusEps = 0.0002;
     while(true) {
-        for(let i = 0; i < 4; i ++) {
+        for(let i = 0; i < 10; i ++) {
             try{
                 betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, alpha);
             } catch(e) {
@@ -46,17 +49,25 @@ export function goGoNewton(best, iterations) {
                     console.log("Nie zbiega :( " + e);
                 return;
             }
-              for(let m = 0; m < 4; m ++) {
-                 betterPoint[m] = (betterPoint[m]) * 0.002;
+              for(let m = 0; m < 2; m ++) {
+                 betterPoint[m] = (betterPoint[m]) * normalEps;
               }
+              for(let m = 2; m < 4; m ++) {
+                  if(ob[1].type === "torus" && ob[0].type !== "torus") {
+                        betterPoint[m] = (betterPoint[m]) * torusEps;
+                  } else {
+                    betterPoint[m] = (betterPoint[m]) * normalEps;
+                  }
+             }
             let helpU1 = u[0] - betterPoint[0];
             let helpU2 = u[1] - betterPoint[2]; 
             let helpV1 = v[0] - betterPoint[1];
             let helpV2 = v[1] - betterPoint[3]; 
-            console.log(helpU1, helpU2, helpV1, helpV2);
-            if((notInRange([helpU1, helpU2], [helpV1, helpV2], ob) && ob1.type !== "torus" && !ob1.cylinder && !ob2.cylinder) ||
-            (notInURange([helpV1, helpV2], ob) && (ob1.cylinder || ob2.cylinder))) {
-           // || (notInURange([helpU1, helpU2], ob) && (ob1.cylinder || ob2.cylinder) && ob1.type === "C2" && ob2.type === "C2")) {
+            if((notInRange([helpU1, helpU2], [helpV1, helpV2], ob)) ||
+            (notInVRange(helpU1, ob[0]) && ob[0].cylinder && ob[0].type === "C2") ||
+            (notInVRange(helpU2, ob[1]) && ob[1].cylinder && ob[1].type === "C2") ||
+            (notInURange(helpU1, ob[0]) && ob[0].cylinder && ob[0].type === "C0") ||
+            (notInURange(helpU2, ob[1]) && ob[1].cylinder && ob[1].type === "C0")) {
                     alpha = -alpha;  
                     if(!backed)    
                         notFinishYet = 0;   
@@ -69,8 +80,9 @@ export function goGoNewton(best, iterations) {
                         updateIn2Visualisation(cuttingCurve.id, {break: true});
                     }
                     pointsList = pointsList.reverse();
+                    pointsList2 = pointsList2.reverse();
 
-                   // pointsList.push(evaluate(ob1, u[0], v[0]));
+                    pointsList.push(evaluate(ob1, u[0], v[0]));
                     backed = true; 
                     continue;
             }
@@ -81,8 +93,8 @@ export function goGoNewton(best, iterations) {
         uPrev = [u[0], u[1]];
         vPrev = [v[0], v[1]];
         const p1 = evaluate(ob1, u[0], v[0]);
-        
         pointsList.push(evaluate(ob1, u[0], v[0]));
+        pointsList2.push(evaluate(ob2, u[1], v[1]));
         if(!iterations) {
             updateIn1Visualisation(cuttingCurve.id, ob[0].type === "torus" ? u[0] :  u[0] / ob[0].width, ob[0].type === "torus" ? v[0] : v[0] / ob[0].height);
             updateIn2Visualisation(cuttingCurve.id, ob[1].type === "torus" ? u[1] : u[1] / ob[1].width, ob[1].type === "torus" ? v[1] : v[1] / ob[1].height);
@@ -99,6 +111,7 @@ export function goGoNewton(best, iterations) {
     if(iterations) {
         for(let i = 0; i < pointsList.length; i ++) {
             DrawPoint(pointsList[i], "Red");
+            DrawPoint(pointsList2[i], "Blue");
             
         }
         return;
@@ -120,11 +133,18 @@ export function goGoNewton(best, iterations) {
     setInterpolationState(false);
  }
  function notInRange(u, v, ob) {
-     return (u[0] < 0 || u[1] < 0 || v[0] < 0 || v[1] < 0 || u[0] >= ob[0].width || u[1] >= ob[1].width || v[0] >= ob[0].height  || v[1] >= ob[1].height );
+     let ret = false;
+     if(ob[0].type !== "torus" && !ob[0].cylinder) {
+         ret = u[0] < 0 || v[0] < 0 || u[0] >= ob[0].width || v[0] >= ob[0].height;
+     }
+     if(ob[1].type !== "torus" && !ob[1].cylinder) {
+         ret = ret ||  u[1] < 0 || v[1] < 0 || u[1] >= ob[1].width || v[1] >= ob[1].height;
+     }
+     return ret;
  }
  function notInURange(u, ob) {
-    return (u[0] < 0 || u[1] < 0 || u[0] >= ob[0].width || u[1] >= ob[1].width);
+    return (u < 0 || u[0] >= ob.width);
  }
  function notInVRange(v, ob) {
-    return (v[0] < 0 || v[1] < 0 || v[0] >= ob[0].height || v[1] >= ob[1].height);
+    return (v < 0|| v >= ob.height);
  }
