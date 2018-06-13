@@ -142,8 +142,13 @@ export function findObjectToIntersectionAndIntersection(){
     for(let i = 0; i < toruses.length; i ++) {
         _objects.push(toruses[i]);
     }
-    if(!findIntersection(_objects)) {
-        return false
+    try{
+        if(!findIntersection(_objects)) {
+            return false
+        }
+    } catch(e) {
+        alert("Error: " + e);
+        return false;
     }
     return true;//TODO
 }

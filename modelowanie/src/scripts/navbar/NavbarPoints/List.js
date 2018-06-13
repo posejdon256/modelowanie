@@ -9,7 +9,7 @@ import { updateCurveName, getCurveById, selectCurve, getCurvesControlPoints, rem
 import { removeSurface, updateSurfaceName, turnOnSurfaceChain, selectSurface } from '../../canvas/Surface/Surface';
 import { turnOnNormals, setGregoryName, selectGrzegorz, removeGregory } from '../../canvas/Gregory/Gregory';
 import { removeTorus, updateTorusName, selectTorus } from '../../canvas/Torus/Torus';
-import { updateCuttingCurveName } from '../../canvas/CuttingCurve/CuttingCurve';
+import { updateCuttingCurveName, selectCuttingCurve, removeCuttingCurve } from '../../canvas/CuttingCurve/CuttingCurve';
 
 export default class List extends Component {
 
@@ -32,6 +32,8 @@ export default class List extends Component {
         this.selectTorus = this.selectTorus.bind(this);
         this.updateTorusName = this.updateTorusName.bind(this);
         this.updateCuttingCurveName = this.updateCuttingCurveName.bind(this);
+        this.removeIntersectionCurve = this.removeIntersectionCurve.bind(this);
+        this.selectIntersectionCurve = this.selectIntersectionCurve.bind(this);
         this.state = {
             points: [],
             curves: [],
@@ -143,6 +145,16 @@ export default class List extends Component {
             torus: selectTorus(id)
         });
     }
+    selectIntersectionCurve(id) {
+        this.setState({
+            cuttingCurves: selectCuttingCurve(id)
+        });
+    }
+    removeIntersectionCurve(id) {
+        this.setState({
+            cuttingCurves: removeCuttingCurve(id)
+        });
+    }
     selectCurve(id) {
         this.setState({
             curves:selectCurve(id)
@@ -184,12 +196,12 @@ export default class List extends Component {
                         return (
                         <li key={"point" + curve.id} className="ab-point-list-li">
                             <input className="ab-point-list-input" type="text" value={curve.name} onChange={(e) => this.updateCuttingCurveName(curve.id, e.target.value)}/>
-                            {/* <button className="ab-delete-point-button" onClick={(e) => this.removeTorus(torus.id)}>
+                            <button className="ab-delete-point-button" onClick={(e) => this.removeIntersectionCurve(curve.id)}>
                                 <img className="ab-delete-point" src={trash} alt="trash" />
                             </button>
-                            <button className="ab-points-list-select-button" onClick={(e) => this.selectTorus(torus.id)}>
-                                <img className="ab-select-point" src={torus.selected ? selectedRed : select} alt="select" />
-                            </button> */}
+                            <button className="ab-points-list-select-button" onClick={(e) => this.selectIntersectionCurve(curve.id)}>
+                                <img className="ab-select-point" src={curve.selected ? selectedRed : select} alt="select" />
+                            </button>
                         </li>
                         );
                     })

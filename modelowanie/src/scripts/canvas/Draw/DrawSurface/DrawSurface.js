@@ -8,6 +8,10 @@ import { getBSplinePointsFromKnots, rebuildVirtualPointsForSingleCurve } from ".
 
 let lastPointsC0 = [];
 let lastPointsC2 = [];
+export function cleanDrawSurfacePoints() {
+    lastPointsC0 = [];
+    lastPointsC2 = [];
+}
 export function _DrawSurfacesC0(ctx, ctxS1, ctxS2, surface) {
     const surfaces = getSurfaces("C0");
     let points = [];

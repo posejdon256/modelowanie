@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../../css/header/Header.css';
 import torus from '../../pictures/torus.png';
+import clean from '../../pictures/clean.png';
 import point from '../../pictures/point.png';
 import bezierc1 from '../../pictures/bezierc1.png';
 import bezierc2 from '../../pictures/bezierc2.png';
@@ -22,6 +23,7 @@ import { MakeGregory } from '../canvas/Gregory/Gregory';
 import { addTorus } from '../canvas/Torus/Torus';
 import { findObjectToIntersectionAndIntersection } from '../canvas/CuttingCurve/FindIntersection';
 import { setProjectionState, getProjectionState } from '../canvas/CuttingCurve/Projection';
+import { cleanScene } from '../canvas/Clean/Clean';
 
 export default class Header extends Component {
     constructor(props) {
@@ -39,6 +41,7 @@ export default class Header extends Component {
         this.addGregory = this.addGregory.bind(this);
         this.addIntersection = this.addIntersection.bind(this);
         this.projectIntersection = this.projectIntersection.bind(this);
+        this.cleanScene = this.cleanScene.bind(this);
     }
     addTorus() {
         addTorus();
@@ -74,7 +77,10 @@ export default class Header extends Component {
             this.props.ShowVisualization();
         }
     }
-    projectIntersection() {
+    cleanScene(){
+        cleanScene();
+    }
+     projectIntersection() {
         setProjectionState(!getProjectionState());
     }
     addInterpolationCurve() {
@@ -93,6 +99,9 @@ export default class Header extends Component {
     render(){
         return(
         <div className="ab-header">
+            <button className="ab-torus-button" onClick={this.cleanScene}>
+                <img className="ab-torus-image" src={clean} alt="torus" />
+            </button>
             <button className="ab-torus-button" onClick={this.addTorus}>
                 <img className="ab-torus-image" src={torus} alt="torus" />
             </button>

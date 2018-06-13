@@ -6,9 +6,14 @@ import { countK0AndH0 } from "./Determinant";
 import { findAB, findP3, findCenter, findQ, findP1, getPartialGregoryPoints } from "./Helper";
 
 let GregoryVectors = [];
-const Gregories = [];
+let Gregories = [];
 let GregoryPoints = [];
 let index = 0;
+export function cleanGrzegorzys() {
+    GregoryVectors = [];
+    Gregories = [];
+    GregoryPoints = [];
+}
 export function getGregoryVectors() {
     return GregoryVectors;
 }

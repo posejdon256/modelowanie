@@ -6,6 +6,7 @@ import { clearCanvas, getContexts, getCanvas } from "./Draw";
 import { _DrawCurves } from "./DrawCurve/DrawCurve";
 import { _DrawSurfaceWithoutRedraw, _DrawSurfacesC2, _DrawSurfacesC0 } from "./DrawSurface/DrawSurface";
 import { DrawGregor } from "./DrawGregory/DrawGregory";
+import { _DrawIntersectionCurves } from "./DrawCurve/DrawIntersectionCurve";
 
 export default function Redraw(){
     clearCanvas();
@@ -16,6 +17,7 @@ export default function Redraw(){
     DrawCurves();
     DrawPoints(getPoints());
     DrawGregor();
+    _DrawIntersectionCurves();
     getCanvas().focus();
 }
 export function RedrawWithoutChangingScene() {
@@ -28,6 +30,7 @@ export function RedrawWithoutChangingScene() {
     DrawCurves();
     DrawPoints(getPoints());
     DrawGregor();
+    _DrawIntersectionCurves();
     getCanvas().focus();
 }
 // function DrawRectangle() {

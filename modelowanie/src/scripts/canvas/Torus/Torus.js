@@ -2,11 +2,14 @@ import Redraw from "../Draw/Redraw";
 import { getCursor } from "../Cursor/Cursor";
 
 
-const toruses = [];
+let toruses = [];
 let torusesCounter = 0;
 let gX = 10;
 let gY = 10;
 
+export function cleanToruses() {
+    toruses = [];
+}
 /**
  * Tworzy tablice z wierzchołkami torusa
  */

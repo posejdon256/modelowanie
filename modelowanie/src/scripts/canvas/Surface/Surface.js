@@ -20,6 +20,9 @@ let addingSurface = false;
 let direction = 0; // 0 - X, 1 - Y, 2 - Z
 let absoluteWidth = 0.05;
 let absoluteHeight = 0.05;
+export function cleanSurfaces() {
+    surfaces = [];
+}
 export function setAbsoluteWidth(_width) {
     const _absoluteWidth = TryParseFloat2(_width);
     if(_absoluteWidth !== undefined) {

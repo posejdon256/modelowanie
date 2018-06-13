@@ -11,6 +11,9 @@ import { TryParseFloat } from '../../Helpers/Helpers';
 let points = [];
 let pointNumber = 1;
 
+export function cleanPoints() {
+    points = [];
+}
 export function getPoints(filter){
     if(points.length > 1000) {
         new Promise(function(resolve, reject) {

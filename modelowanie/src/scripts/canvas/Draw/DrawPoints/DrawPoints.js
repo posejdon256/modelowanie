@@ -33,7 +33,8 @@ export function DrawPoint(p, color) {
     }
     const { ctx } = getContexts();
     drawPoint(_trans[0].x, _trans[0].y, _trans[0].z, img, ctx, rgb);
-    ctx.putImageData(img, 0, 0);  
+    ctx.putImageData(img, 0, 0); 
+    setTranslationPoints([]); 
 }
 export function _DrawPoints(points, _ctx, _ctxStereo, _ctxStereo2) {
     setTranslationPoints(points);

@@ -13,6 +13,7 @@ import { setIntersectionStep } from '../canvas/CuttingCurve/FindIntersection';
 import { setNewtonAlpa, setFinalEpsilon } from '../canvas/CuttingCurve/NewtonMethod';
 import { setOneProjectionPointState, setFirstNewtonIt, setNewtonStep } from '../canvas/CuttingCurve/Projection';
 import { setLocekdCamrea } from '../canvas/Move/Move';
+import { convertToInterpolationCurve } from '../canvas/CuttingCurve/CuttingCurve';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -34,6 +35,7 @@ export default class Navbar extends Component {
         this.lockUnlockCamera = this.lockUnlockCamera.bind(this);
         this.showNewtonIt = this.showNewtonIt.bind(this);
         this.setNewtonStep = this.setNewtonStep.bind(this);
+        this.convertToInterpolation = this.convertToInterpolation.bind(this);
         const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
@@ -106,6 +108,9 @@ export default class Navbar extends Component {
     }
     setNewtonStep(event) {
         setNewtonStep(event.target.value);
+    }
+    convertToInterpolation(event) {
+        convertToInterpolationCurve();
     }
     render(){
         return(
@@ -180,6 +185,9 @@ export default class Navbar extends Component {
                 <div>
                     <label>Ustaw liczbę pokazywanych kroków Newtona:</label>
                     <input type="text" onChange={this.setNewtonStep} defaultValue="20"/>
+                </div>
+                <div>
+                    <button onClick={this.convertToInterpolation}>Konvertuj do interpolacyjnejw</button>
                 </div>
             </div>
             <ListPointsInCurve points={this.state.curvePoints} />

@@ -13,6 +13,9 @@ export function clearCurves() {
     curveCounter = 1;
     curves = [];
 }
+export function cleanCurves() {
+    curves = [];
+}
 export function getCurves(type){
     switch(type) {
         case "C0":
