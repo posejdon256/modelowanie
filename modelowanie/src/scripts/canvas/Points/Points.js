@@ -49,7 +49,7 @@ export function removePoint(id) {
     for(let i = 0; i < points.length; i ++) {
         if(points[i].id === id) {
             if(points[i].surface) {
-                alert("Ten punkt należy do płatka bikubicznego i nie da się go usunąć!");
+                console.log("Ten punkt należy do płatka bikubicznego i nie da się go usunąć!");
                 return;
             }
             points[i].deleted = true;

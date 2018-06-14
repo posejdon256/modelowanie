@@ -74,8 +74,8 @@ export function goGoNewton(best, iterations) {
             if((notInRange([helpU1, helpU2], [helpV1, helpV2], ob)) ||
             (notInVRange(helpU1, ob[0]) && ob[0].cylinder && ob[0].type === "C2") ||
             (notInVRange(helpU2, ob[1]) && ob[1].cylinder && ob[1].type === "C2") ||
-            (notInURange(helpU1, ob[0]) && ob[0].cylinder && ob[0].type === "C0") ||
-            (notInURange(helpU2, ob[1]) && ob[1].cylinder && ob[1].type === "C0")) {
+            (notInURange(helpV1, ob[0]) && ob[0].cylinder && ob[0].type === "C0") ||
+            (notInURange(helpV2, ob[1]) && ob[1].cylinder && ob[1].type === "C0")) {
                     alpha = -alpha;  
                     if(!backed)    
                         notFinishYet = 0;
@@ -102,6 +102,34 @@ export function goGoNewton(best, iterations) {
             v = [helpV1, helpV2];
 
         }
+        if(!iterations && decideIfAddBreak(ob[0], uPrev[0], vPrev[0], u[0], v[0])) {
+            updateIn1Visualisation(cuttingCurve.id, {break: true});
+        }
+        if(!iterations && decideIfAddBreak(ob[1], uPrev[1], vPrev[1], u[1], v[1])) {
+            updateIn2Visualisation(cuttingCurve.id, {break: true});
+        }
+        if(ob[0].type === "torus") {
+            u[0] = u[0] < 0 ? 0.999 : u[0];
+            v[0] = v[0] < 0 ? 0.999 : v[0];
+            u[0] = u[0] >= 1 ? 0 : u[0];
+            v[0] = v[0] >= 1 ? 0 : v[0];
+        }
+        if(ob[1].type === "torus") {
+            u[1] = u[1] < 0 ? 0.999 : u[1];
+            v[1] = v[1] < 0 ? 0.999 : v[1];
+            u[1] = u[1] >= 1 ? 0 : u[1];
+            v[1] = v[1] >= 1 ? 0 : v[1];
+           // updateIn2Visualisation(cuttingCurve.id, {break: true});
+        }
+        // if(ob[0].type === "C0" && ob[0].cylinder) {
+        //     v[0] = v[0] < 0 ? ob[0].height - 0.001 : v[0];
+        //     v[0] = v[0] >= ob[0].height ? 0 : v[0];
+        // }
+        // if(ob[1].type === "C0" && ob[1].cylinder) {
+        //     v[1] = v[1] < 0 ? ob[1].height - 0.001 : v[1];
+        //     v[1] = v[1] >= ob[1].height ? 0 : v[1];
+        //    // updateIn2Visualisation(cuttingCurve.id, {break: true});
+        // }
         uPrev = [u[0], u[1]];
         vPrev = [v[0], v[1]];
         const p1 = evaluate(ob1, u[0], v[0]);
@@ -152,4 +180,20 @@ export function goGoNewton(best, iterations) {
  }
  function notInVRange(v, ob) {
     return (v < 0|| v >= ob.height);
+ }
+ function decideIfAddBreak(ob, uPrev, vPrev, u, v) {
+     let ret = false;
+    //  if(ob.type === "torus" && (Math.floor(uPrev) !== Math.floor(u) || Math.floor(vPrev) !== Math.floor(v))) {
+    //      ret = true;
+    if(ob.type === "torus") {
+        if(u < 0 || v < 0 || u >= 1 || v >= 1)
+            ret = true;
+    }
+     else if(ob.type === "C2" && ob.cylinder && v % ob.width !== vPrev % ob.width){
+        ret = true;
+     } else if(ob.type === "C0" && ob.cylinder) {
+        if( v < 0 || v >= ob.width)
+            ret = true;
+     }
+     return ret;
  }
