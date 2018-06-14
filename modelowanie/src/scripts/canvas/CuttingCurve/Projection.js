@@ -43,7 +43,7 @@ function findIntersection(_objects) {
         point2: {}
     };
     const sizes = getSizes(_objects);
-    const epsDistance = { x: sizes.o1x * 0.1, y: sizes.o1y * 0.1 };
+    const epsDistance = { x: sizes.o1x * 0.5, y: sizes.o1y * 0.5 };
     const sameObjects = _objects[0].id === _objects[1].id ? true : false;
     for(let i = 0.0; i < sizes.o1x; i += 1.0/interation) {
         for(let j = 0.0; j < sizes.o1y; j += 1.0/interation) {
@@ -73,10 +73,10 @@ function findIntersection(_objects) {
 }
 function getSizes(_objects) {
     const sizes = {};
-    sizes.o1x = _objects[0].type === "torus" ? 1 : _objects[0].width;
-    sizes.o1y = _objects[0].type === "torus" ? 1 : _objects[0].height;
-    sizes.o2x = _objects[1].type === "torus" ? 1 : _objects[1].width;
-    sizes.o2y = _objects[1].type === "torus" ? 1 : _objects[1].height;
+    sizes.o1x = _objects[0].type === "torus" ? 1 : _objects[0].height;
+    sizes.o1y = _objects[0].type === "torus" ? 1 : _objects[0].width;
+    sizes.o2x = _objects[1].type === "torus" ? 1 : _objects[1].height;
+    sizes.o2y = _objects[1].type === "torus" ? 1 : _objects[1].width;
     if(_objects[0].type === "C2" && _objects[0].cylinder) {
         sizes.o1x = _objects[0].height;
         sizes.o1y = _objects[0].width
@@ -149,6 +149,8 @@ function countGradientMethod(ob1, ob2, best){
         }
         p1 = evaluate(ob1, u[0], v[0]);
         p2 = evaluate(ob2, u[1], v[1]);
+        DrawPoint(p1, "Blue");
+        DrawPoint(p2, "Blue");
         const uPrev = u;
         const vPrev = v;
 

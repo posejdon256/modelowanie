@@ -4,6 +4,7 @@ import { getCursor } from "../Cursor/Cursor";
 import { getSurfaces }  from  "../Surface/Surface";
 import { EvaluateSurface, EvaluateSurfaceDU, EvaluateSurfaceDV, EvaluateSurfaceC2, EvaluateSurfaceC2DU, EvaluateSurfaceC2DV } from "../Surface/EvaluateSurface";
 import { goGoNewton } from "./NewtonMethod";
+import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
 
 let intersectionStep = 3; //Needs to be updated for toruses and C0
 export function setIntersectionStep(_step) {
@@ -22,7 +23,7 @@ function findIntersection(_objects) {
         point2: {}
     };
     const sizes = getSizes(_objects);
-    const epsDistance = { x: sizes.o1x * 0.1, y: sizes.o1y * 0.1 };
+    const epsDistance = { x: sizes.o1x * 0.5, y: sizes.o1y * 0.5 };
     const sameObjects = _objects[0].id === _objects[1].id ? true : false;
     for(let i = 0.0; i < sizes.o1x; i += 1.0/interation) {
         for(let j = 0.0; j < sizes.o1y; j += 1.0/interation) {
@@ -88,6 +89,8 @@ function countGradientMethod(ob1, ob2, best){
         }
         p1 = evaluate(ob1, u[0], v[0]);
         p2 = evaluate(ob2, u[1], v[1]);
+        DrawPoint(p1, "Blue");
+        DrawPoint(p2, "Blue");
         const uPrev = u;
         const vPrev = v;
 

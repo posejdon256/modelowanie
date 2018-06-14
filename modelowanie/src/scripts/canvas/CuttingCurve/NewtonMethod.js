@@ -74,8 +74,8 @@ export function goGoNewton(best, iterations) {
             if((notInRange([helpU1, helpU2], [helpV1, helpV2], ob)) ||
             (notInVRange(helpU1, ob[0]) && ob[0].cylinder && ob[0].type === "C2") ||
             (notInVRange(helpU2, ob[1]) && ob[1].cylinder && ob[1].type === "C2") ||
-            (notInURange(helpV1, ob[0]) && ob[0].cylinder && ob[0].type === "C0") ||
-            (notInURange(helpV2, ob[1]) && ob[1].cylinder && ob[1].type === "C0")) {
+            (notInVRange(helpV1, ob[0]) && ob[0].cylinder && ob[0].type === "C0") ||
+            (notInVRange(helpV2, ob[1]) && ob[1].cylinder && ob[1].type === "C0")) {
                     alpha = -alpha;  
                     if(!backed)    
                         notFinishYet = 0;
@@ -176,7 +176,7 @@ export function goGoNewton(best, iterations) {
      return ret;
  }
  function notInURange(u, ob) {
-    return (u < 0 || u[0] >= ob.width);
+    return (u < 0 || u >= ob.width);
  }
  function notInVRange(v, ob) {
     return (v < 0|| v >= ob.height);
