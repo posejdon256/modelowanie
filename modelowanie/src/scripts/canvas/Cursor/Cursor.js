@@ -19,10 +19,10 @@ export function setScreenPlace(x, y) {
     cursor.screenX = x;
     cursor.screenY = y;
 }
-export function setCursor(xDiff, yDiif, zDiff, redraw) {
-    cursor.x = xDiff;
-    cursor.y = yDiif;
-    cursor.z = zDiff;
+export function setCursor(x, y, z, redraw) {
+    cursor.x = x;
+    cursor.y = y;
+    cursor.z = z;
     if(redraw) {
         Redraw();
     }

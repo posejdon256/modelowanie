@@ -48,14 +48,14 @@ export function _DrawPoints(points, _ctx, _ctxStereo, _ctxStereo2) {
         let rgb = {r: 236, g: 4, b: 0};
         for(let i = 0; i < left.length; i ++) {
             if((!points[i].c2Bezier && !points[i].c2BSpline) || (points[i].c2BSpline && c2BezierVisible) || (points[i].c2Bezier && !c2BezierVisible))
-            drawPoint(left[i].x, left[i].y, img, _ctxStereo, rgb);
+            drawPoint(left[i].x, left[i].y, left[i].z, img, _ctxStereo, rgb);
         }
         _ctxStereo.putImageData(img, 0, 0);
         rgb = {r: 0, g: 249, b: 247};
         img = _ctxStereo2.getImageData(0, 0, _canvas.width, _canvas.height);
         for(let i = 0; i < right.length; i ++) {
             if((!points[i].c2Bezier && !points[i].c2BSpline) || (points[i].c2BSpline && c2BezierVisible) || (points[i].c2Bezier && !c2BezierVisible))
-                drawPoint(right[i].x, right[i].y, img, _ctxStereo, rgb);
+                drawPoint(right[i].x, right[i].y, right[i].z, img, _ctxStereo, rgb);
         }
         _ctxStereo2.putImageData(img, 0, 0);
         stereoscopyDraw();

@@ -5,6 +5,7 @@ import { getCanvas, drawLine } from "../Draw";
 import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
 import { deCastiljau } from "../../Bezier/DeCastiljau";
 import { getBSplinePointsFromKnots, rebuildVirtualPointsForSingleCurve } from "../../Bezier/BSpline";
+import { DrawLines } from "../DrawLine/DrawLines";
 
 let lastPointsC0 = [];
 let lastPointsC2 = [];
@@ -130,90 +131,18 @@ export function _DrawSurfaceWithoutRedraw(ctx, ctxS1, ctxS2) {
     _DrawCurveInSurface(ctx, ctxS1, ctxS2, lastPointsC0.concat(lastPointsC2));
 }
 export function _DrawCurveInSurface(ctx, ctxS1, ctxS2, points) {
-    const stereoscopy = getStereoscopy();
-    setTranslationPoints(points);
-    const translated =  Translate({});
-    const canvas = getCanvas();
-    if(stereoscopy) {
-        const { right, left} = translated;
-        let img = ctxS1.getImageData(0, 0, canvas.width, canvas.height);
-        ctxS1.strokeStyle = "rgba(236, 4, 0, 1)";
-        ctxS2.strokeStyle = "rgba(0, 249, 247, 1)";
-        ctxS1.beginPath();
-        ctxS2.beginPath();
-        for(let i = 1; i < left.length; i ++) {
-            const x1 = (left[i - 1].x + 1) * 500;
-            const y1 = (left[i - 1].y + 1) * 350;
-            const z1 = left[i - 1].z;
-
-            const x2 = (left[i].x + 1) * 500;
-            const y2 = (left[i].y + 1) * 350;
-            const z2 = left[i].z;
-
-            if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -5 || z1 > 5
-            || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -5 || z2 > 5)
-                continue;
-            drawLine(x1, y1, x2, y2, ctxS1);
-            //drawPixel(x, y, img, ctxS1, rgb);
-        }
-        ctxS1.putImageData(img, 0, 0);
-        for(let i = 1; i < right.length; i ++) {
-            const x1 = (right[i - 1].x + 1) * 500;
-            const y1 = (right[i - 1].y + 1) * 350;
-            const z1 = right[i - 1].z;
-
-            const x2 = (right[i].x + 1) * 500;
-            const y2 = (right[i].y + 1) * 350;
-            const z2 = right[i].z;
-
-            if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -5 || z1 > 5
-                || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -5 || z2 > 5)
-                continue;
-            drawLine(x1, y1, x2, y2, ctxS2);
-        }
-        ctxS1.stroke();
-        ctxS2.stroke()
-        //stereoscopyDraw();
-    } else {
-        ctx.strokeStyle = "rgba(255, 0, 255, 1)";
-        ctx.beginPath();
-        for(let i = 1; i < translated.length; i ++) {
-            const x1 = (translated[i - 1].x + 1) * 500;
-            const y1 = (translated[i - 1].y + 1) * 350;
-            const z1 = translated[i - 1].z;
-
-            const x2 = (translated[i].x + 1) * 500;
-            const y2 = (translated[i].y + 1) * 350;
-            const z2 = translated[i].z;
-            if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -5 || z1 > 5
-                || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -5 || z2 > 5)
-                continue;
-            if(points[i].break) {
-                ctx.closePath();
-                continue;
-            }
-            drawLine(x1, y1, x2, y2, ctx);
-        }
-        ctx.stroke();
-       // ctx.putImageData(img, 0, 0);
-    }
+    DrawLines(points, { r: 255, g: 0, b: 255 });
     drawChainForC2CubicFlake(ctx, ctxS1, ctxS2);
 }
 function drawChainForC2CubicFlake(ctx, ctxS1, ctxS2) {
     const surfaces = getSurfaces("C2");
-    ctx.strokeStyle = "rgba(0, 0, 255, 1)";
     for(let i = 0; i < surfaces.length; i ++) {
         if(!surfaces[i].chain) {
             continue;
         }
         for(let j = 0; j < surfaces[i].pointsMap.length; j ++) {
             setTranslationPoints(surfaces[i].pointsMap[j]);
-            let translated = Translate({});
-            ctx.beginPath();
-            for(let k = 1; k < translated.length; k ++) {
-                drawLine(parseInt((translated[k - 1].x + 1) * 500, 10), parseInt((translated[k - 1].y + 1) * 350, 10), parseInt((translated[k].x + 1) * 500, 10), parseInt((translated[k].y + 1) * 350, 10), ctx);
-            }
-            ctx.stroke();
+            DrawLines(surfaces[i].pointsMap[j], { r: 0, g: 0, b: 255 });
         }
         for(let m = 0; m < surfaces[i].pointsMap[0].length; m ++) {
             const _points = [];
@@ -221,13 +150,7 @@ function drawChainForC2CubicFlake(ctx, ctxS1, ctxS2) {
                 _points.push(surfaces[i].pointsMap[k][m]);
                // _points.push(surfaces[i].pointsMap[k][m]);
             }
-            setTranslationPoints(_points);
-            let translated = Translate({});
-            ctx.beginPath();
-            for(let k = 1; k < translated.length; k ++) {
-                drawLine(parseInt((translated[k - 1].x + 1) * 500, 10), parseInt((translated[k - 1].y + 1) * 350, 10), parseInt((translated[k].x + 1) * 500, 10), parseInt((translated[k].y + 1) * 350, 10), ctx);
-            }
-            ctx.stroke();
+            DrawLines(_points, { r: 0, g: 0, b: 255 });
         }
     }
 }

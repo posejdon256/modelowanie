@@ -79,6 +79,10 @@ export function updateCuttingCurveName(id, name) {
 }
 export function convertToInterpolationCurve() {
     const curve = curves.find(x => x.selected === true);
+    if(!curve) {
+        alert("Nie wybrałeś krzywej!");
+        return curves;
+    }
     addInterpolationCurve();
     setInterpolationState(true);
     addPoint(curve.points[0].x, curve.points[0].y, curve.points[0].z, "Newton");

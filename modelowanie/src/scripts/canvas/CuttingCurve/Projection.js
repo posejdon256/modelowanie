@@ -149,8 +149,6 @@ function countGradientMethod(ob1, ob2, best){
         }
         p1 = evaluate(ob1, u[0], v[0]);
         p2 = evaluate(ob2, u[1], v[1]);
-        DrawPoint(p1, "Blue");
-        DrawPoint(p2, "Blue");
         const uPrev = u;
         const vPrev = v;
 

@@ -27,7 +27,7 @@ export function RedrawVisualization() {
         }
     }
     for(let i = 1; i < curve.intersectionVisualization2.length; i ++) {
-        if(curve.intersectionVisualization1[i].break && i < curve.intersectionVisualization2.length - 1) {
+        if(curve.intersectionVisualization2[i].break && i < curve.intersectionVisualization2.length - 1) {
             ctx2.moveTo(curve.intersectionVisualization2[i + 1].u, curve.intersectionVisualization2[i + 1].v);
         } else {
             ctx2.lineTo(curve.intersectionVisualization2[i].u, curve.intersectionVisualization2[i].v);

@@ -26,13 +26,13 @@ export function cleanSurfaces() {
 export function setAbsoluteWidth(_width) {
     const _absoluteWidth = TryParseFloat2(_width);
     if(_absoluteWidth !== undefined) {
-        absoluteWidth = 0.01 * _absoluteWidth;
+        absoluteWidth = _absoluteWidth;
     }
 }
 export function setAbsoluteHeight(_height) {
     const _absoluteHeight = TryParseFloat2(_height);
     if(_absoluteHeight !== undefined) {
-        absoluteHeight = 0.01 * _absoluteHeight;
+        absoluteHeight = _absoluteHeight;
     }
 }
 export function getSurfaces(type) {
@@ -167,6 +167,7 @@ export function addSurface(_width, _height, _cylinder, _u, _v, _type) {
         height: _height,
         cylinder: _cylinder,
         curves: [],
+        pointsMap:[],
         px: _u,
         py: _v,
         type : _type,

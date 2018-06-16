@@ -51,6 +51,9 @@ export function goGoNewton(best, iterations) {
             try{
                 betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, alpha);
             } catch(e) {
+                // if(u[0] < 0 || u[1] < 0) {
+                //     continue;
+                // }
                 if(!iterations)
                     alert("Nie zbiega :( " + e);
                 else
@@ -88,8 +91,8 @@ export function goGoNewton(best, iterations) {
                     uPrev = [uStart[0], uStart[1]];
                     vPrev = [vStart[0], vStart[1]];
                     if(!iterations) {
-                        // updateIn1Visualisation(cuttingCurve.id, {break: true});
-                        // updateIn2Visualisation(cuttingCurve.id, {break: true});
+                        cuttingCurve.intersectionVisualization1 = cuttingCurve.intersectionVisualization1.reverse();
+                        cuttingCurve.intersectionVisualization2 = cuttingCurve.intersectionVisualization2.reverse();
                     }
                     pointsList = pointsList.reverse();
                     pointsList2 = pointsList2.reverse();
@@ -121,15 +124,24 @@ export function goGoNewton(best, iterations) {
             v[1] = v[1] >= 1 ? 0 : v[1];
            // updateIn2Visualisation(cuttingCurve.id, {break: true});
         }
-        // if(ob[0].type === "C0" && ob[0].cylinder) {
-        //     v[0] = v[0] < 0 ? ob[0].height - 0.001 : v[0];
-        //     v[0] = v[0] >= ob[0].height ? 0 : v[0];
+        // if(ob[0].type === "C2" && ob[0].cylinder) {
+        //     v[0] = v[0] < 0 ? ob[0].width - 0.001 : v[0];
+        //     v[0] = v[0] >= ob[0].width ? 0.01 : v[0];
         // }
-        // if(ob[1].type === "C0" && ob[1].cylinder) {
-        //     v[1] = v[1] < 0 ? ob[1].height - 0.001 : v[1];
-        //     v[1] = v[1] >= ob[1].height ? 0 : v[1];
+        // if(ob[1].type === "C2" && ob[1].cylinder) {
+        //     v[1] = v[1] < 0 ? ob[1].width - 0.001 : v[1];
+        //     v[1] = v[1] >= ob[1].width ? 0.01 : v[1];
         //    // updateIn2Visualisation(cuttingCurve.id, {break: true});
         // }
+        if(ob[0].type === "C0" && ob[0].cylinder) {
+            u[0] = u[0] < 0 ? ob[0].width - 0.001 : u[0];
+            u[0] = u[0] >= ob[0].width ? 0 : u[0];
+        }
+        if(ob[1].type === "C0" && ob[1].cylinder) {
+            u[1] = u[1] < 0 ? ob[1].width - 0.001 : u[1];
+            u[1] = u[1] >= ob[1].width ? 0 : u[1];
+           // updateIn2Visualisation(cuttingCurve.id, {break: true});
+        }
         uPrev = [u[0], u[1]];
         vPrev = [v[0], v[1]];
         const p1 = evaluate(ob1, u[0], v[0]);
@@ -163,6 +175,8 @@ export function goGoNewton(best, iterations) {
     }
     if(!backed) {
         cuttingCurve.points.push({x: pStart.x, y: pStart.y, z: pStart.z});
+        cuttingCurve.intersectionVisualization1.push({u: cuttingCurve.intersectionVisualization1[0].u, v: cuttingCurve.intersectionVisualization1[0].v});
+        cuttingCurve.intersectionVisualization2.push({u: cuttingCurve.intersectionVisualization2[0].u, v: cuttingCurve.intersectionVisualization2[0].v});
     }
  }
  function notInRange(u, v, ob) {
@@ -189,10 +203,11 @@ export function goGoNewton(best, iterations) {
         if(u < 0 || v < 0 || u >= 1 || v >= 1)
             ret = true;
     }
-     else if(ob.type === "C2" && ob.cylinder && v % ob.width !== vPrev % ob.width){
-        ret = true;
-     } else if(ob.type === "C0" && ob.cylinder) {
+     else if(ob.type === "C2" && ob.cylinder) {
         if( v < 0 || v >= ob.width)
+            ret = true;
+    } else if(ob.type === "C0" && ob.cylinder) {
+        if( u < 0 || u >= ob.width)
             ret = true;
      }
      return ret;

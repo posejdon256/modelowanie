@@ -116,8 +116,8 @@ function getUVForC0(id, u, v) {
     if(v > s.height && s.cylinder) {
         vNew = 0;
     }
-    if(u < 0 ||  v < 0 || isNaN(v) || isNaN(u)) {
-         console.log("Problem z evalem "+ u + " " + v);
+    if(uNew < 0 ||  vNew < 0 || isNaN(v) || isNaN(u)) {
+         console.log("Problem z evalem "+ uNew + " " + vNew);
          return {x: 1, y: 0, z: 0, _false: true};
      }
     const _u = Math.floor(vNew) * 3;
