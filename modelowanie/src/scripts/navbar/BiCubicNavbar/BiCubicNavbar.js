@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../../../css/navbar/Navbar.css';
-import { setCylinder, setWidth, setHeight, updateSelectedCurveGrid, setGridX, setGridY, setCylinderDirection, setAbsoluteHeight, setAbsoluteWidth } from '../../canvas/Surface/Surface';
+import { setCylinder, setWidth, setHeight, updateSelectedCurveGrid, setGridX, setGridY, setAbsoluteHeight, setAbsoluteWidth, setDirection } from '../../canvas/Surface/Surface';
 
 export default class BiCubicNavbar extends Component {
     constructor(props) {
@@ -40,7 +40,7 @@ export default class BiCubicNavbar extends Component {
         setGridY(event.target.value);
     }
     setDirection() {
-        setCylinderDirection(this.refs.selectDirection.value);
+        setDirection(this.refs.selectDirection.value);
     }
     render(){
         return(
@@ -68,11 +68,11 @@ export default class BiCubicNavbar extends Component {
                 </div>
                 <div>
                     <label>Stała Szerokość: </label>
-                    <input className="input-ab" type="text" onChange={this.updateAbsoluteHeight} defaultValue={5}/>
+                    <input className="input-ab" type="text" onChange={this.updateAbsoluteHeight} defaultValue={0.07}/>
                 </div>
                 <div>
                     <label>Stała Wysokość: </label>
-                    <input className="input-ab" type="text"  onChange={this.updateAbsoluteWidth} defaultValue={5}/>
+                    <input className="input-ab" type="text"  onChange={this.updateAbsoluteWidth} defaultValue={0.07}/>
                 </div>
                 <div>
                     <button className="btn" onClick={this.updateGridOnSelectedSurface}>Podmień siatki zaznaczonych płatków</button>

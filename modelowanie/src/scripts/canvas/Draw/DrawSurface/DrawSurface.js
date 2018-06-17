@@ -63,7 +63,7 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
     let points = [];
     var i, j, k, m;
     for(i = 0; i < surfaces.length; i ++) {
-        for(j = (surfaces[i].cylinder ? surfaces[i].height + 3 : surfaces[i].width  + 3);
+        for(j = surfaces[i].height + 3;
          j < surfaces[i].curves.length;
          j ++) {
             rebuildVirtualPointsForSingleCurve(surfaces[i].curves[j].id);
@@ -94,7 +94,7 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
         }
     }
     for(i = 0; i < surfaces.length; i ++) {
-        for(j = 0; j < (surfaces[i].cylinder ? 3 + surfaces[i].height : surfaces[i].width + 3); j ++) {
+        for(j = 0; j < 3 + surfaces[i].height; j ++) {
             rebuildVirtualPointsForSingleCurve(surfaces[i].curves[j].id);
         }
         const map = surfaces[i].pointsMap;

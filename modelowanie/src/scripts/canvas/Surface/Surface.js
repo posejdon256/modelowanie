@@ -17,9 +17,9 @@ let surfacesIterator = 1;
 let gridX = 4;
 let gridY = 4;
 let addingSurface = false;
-let direction = 0; // 0 - X, 1 - Y, 2 - Z
-let absoluteWidth = 0.05;
-let absoluteHeight = 0.05;
+let direction = "X"; // 0 - X, 1 - Y, 2 - Z
+let absoluteWidth = 0.07;
+let absoluteHeight = 0.07;
 export function cleanSurfaces() {
     surfaces = [];
 }
@@ -45,20 +45,8 @@ export function getSurfaces(type) {
             return surfaces;
     }
 }
-export function setCylinderDirection(dir) {
-    switch (dir) {
-        case 'X':
-            direction = 2;
-            break;
-        case 'Y':
-            direction = 1;
-            break;
-        case 'Z':
-            direction = 0;
-            break;
-        default:
-            break;
-    }
+export function setDirection(dir) {
+    direction = dir;
 }
 export function setCylinder(_cylinder) {
     cylinder = _cylinder;
@@ -173,6 +161,8 @@ export function addSurface(_width, _height, _cylinder, _u, _v, _type) {
         type : _type,
         absoluteHeight: absoluteHeight,
         absoluteWidth: absoluteWidth,
+        wrapedU: cylinder ? true : false,
+        wrapedUV: false
     }
     surfacesIterator ++;
     surfaces.push(surface);
@@ -194,14 +184,16 @@ export function createSurface(type) {
         direction: direction,
         type : type,
         absoluteHeight: absoluteHeight,
-        absoluteWidth: absoluteWidth
+        absoluteWidth: absoluteWidth,
+        wrapedU: cylinder ? true : false,
+        wrapedUV: false
     }
     surfacesIterator ++;
     surfaces.push(surface);
     if(type === "C0") {
-        makeSurfaceC0(surface);
+        makeSurfaceC0(surface, direction);
     } else {
-        makeSurfaceC2(surface);
+        makeSurfaceC2(surface, direction);
     }
     addingSurface = false;
     Redraw();
