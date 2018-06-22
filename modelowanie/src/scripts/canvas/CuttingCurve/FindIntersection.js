@@ -22,13 +22,12 @@ function findIntersection(_objects) {
         point1: {},
         point2: {}
     };
-    const sizes = getSizes(_objects);
-    const epsDistance = { x: sizes.o1x * 0.5, y: sizes.o1y * 0.5 };
+    const epsDistance = { x: _objects[0].Width * 0.5, y: _objects[0].Height * 0.5 };
     const sameObjects = _objects[0].id === _objects[1].id ? true : false;
-    for(let i = 0.0; i < sizes.o1x; i += 1.0/interation) {
-        for(let j = 0.0; j < sizes.o1y; j += 1.0/interation) {
-            for(let k = sizes.o2x - eps; k >= 0.0; k -= 1.0/interation) {
-                for(let m = sizes.o2y - eps; m >= 0.0; m -= 1.0/interation) {
+    for(let i = 0.0; i < _objects[0].Width; i += 1.0/interation) {
+        for(let j = 0.0; j < _objects[0].Height; j += 1.0/interation) {
+            for(let k = 0.0; k < _objects[1].Width; k += 1.0/interation) {
+                for(let m = 0.0; m < _objects[1].Height; m += 1.0/interation) {
                     const ev1 = evaluate(_objects[0], i, j);
                     const ev2 = evaluate(_objects[1], k, m);
                     const trans = [ev1, ev2];
@@ -43,22 +42,6 @@ function findIntersection(_objects) {
         }
     }
     return countGradientMethod(_objects[0], _objects[1], best);
-}
-function getSizes(_objects) {
-    const sizes = {};
-    sizes.o1x = _objects[0].type === "torus" ? 1 : _objects[0].height;
-    sizes.o1y = _objects[0].type === "torus" ? 1 : _objects[0].width;
-    sizes.o2x = _objects[1].type === "torus" ? 1 : _objects[1].height;
-    sizes.o2y = _objects[1].type === "torus" ? 1 : _objects[1].width;
-    if(_objects[0].type === "C2" && _objects[0].cylinder) {
-        sizes.o1x = _objects[0].height;
-        sizes.o1y = _objects[0].width
-    }
-    if(_objects[1].type === "C2" && _objects[1].cylinder) {
-        sizes.o2x = _objects[1].height;
-        sizes.o2y = _objects[1].width
-    }
-    return sizes;
 }
 function countGradientMethod(ob1, ob2, best){
     let u = [best.point1.u, best.point2.u];

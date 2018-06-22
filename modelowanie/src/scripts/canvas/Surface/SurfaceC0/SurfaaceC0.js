@@ -10,37 +10,42 @@ let width;
 let r;
 let startCursor;
 export function makeSurfaceC0(surface, direction) {
-    const iterationsX = surface.cylinder ? 4 + (surface.width - 1) * 3 - 1 : 4 + (surface.width - 1) * 3;
-    const iterationsY = 4 + (surface.height - 1) * 3;
+    const iterationsX = surface.cylinder ? 4 + (surface.Width - 1) * 3 - 1 : 4 + (surface.Width - 1) * 3;
+    const iterationsY = 4 + (surface.Height - 1) * 3;
     const step = surface.cylinder ? 2 * Math.PI / iterationsX : surface.absoluteWidth;
     let cursorStart = getCursor();
     cursorStart = {x: cursorStart.x, y: cursorStart.y, z: cursorStart.z};
     updateCursorOnStart(surface, iterationsX, iterationsY, direction);
+    let firstPoint = getCursor();
+    firstPoint = {x: firstPoint.x, y: firstPoint.y, z: firstPoint.z};
    for(let i = 0; i < iterationsY; i ++) {
        surface.pointsMap.push([]);
+       let temporaryStart = getCursor();
+       temporaryStart = {x: temporaryStart.x, y: temporaryStart.y, z: temporaryStart.z, temporaryStart};
+
        for(let j = 0; j < iterationsX; j ++) {
-           const cursor = getCursor();
+
+           updateCursorLocalX(surface, iterationsX, step, j, direction, temporaryStart);
            const p = addPoint();
            surface.pointsMap[i].push(p);
-           updateCursorLocalX(surface, iterationsX, step, j, direction);
        }
        if(surface.cylinder) {
             setCursor(surface.pointsMap[i][0].x, surface.pointsMap[i][0].y, surface.pointsMap[i][0].z);
             const p = addPoint();
             surface.pointsMap[i].push(p);
        }
-       updateCursorLocalY(surface, iterationsX, direction);
+       updateCursorLocalY(surface, iterationsX, i, direction, firstPoint);
    }
    setCursor(cursorStart.x, cursorStart.y, cursorStart.z);
 }
-function updateCursorLocalX(surface, iterationsX, step, i, direction) {
+function updateCursorLocalX(surface, iterationsX, step, i, direction, cursorStart) {
     if(surface.cylinder) {
         if(direction === "X") {
-            updateCursor(Math.cos(step * i) * surface.absoluteWidth , 0, Math.sin(step * i) * surface.absoluteWidth);
+            setCursor(cursorStart.x +Math.cos(step * i) * surface.absoluteWidth , cursorStart.y, cursorStart.z + Math.sin(step * i) * surface.absoluteWidth);
         } else if(direction === "Y") {
-            updateCursor(Math.cos(step * i) * surface.absoluteWidth, Math.sin(step * i) * surface.absoluteWidth , 0);
+            setCursor(cursorStart.x +Math.cos(step * i) * surface.absoluteWidth, cursorStart.y + Math.sin(step * i) * surface.absoluteWidth , cursorStart.z);
         } else {
-            updateCursor( 0, Math.cos(step * i) * surface.absoluteWidth, Math.sin(step * i) * surface.absoluteWidth);
+            setCursor( cursorStart.x, cursorStart.y + Math.cos(step * i) * surface.absoluteWidth, cursorStart.z + Math.sin(step * i) * surface.absoluteWidth);
         }
     } else {
         if(direction === "X") {
@@ -52,14 +57,14 @@ function updateCursorLocalX(surface, iterationsX, step, i, direction) {
         }
     }
 }
-function updateCursorLocalY(surface, iterationsX, direction) {
+function updateCursorLocalY(surface, iterationsX, i, direction, cursorStart) {
     if(surface.cylinder) {
         if(direction === "X") {
-            updateCursor(0, surface.absoluteHeight, 0);
+            setCursor(cursorStart.x, cursorStart.y + (i + 1) * surface.absoluteHeight, cursorStart.z);
         } else if(direction === "Y") {
-            updateCursor(0, 0 , surface.absoluteHeight);
+            setCursor(cursorStart.x, cursorStart.y , cursorStart.z + (i + 1) * surface.absoluteHeight);
         } else {
-            updateCursor(surface.absoluteHeight, 0, 0);
+            setCursor(cursorStart.x + (i + 1) * surface.absoluteHeight, cursorStart.y, cursorStart.z);
         }
     } else {
         if(direction === "X") {

@@ -37,6 +37,16 @@ export function getPoints(filter){
     }
     return points;
 }
+export function deselectPoints() {
+    const _points = points.filter(x => x.visible !== false && !x.c2Bezier);
+    _points.forEach(p => {
+        if(p.selected === true) {
+            RemoveCatchPoint(p);
+        }
+        p.selected = false;
+    });
+    Redraw();
+}
 export function removePointWithRedraw(id) {
     removePoint(id);
     Redraw();

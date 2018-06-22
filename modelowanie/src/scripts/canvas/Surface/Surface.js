@@ -91,26 +91,26 @@ export function removeSurface(id) {
 export function selectSurface(id) {
     const surface = surfaces.find(x => x.id === id);
     surface.selected = !surface.selected;
-    // surface.curves.forEach(curve => {
-    //     curve.points.forEach(point => {
-    //         point.selected = surface.selected;
-    //         if(surface.selected === true) {
-    //             CatchPoint(point);
-    //         } else {
-    //             RemoveCatchPoint(point);
-    //         }
-    //     });
-    //     if(curve.pointsBspline) {
-    //         curve.pointsBspline.forEach(point => {
-    //             point.selected = surface.selected;
-    //             if(surface.selected === true) {
-    //                 CatchPoint(point);
-    //             } else {
-    //                 RemoveCatchPoint(point);
-    //             }
-    //         });
-    //     }
-    // });
+    surface.curves.forEach(curve => {
+        curve.points.forEach(point => {
+            point.selected = surface.selected;
+            if(surface.selected === true) {
+                CatchPoint(point);
+            } else {
+                RemoveCatchPoint(point);
+            }
+        });
+        if(curve.pointsBspline) {
+            curve.pointsBspline.forEach(point => {
+                point.selected = surface.selected;
+                if(surface.selected === true) {
+                    CatchPoint(point);
+                } else {
+                    RemoveCatchPoint(point);
+                }
+            });
+        }
+    });
     if(surface)
     return surfaces;
 }
@@ -151,8 +151,8 @@ export function addSurface(_width, _height, _cylinder, _u, _v, _type) {
     const surface = {
         name: "Powierzchnia " + surfacesIterator,
         id: surfacesIterator,
-        width: _width,
-        height: _height,
+        Width: _width,
+        Height: _height,
         cylinder: _cylinder,
         curves: [],
         pointsMap:[],
@@ -161,8 +161,8 @@ export function addSurface(_width, _height, _cylinder, _u, _v, _type) {
         type : _type,
         absoluteHeight: absoluteHeight,
         absoluteWidth: absoluteWidth,
-        wrapedU: cylinder ? true : false,
-        wrapedUV: false
+        WrapedU: cylinder ? true : false,
+        WrapedUV: false
     }
     surfacesIterator ++;
     surfaces.push(surface);
@@ -174,8 +174,8 @@ export function createSurface(type) {
     const surface = {
         name: "Powierzchnia " + surfacesIterator,
         id: surfacesIterator,
-        width: width,
-        height: height,
+        Width: width,
+        Height: height,
         cylinder: cylinder,
         curves: [],
         px: gridX,
@@ -185,8 +185,8 @@ export function createSurface(type) {
         type : type,
         absoluteHeight: absoluteHeight,
         absoluteWidth: absoluteWidth,
-        wrapedU: cylinder ? true : false,
-        wrapedUV: false
+        WrapedU: cylinder ? true : false,
+        WrapedUV: false
     }
     surfacesIterator ++;
     surfaces.push(surface);

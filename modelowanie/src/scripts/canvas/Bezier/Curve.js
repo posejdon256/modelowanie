@@ -89,6 +89,9 @@ export function getCurveById(id){
 }
 export function getCurvesControlPoints(_id) {
     const id = _id !== undefined ? _id : selectedCurveId;
+    if(curves.length === 0) {
+        return [];
+    }
         if(id === undefined)
     return [];
     const curve = curves.find(x => x.id === id);

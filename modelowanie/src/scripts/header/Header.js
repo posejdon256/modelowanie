@@ -12,6 +12,7 @@ import platekG from '../../pictures/platekG.png';
 import scissors from '../../pictures/scissors.png';
 import load from '../../pictures/helicopter.png';
 import save from '../../pictures/safebox.png';
+import select from '../../pictures/square-select.png';
 import projektor from '../../pictures/projektor.png';
 import { getAddBezierState, setAddBezierState } from '../canvas/Bezier/Bezier';
 import { getAddingC2State, setAddingC2State } from '../canvas/Bezier/BSpline';
@@ -24,6 +25,7 @@ import { addTorus } from '../canvas/Torus/Torus';
 import { findObjectToIntersectionAndIntersection } from '../canvas/CuttingCurve/FindIntersection';
 import { setProjectionState, getProjectionState } from '../canvas/CuttingCurve/Projection';
 import { cleanScene } from '../canvas/Clean/Clean';
+import { setRectangleSelectionState, getRectangleSelectionRectangle } from '../canvas/Mouse/RectangleSelect';
 
 export default class Header extends Component {
     constructor(props) {
@@ -42,6 +44,7 @@ export default class Header extends Component {
         this.addIntersection = this.addIntersection.bind(this);
         this.projectIntersection = this.projectIntersection.bind(this);
         this.cleanScene = this.cleanScene.bind(this);
+        this.selectByRectange = this.selectByRectange.bind(this);
     }
     addTorus() {
         addTorus();
@@ -96,11 +99,17 @@ export default class Header extends Component {
     addSurfaceC2(){
         createSurface("C2");
     }
+    selectByRectange() {
+        setRectangleSelectionState(!getRectangleSelectionRectangle());
+    }
     render(){
         return(
         <div className="ab-header">
             <button className="ab-torus-button" onClick={this.cleanScene}>
-                <img className="ab-torus-image" src={clean} alt="torus" />
+                <img className="ab-torus-image" src={clean} alt="clean" />
+            </button>
+            <button className="ab-torus-button" onClick={this.selectByRectange}>
+                <img className="ab-torus-image" src={select} alt="select" />
             </button>
             <button className="ab-torus-button" onClick={this.addTorus}>
                 <img className="ab-torus-image" src={torus} alt="torus" />

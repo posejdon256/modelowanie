@@ -8,7 +8,7 @@ import Redraw from "../canvas/Draw/Redraw";
 import { turnOffAllStates } from "../canvas/StatesCenter/StatesCenter";
 import { addTorus } from "../canvas/Torus/Torus";
 
-let path ="Project.json";
+let path ="Ania1.json";
 
 export function setPath(_path) {
     path =_path.substr(12, _path.length - 12);

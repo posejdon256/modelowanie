@@ -5,7 +5,7 @@ import { getStereoscopy } from "../Stereoscopy/Stereoscopy";
 import { setCursor, getCursor } from "../Cursor/Cursor";
 
 export function selectPoints(x, y, byCursor, z) {
-    const points = getPoints();
+    const points = getPoints("on-scene");
     setTranslationPoints(points);
     let translatedPoints = Translate({});
     translatedPoints = getStereoscopy() ? translatedPoints.left : translatedPoints;

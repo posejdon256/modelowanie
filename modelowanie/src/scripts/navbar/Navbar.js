@@ -8,7 +8,7 @@ import BiCubicNavbar from './BiCubicNavbar/BiCubicNavbar';
 import { getCursor, setCursor } from '../canvas/Cursor/Cursor';
 import { setAddingC2Type } from '../canvas/Bezier/BSpline';
 import { getCurvesControlPoints, addCurveBySelectedPoints } from '../canvas/Bezier/Curve';
-import { updateSelectedPoints } from '../canvas/Points/Points';
+import { updateSelectedPoints, deselectPoints } from '../canvas/Points/Points';
 import { uniteTwoPoints } from '../canvas/Gregory/Claps';
 import { setIntersectionStep } from '../canvas/CuttingCurve/FindIntersection';
 import { setNewtonAlpa, setFinalEpsilon } from '../canvas/CuttingCurve/NewtonMethod';
@@ -39,6 +39,7 @@ export default class Navbar extends Component {
         this.setNewtonStep = this.setNewtonStep.bind(this);
         this.convertToInterpolation = this.convertToInterpolation.bind(this);
         this.setPath = this.setPath.bind(this);
+        this.deselectPoints = this.deselectPoints.bind(this);
         const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
@@ -118,6 +119,9 @@ export default class Navbar extends Component {
     setPath(event) {
         setPath(event.target.value);
     }
+    deselectPoints() {
+        deselectPoints();
+    }
     render(){
         return(
         <div className="ab-navbar">
@@ -127,6 +131,9 @@ export default class Navbar extends Component {
             </div>
             <div>
                 <button className="btn" onClick={this.setCursorToStart}>Ustaw Kursor w (0,0,0)</button>
+            </div>
+            <div>
+                <button className="btn" onClick={this.deselectPoints}>Odznacz wszystkie punkty</button>
             </div>
             <div>
                 <label>Zablokuj/Odblokuj kamerę:</label>

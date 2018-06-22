@@ -67,11 +67,11 @@ export default class BiCubicNavbar extends Component {
                     <input className="input-ab" type="text"  onChange={this.setGridY} defaultValue={4}/>
                 </div>
                 <div>
-                    <label>Stała Szerokość: </label>
+                    <label>Stała Wysokość: </label>
                     <input className="input-ab" type="text" onChange={this.updateAbsoluteHeight} defaultValue={0.07}/>
                 </div>
                 <div>
-                    <label>Stała Wysokość: </label>
+                    <label>Stała Szerokość: </label>
                     <input className="input-ab" type="text"  onChange={this.updateAbsoluteWidth} defaultValue={0.07}/>
                 </div>
                 <div>
