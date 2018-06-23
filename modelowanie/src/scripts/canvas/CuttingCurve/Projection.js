@@ -32,23 +32,24 @@ export function getFirstNewtonIt() {
     return showIterations;
 }
 function findIntersection(_objects) {
-    const interation = 10.0;
+    const step = {
+        h1: _objects[0].Height /10.0,
+        w1: _objects[0].Width /10.0,
+        h2: _objects[1].Height /10.0,
+        w2: _objects[1].Width /10.0,
+    };
     const cursor = getCursor();
-    DrawPoint(evaluate(_objects[0], 0.5, 0.99), "Blue");
-    DrawPoint(evaluate(_objects[1], 0.5, 0.99), "Blue");
-    const eps = 0.001;
     const best = {
         lenght: 10000,
         point1: {},
         point2: {}
     };
-    const sizes = getSizes(_objects);
-    const epsDistance = { x: sizes.o1x * 0.5, y: sizes.o1y * 0.5 };
+    const epsDistance = { x: _objects[0].Width * 0.5, y: _objects[0].Height * 0.5 };
     const sameObjects = _objects[0].id === _objects[1].id ? true : false;
-    for(let i = 0.0; i < sizes.o1x; i += 1.0/interation) {
-        for(let j = 0.0; j < sizes.o1y; j += 1.0/interation) {
-            for(let k = sizes.o2x - eps; k >= 0.0; k -= 1.0/interation) {
-                for(let m = sizes.o2y - eps; m >= 0.0; m -= 1.0/interation) {
+    for(let i = 0.0; i < _objects[0].Height; i += step.w1) {
+        for(let j = 0.0; j < _objects[0].Width; j += step.h1) {
+            for(let k = 0.0; k < _objects[1].Height; k += step.w2) {
+                for(let m = 0.0; m < _objects[1].Width; m += step.h2) {
                     const ev1 = evaluate(_objects[0], i, j);
                     const ev2 = evaluate(_objects[1], k, m);
                     const trans = [ev1, ev2];
@@ -70,22 +71,6 @@ function findIntersection(_objects) {
     if(oneIntersectionPointState) {
         countGradientMethod(_objects[0], _objects[1], best);
     }
-}
-function getSizes(_objects) {
-    const sizes = {};
-    sizes.o1x = _objects[0].type === "torus" ? 1 : _objects[0].height;
-    sizes.o1y = _objects[0].type === "torus" ? 1 : _objects[0].width;
-    sizes.o2x = _objects[1].type === "torus" ? 1 : _objects[1].height;
-    sizes.o2y = _objects[1].type === "torus" ? 1 : _objects[1].width;
-    if(_objects[0].type === "C2" && _objects[0].cylinder) {
-        sizes.o1x = _objects[0].height;
-        sizes.o1y = _objects[0].width
-    }
-    if(_objects[1].type === "C2" && _objects[1].cylinder) {
-        sizes.o2x = _objects[1].height;
-        sizes.o2y = _objects[1].width
-    }
-    return sizes;
 }
 export function projectIntersectionPoints(){
     if(!projectionState) {
@@ -131,6 +116,7 @@ function countGradientMethod(ob1, ob2, best){
         i ++;
         if(i > 1000) {
             console.log("Nie znaleziono przecięcia!");
+            console.log(getVectorLength(p1, p2));
             return false;
         }
         const help = {

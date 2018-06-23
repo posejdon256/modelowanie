@@ -8,15 +8,19 @@ import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
 
 let intersectionStep = 3; //Needs to be updated for toruses and C0
 export function setIntersectionStep(_step) {
-    intersectionStep = TryParseFloat(_step, intersectionStep);
+intersectionStep = TryParseFloat(_step, intersectionStep);
 }
 export function getIntersectionStep() {
     return intersectionStep;
 }
 function findIntersection(_objects) {
-    const interation = 10.0;
+    const step = {
+        h1: _objects[0].Height /10.0,
+        w1: _objects[0].Width /10.0,
+        h2: _objects[1].Height /10.0,
+        w2: _objects[1].Width /10.0,
+    };
     const cursor = getCursor();
-    const eps = 0.001;
     const best = {
         lenght: 10000,
         point1: {},
@@ -24,10 +28,10 @@ function findIntersection(_objects) {
     };
     const epsDistance = { x: _objects[0].Width * 0.5, y: _objects[0].Height * 0.5 };
     const sameObjects = _objects[0].id === _objects[1].id ? true : false;
-    for(let i = 0.0; i < _objects[0].Width; i += 1.0/interation) {
-        for(let j = 0.0; j < _objects[0].Height; j += 1.0/interation) {
-            for(let k = 0.0; k < _objects[1].Width; k += 1.0/interation) {
-                for(let m = 0.0; m < _objects[1].Height; m += 1.0/interation) {
+    for(let i = 0.0; i < _objects[0].Height; i += step.w1) {
+        for(let j = 0.0; j < _objects[0].Width; j += step.h1) {
+            for(let k = 0.0; k < _objects[1].Height; k += step.w2) {
+                for(let m = 0.0; m < _objects[1].Width; m += step.h2) {
                     const ev1 = evaluate(_objects[0], i, j);
                     const ev2 = evaluate(_objects[1], k, m);
                     const trans = [ev1, ev2];
@@ -54,6 +58,7 @@ function countGradientMethod(ob1, ob2, best){
         i ++;
         if(i > 1000) {
             alert("Nie znaleziono przecięcia!");
+            console.log(getVectorLength(p1, p2));
             return false;
         }
         const help = {

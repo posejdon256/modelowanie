@@ -101,52 +101,22 @@ export function EvaluateSurfaceC2DV(id, u, v) {
     return ret;
 }
 function getUVForC0(id, u, v) {
-    let vNew = v, uNew = u;
     const surfaces = getSurfaces();
     const s = surfaces.find(x => x.id === id);
-    if(u < 0 && s.cylinder) {
-        uNew += s.width;
-    }
-    if(v < 0 && s.cylinder) {
-        vNew = s.height - 0.001;
-    }
-    if(u > s.width && s.cylinder) {
-        uNew -= s.width;
-    }
-    if(v > s.height && s.cylinder) {
-        vNew = 0;
-    }
-    if(uNew < 0 ||  vNew < 0 || isNaN(v) || isNaN(u)) {
-         console.log("Problem z evalem "+ uNew + " " + vNew);
-         return {x: 1, y: 0, z: 0, _false: true};
-     }
-    const _u = Math.floor(vNew) * 3;
-    const _v = Math.floor(uNew) * 3;
-    const _u1 =  uNew - Math.floor(uNew);
-    const _v1 = vNew - Math.floor(vNew) ;
+    const _u = Math.floor(u) * 3;
+    const _v = Math.floor(v) * 3;
+    const _u1 =  u - Math.floor(u);
+    const _v1 = v - Math.floor(v) ;
     //console.log(u, v, uNew, vNew, _u, _v);
     return {_u: _u, _v: _v, _u1 : _u1, _v1: _v1};
 }
 function getUVForC2(id, u, v) {
-    let vNew = v, uNew = u;
     const surfaces = getSurfaces();
     const s = surfaces.find(x => x.id === id);
-    if(u < 0 && s.cylinder) {
-        uNew = s.height - 0.001;
-    }
-    if(v < 0 && s.cylinder) {
-        vNew = 0;
-    }
-    if(u > s.height && s.cylinder) {
-        uNew = 0;
-    }
-    if(v > s.width && s.cylinder) {
-        vNew = s.width - 0.001;
-    }
-    const _u = Math.floor(uNew);
-    const _v = Math.floor(vNew);
-    const _u1 = u - Math.floor(uNew);
-    const _v1 = v - Math.floor(vNew) ;
+    const _u = Math.floor(u);
+    const _v = Math.floor(v);
+    const _u1 = u - Math.floor(u);
+    const _v1 = v - Math.floor(v) ;
     return {_u: _u, _v: _v, _u1 : _u1, _v1: _v1};
 }
 export function EvaluateSurfaceC2DU(id, u, v) {

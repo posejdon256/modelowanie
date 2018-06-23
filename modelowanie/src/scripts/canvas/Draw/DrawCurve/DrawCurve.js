@@ -7,7 +7,7 @@ import { DrawLines } from "../DrawLine/DrawLines";
 export function _DrawCurves() {
     const points = getCurvesPoints();
     drawChaines();
-    let color = undefined;
+    let color = {r: 80, g: 168, b: 227, a: 1};
     if(points.length > 0 && points[0].selected){
         color = {r: 255, g: 0, b: 0, a: 1};
     }

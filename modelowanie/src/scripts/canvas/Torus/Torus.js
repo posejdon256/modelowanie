@@ -25,8 +25,8 @@ export function addTorus(_r, _R, _gridX, _gridY, _center, _rotation, _scale) {
         R: _R? _R : 0.5,
         gridX: _gridX ? _gridX : gX,
         gridY: _gridY ? _gridY : gY,
-        WrapedU: true,
-        WrapedV: true,
+        WrappedU: true,
+        WrappedV: true,
         center: {
             x: center.x,
             y: center.y,

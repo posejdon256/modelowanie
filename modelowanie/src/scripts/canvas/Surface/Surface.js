@@ -92,24 +92,24 @@ export function selectSurface(id) {
     const surface = surfaces.find(x => x.id === id);
     surface.selected = !surface.selected;
     surface.curves.forEach(curve => {
-        curve.points.forEach(point => {
-            point.selected = surface.selected;
-            if(surface.selected === true) {
-                CatchPoint(point);
-            } else {
-                RemoveCatchPoint(point);
-            }
-        });
-        if(curve.pointsBspline) {
-            curve.pointsBspline.forEach(point => {
-                point.selected = surface.selected;
-                if(surface.selected === true) {
-                    CatchPoint(point);
-                } else {
-                    RemoveCatchPoint(point);
-                }
-            });
-        }
+        // curve.points.forEach(point => {
+        //     point.selected = surface.selected;
+        //     if(surface.selected === true) {
+        //         CatchPoint(point);
+        //     } else {
+        //         RemoveCatchPoint(point);
+        //     }
+        // });
+        // if(curve.pointsBspline) {
+        //     curve.pointsBspline.forEach(point => {
+        //         point.selected = surface.selected;
+        //         if(surface.selected === true) {
+        //             CatchPoint(point);
+        //         } else {
+        //             RemoveCatchPoint(point);
+        //         }
+        //     });
+        // }
     });
     if(surface)
     return surfaces;
@@ -161,8 +161,8 @@ export function addSurface(_width, _height, _cylinder, _u, _v, _type) {
         type : _type,
         absoluteHeight: absoluteHeight,
         absoluteWidth: absoluteWidth,
-        WrapedU: cylinder ? true : false,
-        WrapedUV: false
+        WrappedU: false,
+        WrappedV: _cylinder ? true : false
     }
     surfacesIterator ++;
     surfaces.push(surface);
@@ -185,8 +185,8 @@ export function createSurface(type) {
         type : type,
         absoluteHeight: absoluteHeight,
         absoluteWidth: absoluteWidth,
-        WrapedU: cylinder ? true : false,
-        WrapedUV: false
+        WrappedU: false,
+        WrappedV: cylinder ? true : false
     }
     surfacesIterator ++;
     surfaces.push(surface);
