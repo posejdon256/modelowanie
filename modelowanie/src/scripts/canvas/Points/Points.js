@@ -28,7 +28,6 @@ export function getPoints(filter){
             catch(e) {
                 reject(e);
             }
-            console.log(points.length);
             resolve('wow!');
         });
     } 

@@ -23,7 +23,6 @@ export default function Redraw(){
 }
 export function RedrawWithoutChangingScene() {
     clearCanvas();
-    console.log('redraw');
     DrawTorus();
     //DrawRectangle();
     DrawCursor();

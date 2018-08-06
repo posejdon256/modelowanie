@@ -8,7 +8,7 @@ import Redraw from "../canvas/Draw/Redraw";
 import { turnOffAllStates } from "../canvas/StatesCenter/StatesCenter";
 import { addTorus } from "../canvas/Torus/Torus";
 
-let path ="Ania1.json";
+let path ="Ania3.json";
 
 export function setPath(_path) {
     path =_path.substr(12, _path.length - 12);
@@ -56,7 +56,7 @@ export function Load() {
     turnOffAllStates();
     json.surfacesC0.forEach(surface => {
         setAddingSurfaceState(true);
-        let _surface = addSurface(surface.flakeU, surface.flakeV, surface.cylinder, surface.u, surface.v, "C0");
+        let _surface = addSurface(surface.flakeU, surface.flakeV, surface.cylinder, surface.u, surface.v, surface.name, "C0");
         _surface.pointsMap = [];
         surface.points.forEach(pointRow => {
             _surface.pointsMap.push([]);
@@ -70,7 +70,7 @@ export function Load() {
     json.surfacesC2.forEach(surface => {
         setAddingSurfaceState(true);
         setAddingC2State(true);
-        let _surface = addSurface(surface.flakeU, surface.flakeV, surface.cylinder, surface.u, surface.v, "C2");
+        let _surface = addSurface(surface.flakeU, surface.flakeV, surface.cylinder, surface.u, surface.v, surface.name, "C2");
         _surface.pointsMap = [];
         surface.points.forEach(pointRow => {
             _surface.pointsMap.push([]);

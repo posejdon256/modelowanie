@@ -133,9 +133,30 @@ export function _DrawSurfaceWithoutRedraw(ctx, ctxS1, ctxS2) {
 export function _DrawCurveInSurface(ctx, ctxS1, ctxS2, points) {
     DrawLines(points, { r: 255, g: 0, b: 255 });
     drawChainForC2CubicFlake(ctx, ctxS1, ctxS2);
+    drawChainForC0CubicFlake(ctx, ctxS1, ctxS2);
 }
 function drawChainForC2CubicFlake(ctx, ctxS1, ctxS2) {
     const surfaces = getSurfaces("C2");
+    for(let i = 0; i < surfaces.length; i ++) {
+        if(!surfaces[i].chain) {
+            continue;
+        }
+        for(let j = 0; j < surfaces[i].pointsMap.length; j ++) {
+            setTranslationPoints(surfaces[i].pointsMap[j]);
+            DrawLines(surfaces[i].pointsMap[j], { r: 0, g: 0, b: 255 });
+        }
+        for(let m = 0; m < surfaces[i].pointsMap[0].length; m ++) {
+            const _points = [];
+            for(let k = 0; k <surfaces[i].pointsMap.length; k ++) {
+                _points.push(surfaces[i].pointsMap[k][m]);
+               // _points.push(surfaces[i].pointsMap[k][m]);
+            }
+            DrawLines(_points, { r: 0, g: 0, b: 255 });
+        }
+    }
+}
+function drawChainForC0CubicFlake(ctx, ctxS1, ctxS2) {
+    const surfaces = getSurfaces("C0");
     for(let i = 0; i < surfaces.length; i ++) {
         if(!surfaces[i].chain) {
             continue;

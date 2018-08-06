@@ -31,7 +31,6 @@ export function updateIn1Visualisation(id, u, v) {
     const _u = (parseInt(u * size, 10) + size) % size;
     const _v = (parseInt(v * size, 10) + size) % size;
     if(_u < 0 || _v < 0) {
-        console.log(u, v);
         return;
     }
     curve.intersectionVisualization1.push({u: _u, v: _v});
@@ -45,7 +44,6 @@ export function updateIn2Visualisation(id, u, v) {
     const _u = (parseInt(u * size, 10) + size) % size;
     const _v = (parseInt(v * size, 10) + size) % size;
     if(_u < 0 || _v < 0){
-        console.log(u, v);
         return;
     }
     curve.intersectionVisualization2.push({u: _u, v: _v});

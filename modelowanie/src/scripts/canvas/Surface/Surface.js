@@ -136,9 +136,6 @@ export function updateSelectedCurveGrid() {
 export function turnOnSurfaceChain(id) {
     const surface = surfaces.find(x => x.id === id);
     surface.chain = !surface.chain;
-    for(let i = 0; i < surface.curves.length; i ++) {
-        surface.curves[i].chain = surface.chain;
-    }
     Redraw();
     return surfaces;
 }
@@ -147,9 +144,9 @@ export function updateSurfaceName(id, name) {
     surface.name = name;
     return surfaces;
 }
-export function addSurface(_width, _height, _cylinder, _u, _v, _type) {
+export function addSurface(_width, _height, _cylinder, _u, _v, name, _type) {
     const surface = {
-        name: "Powierzchnia " + surfacesIterator,
+        name: name ? name : "Powierzchnia " + surfacesIterator,
         id: surfacesIterator,
         Width: _width,
         Height: _height,
@@ -161,8 +158,8 @@ export function addSurface(_width, _height, _cylinder, _u, _v, _type) {
         type : _type,
         absoluteHeight: absoluteHeight,
         absoluteWidth: absoluteWidth,
-        WrappedU: false,
-        WrappedV: _cylinder ? true : false
+        WrappedU: _cylinder && _type === "C0" ? true : false,
+        WrappedV: _cylinder && _type === "C2" ? true : false
     }
     surfacesIterator ++;
     surfaces.push(surface);
@@ -185,8 +182,8 @@ export function createSurface(type) {
         type : type,
         absoluteHeight: absoluteHeight,
         absoluteWidth: absoluteWidth,
-        WrappedU: false,
-        WrappedV: cylinder ? true : false
+        WrappedU: cylinder && type === "C0" ? true : false,
+        WrappedV: cylinder && type === "C2" ? true : false
     }
     surfacesIterator ++;
     surfaces.push(surface);

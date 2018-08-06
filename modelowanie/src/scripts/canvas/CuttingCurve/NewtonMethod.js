@@ -20,6 +20,7 @@ export function goGoNewton(best, iterations) {
     let {ob1, ob2, u, v} = best;
     let interpolation;
     let cuttingCurve;
+    let _alpha = alpha;
     if(!iterations) {
         cuttingCurve = addCuttingCurve(interpolation);
     }
@@ -39,7 +40,7 @@ export function goGoNewton(best, iterations) {
     let finished = false;
     while(!finished) {
         for(let i = 0; i < 10; i ++) {
-            betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, alpha);
+            betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, _alpha);
             // const { ob, u, v, uNew, vNew, uStart, vStart, alpha, backed };
             const upd1 = updateUVAfterNewton({ob: ob1, u: u[0], v: v[0], uNew: betterPoint[0], vNew: betterPoint[1], backed: backed});
             const upd2 = updateUVAfterNewton({ob: ob2, u: u[1], v: v[1], uNew: betterPoint[2], vNew: betterPoint[3], backed: backed});
@@ -48,7 +49,8 @@ export function goGoNewton(best, iterations) {
                 break;
             }
             if(upd1.backThisTime || upd2.backThisTime) {
-                backNewton(pointsList, uStart, vStart, u, v, uPrev, vPrev);
+                const ret = backNewton(pointsList, uStart, vStart, u, v, uPrev, vPrev, _alpha);
+                _alpha = ret.alpha;
                 backed = true;
                 break;
             }
@@ -75,7 +77,6 @@ export function goGoNewton(best, iterations) {
             updateIn1Visualisation(cuttingCurve.id, u[0] / ob1.Height , v[0] / ob1.Width);
             updateIn2Visualisation(cuttingCurve.id, u[1] / ob2.Height, v[1] / ob2.Width);
         }
-        console.log(getVectorLength(pStart, p1));
         if(finalEpsilon > getVectorLength(pStart, p1) && notFinishYet > 10) {
             break;
         }

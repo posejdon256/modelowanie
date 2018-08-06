@@ -38,6 +38,40 @@ export function EvaluateSurface(id, u, v) {
     }
     return deCastiljau(_v1, knots[0], knots[1], knots[2], knots[3]);
 }
+export function EvaluateSurfaceDV(id, u, v) {
+    const surfaces = getSurfaces();
+    const s = surfaces.find(x => x.id === id);
+    const {_u, _v, _u1, _v1, _false} = getUVForC0(id, u, v);
+    if(_false) {
+        return getUVForC0(id, u, v);
+    }
+    const knots = [];
+    for(let i = 0; i < 4; i ++) {
+        knots.push(deCastiljau(_u1, s.pointsMap[_u + i][_v + 0], s.pointsMap[_u + i][_v + 1], s.pointsMap[_u + i][_v + 2], s.pointsMap[_u + i][_v + 3]));
+    }
+    const derKnots = [];
+    for(let i = 0; i <3; i++) {
+        derKnots.push(MultiplyPoint(DiffPoints(knots[i + 1] , knots[i]), 3));
+    }
+    return deCastiljau3(_v1, derKnots[0], derKnots[1], derKnots[2]);
+}
+export function EvaluateSurfaceDU(id, u, v) {
+    const surfaces = getSurfaces();
+    const s = surfaces.find(x => x.id === id);
+    const {_u, _v, _u1, _v1, _false} = getUVForC0(id, u, v);
+    if(_false) {
+        return getUVForC0(id, u, v);
+    }
+    const knots = [];
+    for(let i = 0; i < 4; i ++) {
+        knots.push(deCastiljau(_v1, s.pointsMap[_u + 0][_v + i], s.pointsMap[_u + 1][_v + i], s.pointsMap[_u + 2][_v + i], s.pointsMap[_u + 3][_v + i]));
+    }
+    const derKnots = [];
+    for(let i = 0; i <3; i++) {
+        derKnots.push(MultiplyPoint(DiffPoints(knots[i + 1] , knots[i]), 3));
+    }
+    return deCastiljau3(_u1, derKnots[0], derKnots[1], derKnots[2]);
+}
 export function EvaluateSurfaceC2(id, u, v) {
     const {_u, _v, _u1, _v1} = getUVForC2(id, u, v);
     const s = getSurfaces("C2").find(x => x.id === id);
@@ -100,25 +134,6 @@ export function EvaluateSurfaceC2DV(id, u, v) {
     };
     return ret;
 }
-function getUVForC0(id, u, v) {
-    const surfaces = getSurfaces();
-    const s = surfaces.find(x => x.id === id);
-    const _u = Math.floor(u) * 3;
-    const _v = Math.floor(v) * 3;
-    const _u1 =  u - Math.floor(u);
-    const _v1 = v - Math.floor(v) ;
-    //console.log(u, v, uNew, vNew, _u, _v);
-    return {_u: _u, _v: _v, _u1 : _u1, _v1: _v1};
-}
-function getUVForC2(id, u, v) {
-    const surfaces = getSurfaces();
-    const s = surfaces.find(x => x.id === id);
-    const _u = Math.floor(u);
-    const _v = Math.floor(v);
-    const _u1 = u - Math.floor(u);
-    const _v1 = v - Math.floor(v) ;
-    return {_u: _u, _v: _v, _u1 : _u1, _v1: _v1};
-}
 export function EvaluateSurfaceC2DU(id, u, v) {
     const {_u, _v, _u1, _v1} = getUVForC2(id, u, v);
     const s = getSurfaces("C2").find(x => x.id === id);
@@ -150,37 +165,22 @@ export function EvaluateSurfaceC2DU(id, u, v) {
     };
     return ret;
 }
-export function EvaluateSurfaceDV(id, u, v) {
+function getUVForC0(id, u, v) {
     const surfaces = getSurfaces();
     const s = surfaces.find(x => x.id === id);
-    const {_u, _v, _u1, _v1, _false} = getUVForC0(id, u, v);
-    if(_false) {
-        return getUVForC0(id, u, v);
-    }
-    const knots = [];
-    for(let i = 0; i < 4; i ++) {
-        knots.push(deCastiljau(_u1, s.pointsMap[_u + i][_v + 0], s.pointsMap[_u + i][_v + 1], s.pointsMap[_u + i][_v + 2], s.pointsMap[_u + i][_v + 3]));
-    }
-    const derKnots = [];
-    for(let i = 0; i <3; i++) {
-        derKnots.push(MultiplyPoint(DiffPoints(knots[i + 1] , knots[i]), 3));
-    }
-    return deCastiljau3(_v1, derKnots[0], derKnots[1], derKnots[2]);
+    const _u = Math.floor(u) * 3;
+    const _v = Math.floor(v) * 3;
+    const _u1 =  u - Math.floor(u);
+    const _v1 = v - Math.floor(v);
+    //console.log(u, v, uNew, vNew, _u, _v);
+    return {_u: _u, _v: _v, _u1 : _u1, _v1: _v1};
 }
-export function EvaluateSurfaceDU(id, u, v) {
+function getUVForC2(id, u, v) {
     const surfaces = getSurfaces();
     const s = surfaces.find(x => x.id === id);
-    const {_u, _v, _u1, _v1, _false} = getUVForC0(id, u, v);
-    if(_false) {
-        return getUVForC0(id, u, v);
-    }
-    const knots = [];
-    for(let i = 0; i < 4; i ++) {
-        knots.push(deCastiljau(_v1, s.pointsMap[_u + 0][_v + i], s.pointsMap[_u + 1][_v + i], s.pointsMap[_u + 2][_v + i], s.pointsMap[_u + 3][_v + i]));
-    }
-    const derKnots = [];
-    for(let i = 0; i <3; i++) {
-        derKnots.push(MultiplyPoint(DiffPoints(knots[i + 1] , knots[i]), 3));
-    }
-    return deCastiljau3(_u1, derKnots[0], derKnots[1], derKnots[2]);
+    const _u = Math.floor(u);
+    const _v = Math.floor(v);
+    const _u1 = u - Math.floor(u);
+    const _v1 = v - Math.floor(v) ;
+    return {_u: _u, _v: _v, _u1 : _u1, _v1: _v1};
 }
