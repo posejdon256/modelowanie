@@ -8,6 +8,7 @@ import { setCursor } from "../Cursor/Cursor";
 import { cleanDrawSurfacePoints } from "../Draw/DrawSurface/DrawSurface";
 import Redraw from "../Draw/Redraw";
 import { CleanCatchedPoints } from "../Move/MoveCursor";
+import { clearVisualization } from "../Draw/RedrawVisualisation/RedrawVisualization";
 
 export function cleanScene() {
     cleanCurves();
@@ -18,6 +19,7 @@ export function cleanScene() {
     cleanToruses();
     cleanDrawSurfacePoints();
     CleanCatchedPoints();
+    clearVisualization();
     setCursor(0, 0, 0);
     Redraw();
 }

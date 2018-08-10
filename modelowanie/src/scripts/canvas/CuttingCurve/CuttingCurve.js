@@ -28,6 +28,10 @@ export function updateIn1Visualisation(id, u, v) {
         curve.intersectionVisualization1.push({break: true});
         return;
     }
+    if(u.back) {
+        curve.intersectionVisualization1.push({back: true});
+        return;
+    }
     const _u = (parseInt(u * size, 10) + size) % size;
     const _v = (parseInt(v * size, 10) + size) % size;
     if(_u < 0 || _v < 0) {
@@ -39,6 +43,10 @@ export function updateIn2Visualisation(id, u, v) {
     const curve = curves.find(x => x.id === id);
     if(u.break) {
         curve.intersectionVisualization2.push({break: true});
+        return;
+    }
+    if(u.back) {
+        curve.intersectionVisualization2.push({back: true});
         return;
     }
     const _u = (parseInt(u * size, 10) + size) % size;

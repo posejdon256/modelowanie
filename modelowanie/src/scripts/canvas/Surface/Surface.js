@@ -158,8 +158,8 @@ export function addSurface(_width, _height, _cylinder, _u, _v, name, _type) {
         type : _type,
         absoluteHeight: absoluteHeight,
         absoluteWidth: absoluteWidth,
-        WrappedU: _cylinder && _type === "C0" ? true : false,
-        WrappedV: _cylinder && _type === "C2" ? true : false
+        WrappedU: false,
+        WrappedV: _cylinder ? true : false
     }
     surfacesIterator ++;
     surfaces.push(surface);
@@ -182,8 +182,8 @@ export function createSurface(type) {
         type : type,
         absoluteHeight: absoluteHeight,
         absoluteWidth: absoluteWidth,
-        WrappedU: cylinder && type === "C0" ? true : false,
-        WrappedV: cylinder && type === "C2" ? true : false
+        WrappedU: false,
+        WrappedV: cylinder ? true : false
     }
     surfacesIterator ++;
     surfaces.push(surface);

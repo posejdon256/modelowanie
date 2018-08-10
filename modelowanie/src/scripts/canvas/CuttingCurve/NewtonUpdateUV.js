@@ -2,6 +2,7 @@ export  function updateUVAfterNewton(confObject) {
     const { ob, u, v, uNew, vNew, backed } = confObject;
     
     let backThisTime = false;
+    let crossed = false;
     let end = false;
 
     const eps = 0.002;
@@ -15,46 +16,54 @@ export  function updateUVAfterNewton(confObject) {
            _uNew = ob.Height - epsWrap;
        } else {
            if(backed) {
+               _uNew = 0;
                end = true;
            } else {
                 backThisTime = true;      
            }
        }
+       crossed = true;
     }
     if(_uNew >= ob.Height) {
        if(ob.WrappedU) {
            _uNew = 0 + epsWrap;
        } else {
            if(backed) {
+               _uNew = ob.Height - epsWrap;
                end = true;
            } else {
                 backThisTime = true; 
            }
        }
+       crossed = true;
     }
     if(_vNew >= ob.Width) {
        if(ob.WrappedV) {
            _vNew = 0 + epsWrap;
        } else {
            if(backed) {
+               _vNew = ob.Width - epsWrap;
                end = true;
            } else {
                 backThisTime = true; 
            }
        }
+       crossed = true;
     }
     if(_vNew < 0) {
        if(ob.WrappedV) {
            _vNew = ob.Width - epsWrap;
        } else {
            if(backed) {
+                _vNew = 0;
                end = true;
            } else {
                 backThisTime = true; 
            }
        }
+       crossed = true;
     }
-    return {u: _uNew, v: _vNew, end: end, backThisTime: backThisTime};
+    return {u: _uNew, v: _vNew, end: end, backThisTime: backThisTime, crossed: crossed};
 }
 export function backNewton(pointsList, uStarts, vStarts, us, vs, uPrevs, vPrevs, alpha) {
 

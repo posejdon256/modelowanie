@@ -65,7 +65,7 @@ function getFforJacobi(ob, u, v, uNew, vNew, alpha) {
         P1.x - Q.x,
         P1.y - Q.y,
         P1.z - Q.z,
-        scalarMultiply(DiffPoints(P1, P0), t) + (ob[1].type === "torus" ? 0.2 : alpha * 100.0)
+        scalarMultiply(DiffPoints(P1, P0), t) +  (alpha * 100.0)
     ];
 }
 export function findNewNewtonPoint(ob, u, v, uNew, vNew, alpha) {

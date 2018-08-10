@@ -10,6 +10,7 @@ import { updateUVAfterNewton, backNewton } from "./NewtonUpdateUV";
 
 let alpha = 0.002;
 let finalEpsilon = 0.01;
+let alphaEpsilon = 0.001;
 export function setNewtonAlpa(_alpha) {
     alpha = TryParseFloat(_alpha, alpha);
 }
@@ -40,39 +41,55 @@ export function goGoNewton(best, iterations) {
     let stop = iterations ? iterations : 1000;
     let finished = false;
     while(!finished) {
+        let tempAlpha = _alpha;
         for(let i = 0; i < 10; i ++) {
-            betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, _alpha);
+            betterPoint = findNewNewtonPoint(ob, uPrev, vPrev, u, v, tempAlpha);
+            if(ob1.type !== "torus" && ob2.type === "torus") {
+                betterPoint[2] *= 0.15;
+                betterPoint[3] *= 0.15;
+            }
             // const { ob, u, v, uNew, vNew, uStart, vStart, alpha, backed };
             const upd1 = updateUVAfterNewton({ob: ob1, u: u[0], v: v[0], uNew: betterPoint[0], vNew: betterPoint[1], backed: backed});
             const upd2 = updateUVAfterNewton({ob: ob2, u: u[1], v: v[1], uNew: betterPoint[2], vNew: betterPoint[3], backed: backed});
-            if(upd1.end || upd2.end) {
-                finished = true;
-                break;
-            }
-            if(upd1.backThisTime || upd2.backThisTime) {
-                const ret = backNewton(pointsList, uStart, vStart, u, v, uPrev, vPrev, _alpha);
-                _alpha = ret.alpha;
-                backed = true;
-                break;
-            }
             u[0] = upd1.u;
             u[1] = upd2.u;
 
             v[0] = upd1.v;
             v[1] = upd2.v;
+            if(upd1.end || upd2.end) {
+                finished = true;
+                break;
+            }
+            if(!iterations && upd1.crossed && !upd1.backThisTime) {
+                updateIn1Visualisation(cuttingCurve.id, {break: true});
+            }
+            if(!iterations && upd2.crossed && !upd2.backThisTime) {
+                updateIn2Visualisation(cuttingCurve.id, {break: true});
+            }
+            if(!iterations && (upd1.backThisTime || upd2.backThisTime)) {
+                updateIn1Visualisation(cuttingCurve.id, {back: true});
+                updateIn2Visualisation(cuttingCurve.id, {back: true});
+            }
+            if(upd1.backThisTime || upd2.backThisTime) {
+                pointsList.push(evaluate(ob1, u[0], v[0]));
+                const ret = backNewton(pointsList, uStart, vStart, u, v, uPrev, vPrev, _alpha);
+                _alpha = ret.alpha;
+                pointsList = ret.pointsList;
+                notFinishYet = 5;
+                backed = true;
+                tempAlpha = _alpha;
+                break;
+            }
             
         }
-        // if(!iterations && decideIfAddBreak(ob[0], uPrev[0], vPrev[0], u[0], v[0])) {
-        //     updateIn1Visualisation(cuttingCurve.id, {break: true});
-        // }
-        // if(!iterations && decideIfAddBreak(ob[1], uPrev[1], vPrev[1], u[1], v[1])) {
-        //     updateIn2Visualisation(cuttingCurve.id, {break: true});
-        // }
         uPrev = [u[0], u[1]];
         vPrev = [v[0], v[1]];
 
         const p1 = evaluate(ob1, u[0], v[0], true);
         const p2 = evaluate(ob2, u[1], v[1]);
+        if(alphaEpsilon < getVectorLength(p2, p1)) {
+            tempAlpha /= 2;
+        }
         DrawPoint(p1, "Red"); 
         DrawPoint(p2, "Blue"); 
         pointsList.push(evaluate(ob1, u[0], v[0]));
