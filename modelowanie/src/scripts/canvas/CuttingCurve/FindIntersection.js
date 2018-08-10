@@ -143,12 +143,12 @@ export function findObjectToIntersectionAndIntersection(){
     }
     return true;//TODO
 }
-export function evaluate(object, u, v) {
+export function evaluate(object, u, v, debug) {
     if(object.type === "torus") {
        return EvaluateTorus(object.id, u, v);
     }
     else if(object.type === "C0") {
-        return EvaluateSurface(object.id, u, v);
+        return EvaluateSurface(object.id, u, v, debug);
     }
     else if(object.type === "C2") {
         return EvaluateSurfaceC2(object.id, u, v);

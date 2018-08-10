@@ -17,6 +17,7 @@ export function setFinalEpsilon(_eps) {
     finalEpsilon = TryParseFloat(_eps, finalEpsilon);
 }
 export function goGoNewton(best, iterations) {
+    console.clear();
     let {ob1, ob2, u, v} = best;
     let interpolation;
     let cuttingCurve;
@@ -70,7 +71,10 @@ export function goGoNewton(best, iterations) {
         uPrev = [u[0], u[1]];
         vPrev = [v[0], v[1]];
 
-        const p1 = evaluate(ob1, u[0], v[0]);
+        const p1 = evaluate(ob1, u[0], v[0], true);
+        const p2 = evaluate(ob2, u[1], v[1]);
+        DrawPoint(p1, "Red"); 
+        DrawPoint(p2, "Blue"); 
         pointsList.push(evaluate(ob1, u[0], v[0]));
 
         if(!iterations) {
@@ -88,7 +92,7 @@ export function goGoNewton(best, iterations) {
     }
     if(iterations) {
         for(let i = 0; i < pointsList.length; i ++) {
-            DrawPoint(pointsList[i], "Red"); 
+            //DrawPoint(pointsList[i], "Red"); 
         }
         return;
     }

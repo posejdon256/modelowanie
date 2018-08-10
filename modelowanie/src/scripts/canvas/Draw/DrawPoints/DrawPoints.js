@@ -31,6 +31,9 @@ export function DrawPoint(p, color) {
     else if(color === "Red") {
         rgb = {r: 255, g: 0, b: 0};
     }
+    else if(color === "Green") {
+        rgb = {r: 0, g: 255, b: 0};
+    }
     const { ctx } = getContexts();
     drawPoint(_trans[0].x, _trans[0].y, _trans[0].z, img, ctx, rgb);
     ctx.putImageData(img, 0, 0); 

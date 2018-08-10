@@ -110,6 +110,8 @@ function countGradientMethod(ob1, ob2, best){
     let v = [best.point1.v, best.point2.v];
     let p1 = evaluate(ob1, u[0], v[0]);
     let p2 = evaluate(ob2, u[1], v[1]);
+    DrawPoint(evaluate(ob1, 0, 0), "Green");
+    DrawPoint(evaluate(ob1, 2.1, 3.1), "Green");
     const eps = 0.001;
     let i = 0;
     while(getVectorLength(p1, p2) > eps) {

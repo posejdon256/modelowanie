@@ -34,6 +34,9 @@ function removeIntervalForMoving(){
         stillMove = false;
     }
 }
+export function CleanCatchedPoints() {
+    catchedPoints = [];
+}
 export function CatchPoint(point) {
     if(point) {
         const _point = catchedPoints.find(x => x.id === point.id);
