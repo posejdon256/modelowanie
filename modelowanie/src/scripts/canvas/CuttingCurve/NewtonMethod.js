@@ -61,9 +61,11 @@ export function goGoNewton(best, iterations) {
                 break;
             }
             if(!iterations && upd1.crossed && !upd1.backThisTime) {
+                updateIn1Visualisation(cuttingCurve.id, upd1.uLast / ob1.Height ,upd1.vLast / ob1.Width);
                 updateIn1Visualisation(cuttingCurve.id, {break: true});
             }
             if(!iterations && upd2.crossed && !upd2.backThisTime) {
+                updateIn2Visualisation(cuttingCurve.id, upd2.uLast / ob2.Height , upd2.vLast / ob2.Width);
                 updateIn2Visualisation(cuttingCurve.id, {break: true});
             }
             if(!iterations && (upd1.backThisTime || upd2.backThisTime)) {
