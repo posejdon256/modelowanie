@@ -10,7 +10,7 @@ import { setAddingC2Type } from '../canvas/Bezier/BSpline';
 import { getCurvesControlPoints, addCurveBySelectedPoints } from '../canvas/Bezier/Curve';
 import { updateSelectedPoints, deselectPoints } from '../canvas/Points/Points';
 import { uniteTwoPoints } from '../canvas/Gregory/Claps';
-import { setIntersectionStep } from '../canvas/CuttingCurve/FindIntersection';
+import { setIntersectionStep, setEpsilonOfFindingIntersection } from '../canvas/CuttingCurve/FindIntersection';
 import { setNewtonAlpa, setFinalEpsilon } from '../canvas/CuttingCurve/NewtonMethod';
 import { setOneProjectionPointState, setFirstNewtonIt, setNewtonStep } from '../canvas/CuttingCurve/Projection';
 import { setLocekdCamrea } from '../canvas/Move/Move';
@@ -40,6 +40,7 @@ export default class Navbar extends Component {
         this.convertToInterpolation = this.convertToInterpolation.bind(this);
         this.setPath = this.setPath.bind(this);
         this.deselectPoints = this.deselectPoints.bind(this);
+        this.setIntersectionEpsilon = this.setIntersectionEpsilon.bind(this);
         const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
@@ -122,6 +123,9 @@ export default class Navbar extends Component {
     deselectPoints() {
         deselectPoints();
     }
+    setIntersectionEpsilon(event) {
+        setEpsilonOfFindingIntersection(event.target.value);
+    }
     render(){
         return(
         <div className="ab-navbar">
@@ -182,6 +186,10 @@ export default class Navbar extends Component {
                 <div>
                     <label>Ustaw krok znajdowania przecięcia:</label>
                     <input className="input-ab" type="text" onChange={this.setIntersectionStep} defaultValue="3"/>
+                </div>
+                <div>
+                    <label>Ustaw epsilon znajdowania przecięcia:</label>
+                    <input className="input-ab" type="text" onChange={this.setIntersectionEpsilon} defaultValue="0.001"/>
                 </div>
                 <div>
                     <label>Ustaw krok Newtona:</label>

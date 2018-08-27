@@ -41,7 +41,7 @@ export function RedrawVisualization() {
         } else if(curve.intersectionVisualization2[i].back && i < curve.intersectionVisualization2.length - 1) {
             ctx2.moveTo(curve.intersectionVisualization2[0].u, curve.intersectionVisualization2[0].v);
             ctx2.lineTo(curve.intersectionVisualization2[i + 1].u, curve.intersectionVisualization2[i + 1].v);
-        }else {
+        } else {
             ctx2.lineTo(curve.intersectionVisualization2[i].u, curve.intersectionVisualization2[i].v);
         }
     }

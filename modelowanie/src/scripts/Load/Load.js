@@ -11,6 +11,9 @@ import { addTorus } from "../canvas/Torus/Torus";
 let path ="Ania3.json";
 
 export function setPath(_path) {
+    if(_path === "") {
+        return;
+    }
     path =_path.substr(12, _path.length - 12);
 }
 export function Load() {

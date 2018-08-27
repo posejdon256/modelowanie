@@ -1,5 +1,5 @@
 import { evaluateDU, evaluateDV, evaluate } from "./FindIntersection";
-import { MultiplyPoint, crossMultiply, normalize, scalarMultiply, DiffPoints} from "../../Helpers/Helpers";
+import { MultiplyPoint, crossMultiply, normalize, scalarMultiply, DiffPoints, DividePoint, getVectorLength} from "../../Helpers/Helpers";
 import math from "mathjs";
 import { multiplyVectorAndMatrix } from "../../MatrixOperations/Multiply/Multiply";
 
@@ -40,10 +40,10 @@ function generateJacobi(ob, u, v, uNew, vNew, alpha) {
     return math.inv(jacobiMatrix);
 }
 function getT(du1, du2, dv1, dv2, alpha) {
-    const np = crossMultiply(du1, dv1);
-    const nq = crossMultiply(du2, dv2);
-    const t = normalize(crossMultiply(np, nq));
-    return t;
+    const np = normalize(crossMultiply(du1, dv1));
+    const nq = normalize(crossMultiply(du2, dv2));
+    const t = crossMultiply(np, nq);
+    return normalize(t);
 }
 function getFforJacobi(ob, u, v, uNew, vNew, alpha) {
     const P0 = evaluate(ob[0], u[0], v[0]);

@@ -37,6 +37,7 @@ export function goGoNewton(best, iterations) {
     DrawPoint(pStart, "Blue");
     let notFinishYet = 0;
     let loops = 0;
+    let crossed1 = 0, crossed2 = 0;
     let pointsList = [];
     let stop = iterations ? iterations : 1000;
     let finished = false;
@@ -60,11 +61,15 @@ export function goGoNewton(best, iterations) {
                 finished = true;
                 break;
             }
-            if(!iterations && upd1.crossed && !upd1.backThisTime) {
+            if(!iterations && upd1.crossed !== 0 && !upd1.backThisTime) {
+                crossed1 += upd1.crossed;
+                addBorder(upd1.crossed, 1, cuttingCurve, uPrev, vPrev, ob1);
                 updateIn1Visualisation(cuttingCurve.id, upd1.uLast / ob1.Height ,upd1.vLast / ob1.Width);
                 updateIn1Visualisation(cuttingCurve.id, {break: true});
             }
-            if(!iterations && upd2.crossed && !upd2.backThisTime) {
+            if(!iterations && upd2.crossed !== 0 && !upd2.backThisTime) {
+                crossed2 += upd2.crossed;
+                addBorder(upd2.crossed, 2, cuttingCurve, uPrev, vPrev, ob2);
                 updateIn2Visualisation(cuttingCurve.id, upd2.uLast / ob2.Height , upd2.vLast / ob2.Width);
                 updateIn2Visualisation(cuttingCurve.id, {break: true});
             }
@@ -123,7 +128,52 @@ export function goGoNewton(best, iterations) {
     }
     if(!backed) {
         cuttingCurve.points.push({x: pStart.x, y: pStart.y, z: pStart.z});
-        cuttingCurve.intersectionVisualization1.push({u: cuttingCurve.intersectionVisualization1[0].u, v: cuttingCurve.intersectionVisualization1[0].v});
-        cuttingCurve.intersectionVisualization2.push({u: cuttingCurve.intersectionVisualization2[0].u, v: cuttingCurve.intersectionVisualization2[0].v});
+        if(isLenghtNotToLong(cuttingCurve.intersectionVisualization1)) {
+            cuttingCurve.intersectionVisualization1.push({u: cuttingCurve.intersectionVisualization1[0].u, v: cuttingCurve.intersectionVisualization1[0].v});
+        }
+        if(isLenghtNotToLong(cuttingCurve.intersectionVisualization2)) {
+            cuttingCurve.intersectionVisualization2.push({u: cuttingCurve.intersectionVisualization2[0].u, v: cuttingCurve.intersectionVisualization2[0].v});
+        }
     }
- }
+}
+function isLenghtNotToLong(intersectionVisualization) {
+    const len1 = intersectionVisualization[0].u - intersectionVisualization[intersectionVisualization.length - 1].u;
+    const len2 = intersectionVisualization[0].v - intersectionVisualization[intersectionVisualization.length - 1].v;    
+    return Math.abs(len1) < 50 && Math.abs(len2) < 50;
+}
+/**
+ * 
+ * @param {*} crossed 
+ * @param {*} num 
+ * @param {*} cuttingCurve 
+ * @param {*} u 
+ * @param {*} v 
+ * @param {*} ob 
+ */
+function addBorder(crossed, num, cuttingCurve, u, v, ob) {
+    if(crossed === -2) {
+        if(num === 1) {
+            updateIn1Visualisation(cuttingCurve.id, 0 , v[0] / ob.Width);    
+        }  else {
+            updateIn2Visualisation(cuttingCurve.id, 0 , v[1] / ob.Width); 
+        }  
+    } else if(crossed === 2) {
+        if(num === 1) {
+            updateIn1Visualisation(cuttingCurve.id, 1 , v[0] / ob.Width);    
+        }  else {
+            updateIn2Visualisation(cuttingCurve.id, 1 , v[1] / ob.Width); 
+        } 
+    } else if(crossed === -1) {
+        if(num === 1) {
+            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Width, 0);    
+        }  else {
+            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Width, 0); 
+        } 
+    } else if(crossed === 1) {
+        if(num === 1) {
+            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Width, 1);    
+        }  else {
+            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Width, 1); 
+        }  
+    }
+}

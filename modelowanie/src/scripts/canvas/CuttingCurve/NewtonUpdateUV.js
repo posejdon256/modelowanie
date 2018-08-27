@@ -1,11 +1,16 @@
+// crossed:
+// left -1
+// right 1
+// top -2
+// bottom 2
 export  function updateUVAfterNewton(confObject) {
     const { ob, u, v, uNew, vNew, backed } = confObject;
     
     let backThisTime = false;
-    let crossed = false;
+    let crossed = 0;
     let end = false;
 
-    const eps = 0.0002;
+    const eps = ob.type === "torus" ? 0.0009 : 0.0009;
     const epsWrap = 0.00001;
 
     let _uNew = u - (uNew * eps);
@@ -18,14 +23,14 @@ export  function updateUVAfterNewton(confObject) {
            _uNew = ob.Height - epsWrap;
            _uLast = 0;
        } else {
+            _uNew = 0;
            if(backed) {
-               _uNew = 0;
                end = true;
            } else {
                 backThisTime = true;      
            }
        }
-       crossed = true;
+       crossed = -1;
     }
     if(_uNew >= ob.Height) {
        if(ob.WrappedU) {
@@ -39,7 +44,7 @@ export  function updateUVAfterNewton(confObject) {
                 backThisTime = true; 
            }
        }
-       crossed = true;
+       crossed = 1;
     }
     if(_vNew >= ob.Width) {
        if(ob.WrappedV) {
@@ -53,21 +58,21 @@ export  function updateUVAfterNewton(confObject) {
                 backThisTime = true; 
            }
        }
-       crossed = true;
+       crossed = 2;
     }
     if(_vNew < 0) {
        if(ob.WrappedV) {
            _vNew = ob.Width - epsWrap;
            _vLast = 0;
        } else {
-        _vNew = 0;
+            _vNew = 0;
            if(backed) {
                end = true;
            } else {
                 backThisTime = true; 
            }
        }
-       crossed = true;
+       crossed = -2;
     }
     return {u: _uNew, v: _vNew, end: end, backThisTime: backThisTime, crossed: crossed, uLast: _uLast, vLast: _vLast};
 }

@@ -32,12 +32,6 @@ export function getFirstNewtonIt() {
     return showIterations;
 }
 function findIntersection(_objects) {
-    const step = {
-        h1: _objects[0].Height /10.0,
-        w1: _objects[0].Width /10.0,
-        h2: _objects[1].Height /10.0,
-        w2: _objects[1].Width /10.0,
-    };
     const cursor = getCursor();
     const best = {
         lenght: 10000,
@@ -46,17 +40,23 @@ function findIntersection(_objects) {
     };
     const epsDistance = { x: _objects[0].Width * 0.5, y: _objects[0].Height * 0.5 };
     const sameObjects = _objects[0].id === _objects[1].id ? true : false;
-    for(let i = 0.0; i < _objects[0].Height; i += step.w1) {
-        for(let j = 0.0; j < _objects[0].Width; j += step.h1) {
-            for(let k = 0.0; k < _objects[1].Height; k += step.w2) {
-                for(let m = 0.0; m < _objects[1].Width; m += step.h2) {
-                    const ev1 = evaluate(_objects[0], i, j);
-                    const ev2 = evaluate(_objects[1], k, m);
-                    const trans = [ev1, ev2];
-                    const _lenght = getVectorLength(trans[0], cursor) + getVectorLength(trans[1], cursor);
+    const divideValue = sameObjects ? 10.0 : 10.0;
+    const step = {
+        h1: _objects[0].Height /divideValue,
+        w1: _objects[0].Width /divideValue,
+        h2: _objects[1].Height /divideValue,
+        w2: _objects[1].Width /divideValue,
+    };
+    for(let i = 0.0; i < _objects[0].Width; i += step.w1) {
+        for(let j = 0.0; j < _objects[0].Height; j += step.h1) {
+            for(let k = 0.0; k < _objects[1].Width; k += step.w2) {
+                for(let m = 0.0; m < _objects[1].Height; m += step.h2) {
+                    const ev1 = evaluate(_objects[0], j, i);
+                    const ev2 = evaluate(_objects[1], m, k);
+                    const _lenght = getVectorLength(ev1, cursor) + getVectorLength(ev2, cursor);
                     if(_lenght < best.lenght && (!sameObjects || (epsDistance.x < Math.abs(i - k) && epsDistance.y < Math.abs(j - m)))) {
-                        best.point1 = {u: i, v: j};
-                        best.point2 = {u: k, v: m};
+                        best.point1 = {u: j, v: i};
+                        best.point2 = {u: m, v: k};
                         best.lenght = _lenght;
                     }
                 }
@@ -67,7 +67,7 @@ function findIntersection(_objects) {
     const p2 = evaluate(_objects[1], best.point2.u, best.point2.v);
 
     DrawPoint(p1, "Blue");
-    DrawPoint(p2, "Yellow");
+    DrawPoint(p2, "Red");
     if(oneIntersectionPointState) {
         countGradientMethod(_objects[0], _objects[1], best);
     }
@@ -81,7 +81,6 @@ export function projectIntersectionPoints(){
     const _objects = [];
     if(surfaces.length  + toruses.length !== 2) {
         if(surfaces.length === 1 && toruses.length === 0) {
-            _objects.push(surfaces[0]);
             _objects.push(surfaces[0]);
         } else {
             console.log("Niepoprawna liczba obiektów jest wybrana!");
@@ -137,6 +136,8 @@ function countGradientMethod(ob1, ob2, best){
         }
         p1 = evaluate(ob1, u[0], v[0]);
         p2 = evaluate(ob2, u[1], v[1]);
+        DrawPoint(p1, "Red");
+        DrawPoint(p2, "Red");
         const uPrev = u;
         const vPrev = v;
 
