@@ -38,7 +38,7 @@ function findIntersection(_objects) {
         point1: {},
         point2: {}
     };
-    const epsDistance = { x: _objects[0].Width * 0.5, y: _objects[0].Height * 0.5 };
+    const epsDistance = { x: 0.5, y: 0.5 };
     const sameObjects = _objects[0].id === _objects[1].id ? true : false;
     const divideValue = sameObjects ? 10.0 : 10.0;
     const step = {

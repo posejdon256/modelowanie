@@ -3,7 +3,7 @@ import { addPoint } from "../Points/Points";
 
 let curves = [];
 let numberOfIntersections = 0;
-const size = 250.0;
+const size = 251.0;
 export function cleanCuttingCurves() {
     curves = [];
 }

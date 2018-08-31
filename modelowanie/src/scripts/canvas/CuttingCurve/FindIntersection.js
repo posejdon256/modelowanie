@@ -8,8 +8,12 @@ import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
 
 let intersectionStep = 3; //Needs to be updated for toruses and C0
 let intersectionEpsilon = 0.001;
+let selectedObjects = [];
 export function setIntersectionStep(_step) {
-intersectionStep = TryParseFloat(_step, intersectionStep);
+    intersectionStep = TryParseFloat(_step, intersectionStep);
+}
+export function getIntersectionSelectedObjects() {
+    return selectedObjects;
 }
 export function getIntersectionStep() {
     return intersectionStep;
@@ -140,6 +144,7 @@ export function findObjectToIntersectionAndIntersection(){
         _objects.push(toruses[i]);
     }
     try{
+        selectedObjects = _objects;
         if(!findIntersection(_objects)) {
             return false
         }

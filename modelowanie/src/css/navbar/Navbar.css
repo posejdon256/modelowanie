@@ -214,3 +214,14 @@ label {
     font-variant: normal;
     text-transform: none;
   }
+  .ab-navbar-visible {
+  }
+  .ab-navbar-not-visible {
+    display: none;
+  }
+  .ab-navbar-selector{
+    display: flex;
+  }
+  .ab-grid {
+    display: grid;
+  }

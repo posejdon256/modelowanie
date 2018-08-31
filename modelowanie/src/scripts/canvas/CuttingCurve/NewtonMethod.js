@@ -6,6 +6,7 @@ import { addCuttingCurve, updateIn1Visualisation, updateIn2Visualisation } from 
 import { findNewNewtonPoint } from "./Jacobi";
 import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
 import { updateUVAfterNewton, backNewton } from "./NewtonUpdateUV";
+import { setVisualisationObjects } from "../Draw/RedrawVisualisation/RedrawVisualization";
 
 
 let alpha = 0.002;
@@ -59,6 +60,11 @@ export function goGoNewton(best, iterations) {
             v[1] = upd2.v;
             if(upd1.end || upd2.end) {
                 finished = true;
+                if(upd1.end) {
+                    addBorder(upd1.crossed, 1, cuttingCurve, uPrev, vPrev, ob1);
+                } else if(upd2.end) {
+                    addBorder(upd2.crossed, 2, cuttingCurve, uPrev, vPrev, ob2);
+                }
                 break;
             }
             if(!iterations && upd1.crossed !== 0 && !upd1.backThisTime) {
@@ -66,14 +72,21 @@ export function goGoNewton(best, iterations) {
                 addBorder(upd1.crossed, 1, cuttingCurve, uPrev, vPrev, ob1);
                 updateIn1Visualisation(cuttingCurve.id, upd1.uLast / ob1.Height ,upd1.vLast / ob1.Width);
                 updateIn1Visualisation(cuttingCurve.id, {break: true});
+                updateIn1Visualisation(cuttingCurve.id, u[0] / ob1.Height, v[0] / ob1.Width);
             }
             if(!iterations && upd2.crossed !== 0 && !upd2.backThisTime) {
                 crossed2 += upd2.crossed;
                 addBorder(upd2.crossed, 2, cuttingCurve, uPrev, vPrev, ob2);
                 updateIn2Visualisation(cuttingCurve.id, upd2.uLast / ob2.Height , upd2.vLast / ob2.Width);
                 updateIn2Visualisation(cuttingCurve.id, {break: true});
+                updateIn2Visualisation(cuttingCurve.id, u[1] / ob2.Height, v[1] / ob2.Width);
             }
             if(!iterations && (upd1.backThisTime || upd2.backThisTime)) {
+                if(upd1.backThisTime) {
+                    addBorder(upd1.crossed, 1, cuttingCurve, uPrev, vPrev, ob1);
+                } else if(upd2.backThisTime) {
+                    addBorder(upd2.crossed, 2, cuttingCurve, uPrev, vPrev, ob2);
+                }
                 updateIn1Visualisation(cuttingCurve.id, {back: true});
                 updateIn2Visualisation(cuttingCurve.id, {back: true});
             }
@@ -106,6 +119,8 @@ export function goGoNewton(best, iterations) {
             updateIn2Visualisation(cuttingCurve.id, u[1] / ob2.Height, v[1] / ob2.Width);
         }
         if(finalEpsilon > getVectorLength(pStart, p1) && notFinishYet > 10) {
+            // updateWrappingBeforeFinish(crossed1, 1, cuttingCurve, u, v, ob1);
+            // updateWrappingBeforeFinish(crossed2, 2, cuttingCurve, u, v, ob2);
             break;
         }
         if(loops > stop) {
@@ -120,6 +135,7 @@ export function goGoNewton(best, iterations) {
         }
         return;
     }
+    setVisualisationObjects(ob1, ob2);
     if(!backed) {
         cuttingCurve.points.push({x: pStart.x, y: pStart.y, z: pStart.z});
     }
@@ -153,27 +169,71 @@ function isLenghtNotToLong(intersectionVisualization) {
 function addBorder(crossed, num, cuttingCurve, u, v, ob) {
     if(crossed === -2) {
         if(num === 1) {
-            updateIn1Visualisation(cuttingCurve.id, 0 , v[0] / ob.Width);    
+            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Height, 0);    
         }  else {
-            updateIn2Visualisation(cuttingCurve.id, 0 , v[1] / ob.Width); 
+            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Height, 0); 
         }  
     } else if(crossed === 2) {
         if(num === 1) {
-            updateIn1Visualisation(cuttingCurve.id, 1 , v[0] / ob.Width);    
+            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Height, 0.99999);    
         }  else {
-            updateIn2Visualisation(cuttingCurve.id, 1 , v[1] / ob.Width); 
+            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Height, 0.99999); 
         } 
     } else if(crossed === -1) {
         if(num === 1) {
-            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Width, 0);    
+            updateIn1Visualisation(cuttingCurve.id, 0, v[0] / ob.Width);    
         }  else {
-            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Width, 0); 
+            updateIn2Visualisation(cuttingCurve.id, 0, v[1] / ob.Width); 
         } 
     } else if(crossed === 1) {
         if(num === 1) {
-            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Width, 1);    
+            updateIn1Visualisation(cuttingCurve.id, 0.99999, v[0] / ob.Width);    
         }  else {
-            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Width, 1); 
+            updateIn2Visualisation(cuttingCurve.id, 0.99999, v[1] / ob.Width); 
+        }  
+    }
+}
+function updateWrappingBeforeFinish(crossed, num, cuttingCurve, u, v, ob) {
+    if(crossed === -2) {
+        if(num === 1) {
+            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Height, 0);  
+            updateIn1Visualisation(cuttingCurve.id, {break: true});
+            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Height, 0.99999);    
+        }  else {
+            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Height, 0);
+            updateIn2Visualisation(cuttingCurve.id, {break: true});
+            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Height, 0.99999); 
+        }  
+    } else if(crossed === 2) {
+        if(num === 1) {
+            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Height, 0.99999); 
+            updateIn1Visualisation(cuttingCurve.id, {break: true}); 
+            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Height, 0);    
+        }  else {
+            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Height, 0.99999);
+            updateIn2Visualisation(cuttingCurve.id, {break: true});
+            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Height, 0); 
+        } 
+    } 
+    if(crossed === -1) {
+        if(num === 1) {
+            updateIn1Visualisation(cuttingCurve.id, 0, v[0] / ob.Width);  
+            updateIn1Visualisation(cuttingCurve.id, {break: true});
+            updateIn1Visualisation(cuttingCurve.id, 0.99999, v[0] / ob.Width);   
+        }  else {
+            updateIn2Visualisation(cuttingCurve.id, 0, v[1] / ob.Width); 
+            updateIn2Visualisation(cuttingCurve.id, {break: true});
+            updateIn2Visualisation(cuttingCurve.id, 0.99999, v[1] / ob.Width); 
+        } 
+    } else if(crossed === 1) {
+        if(num === 1) {
+            updateIn1Visualisation(cuttingCurve.id, 0.99999, v[0] / ob.Width); 
+            updateIn1Visualisation(cuttingCurve.id, {break: true});
+            updateIn1Visualisation(cuttingCurve.id, 0, v[0] / ob.Width);    
+        }  else {
+            updateIn2Visualisation(cuttingCurve.id, 0.99999, v[1] / ob.Width); 
+            updateIn2Visualisation(cuttingCurve.id, {break: true});
+            updateIn2Visualisation(cuttingCurve.id, 0, v[1] / ob.Width); 
         }  
     }
 }

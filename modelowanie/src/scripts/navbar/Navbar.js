@@ -4,6 +4,7 @@ import'../../css/formbase.min.css';
 import List from './NavbarPoints/List';
 import ListPointsInCurve from './NavbarPoints/ListPointsInCurve';
 import BiCubicNavbar from './BiCubicNavbar/BiCubicNavbar';
+import NavbarIntersetion from './NavbutIntersection';
 
 import { getCursor, setCursor } from '../canvas/Cursor/Cursor';
 import { setAddingC2Type } from '../canvas/Bezier/BSpline';
@@ -30,17 +31,12 @@ export default class Navbar extends Component {
         this.updateSelectedPoints = this.updateSelectedPoints.bind(this);
         this.setCursorToStart = this.setCursorToStart.bind(this);
         this.uniteTwoPoints = this.uniteTwoPoints.bind(this);
-        this.setIntersectionStep = this.setIntersectionStep.bind(this);
-        this.setNewton = this.setNewton.bind(this);
-        this.setFinalEpsilon = this.setFinalEpsilon.bind(this);
         this.setOneProjectionPointState = this.setOneProjectionPointState.bind(this);
         this.lockUnlockCamera = this.lockUnlockCamera.bind(this);
-        this.showNewtonIt = this.showNewtonIt.bind(this);
-        this.setNewtonStep = this.setNewtonStep.bind(this);
         this.convertToInterpolation = this.convertToInterpolation.bind(this);
         this.setPath = this.setPath.bind(this);
         this.deselectPoints = this.deselectPoints.bind(this);
-        this.setIntersectionEpsilon = this.setIntersectionEpsilon.bind(this);
+        this.selectNavbar = this.selectNavbar.bind(this);
         const cursor = getCursor();
         this.state = {
             cursorX: 0.00,
@@ -48,7 +44,8 @@ export default class Navbar extends Component {
             cursorZ: 0.00,
             cursorPosX: cursor.screenX,
             cursorPosY: cursor.screenY,
-            curvePoints: []
+            curvePoints: [],
+            navbar: 1 //0 - normal, 1 - bicubic, 2 - cut
         };
     }
     updateAddingC2Type(event) {
@@ -80,6 +77,11 @@ export default class Navbar extends Component {
     updateChecked(event) {
         this.props.updateChecked(event.target.checked);
     }
+    selectNavbar(number) {
+        this.setState({
+            navbar: number
+        });
+    }
     updateCurvePoints(points) {
         this.setState({
             curvePoints: points
@@ -93,26 +95,11 @@ export default class Navbar extends Component {
     setCursorToStart() {
         setCursor(0,0,0, true);// with redraw
     }
-    setIntersectionStep(event) {
-        setIntersectionStep(event.target.value);
-    }
-    setNewton(event) {
-        setNewtonAlpa(event.target.value);
-    }
-    setFinalEpsilon(event) {
-        setFinalEpsilon(event.target.value);
-    }
     uniteTwoPoints() {
         uniteTwoPoints();
     }
     lockUnlockCamera(event) {
         setLocekdCamrea(event.target.checked);
-    }
-    showNewtonIt(event) {
-        setFirstNewtonIt(event.target.checked);
-    }
-    setNewtonStep(event) {
-        setNewtonStep(event.target.value);
     }
     convertToInterpolation(event) {
         convertToInterpolationCurve();
@@ -123,37 +110,77 @@ export default class Navbar extends Component {
     deselectPoints() {
         deselectPoints();
     }
-    setIntersectionEpsilon(event) {
-        setEpsilonOfFindingIntersection(event.target.value);
-    }
     render(){
         return(
         <div className="ab-navbar">
-            <div>
-                <label>Załaduj plik:</label>
-                <input className="input-ab" type="file" onChange={this.setPath} accept=".json" />
+            <div className="ab-navbar-selector">
+                <button className="btn" onClick={(e) => this.selectNavbar(0)}>Navbar zwykły</button>
+                <button className="btn" onClick={(e) => this.selectNavbar(1)}>Navbar przecięć</button>
+                <button className="btn" onClick={(e) => this.selectNavbar(2)}>Navbar bikubiczny</button>
             </div>
-            <div>
-                <button className="btn" onClick={this.setCursorToStart}>Ustaw Kursor w (0,0,0)</button>
-            </div>
-            <div>
-                <button className="btn" onClick={this.deselectPoints}>Odznacz wszystkie punkty</button>
-            </div>
-            <div>
-                <label>Zablokuj/Odblokuj kamerę:</label>
-                <input className="input-ab" type="checkbox" onChange={this.lockUnlockCamera} defaultChecked={true}/>
-            </div>
-            <div>
-                <label>Siatka pozioma</label>
-                <input className="istyle" type="range" min="2" max="100" onChange={this.updateXGrid} />
-            </div>
-            <div>
-                <label>Siatka pionowa</label>
-                <input className="istyle" type="range" min="2" max="100" onChange={this.updateYGrid} />
-            </div>
-            <div>
-                <label htmlFor="3dTorus">Stereoskopia</label>
-                <input id="3dTorus" type="checkbox" onChange={this.updateChecked} />
+            <div className={this.state.navbar === 0 ? "ab-navbar-visible" : "ab-navbar-not-visible"}>
+                <div>
+                    <label>Załaduj plik:</label>
+                    <input className="input-ab" type="file" onChange={this.setPath} accept=".json" />
+                </div>
+                <div>
+                    <button className="btn" onClick={this.setCursorToStart}>Ustaw Kursor w (0,0,0)</button>
+                </div>
+                <div>
+                    <button className="btn" onClick={this.deselectPoints}>Odznacz wszystkie punkty</button>
+                </div>
+                <div>
+                    <label>Zablokuj/Odblokuj kamerę:</label>
+                    <input className="input-ab" type="checkbox" onChange={this.lockUnlockCamera} defaultChecked={true}/>
+                </div>
+                <div>
+                    <label>Siatka pozioma</label>
+                    <input className="istyle" type="range" min="2" max="100" onChange={this.updateXGrid} />
+                </div>
+                <div>
+                    <label>Siatka pionowa</label>
+                    <input className="istyle" type="range" min="2" max="100" onChange={this.updateYGrid} />
+                </div>
+                <div>
+                    <label htmlFor="3dTorus">Stereoskopia</label>
+                    <input id="3dTorus" type="checkbox" onChange={this.updateChecked} />
+                </div>
+                <div>
+                    <label>Ustaw położenia zaznaczonych punktów</label>
+                    <div>
+                        <div>
+                            <label>X: </label>
+                            <input className="input-ab" ref="changeX" type="text" defaultValue="0"/>
+                        </div>
+                        <div>
+                            <label>Y: </label>
+                            <input className="input-ab" ref="changeY" type="text" defaultValue="0"/>
+                        </div>
+                        <div>
+                            <label>Z: </label>
+                            <input className="input-ab" ref="changeZ" type="text" defaultValue="0"/>
+                        </div>
+                    </div>
+                    <button className="btn" onClick={this.updateSelectedPoints}>Zamień</button>
+                    <div>
+                        <label>Pozycja kursora:</label>
+                        <label>{"x: " + this.state.cursorX + " y: " + this.state.cursorY + " z: " + this.state.cursorZ}</label>
+                    </div>
+                </div>
+                <div>
+                    <label>Współrzędne ekranowe:</label>
+                    <label>{"x: " + this.state.cursorPosX + " y: " + this.state.cursorPosY}</label>
+                </div>
+                <div>
+                    <button className="btn" onClick={this.addCurve}>Dodaj krzywą Beziera z punktów</button>
+                </div>
+                <div>
+                    <label>Dodawanie krzywej C2 w bazie Beziera:</label>
+                    <input type="checkbox" onChange={this.updateAddingC2Type}/>
+                </div>
+                <div>
+                    <button className="btn" onClick={this.uniteTwoPoints}>Scal dwa punkty</button>
+                </div>
             </div>
             <List 
                 points={this.props.points}
@@ -164,77 +191,13 @@ export default class Navbar extends Component {
                 cuttingCurves={this.props.cuttingCurves}
                 updateCurvePoints={this.updateCurvePoints}
             />
-            <div>
-                <label>Ustaw położenia zaznaczonych punktów</label>
-                <div>
-                    <div>
-                        <label>X: </label>
-                        <input className="input-ab" ref="changeX" type="text" defaultValue="0"/>
-                    </div>
-                    <div>
-                        <label>Y: </label>
-                        <input className="input-ab" ref="changeY" type="text" defaultValue="0"/>
-                    </div>
-                    <div>
-                        <label>Z: </label>
-                        <input className="input-ab" ref="changeZ" type="text" defaultValue="0"/>
-                    </div>
-                </div>
-                <button className="btn" onClick={this.updateSelectedPoints}>Zamień</button>
-            </div>
-            <div className="ab-bicubic">
-                <div>
-                    <label>Ustaw krok znajdowania przecięcia:</label>
-                    <input className="input-ab" type="text" onChange={this.setIntersectionStep} defaultValue="3"/>
-                </div>
-                <div>
-                    <label>Ustaw epsilon znajdowania przecięcia:</label>
-                    <input className="input-ab" type="text" onChange={this.setIntersectionEpsilon} defaultValue="0.001"/>
-                </div>
-                <div>
-                    <label>Ustaw krok Newtona:</label>
-                    <input className="input-ab" type="text" onChange={this.setNewton} defaultValue="0.002"/>
-                </div>
-                <div>
-                    <label>Ustaw Epsilon warunku końcowego:</label>
-                    <input className="input-ab" type="text" onChange={this.setFinalEpsilon} defaultValue="0.001"/>
-                </div>
-                <div>
-                    <label>Włącz/wyłącz podgląd ze znajdowaniem punktu przecięcia:</label>
-                    <input type="checkbox" onChange={this.setOneProjectionPointState}/>
-                </div>
-                <div>
-                    <label>Włącz/wyłącz widok pierwszych 20 iteracji Newtona:</label>
-                    <input type="checkbox" onChange={this.showNewtonIt} defaultChecked={false}/>
-                </div>
-                <div>
-                    <label>Ustaw liczbę pokazywanych kroków Newtona:</label>
-                    <input className="input-ab" type="text" onChange={this.setNewtonStep} defaultValue="20"/>
-                </div>
-                <div>
-                    <button className="btn" onClick={this.convertToInterpolation}>Konvertuj do interpolacyjnejw</button>
-                </div>
-            </div>
             <ListPointsInCurve points={this.state.curvePoints} />
-            <div>
-                <label>Pozycja kursora:</label>
-                <label>{"x: " + this.state.cursorX + " y: " + this.state.cursorY + " z: " + this.state.cursorZ}</label>
+            <div className={this.state.navbar === 1 ? "ab-navbar-visible" : "ab-navbar-not-visible"}>
+                <NavbarIntersetion />
             </div>
-            <div>
-                <label>Współrzędne ekranowe:</label>
-                <label>{"x: " + this.state.cursorPosX + " y: " + this.state.cursorPosY}</label>
+            <div className={this.state.navbar === 2 ? "ab-navbar-visible" : "ab-navbar-not-visible"}>
+                <BiCubicNavbar />
             </div>
-            <div>
-                <button className="btn" onClick={this.addCurve}>Dodaj krzywą Beziera z punktów</button>
-            </div>
-            <div>
-                <label>Dodawanie krzywej C2 w bazie Beziera:</label>
-                <input type="checkbox" onChange={this.updateAddingC2Type}/>
-            </div>
-            <div>
-                <button className="btn" onClick={this.uniteTwoPoints}>Scal dwa punkty</button>
-            </div>
-            <BiCubicNavbar />
         </div>);
     }
 }

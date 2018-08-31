@@ -34,7 +34,7 @@ class App extends Component {
       gregories: [],
       toruses: [],
       cuttingCurves:[],
-      visualisate: false
+      visualisate: true
     };
 
     this.addTorus = this.addTorus.bind(this);

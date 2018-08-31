@@ -2,9 +2,24 @@ import { getCuttingCurves } from "../../CuttingCurve/CuttingCurve";
 
 let canvas1;
 let canvas2;
+let ob1;
+let ob2;
+let img;
 export function setVisualisationCanvases(c1, c2) {
     canvas1 = c1;
     canvas2 = c2;
+}
+export function getUVImages() {
+    const ctx1 = canvas1.getContext("2d");
+    const ctx2 = canvas2.getContext("2d");
+    return { 
+        img1: ctx1.getImageData(0, 0, canvas1.width, canvas1.height),
+        img2: ctx2.getImageData(0, 0, canvas2.width, canvas2.height) 
+    };
+}
+export function setVisualisationObjects(_ob1, _ob2) {
+    ob1 = _ob1;
+    ob2 = _ob2;
 }
 export function clearVisualization() {
     const ctx1 = canvas1.getContext("2d");
@@ -45,36 +60,97 @@ export function RedrawVisualization() {
             ctx2.lineTo(curve.intersectionVisualization2[i].u, curve.intersectionVisualization2[i].v);
         }
     }
-
-    // ctx1.lineTo(curve.intersectionVisualization1[0].u, curve.intersectionVisualization1[0].v);
-    // ctx2.lineTo(curve.intersectionVisualization2[0].u, curve.intersectionVisualization2[0].v);
     ctx1.stroke();
     ctx2.stroke();
+    trimVisualisation();
 }
-// export function RedrawVisualization() {
-//     const ctx1 = canvas1.getContext("2d");
-//     const ctx2 = canvas2.getContext("2d");
-//     let img1 = ctx1.getImageData(0, 0, canvas1.width, canvas1.height);
-//     let img2 = ctx2.getImageData(0, 0, canvas2.width, canvas2.height);
-//     const curves = getCuttingCurves();
-//     const curve = curves[curves.length - 1];
-//     for(let i = 0; i < curve.intersectionVisualization1.length; i ++) {
-//         const rgb = {r: 255, g: 0, b: 0};
-//         img1 = drawPixel(curve.intersectionVisualization1[i].u, curve.intersectionVisualization1[i].v, img1, ctx1, rgb);
-//     }
-//     for(let i = 0; i < curve.intersectionVisualization2.length; i ++) {
-//         const rgb = {r: 255, g: 0, b: 0};
-//         img2 = drawPixel(curve.intersectionVisualization2[i].u, curve.intersectionVisualization2[i].v, img2, ctx2, rgb);
-//     }
-//     ctx1.putImageData(img1, 0, 0);  
-//     ctx2.putImageData(img2, 0, 0);  
-// }
-function drawPixel(x, y, img, ctx, rgb) {
-    const place = (parseInt((y), 10)* canvas1.width * 4) + (parseInt(x, 10) * 4);
-    img.data[place] = rgb.r;
-    img.data[place + 1] = rgb.g;
-    img.data[place + 2] = rgb.b;
+export function trimVisualisation() {
+    let stack = [];
+    const ctx1 = canvas1.getContext('2d');
+    const ctx2 = canvas2.getContext('2d');
+    img = ctx1.getImageData(0, 0, canvas1.width, canvas1.height);
+    let startX = parseInt(Math.random() * 250, 10);
+    let startY = parseInt(Math.random() * 250, 10);
+    while (getPixelColor(canvas1, startX, startY) !== "Black") {
+        startX = parseInt(Math.random() * 250, 10);
+        startY = parseInt(Math.random() * 250, 10);
+    }
+    stack.push({canvas: canvas1, x: startX, y: startY});
+    while(stack.length > 0) {
+        //const problem = stack[stack.length - 1];
+        recurence(stack, ob1);
+    }
+    ctx1.putImageData(img, 0, 0);  
+    img = ctx2.getImageData(0, 0, canvas2.width, canvas2.height);
+    while (getPixelColor(canvas2, startX, startY) !== "Black") {
+        startX = parseInt(Math.random() * 255, 10);
+        startY = parseInt(Math.random() * 255, 10);
+    }
+    stack.push({canvas: canvas2, x: startX, y: startY});
+    while(stack.length > 0) {
+        //const problem = stack[stack.length - 1];
+        recurence(stack, ob2);
+    }
+    ctx2.putImageData(img, 0, 0); 
+}
+function recurence(stack, ob) {
+    const problem = stack[stack.length - 1];
+    let {x, y, canvas} = problem;
+    const ctx = canvas.getContext('2d');
+    stack.splice(stack.length - 1, 1);
+    if(x < 0) {
+        if(ob.WrappedU) {
+            x = 250;
+        } else {
+            return;
+        }
+    }
+    if(y < 0) {
+        if(ob.WrappedV) {
+            y = 250;
+        } else {
+            return;
+        }
+    }
+    if(x >= 250) {
+        if(ob.WrappedU) {
+            x = 0;
+        } else {
+            return;
+        }
+    }
+    if(y >= 250) {
+        if(ob.WrappedV) {
+            y = 0;
+        } else {
+            return;
+        }
+    }
+    if(getPixelColor(canvas, x, y) === "Red" || getPixelColor(canvas, x, y) === "White") {
+        return;
+    }
+    colourPixelOnWhite(canvas, x, y);
+    stack.push({canvas: canvas, x: x - 1, y: y});
+    stack.push({canvas: canvas, x: x + 1, y: y});
+    stack.push({canvas: canvas, x: x, y: y - 1});
+    stack.push({canvas: canvas, x: x, y: y + 1});
+}
+function getPixelColor(canvas, x, y){
+    const place = (parseInt((y), 10)* canvas.width * 4) + (parseInt(x, 10) * 4);
+    if(img.data[place] === 0 && img.data[place + 1] === 0 && img.data[place + 2] === 0) {
+        return "Black";
+    } else if(img.data[place] === 255 && img.data[place + 1] === 255 && img.data[place + 2] === 255) {
+        return "White";
+    } else if(img.data[place] === 255 && img.data[place + 1] === 0 && img.data[place + 2] === 0) {
+        return "Red";
+    }
+    alert("Problem with colors");
+}
+function colourPixelOnWhite(canvas, x, y) {
+    const _ctx = canvas.getContext('2d');
+    const place = (parseInt((y), 10)* canvas.width * 4) + (parseInt(x, 10) * 4);
+    img.data[place] = 255;
+    img.data[place + 1] = 255;
+    img.data[place + 2] = 255;
     img.data[place + 3] = 255
-    return img;
-   // localContext.fillRect( parseInt(x,10), parseInt(y,10), 1, 1 );
 }

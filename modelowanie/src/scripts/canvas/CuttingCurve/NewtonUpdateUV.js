@@ -10,7 +10,7 @@ export  function updateUVAfterNewton(confObject) {
     let crossed = 0;
     let end = false;
 
-    const eps = ob.type === "torus" ? 0.0009 : 0.0009;
+    const eps = 0.0009;
     const epsWrap = 0.00001;
 
     let _uNew = u - (uNew * eps);
@@ -34,7 +34,7 @@ export  function updateUVAfterNewton(confObject) {
     }
     if(_uNew >= ob.Height) {
        if(ob.WrappedU) {
-           _uNew = 0 + epsWrap;
+           _uNew = 0;
            _uLast = ob.Height - epsWrap;
        } else {
             _uNew = ob.Height - epsWrap;
@@ -48,7 +48,7 @@ export  function updateUVAfterNewton(confObject) {
     }
     if(_vNew >= ob.Width) {
        if(ob.WrappedV) {
-           _vNew = 0 + epsWrap;
+           _vNew = 0;
            _vLast = ob.Width - epsWrap;
        } else {
             _vNew = ob.Width - epsWrap;
