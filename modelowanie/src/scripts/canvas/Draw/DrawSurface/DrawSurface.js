@@ -141,9 +141,13 @@ function drawChainForC2CubicFlake(ctx, ctxS1, ctxS2) {
         if(!surfaces[i].chain) {
             continue;
         }
+        const trim = {
+            trim: surfaces[i].trim,
+            trimOptions: surfaces[i].trimOptions
+        }
         for(let j = 0; j < surfaces[i].pointsMap.length; j ++) {
             setTranslationPoints(surfaces[i].pointsMap[j]);
-            DrawLines(surfaces[i].pointsMap[j], { r: 0, g: 0, b: 255 });
+            DrawLines(surfaces[i].pointsMap[j], { r: 0, g: 0, b: 255 }, trim);
         }
         for(let m = 0; m < surfaces[i].pointsMap[0].length; m ++) {
             const _points = [];
@@ -151,19 +155,23 @@ function drawChainForC2CubicFlake(ctx, ctxS1, ctxS2) {
                 _points.push(surfaces[i].pointsMap[k][m]);
                // _points.push(surfaces[i].pointsMap[k][m]);
             }
-            DrawLines(_points, { r: 0, g: 0, b: 255 });
+            DrawLines(_points, { r: 0, g: 0, b: 255 }, trim);
         }
     }
 }
 function drawChainForC0CubicFlake(ctx, ctxS1, ctxS2) {
     const surfaces = getSurfaces("C0");
     for(let i = 0; i < surfaces.length; i ++) {
+        const trim = {
+            trim: surfaces[i].trim,
+            trimOptions: surfaces[i].trimOptions
+        }
         if(!surfaces[i].chain) {
             continue;
         }
         for(let j = 0; j < surfaces[i].pointsMap.length; j ++) {
             setTranslationPoints(surfaces[i].pointsMap[j]);
-            DrawLines(surfaces[i].pointsMap[j], { r: 0, g: 0, b: 255 });
+            DrawLines(surfaces[i].pointsMap[j], { r: 0, g: 0, b: 255 }, trim);
         }
         for(let m = 0; m < surfaces[i].pointsMap[0].length; m ++) {
             const _points = [];
@@ -171,7 +179,7 @@ function drawChainForC0CubicFlake(ctx, ctxS1, ctxS2) {
                 _points.push(surfaces[i].pointsMap[k][m]);
                // _points.push(surfaces[i].pointsMap[k][m]);
             }
-            DrawLines(_points, { r: 0, g: 0, b: 255 });
+            DrawLines(_points, { r: 0, g: 0, b: 255 }, trim);
         }
     }
 }

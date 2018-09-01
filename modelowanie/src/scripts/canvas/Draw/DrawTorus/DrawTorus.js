@@ -2,8 +2,18 @@ import { getTorusLines, getToruses, getTorusVertices } from "../../Torus/Torus";
 import { drawLine, getPixelColor, stereoscopyDraw } from "../Draw";
 import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
 import Translate, { setTranslationPoints } from "../../Translation/TranslationCenter/TranslationCenter";
+import { trimIsMet } from "../../CuttingCurve/Trimming";
 
-function drawTorusLines(lines, id, ctx, points) {
+function drawTorusLines(lines, id, ctx, points, vertices) {
+    const torus = getToruses().find(x => x.id === id);
+    const ops = {};
+    if(torus.trim) {
+        const ctx = torus.trimOptions.canvas.getContext('2d');
+        const img = ctx.getImageData(0, 0, torus.trimOptions.canvas.width, torus.trimOptions.canvas.height);
+        ops.img = img;
+        ops.op = torus.trimOptions.op;
+        ops.canvas = torus.trimOptions.canvas;
+    }
     ctx.beginPath();
     lines.forEach(line => {
         let bla = 10;
@@ -11,7 +21,9 @@ function drawTorusLines(lines, id, ctx, points) {
         if(line[1] < points.length 
         && line[0] < points.length && points[line[0]].z > -blaZ && points[line[0]].x < bla && points[line[0]].x > -bla
             && points[line[0]].y < bla  && points[line[0]].y > -bla && points[line[1]].z < 1 && points[line[1]].z > -blaZ && points[line[1]].x < bla && points[line[1]].x > -bla
-            && points[line[1]].y < bla && points[line[1]].y > -bla) {
+            && points[line[1]].y < bla && points[line[1]].y > -bla
+            && (!torus.trim || 
+            (trimIsMet(vertices[line[0]].u, vertices[line[0]].v, ops) && trimIsMet(vertices[line[1]].u, vertices[line[1]].v, ops)))) {
              drawLine((points[line[0]].x + 1) * (500), (points[line[0]].y + 1) * (350), (points[line[1]].x + 1) * (500), (points[line[1]].y + 1) * (350), ctx);
          }
     });
@@ -21,7 +33,8 @@ export function _DrawTorus(_ctx, _ctxStereo, _ctxStereo2){
     const stereoscopy = getStereoscopy();
     const toruses = getToruses();
     toruses.forEach(torus => {
-        setTranslationPoints(getTorusVertices(torus.id));
+        const torusVertices = getTorusVertices(torus.id);
+        setTranslationPoints(torusVertices);
         const confObject = {};
         if(torus.rotation.x !== 0) {
             confObject.axisX = true;
@@ -36,19 +49,19 @@ export function _DrawTorus(_ctx, _ctxStereo, _ctxStereo2){
             confObject.alphaZ = torus.rotation.z;
         }
         const translated = Translate(confObject, "torus");
-        drawTorus(translated, torus.id, _ctx, _ctxStereo, _ctxStereo2);
+        drawTorus(translated, torus.id, _ctx, _ctxStereo, _ctxStereo2, torusVertices);
     });
     if(stereoscopy){
         stereoscopyDraw();
     }
 }
-function drawTorus(points, id, _ctx, _ctxStereo, _ctxStereo2) {
+function drawTorus(points, id, _ctx, _ctxStereo, _ctxStereo2, vertices) {
     const lines = getTorusLines(id);
     const stereoscopy = getStereoscopy();
     const {r, g, b, a} = getPixelColor();
     if(!stereoscopy) {
         _ctx.strokeStyle = "rgba("+r+","+g+","+b+","+a+")";
-        drawTorusLines(lines, id, _ctx, points);
+        drawTorusLines(lines, id, _ctx, points, vertices);
     } else {
         const { left, right } = points;
         
