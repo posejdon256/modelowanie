@@ -84,12 +84,14 @@ function generateTorus(torus) {
     for(let i = 0.0; i <= 2 * Math.PI ; i += stepX) {
         howMany ++;
     }
-    for(let i = 0.0; i <= 2 * Math.PI ; i += stepY) {
+    for(let i = 0.0; i <= 2 * Math.PI; i += stepY) {
         for(let j = 0.0; j <= 2 * Math.PI; j += stepX) {
             torus.TorusVertices.push({
                 x: ((R + (r * Math.cos(j))) * Math.cos(i)) + center.x,
                 y: ((R + (r * Math.cos(j))) * Math.sin(i) ) +  center.y,
-                z: (r * Math.sin(j)) + center.z
+                z: (r * Math.sin(j)) + center.z,
+                u: i / (2 * Math.PI),
+                v: j / (2 * Math.PI)
             });
             if(counter % howMany + 1 === howMany) {
                 torus.TorusLines.push([counter, counter - howMany + 1])

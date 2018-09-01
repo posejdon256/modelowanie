@@ -10,11 +10,9 @@ export function setVisualisationCanvases(c1, c2) {
     canvas2 = c2;
 }
 export function getUVImages() {
-    const ctx1 = canvas1.getContext("2d");
-    const ctx2 = canvas2.getContext("2d");
     return { 
-        img1: ctx1.getImageData(0, 0, canvas1.width, canvas1.height),
-        img2: ctx2.getImageData(0, 0, canvas2.width, canvas2.height) 
+        canvas1: canvas1,
+        canvas2: canvas2
     };
 }
 export function setVisualisationObjects(_ob1, _ob2) {
@@ -100,14 +98,14 @@ function recurence(stack, ob) {
     stack.splice(stack.length - 1, 1);
     if(x < 0) {
         if(ob.WrappedU) {
-            x = 250;
+            x = 249;
         } else {
             return;
         }
     }
     if(y < 0) {
         if(ob.WrappedV) {
-            y = 250;
+            y = 249;
         } else {
             return;
         }
