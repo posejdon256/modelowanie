@@ -17,6 +17,11 @@ export function _DrawSurfacesC0(ctx, ctxS1, ctxS2, surface) {
     const surfaces = getSurfaces("C0");
     let points = [];
     for(let i = 0; i < surfaces.length; i ++) {
+        const surfacepoints = {
+            points: [],
+            trim: surfaces[i].trim,
+            trimOptions: surfaces[i].trimOptions
+        };
         const map = surfaces[i].pointsMap;
         for(let j = 0; j < map.length - 2; j += 3) {
                 const n = parseInt(surfaces[i].px, 10) - 1;
@@ -32,12 +37,17 @@ export function _DrawSurfacesC0(ctx, ctxS1, ctxS2, surface) {
                         }
                         knots.push(point);
                     }
-                    points = points.concat(getBezierPointsFromKnots(knots, "C0"));
+                    surfacepoints.points = surfacepoints.points.concat(getBezierPointsFromKnots(knots, "C0"));
                 }
         }
     }
     for(let i = 0; i < surfaces.length; i ++) {
         const map = surfaces[i].pointsMap;
+        const surfacepoints = {
+            points: [],
+            trim: surfaces[i].trim,
+            trimOptions: surfaces[i].trimOptions
+        };
         for(let k = 0; k < map[0].length - 2; k += 3) {
                 const n = parseInt(surfaces[i].py, 10) - 1;
                 for(let m = 0; m <= n; m ++) {
@@ -51,9 +61,11 @@ export function _DrawSurfacesC0(ctx, ctxS1, ctxS2, surface) {
                         }
                         knots.push(point);
                     }
-                    points = points.concat(getBezierPointsFromKnots(knots, "C0"));
+                    surfacepoints.points = surfacepoints.points.concat(getBezierPointsFromKnots(knots, "C0"));
+                   // points = points.concat(getBezierPointsFromKnots(knots, "C0"));
                 }
         }
+        points.push(surfacepoints);
     }
     lastPointsC0 = points;
     _DrawCurveInSurface(ctx, ctxS1, ctxS2, points)
@@ -63,6 +75,11 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
     let points = [];
     var i, j, k, m;
     for(i = 0; i < surfaces.length; i ++) {
+        const surfacepoints = {
+            points: [],
+            trim: surfaces[i].trim,
+            trimOptions: surfaces[i].trimOptions
+        };
         for(j = surfaces[i].Height + 3;
          j < surfaces[i].curves.length;
          j ++) {
@@ -83,7 +100,8 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
                         }
                         knots.push(point);
                     }
-                    points = points.concat(getBSplinePointsFromKnots(knots, "C2"));
+                  //  points = points.concat(getBSplinePointsFromKnots(knots, "C2"));
+                    surfacepoints.points = surfacepoints.points.concat(getBSplinePointsFromKnots(knots, "C2"));
                     knots.forEach(knot => {
                         knot.virtualPoints.forEach(vp => {
                             vp.deleted = true;
@@ -92,8 +110,14 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
                 }
             
         }
+        points.push(surfacepoints);
     }
     for(i = 0; i < surfaces.length; i ++) {
+        const surfacepoints = {
+            points: [],
+            trim: surfaces[i].trim,
+            trimOptions: surfaces[i].trimOptions
+        };
         for(j = 0; j < 3 + surfaces[i].Height; j ++) {
             rebuildVirtualPointsForSingleCurve(surfaces[i].curves[j].id);
         }
@@ -112,9 +136,11 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
                         knots.push(point);
                     }
                     if(surfaces[i].type === "C0") {
-                        points = points.concat(getBezierPointsFromKnots(knots, "C2"));
+                        surfacepoints.points = surfacepoints.points.concat(getBezierPointsFromKnots(knots, "C2"));
+                       // points = points.concat(getBezierPointsFromKnots(knots, "C2"));
                     } else {
-                        points = points.concat(getBSplinePointsFromKnots(knots));
+                        surfacepoints.points = surfacepoints.points.concat(getBSplinePointsFromKnots(knots));
+                       // points = points.concat(getBSplinePointsFromKnots(knots));
                     }
                     knots.forEach(knot => {
                         knot.virtualPoints.forEach(vp => {
@@ -123,6 +149,7 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
                     });
                 }
         }
+        points.push(surfacepoints);
     }
     lastPointsC2 = points;
     _DrawCurveInSurface(ctx, ctxS1, ctxS2, points)
