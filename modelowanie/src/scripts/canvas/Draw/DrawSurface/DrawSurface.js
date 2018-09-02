@@ -33,7 +33,9 @@ export function _DrawSurfacesC0(ctx, ctxS1, ctxS2, surface) {
                         point = {
                             x : newBezier1.x,
                             y : newBezier1.y,
-                            z : newBezier1.z
+                            z : newBezier1.z,
+                            u: m/n,
+                            v: j/map[j].length
                         }
                         knots.push(point);
                     }
@@ -57,7 +59,9 @@ export function _DrawSurfacesC0(ctx, ctxS1, ctxS2, surface) {
                         const point = {
                             x : newBezier1.x,
                             y : newBezier1.y,
-                            z : newBezier1.z
+                            z : newBezier1.z,
+                            u: m/n,
+                            v: j/map.length
                         }
                         knots.push(point);
                     }
@@ -96,7 +100,9 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
                         point = {
                             x : newBezier1.x,
                             y : newBezier1.y,
-                            z : newBezier1.z
+                            z : newBezier1.z,
+                            u: m/n,
+                            v: j/map[j].length
                         }
                         knots.push(point);
                     }
@@ -131,7 +137,9 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
                         const point = {
                             x : newBezier1.x,
                             y : newBezier1.y,
-                            z : newBezier1.z
+                            z : newBezier1.z,
+                            u: m/n,
+                            v: j/map.length
                         }
                         knots.push(point);
                     }
