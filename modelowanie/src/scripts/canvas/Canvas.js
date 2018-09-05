@@ -63,8 +63,8 @@ export default class Canvas extends Component {
             onMouseMove={this.mouseFunction}/>
             <canvas ref="stereoscopyHelpCanvas" className="abcanvas ab-canvas-stereopscopy" width="1000px" height="700px" />
             <canvas ref="stereoscopyHelpCanvas2" className="abcanvas ab-canvas-stereopscopy" width="1000px" height="700px" />
-            <canvas ref="visualization1" className={(!visualisate ? "" : "ab-canvas-visualization1")} width="250px" height="250px" />
-            <canvas ref="visualization2" className={(!visualisate ? "" : "ab-canvas-visualization2")} width="250px" height="250px" />
+            <canvas ref="visualization1" className={(!visualisate ? "" : "ab-canvas-visualization1")} width="500px" height="500px" />
+            <canvas ref="visualization2" className={(!visualisate ? "" : "ab-canvas-visualization2")} width="500px" height="500px" />
         </div>);
     }
 }

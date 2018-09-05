@@ -6,8 +6,10 @@ export function trimIsMet(u, v, ops) {
     let isMet = true;
     const { canvas, op, img } = ops;
 
-    const y = parseInt(u * 250, 10);
-    const x = parseInt(v * 250, 10);
+    let y = parseInt(u * 500, 10);
+    let x = parseInt(v * 500, 10);
+    y = y === 500 ? 499: y;
+    x = x === 500 ? 499 : x;
 
     const place = (parseInt((y), 10)* canvas.width * 4) + (parseInt(x, 10) * 4);
 
@@ -20,6 +22,9 @@ export function trimIsMet(u, v, ops) {
         if(img.data[place] === 0 && img.data[place] === 0 && img.data[place] === 0) {
             isMet = false;
         }
+    }
+    if(op === "all") {
+        isMet = false;
     }
     return isMet;
 }

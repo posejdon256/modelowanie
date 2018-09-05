@@ -3,7 +3,7 @@ import { addPoint } from "../Points/Points";
 
 let curves = [];
 let numberOfIntersections = 0;
-const size = 251.0;
+const size = 501.0;
 export function cleanCuttingCurves() {
     curves = [];
 }
@@ -32,8 +32,8 @@ export function updateIn1Visualisation(id, u, v) {
         curve.intersectionVisualization1.push({back: true});
         return;
     }
-    let _u = (parseInt(u * size, 10) + size) % size;
-    let _v = (parseInt(v * size, 10) + size) % size;
+    let _u = (parseInt(u * size, 10)) % size;
+    let _v = (parseInt(v * size, 10)) % size;
     if(_u < 0 || _v < 0) {
         return;
     }
@@ -49,8 +49,8 @@ export function updateIn2Visualisation(id, u, v) {
         curve.intersectionVisualization2.push({back: true});
         return;
     }
-    const _u = (parseInt(u * size, 10) + size) % size;
-    const _v = (parseInt(v * size, 10) + size) % size;
+    const _u = (parseInt(u * size, 10)) % size;
+    const _v = (parseInt(v * size, 10)) % size;
     if(_u < 0 || _v < 0){
         return;
     }

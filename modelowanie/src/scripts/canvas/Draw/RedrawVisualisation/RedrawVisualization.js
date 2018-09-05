@@ -67,11 +67,11 @@ export function trimVisualisation() {
     const ctx1 = canvas1.getContext('2d');
     const ctx2 = canvas2.getContext('2d');
     img = ctx1.getImageData(0, 0, canvas1.width, canvas1.height);
-    let startX = parseInt(Math.random() * 250, 10);
-    let startY = parseInt(Math.random() * 250, 10);
+    let startX = parseInt(Math.random() * 500, 10);
+    let startY = parseInt(Math.random() * 500, 10);
     while (getPixelColor(canvas1, startX, startY) !== "Black") {
-        startX = parseInt(Math.random() * 250, 10);
-        startY = parseInt(Math.random() * 250, 10);
+        startX = parseInt(Math.random() * 500, 10);
+        startY = parseInt(Math.random() * 500, 10);
     }
     stack.push({canvas: canvas1, x: startX, y: startY});
     while(stack.length > 0) {
@@ -98,26 +98,26 @@ function recurence(stack, ob) {
     stack.splice(stack.length - 1, 1);
     if(x < 0) {
         if(ob.WrappedU) {
-            x = 249;
+            x = 499;
         } else {
             return;
         }
     }
     if(y < 0) {
         if(ob.WrappedV) {
-            y = 249;
+            y = 499;
         } else {
             return;
         }
     }
-    if(x >= 250) {
+    if(x >= 500) {
         if(ob.WrappedU) {
             x = 0;
         } else {
             return;
         }
     }
-    if(y >= 250) {
+    if(y >= 500) {
         if(ob.WrappedV) {
             y = 0;
         } else {

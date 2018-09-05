@@ -7,6 +7,8 @@ export function _DrawIntersectionCurves() {
     const curves = getCuttingCurves();
     const color = {r: 255, g: 255, b: 0, a: 1};
     curves.forEach(curve => {
-        DrawLines(curve.points, color);
+        const _points = {points: curve.points, trim: false};
+        const points = [_points];
+        DrawLines(points, color);
     });
 }

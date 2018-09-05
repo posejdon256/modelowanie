@@ -6,6 +6,7 @@ import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
 import { deCastiljau } from "../../Bezier/DeCastiljau";
 import { getBSplinePointsFromKnots, rebuildVirtualPointsForSingleCurve } from "../../Bezier/BSpline";
 import { DrawLines } from "../DrawLine/DrawLines";
+import { DrawPoint } from "../DrawPoints/DrawPoints";
 
 let lastPointsC0 = [];
 let lastPointsC2 = [];
@@ -34,14 +35,13 @@ export function _DrawSurfacesC0(ctx, ctxS1, ctxS2, surface) {
                             x : newBezier1.x,
                             y : newBezier1.y,
                             z : newBezier1.z,
-                            u: m/n,
-                            v: j/map[j].length
                         }
                         knots.push(point);
                     }
-                    surfacepoints.points = surfacepoints.points.concat(getBezierPointsFromKnots(knots, "C0"));
+                    surfacepoints.points = surfacepoints.points.concat(getBezierPointsFromKnots(knots, "C0", "V", ((j / 3) +  (m / n)) / surfaces[i].Height));
                 }
         }
+        points.push(surfacepoints);
     }
     for(let i = 0; i < surfaces.length; i ++) {
         const map = surfaces[i].pointsMap;
@@ -60,12 +60,10 @@ export function _DrawSurfacesC0(ctx, ctxS1, ctxS2, surface) {
                             x : newBezier1.x,
                             y : newBezier1.y,
                             z : newBezier1.z,
-                            u: m/n,
-                            v: j/map.length
                         }
                         knots.push(point);
                     }
-                    surfacepoints.points = surfacepoints.points.concat(getBezierPointsFromKnots(knots, "C0"));
+                    surfacepoints.points = surfacepoints.points.concat(getBezierPointsFromKnots(knots, "C0", "U", ((k / 3) +  (m / n))/ surfaces[i].Width));
                    // points = points.concat(getBezierPointsFromKnots(knots, "C0"));
                 }
         }
@@ -206,7 +204,8 @@ function drawChainForC0CubicFlake(ctx, ctxS1, ctxS2) {
         }
         for(let j = 0; j < surfaces[i].pointsMap.length; j ++) {
             setTranslationPoints(surfaces[i].pointsMap[j]);
-            DrawLines(surfaces[i].pointsMap[j], { r: 0, g: 0, b: 255 }, trim);
+            const _finalPoints = [{points: surfaces[i].pointsMap[j], trim: false}];
+            DrawLines(_finalPoints, { r: 0, g: 0, b: 255 }, trim);
         }
         for(let m = 0; m < surfaces[i].pointsMap[0].length; m ++) {
             const _points = [];
@@ -214,7 +213,8 @@ function drawChainForC0CubicFlake(ctx, ctxS1, ctxS2) {
                 _points.push(surfaces[i].pointsMap[k][m]);
                // _points.push(surfaces[i].pointsMap[k][m]);
             }
-            DrawLines(_points, { r: 0, g: 0, b: 255 }, trim);
+            const _finalPoints = [{points: _points, trim: false}];
+            DrawLines(_finalPoints, { r: 0, g: 0, b: 255 }, trim);
         }
     }
 }

@@ -78,7 +78,7 @@ export function getBezierPoints(_curves){
     }
     return points;
 }
-export function getBezierPointsFromKnots(knots, type) {
+export function getBezierPointsFromKnots(knots, type, uv, uvValue) {
     const berstainsNAfterI = countBerstainNAfterI();
     const points = [];
     for(let l = 0; l < knots.length;) {
@@ -105,6 +105,8 @@ export function getBezierPointsFromKnots(knots, type) {
                 point.y += (value * curvePart[k].y);
                 point.z += (value * curvePart[k].z);
             }
+            point.u = uv === "V" ? ((l) / (knots.length - 1)) + ((j / divisions) * (3 / (knots.length - 1))) : uvValue;
+            point.v = uv === "U" ? ((l) / (knots.length - 1)) + ((j / divisions) * (3 / (knots.length - 1))) : uvValue;
             points.push(point);
         }
         if((type === "C2") && (l === 0 || knots.length < l + 3)) {
@@ -112,6 +114,8 @@ export function getBezierPointsFromKnots(knots, type) {
         } else  {
             l += 3;
         }
+    }
+    for(let i = 0; i < points.length; i ++) {
     }
     return points;
 }
@@ -146,7 +150,7 @@ function countCircumfrence(curve) {
     }
     if(ret > 5000) 
         return 5000;
-    return ret/2;
+    return 100;
 }
 function nAfterI(n, i) {
     return factorial(n)/(factorial(i)*factorial(n-i));
