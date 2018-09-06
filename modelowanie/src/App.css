@@ -31,6 +31,7 @@
   background: url('pictures/stars.png');
   background-repeat-y: repeat;
   height: 100%;
+  min-height: 943px;
 }
 .ab-canvas-navbar-container {
   height: 85%;

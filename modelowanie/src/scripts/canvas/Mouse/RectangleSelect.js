@@ -22,7 +22,7 @@ export function selectPointsByRectangle(x, y) {
         select(position);
 
     } catch(e) {
-        alert('Problem w wybraniu prostokątem')
+        console.log('Problem in selecting rectangle.')
     }
 }
 function select(p) {

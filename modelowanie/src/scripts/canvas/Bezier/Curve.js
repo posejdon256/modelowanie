@@ -136,15 +136,15 @@ export function addNewCurve(type, newCurve) {
     newCurve.id = curveCounter;
     switch(type) {
         case "C0":;
-            newCurve.name = "Krzywa C0 "+ curveCounter;
+            newCurve.name = "Curve C0 "+ curveCounter;
             newCurve.type = "C0";
             break;
         case "C2":
-            newCurve.name = "Krzywa C2 "+ curveCounter;
+            newCurve.name = "Curve C2 "+ curveCounter;
             newCurve.type = "C2";
             break;
         case "C2I":
-            newCurve.name = "Krzywa C2 interpolacyjna  " + curveCounter;
+            newCurve.name = "Interpolation Curve C2  " + curveCounter;
             newCurve.type = "C2I";
             break;
         default:

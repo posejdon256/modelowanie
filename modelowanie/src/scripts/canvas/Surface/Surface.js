@@ -169,7 +169,7 @@ export function createSurface(type) {
     turnOffAllStates();
     addingSurface = true;
     const surface = {
-        name: "Powierzchnia " + surfacesIterator,
+        name: "Patch " + surfacesIterator,
         id: surfacesIterator,
         Width: width,
         Height: height,

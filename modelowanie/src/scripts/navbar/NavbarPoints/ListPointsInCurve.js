@@ -26,7 +26,7 @@ export default class ListPointsInCurve extends Component {
         const points  = this.state.points;
         return(
             <div>
-                <label>Punkty krzywej:</label>
+                <label>Curve points:</label>
                 <ul className="ab-ul-points">
                 {
                     points.map(point => {

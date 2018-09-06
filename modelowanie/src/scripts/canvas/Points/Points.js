@@ -150,7 +150,7 @@ export function addPoint(x, y, z, type) {
         x: cursor.x,
         y: cursor.y,
         z: cursor.z,
-        name: "Punkt " + pointNumber,
+        name: "Point " + pointNumber,
         id: pointNumber,
         selected: false,
         c2Bezier: type === "C2-bezier" ? true : false,

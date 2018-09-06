@@ -94,7 +94,6 @@ export function trim(op1, op2) {
         setOptions(canvas2, op2, 1);
     }
     Redraw();
-    alert('Done!');
 }
 function isTrimmed(img) {
     for(let i = 0; i < img.data.length; i += 4) {

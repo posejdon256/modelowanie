@@ -98,7 +98,7 @@ class App extends Component {
     try{
       RedrawVisualization();
     } catch(e) {
-      alert("Problem z rysowaniem na canvasach " + e);
+      console.log("Canvases problem" + e);
     }
   }
   updateYGrid(gridNumber) {

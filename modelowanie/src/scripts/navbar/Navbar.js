@@ -114,39 +114,39 @@ export default class Navbar extends Component {
         return(
         <div className="ab-navbar">
             <div className="ab-navbar-selector">
-                <button className="btn" onClick={(e) => this.selectNavbar(0)}>Navbar zwykły</button>
-                <button className="btn" onClick={(e) => this.selectNavbar(1)}>Navbar przecięć</button>
-                <button className="btn" onClick={(e) => this.selectNavbar(2)}>Navbar bikubiczny</button>
+                <button className="btn" onClick={(e) => this.selectNavbar(0)}>BASIC</button>
+                <button className="btn" onClick={(e) => this.selectNavbar(1)}>INTERSECTION</button>
+                <button className="btn" onClick={(e) => this.selectNavbar(2)}>BICUBIC</button>
             </div>
             <div className={this.state.navbar === 0 ? "ab-navbar-visible" : "ab-navbar-not-visible"}>
                 <div>
-                    <label>Załaduj plik:</label>
+                    <label>Load files:</label>
                     <input className="input-ab" type="file" onChange={this.setPath} accept=".json" />
                 </div>
                 <div>
-                    <button className="btn" onClick={this.setCursorToStart}>Ustaw Kursor w (0,0,0)</button>
+                    <button className="btn" onClick={this.setCursorToStart}>Set cursor in (0,0,0)</button>
                 </div>
                 <div>
-                    <button className="btn" onClick={this.deselectPoints}>Odznacz wszystkie punkty</button>
+                    <button className="btn" onClick={this.deselectPoints}>Mark of all points</button>
                 </div>
                 <div>
-                    <label>Zablokuj/Odblokuj kamerę:</label>
+                    <label>Block camera:</label>
                     <input className="input-ab" type="checkbox" onChange={this.lockUnlockCamera} defaultChecked={true}/>
                 </div>
                 <div>
-                    <label>Siatka pozioma</label>
+                    <label>Torus grid X</label>
                     <input className="istyle" type="range" min="2" max="100" onChange={this.updateXGrid} />
                 </div>
                 <div>
-                    <label>Siatka pionowa</label>
+                    <label>Torus grid y</label>
                     <input className="istyle" type="range" min="2" max="100" onChange={this.updateYGrid} />
                 </div>
                 <div>
-                    <label htmlFor="3dTorus">Stereoskopia</label>
+                    <label htmlFor="3dTorus">Stereoscopy</label>
                     <input id="3dTorus" type="checkbox" onChange={this.updateChecked} />
                 </div>
                 <div>
-                    <label>Ustaw położenia zaznaczonych punktów</label>
+                    <label>Set positions of selected points</label>
                     <div>
                         <div>
                             <label>X: </label>
@@ -161,25 +161,25 @@ export default class Navbar extends Component {
                             <input className="input-ab" ref="changeZ" type="text" defaultValue="0"/>
                         </div>
                     </div>
-                    <button className="btn" onClick={this.updateSelectedPoints}>Zamień</button>
+                    <button className="btn" onClick={this.updateSelectedPoints}>Submit</button>
                     <div>
-                        <label>Pozycja kursora:</label>
+                        <label>Cursor position:</label>
                         <label>{"x: " + this.state.cursorX + " y: " + this.state.cursorY + " z: " + this.state.cursorZ}</label>
                     </div>
                 </div>
                 <div>
-                    <label>Współrzędne ekranowe:</label>
+                    <label>Screen cursor coordinates:</label>
                     <label>{"x: " + this.state.cursorPosX + " y: " + this.state.cursorPosY}</label>
                 </div>
                 <div>
-                    <button className="btn" onClick={this.addCurve}>Dodaj krzywą Beziera z punktów</button>
+                    <button className="btn" onClick={this.addCurve}>Add Bezier curve from selected points</button>
                 </div>
                 <div>
-                    <label>Dodawanie krzywej C2 w bazie Beziera:</label>
+                    <label>Adding curve C2 in Bezier basis:</label>
                     <input type="checkbox" onChange={this.updateAddingC2Type}/>
                 </div>
                 <div>
-                    <button className="btn" onClick={this.uniteTwoPoints}>Scal dwa punkty</button>
+                    <button className="btn" onClick={this.uniteTwoPoints}>Connect two points</button>
                 </div>
             </div>
             <List 

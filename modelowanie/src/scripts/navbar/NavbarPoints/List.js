@@ -174,7 +174,7 @@ export default class List extends Component {
         const cuttingCurves = this.state.cuttingCurves;
         return(
             <div>
-                <label>Obiekty sceny:</label>
+                <label>Scene objects:</label>
                 <ul className="ab-ul-points">
                 {
                     toruses.map(torus => {
@@ -211,7 +211,7 @@ export default class List extends Component {
                         return (
                         <li key={"point" + gregory.id} className="ab-point-list-li">
                             <input className="ab-point-list-input" type="text" value={gregory.name} onChange={(e) => this.updateGregoryName(gregory.id, e.target.value)}/>
-                            <label className="ab-curve-chain-label">Włącz normalne</label>
+                            <label className="ab-curve-chain-label">Show normal vectors</label>
                             <input className="ab-point-list-checkbox" key={gregory.id} type="checkbox" checked={gregory.normals} onChange={(e) => this.turnOnNormals(gregory.id)}/>
                             <button className="ab-delete-point-button" onClick={(e) => this.removeGrzegorz(gregory.id)}>
                                 <img className="ab-delete-point" src={trash} alt="trash" />
@@ -228,7 +228,7 @@ export default class List extends Component {
                         return (
                         <li key={"point" + surface.id} className="ab-point-list-li">
                             <input className="ab-point-list-input" type="text" value={surface.name} onChange={(e) => this.updateSurfaceName(surface.id, e.target.value)}/>
-                            <label className="ab-curve-chain-label">Włącz łamaną</label>
+                            <label className="ab-curve-chain-label">Show chain</label>
                             <input className="ab-point-list-checkbox" key={surface.id} type="checkbox" checked={surface.chain} onChange={(e) => this.turnOnChainSurface(surface.id)}/>
                             <button className="ab-delete-point-button" onClick={(e) => this.removeSurface(surface.id)}>
                                 <img className="ab-delete-point" src={trash} alt="trash" />

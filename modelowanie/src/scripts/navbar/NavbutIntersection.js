@@ -47,49 +47,49 @@ export default class NavbarIntersection extends Component {
         return(
         <div className="ab-bicubic">
             <div className="ab-grid">
-                <label>Ustaw krok znajdowania przecięcia:</label>
+                <label>Set step of finding intersection:</label>
                 <input className="input-ab" type="text" onChange={this.setIntersectionStep} defaultValue="3"/>
             </div>
             <div className="ab-grid">
-                <label>Ustaw epsilon znajdowania przecięcia:</label>
+                <label>Set epsilon of finding intersection:</label>
                 <input className="input-ab" type="text" onChange={this.setIntersectionEpsilon} defaultValue="0.001"/>
             </div>
             <div className="ab-grid">
-                <label>Ustaw krok Newtona:</label>
+                <label>Set Newton Algorithm step:</label>
                 <input className="input-ab" type="text" onChange={this.setNewton} defaultValue="0.002"/>
             </div>
             <div className="ab-grid">
-                <label>Ustaw Epsilon warunku końcowego:</label>
+                <label>Set epsilon of final condition:</label>
                 <input className="input-ab" type="text" onChange={this.setFinalEpsilon} defaultValue="0.001"/>
             </div>
             <div className="ab-grid">
-                <label>Włącz/wyłącz podgląd ze znajdowaniem punktu przecięcia:</label>
+                <label>Show preview of finding intersection:</label>
                 <input type="checkbox" onChange={this.setOneProjectionPointState}/>
             </div>
             <div className="ab-grid">
-                <label>Włącz/wyłącz widok pierwszych 20 iteracji Newtona:</label>
+                <label>Show first steps of Newton Algorithm iterations:</label>
                 <input type="checkbox" onChange={this.showNewtonIt} defaultChecked={false}/>
             </div>
             <div className="ab-grid">
-                <label>Ustaw liczbę pokazywanych kroków Newtona:</label>
+                <label>Set number of Newton Algorithm steps in preview:</label>
                 <input className="input-ab" type="text" onChange={this.setNewtonStep} defaultValue="20"/>
             </div>
             <div className="ab-grid">
-                <button className="btn" onClick={this.convertToInterpolation}>Konvertuj do interpolacyjnej</button>
+                <button className="btn" onClick={this.convertToInterpolation}>Convert to interpolation curve</button>
             </div>
             <div className="ab-grid">
-                <label>Trimowanie</label>
+                <label>Trimming</label>
                 <select ref="trimSelect1">
-                    <option value="all">Calość obiektu 1</option>
-                    <option value="left">Pierwsza część obiektu 1</option>
-                    <option value="right">Druga część obiektu 1</option>
+                    <option value="all">Whole first object</option>
+                    <option value="left">First part of first object</option>
+                    <option value="right">Second part of first object</option>
                 </select>
                 <select ref="trimSelect2">
-                    <option value="all">Calość obiektu 2</option>
-                    <option value="left">Pierwsza część obiektu 2</option>
-                    <option value="right">Druga część obiektu 2</option>
+                    <option value="all">Whole second object</option>
+                    <option value="left">First part of second object</option>
+                    <option value="right">Second part of second object</option>
                 </select>
-                <button onClick={this.trim} className="btn">Trimuj</button>
+                <button onClick={this.trim} className="btn">Trim</button>
             </div>
         </div>);
     }

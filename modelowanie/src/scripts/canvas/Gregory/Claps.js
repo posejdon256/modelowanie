@@ -7,7 +7,7 @@ export function uniteTwoPoints() {
     const points = getPoints();
     const selectedPoints = points.filter(x => x.selected);
     if(selectedPoints.length !== 2) {
-        alert("Muszą być zaznaczone dokładnie dwa punkty!");
+        alert("Please select exactly two points.");
         return;
     }
     const foundPoints = [];
@@ -48,7 +48,7 @@ export function uniteTwoPoints() {
             }
         }
         if(!fromC0Corner) {
-            alert("Wybrałeś punkt który nie jest na rogu płaskiego bikubicznego płata C0");
+            alert("Please select a point which is on the corner of non cylindrical bicubic patch C0");
             return;
         }
     });

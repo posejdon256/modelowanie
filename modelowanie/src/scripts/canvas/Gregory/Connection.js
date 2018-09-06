@@ -4,7 +4,7 @@ import { getSurfaces } from "../Surface/Surface";
 export function findConnection() {
     const selectedSurfaces = getSurfaces("C0").filter(x => x.selected);
     if(selectedSurfaces.length !== 3) {
-        alert("Wybrałeś niewłaśc1wą liczbę płatów");
+        alert("Please select exactly three patches.");
         return;
     }
     const corners = [];
@@ -26,7 +26,7 @@ export function findConnection() {
         } else if((c2 = findPointConnectionsS(corners[3], selectedSurfaces[2])) !== -1) {
             second = corners[2];
         } else {
-            alert("Nie ma c1ągłośc1");
+            alert("There is not continuity.");
             return;
         }
     } else if((c1 = findPointConnectionsS(corners[1], selectedSurfaces[1])) !== -1) {
@@ -36,7 +36,7 @@ export function findConnection() {
         } else if((c2 = findPointConnectionsS(corners[2], selectedSurfaces[2])) !== -1) {
             second = corners[2];
         } else {
-            alert("Nie ma c1ągłośc1");
+            alert("There is not continuity.");
             return;
         }
     } else if((c1 = findPointConnectionsS(corners[2], selectedSurfaces[1])) !== -1) {
@@ -46,7 +46,7 @@ export function findConnection() {
         } else if((c2 = findPointConnectionsS(corners[3], selectedSurfaces[2])) !== -1) {
             second = corners[3];
         } else {
-            alert("Nie ma c1ągłośc1");
+            alert("There is not continuity.");
             return;
         }
     } else if((c1 = findPointConnectionsS(corners[3], selectedSurfaces[1])) !== -1) {
@@ -56,11 +56,11 @@ export function findConnection() {
         } else if((c2 = findPointConnectionsS(corners[2], selectedSurfaces[2])) !== -1) {
             second = corners[2];
         } else {
-            alert("Nie ma c1ągłośc1");
+            alert("There is not continuity.");
             return;
         }
     } else {
-        alert("Nie znaleziono dwóch punktów");
+        alert("Two points can't be find.");
     }
     c1 += 4;
     c2 += 8;
@@ -73,36 +73,36 @@ function findC1AndC2(corners, c1, c2, s1, s2) {
     if(c1 === 4) {
         if((cHelp = findPointConnectionsS(corners[5], s2)) !== -1) {
             if(corners[8 + cHelp] !== corners[5]) {
-                alert("Coś jest nie tak z Twoim zaznaczniem");
+                alert("There is a problem with selection.");
                 return null;
             }
         } else if((cHelp = findPointConnectionsS(corners[7], s2)) !== -1) {
             if(corners[8 + cHelp] !== corners[7]) {
-                alert("Coś jest nie tak z Twoim zaznaczniem");
+                alert("There is a problem with selection.");
                 return null;
             }
         }
     } else if(c1 === 7) {
         if((cHelp = findPointConnectionsS(corners[4], s2)) !== -1) {
             if(corners[8 + cHelp] !== corners[4]) {
-                alert("Coś jest nie tak z Twoim zaznaczniem");
+                alert("There is a problem with selection.");
                 return null;
             }
         } else if((cHelp = findPointConnectionsS(corners[6], s2)) !== -1) {
             if(corners[8 + cHelp] !== corners[6]) {
-                alert("Coś jest nie tak z Twoim zaznaczniem");
+                alert("There is a problem with selection.");
                 return null;
             }
         }
     } else {
         if((cHelp = findPointConnectionsS(corners[c1 + 1], s2)) !== -1) {
             if(corners[8 + cHelp] !== corners[c1 + 1]) {
-                alert("Coś jest nie tak z Twoim zaznaczniem");
+                alert("There is a problem with selection.");
                 return null;
             }
         }else if((cHelp = findPointConnectionsS(corners[c1 - 1], s2)) !== -1) {
             if(corners[8 + cHelp] !== corners[c1 - 1]) {
-                alert("Coś jest nie tak z Twoim zaznaczniem");
+                alert("There is a problem with selection.");
                 return null;
             }
         }

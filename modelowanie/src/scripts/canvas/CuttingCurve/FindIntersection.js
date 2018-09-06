@@ -68,7 +68,7 @@ function countGradientMethod(ob1, ob2, best){
     while(getVectorLength(p1, p2) > intersectionEpsilon) {
         i ++;
         if(i > 1000) {
-            alert("Nie znaleziono przecięcia!");
+            alert("There is no intersection. Try to put cursor in other place.");
             console.log(getVectorLength(p1, p2));
             return false;
         }
@@ -80,7 +80,7 @@ function countGradientMethod(ob1, ob2, best){
         try{
             betterPoint = getGradient(ob1, ob2, help);
         } catch(e) {
-            alert("Nie znaleziono przecięcia :( "  + e);
+            alert("There is no intersection. Try to put cursor in other place."  + e);
             return false;
         }
         for(let j = 0; j < 4; j ++) {
@@ -133,7 +133,7 @@ export function findObjectToIntersectionAndIntersection(){
         if(surfaces.length === 1 && toruses.length === 0) {
             _objects.push(surfaces[0]);
         } else {
-            alert("Niepoprawna liczba obiektów jest wybrana!");
+            alert("Wrong number of objects is selected.");
             return false;
         }
     }
@@ -149,7 +149,7 @@ export function findObjectToIntersectionAndIntersection(){
             return false
         }
     } catch(e) {
-        alert("Error: " + e);
+        console.log("Error: " + e);
         return false;
     }
     return true;//TODO

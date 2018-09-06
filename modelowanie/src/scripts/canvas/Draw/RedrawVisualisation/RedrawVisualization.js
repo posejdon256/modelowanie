@@ -142,7 +142,7 @@ function getPixelColor(canvas, x, y){
     } else if(img.data[place] === 255 && img.data[place + 1] === 0 && img.data[place + 2] === 0) {
         return "Red";
     }
-    alert("Problem with colors");
+    console.log("Problem with colors");
 }
 function colourPixelOnWhite(canvas, x, y) {
     const _ctx = canvas.getContext('2d');

@@ -86,7 +86,7 @@ export function updateCuttingCurveName(id, name) {
 export function convertToInterpolationCurve() {
     const curve = curves.find(x => x.selected === true);
     if(!curve) {
-        alert("Nie wybrałeś krzywej!");
+        alert("Please select a curve");
         return curves;
     }
     addInterpolationCurve();

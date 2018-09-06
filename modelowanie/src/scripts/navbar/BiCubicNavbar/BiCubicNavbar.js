@@ -45,42 +45,42 @@ export default class BiCubicNavbar extends Component {
     render(){
         return(
             <div className="ab-bicubic">
-                <label>Parametry łączonego płata</label>
+                <label>Parameters of combined patch</label>
                 <div>
-                    <label>Wysokość: </label>
+                    <label>Height: </label>
                     <input className="input-ab" type="text" onChange={this.updateHeight} defaultValue={1}/>
                 </div>
                 <div>
-                    <label>Szerokość: </label>
+                    <label>Width: </label>
                     <input className="input-ab" type="text"  onChange={this.updateWidth} defaultValue={1}/>
                 </div>
                 <div>
-                    <label htmlFor="bicuBicCheckbox">Walec</label>
+                    <label htmlFor="bicuBicCheckbox">Cylinder</label>
                     <input className="input-ab" id="bicuBicCheckbox" type="checkbox" onChange={this.updateCylinder}/>
                 </div>
                 <div>
-                    <label>Siatka po X: </label>
+                    <label>Grid X: </label>
                     <input className="input-ab" type="text" onChange={this.setGridX} defaultValue={4}/>
                 </div>
                 <div>
-                    <label>Siatka po Y: </label>
+                    <label>Grid Y: </label>
                     <input className="input-ab" type="text"  onChange={this.setGridY} defaultValue={4}/>
                 </div>
                 <div>
-                    <label>Stała Wysokość: </label>
+                    <label>Constant height: </label>
                     <input className="input-ab" type="text" onChange={this.updateAbsoluteHeight} defaultValue={0.07}/>
                 </div>
                 <div>
-                    <label>Stała Szerokość: </label>
+                    <label>Constant width: </label>
                     <input className="input-ab" type="text"  onChange={this.updateAbsoluteWidth} defaultValue={0.07}/>
                 </div>
                 <div>
-                    <button className="btn" onClick={this.updateGridOnSelectedSurface}>Podmień siatki zaznaczonych płatków</button>
+                    <button className="btn" onClick={this.updateGridOnSelectedSurface}>Update grids of selected patches</button>
                 </div>
                 <select ref="selectDirection" onChange={this.setDirection}>
-                    <option value="X">Walec po X</option>
-                    <option value="Y">Walec po Y</option>
-                    <option value="Z">Walec po Z</option>
+                    <option value="X">Direction X</option>
+                    <option value="Y">Direction Y</option>
+                    <option value="Z">Direction Z</option>
                 </select>
             </div>
         );
