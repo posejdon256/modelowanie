@@ -105,7 +105,7 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
                         knots.push(point);
                     }
                   //  points = points.concat(getBSplinePointsFromKnots(knots, "C2"));
-                    surfacepoints.points = surfacepoints.points.concat(getBSplinePointsFromKnots(knots, "C2"));
+                    surfacepoints.points = surfacepoints.points.concat(getBSplinePointsFromKnots(knots, "V", ((j - 2) +  (m / n)) / surfaces[i].Height));
                     knots.forEach(knot => {
                         knot.virtualPoints.forEach(vp => {
                             vp.deleted = true;
@@ -142,10 +142,10 @@ export function _DrawSurfacesC2(ctx, ctxS1, ctxS2){
                         knots.push(point);
                     }
                     if(surfaces[i].type === "C0") {
-                        surfacepoints.points = surfacepoints.points.concat(getBezierPointsFromKnots(knots, "C2"));
+                        surfacepoints.points = surfacepoints.points.concat(getBezierPointsFromKnots(knots, "C2","U", ((k - 2) +  (m / n)) / surfaces[i].Width));
                        // points = points.concat(getBezierPointsFromKnots(knots, "C2"));
                     } else {
-                        surfacepoints.points = surfacepoints.points.concat(getBSplinePointsFromKnots(knots));
+                        surfacepoints.points = surfacepoints.points.concat(getBSplinePointsFromKnots(knots, "U", ((k - 2) +  (m / n)) / surfaces[i].Width));
                        // points = points.concat(getBSplinePointsFromKnots(knots));
                     }
                     knots.forEach(knot => {

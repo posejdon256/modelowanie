@@ -105,8 +105,13 @@ export function getBezierPointsFromKnots(knots, type, uv, uvValue) {
                 point.y += (value * curvePart[k].y);
                 point.z += (value * curvePart[k].z);
             }
-            point.u = uv === "V" ? ((l) / (knots.length - 1)) + ((j / divisions) * (3 / (knots.length - 1))) : uvValue;
-            point.v = uv === "U" ? ((l) / (knots.length - 1)) + ((j / divisions) * (3 / (knots.length - 1))) : uvValue;
+            if(type === "C0") {
+                point.u = uv === "V" ? ((l) / (knots.length - 1)) + ((j / divisions) * (3 / (knots.length - 1))) : uvValue;
+                point.v = uv === "U" ? ((l) / (knots.length - 1)) + ((j / divisions) * (3 / (knots.length - 1))) : uvValue;
+            } else if(type === "C2") {
+                point.u = uv === "V" ? ((l - 2) / (knots.length - 5)) + ((j / divisions) * (3 / (knots.length - 5))) : uvValue;
+                point.v = uv === "U" ? ((l - 2) / (knots.length - 5)) + ((j / divisions) * (3 / (knots.length - 5))) : uvValue;
+            }
             points.push(point);
         }
         if((type === "C2") && (l === 0 || knots.length < l + 3)) {

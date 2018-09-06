@@ -28,6 +28,53 @@ export function trimIsMet(u, v, ops) {
     }
     return isMet;
 }
+export function findTorusBoundryToTrim(u1, v1, u2, v2, ops) {
+    const division = 100;
+    const diff1 = (u2 - u1) / division;
+    const diff2 = (v2 - v1) / division;
+    let loopU = u1;
+    let loopV = v1;
+    let loopPrevU = u1;
+    let loopPrevV = v1;
+    const { canvas, op, img } = ops;
+    for(let i = 0; i < division; i ++) {
+        loopU += diff1;
+        loopV += diff2;
+        let y = parseInt(loopU * 500, 10);
+        let x = parseInt(loopV * 500, 10);
+        y = y === 500 ? 499 : y;
+        x = x === 500 ? 499 : x;
+
+        const place1 = (parseInt((y), 10)* canvas.width * 4) + (parseInt(x, 10) * 4);
+        console.log(place1);
+
+        y = parseInt(loopPrevU * 500, 10);
+        x = parseInt(loopPrevV * 500, 10);
+        y = y === 500 ? 499 : y;
+        x = x === 500 ? 499 : x;
+    
+        const place2 = (parseInt((y), 10)* canvas.width * 4) + (parseInt(x, 10) * 4);
+
+        if(op === "left") {
+            if(img.data[place1] === 255 && img.data[place1] === 255 && img.data[place1] === 255) {
+                break;
+            }
+        }
+        if(op === "right") {
+            if(img.data[place1] === 0 && img.data[place1] === 0 && img.data[place1] === 0) {
+                break;
+            }
+        }
+        if(op === "all") {
+            return {u: u2, v: v2};
+        }
+        loopPrevU = loopU;
+        loopPrevV = loopV;
+    }
+    const ret = {u: loopPrevU, v: loopPrevV};
+    return ret;
+
+}
 export function trim(op1, op2) {
     if(findObjectToIntersectionAndIntersection()){
         RedrawVisualization();

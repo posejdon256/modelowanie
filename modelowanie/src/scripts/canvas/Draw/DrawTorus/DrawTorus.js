@@ -2,7 +2,8 @@ import { getTorusLines, getToruses, getTorusVertices } from "../../Torus/Torus";
 import { drawLine, getPixelColor, stereoscopyDraw } from "../Draw";
 import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
 import Translate, { setTranslationPoints } from "../../Translation/TranslationCenter/TranslationCenter";
-import { trimIsMet } from "../../CuttingCurve/Trimming";
+import { trimIsMet, findTorusBoundryToTrim } from "../../CuttingCurve/Trimming";
+import { evaluate } from "../../CuttingCurve/FindIntersection";
 
 function drawTorusLines(lines, id, ctx, points, vertices) {
     const torus = getToruses().find(x => x.id === id);
@@ -21,10 +22,25 @@ function drawTorusLines(lines, id, ctx, points, vertices) {
         if(line[1] < points.length 
         && line[0] < points.length && points[line[0]].z > -blaZ && points[line[0]].x < bla && points[line[0]].x > -bla
             && points[line[0]].y < bla  && points[line[0]].y > -bla && points[line[1]].z < 1 && points[line[1]].z > -blaZ && points[line[1]].x < bla && points[line[1]].x > -bla
-            && points[line[1]].y < bla && points[line[1]].y > -bla
-            && (!torus.trim || 
-            (trimIsMet(vertices[line[0]].u, vertices[line[0]].v, ops) && trimIsMet(vertices[line[1]].u, vertices[line[1]].v, ops)))) {
-             drawLine((points[line[0]].x + 1) * (500), (points[line[0]].y + 1) * (350), (points[line[1]].x + 1) * (500), (points[line[1]].y + 1) * (350), ctx);
+            && points[line[1]].y < bla && points[line[1]].y > -bla) {
+                if(!torus.trim || (trimIsMet(vertices[line[0]].u, vertices[line[0]].v, ops) && trimIsMet(vertices[line[1]].u, vertices[line[1]].v, ops))) {
+                    drawLine((points[line[0]].x + 1) * (500), (points[line[0]].y + 1) * (350), (points[line[1]].x + 1) * (500), (points[line[1]].y + 1) * (350), ctx);
+                } else if(trimIsMet(vertices[line[0]].u, vertices[line[0]].v, ops) && !trimIsMet(vertices[line[1]].u, vertices[line[1]].v, ops)) {
+                    const uv = findTorusBoundryToTrim(vertices[line[0]].u, vertices[line[0]].v, vertices[line[1]].u, vertices[line[1]].v, ops);
+                    const p1 = evaluate(torus, vertices[line[0]].u, vertices[line[0]].v);
+                    const p2 = evaluate(torus, uv.v, uv.u);
+                    setTranslationPoints([p1, p2]);
+                    const twoFinalPoints = Translate({});
+                    drawLine((points[line[0]].x + 1) * (500), (points[line[0]].y + 1) * (350), (twoFinalPoints[1].x + 1) * (500), (twoFinalPoints[1].y + 1) * (350), ctx);
+                } else if(!trimIsMet(vertices[line[0]].u, vertices[line[0]].v, ops) && trimIsMet(vertices[line[1]].u, vertices[line[1]].v, ops)) {
+                    const uv = findTorusBoundryToTrim(vertices[line[1]].u, vertices[line[1]].v, vertices[line[0]].u, vertices[line[0]].v, ops);
+                    const p1 = evaluate(torus, vertices[line[1]].u, vertices[line[1]].v);
+                    const p2 = evaluate(torus, uv.v, uv.u);
+                    setTranslationPoints([p1, p2]);
+                    const twoFinalPoints = Translate({});
+                    drawLine((points[line[1]].x + 1) * (500), (points[line[1]].y + 1) * (350), (twoFinalPoints[1].x + 1) * (500), (twoFinalPoints[1].y + 1) * (350), ctx);
+                    
+                }
          }
     });
     ctx.stroke();

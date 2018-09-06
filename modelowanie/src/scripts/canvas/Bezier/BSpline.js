@@ -174,7 +174,7 @@ export function getSplinePoints() {
         return getBezierPoints(carefullyCutBspline());
     }
 }
-export function getBSplinePointsFromKnots(knots) {
+export function getBSplinePointsFromKnots(knots, uv, uvValue) {
         const points = knots;
         for(let j = 0; j < points.length; j ++) {
             points[j].virtualPoints = [];
@@ -216,6 +216,9 @@ export function getBSplinePointsFromKnots(knots) {
             ret =  ret.concat(points[j].virtualPoints);
         }
        // curves[i].pointsBezier = _finalPoints;
+       if(uv) {
+        return getBezierPointsFromKnots(ret, "C2", uv, uvValue);
+       }
     return getBezierPointsFromKnots(ret, "C2");
 }
 export function clearArray(curves) {
