@@ -26,6 +26,7 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
 .ab-main-div {
   width: 1920px;
   background: url('pictures/stars.png');

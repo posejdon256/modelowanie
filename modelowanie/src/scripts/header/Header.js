@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../../css/header/Header.css';
+import '../../css/tooltip/Tooltip.css';
 import torus from '../../pictures/torus.png';
 import clean from '../../pictures/clean.png';
 import point from '../../pictures/point.png';
@@ -105,47 +106,61 @@ export default class Header extends Component {
     render(){
         return(
         <div className="ab-header">
-            <button className="ab-torus-button" onClick={this.cleanScene}>
+            <button className="ab-torus-button tooltip" onClick={this.cleanScene}>
                 <img className="ab-torus-image" src={clean} alt="clean" />
+                <span class="tooltiptext">Clean all elements from the scene</span>
             </button>
-            <button className="ab-torus-button" onClick={this.selectByRectange}>
+            <button className="ab-torus-button tooltip" onClick={this.selectByRectange}>
                 <img className="ab-torus-image" src={select} alt="select" />
+                <span class="tooltiptext">If you have any points on the scene, you can select this mode. Then you can select/deselect points on the scene in rectangle.</span>
             </button>
-            <button className="ab-torus-button" onClick={this.addTorus}>
+            <button className="ab-torus-button tooltip" onClick={this.addTorus}>
                 <img className="ab-torus-image" src={torus} alt="torus" />
+                <span class="tooltiptext">Add torus to the scene. You can change some torus parameters in basic navbar.</span>
             </button>
-            <button className="ab-torus-button" onClick={this.addPoint}>
+            <button className="ab-torus-button tooltip" onClick={this.addPoint}>
                 <img className="ab-point-image" src={point} alt="point" />
+                <span class="tooltiptext">Add single point to the scene. Point can be selected or removed from the scene. All curves and patches are based on points.</span>
             </button>
-            <button className="ab-torus-button" onClick={this.addCurve}>
+            <button className="ab-torus-button tooltip" onClick={this.addCurve}>
                 <img className="ab-point-image" src={bezierc1} alt="bezier" />
+                <span class="tooltiptext">Turn on Bezier Curve C0 mode. Now when you are adding a point it is a part of curve. Turn off this mode by click on it second time.</span>
             </button>
-            <button className="ab-torus-button" onClick={this.addBesplineCurve}>
+            <button className="ab-torus-button tooltip" onClick={this.addBesplineCurve}>
                 <img className="ab-point-image" src={bezierc2} alt="bezier" />
+                <span class="tooltiptext">Turn on Bspline mode. No when you are adding a point it is a part of curve. <br/>Hint: you can add points with space button.</span>
             </button>
-            <button className="ab-torus-button" onClick={this.addInterpolationCurve}>
+            <button className="ab-torus-button tooltip" onClick={this.addInterpolationCurve}>
                 <img className="ab-point-image" src={bezierc2I} alt="bezier" />
+                <span class="tooltiptext">Turn on Interpolation Curve mode. No when you are adding a point it is a part of curve.</span>
             </button>
-            <button className="ab-torus-button" onClick={this.addSurfaceC0}>
+            <button className="ab-torus-button tooltip" onClick={this.addSurfaceC0}>
                 <img className="ab-point-image" src={platekC0} alt="surface c0" />
+                <span class="tooltiptext">Add C0 Patch to scene. <br/>Hint: You can change C0 patch paramenters in bicubic navbar.</span>
             </button>
-            <button className="ab-torus-button" onClick={this.addSurfaceC2}>
+            <button className="ab-torus-button tooltip" onClick={this.addSurfaceC2}>
                 <img className="ab-point-image" src={platekC2} alt="surface c2" />
+                <span class="tooltiptext">Add C2 Patch to scene. <br/>Hint: You can change C0 patch paramenters in bicubic navbar.</span>
             </button>   
-            <button className="ab-torus-button" onClick={this.addGregory}>
+            <button className="ab-torus-button tooltip" onClick={this.addGregory}>
                 <img className="ab-point-image" src={platekG} alt="surface c2" />
+                <span class="tooltiptext">Add Gregory patch. Gregory patch can be add to three connected single patches. For more information go to Help(not ready)</span>
             </button>   
-            <button className="ab-torus-button" onClick={this.saveFile}>
+            <button className="ab-torus-button tooltip" onClick={this.saveFile}>
                 <img className="ab-point-image" src={save} alt="surface c0" />
+                <span class="tooltiptext">Save your work</span>
             </button>
-            <button className="ab-torus-button" onClick={this.loadFile}>
+            <button className="ab-torus-button tooltip" onClick={this.loadFile}>
                 <img className="ab-point-image" src={load} alt="surface c2" />
+                <span class="tooltiptext">Load helicopter project. <br/>Hint: you can also load your project if you saved it firstly and selected it in "Load file" button in Basic navbar.</span>
             </button>  
-            <button className="ab-torus-button" onClick={this.projectIntersection}>
+            <button className="ab-torus-button tooltip" onClick={this.projectIntersection}>
                 <img className="ab-point-image" src={projektor} alt="intersection curve projection" />
+                <span class="tooltiptext">Project intersection. If you selected two objects you can try to find intersection between them. Important is that cursor has to be near to intersection and "Finding intersection step" should be 3 or 0.2</span>
             </button>  
-            <button className="ab-torus-button" onClick={this.addIntersection}>
+            <button className="ab-torus-button tooltip" onClick={this.addIntersection}>
                 <img className="ab-point-image" src={scissors} alt="intersection curve" />
+                <span class="tooltiptext">Project intersection. If you selected two objects you can try to find intersection between them. Important is that cursor has to be near to intersection and "Finding intersection step" should be 3 or 0.2</span>
             </button>  
         </div>);
     }
