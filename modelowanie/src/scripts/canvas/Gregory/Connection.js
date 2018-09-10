@@ -183,13 +183,13 @@ export function findPoint1Array(surfaces, p1, p2) {
         } else if (s.pointsMap[s.pointsMap.length - 1][s.pointsMap[0].length - 1].id === p2.id && s.pointsMap[0][s.pointsMap[0].length - 1].id === p1.id) {
             for(let j = 0; j < s.pointsMap.length; j ++) {
                 ret1.push(s.pointsMap[j][s.pointsMap[0].length - 1]);
-                ret2.push(s.pointsMap[j][s.pointsMap[0].length - 1]);
+                ret2.push(s.pointsMap[j][s.pointsMap[0].length - 2]);
             }
             break;       
          } else if(s.pointsMap[s.pointsMap.length - 1][s.pointsMap[0].length - 1].id === p1.id && s.pointsMap[0][s.pointsMap[0].length - 1].id === p2.id){
             for(let j = s.pointsMap.length - 1; j >= 0; j --) {
                 ret1.push(s.pointsMap[j][s.pointsMap[0].length - 1]);
-                ret2.push(s.pointsMap[j][s.pointsMap[0].length - 1]);
+                ret2.push(s.pointsMap[j][s.pointsMap[0].length - 2]);
             }
             break;
         }
