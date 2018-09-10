@@ -31,6 +31,12 @@ import { setRectangleSelectionState, getRectangleSelectionRectangle } from '../c
 export default class Header extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            projection: false,
+            interpolation: false,
+            C0: false,
+            C2: false
+        };
         
         this.addTorus = this.addTorus.bind(this);
         this.addPoint = this.addPoint.bind(this);
@@ -65,16 +71,20 @@ export default class Header extends Component {
     addBesplineCurve() {
         if(getAddingC2State()) {
             setAddingC2State(false);
+            this.setState({C2: false});
             return;
         }
         this.props.addCurve("Bspline");
+        this.setState({C2: true});
     }
     addCurve(){
         if(getAddBezierState()) {
             setAddBezierState(false);
+            this.setState({C0: false});
             return;
         }
         this.props.addCurve();
+        this.setState({C0: true});
     }
     addIntersection(){
         if(findObjectToIntersectionAndIntersection()){
@@ -83,15 +93,28 @@ export default class Header extends Component {
     }
     cleanScene(){
         cleanScene();
+        this.setState({
+            projection: false,
+            interpolation: false,
+            C0: false,
+            C2: false
+        });
     }
      projectIntersection() {
+         if(getProjectionState()) {
+            this.setState({projection: false});
+         } else {
+            this.setState({projection: true});
+         }
         setProjectionState(!getProjectionState());
     }
     addInterpolationCurve() {
         if(getInterpolationState()) {
             setInterpolationState(false);
+            this.setState({interpolation: false});
             return;
         }
+        this.setState({interpolation: true});
         this.props.addCurve("C2I");
     }
     addSurfaceC0(){
@@ -122,15 +145,15 @@ export default class Header extends Component {
                 <img className="ab-point-image" src={point} alt="point" />
                 <span class="tooltiptext">Add single point to the scene. Point can be selected or removed from the scene. All curves and patches are based on points.</span>
             </button>
-            <button className="ab-torus-button tooltip" onClick={this.addCurve}>
+            <button className={"ab-torus-button tooltip" + (this.state.C0 ? " ab-selected-state" : "")} onClick={this.addCurve}>
                 <img className="ab-point-image" src={bezierc1} alt="bezier" />
                 <span class="tooltiptext">Turn on Bezier Curve C0 mode. Now when you are adding a point it is a part of curve. Turn off this mode by click on it second time.</span>
             </button>
-            <button className="ab-torus-button tooltip" onClick={this.addBesplineCurve}>
+            <button className={"ab-torus-button tooltip" + (this.state.C2 ? " ab-selected-state" : "")} onClick={this.addBesplineCurve}>
                 <img className="ab-point-image" src={bezierc2} alt="bezier" />
                 <span class="tooltiptext">Turn on Bspline mode. No when you are adding a point it is a part of curve. <br/>Hint: you can add points with space button.</span>
             </button>
-            <button className="ab-torus-button tooltip" onClick={this.addInterpolationCurve}>
+            <button className={"ab-torus-button tooltip" + (this.state.interpolation ? " ab-selected-state" : "")} onClick={this.addInterpolationCurve}>
                 <img className="ab-point-image" src={bezierc2I} alt="bezier" />
                 <span class="tooltiptext">Turn on Interpolation Curve mode. No when you are adding a point it is a part of curve.</span>
             </button>
@@ -150,11 +173,11 @@ export default class Header extends Component {
                 <img className="ab-point-image" src={save} alt="surface c0" />
                 <span class="tooltiptext">Save your work</span>
             </button>
-            <button className="ab-torus-button tooltip" onClick={this.projectIntersection}>
+            <button className={"ab-torus-button tooltip" + (this.state.projection ? " ab-selected-state" : "")} onClick={this.projectIntersection}>
                 <img className="ab-point-image" src={projektor} alt="intersection curve projection" />
                 <span class="tooltiptext">Project intersection. If you selected two objects you can try to find intersection between them. Important is that cursor has to be near to intersection and "Finding intersection step" should be 3 or 0.2</span>
             </button>  
-            <button className="ab-torus-button tooltip" onClick={this.addIntersection}>
+            <button className={"ab-torus-button tooltip"} onClick={this.addIntersection}>
                 <img className="ab-point-image" src={scissors} alt="intersection curve" />
                 <span class="tooltiptext">Project intersection. If you selected two objects you can try to find intersection between them. Important is that cursor has to be near to intersection and "Finding intersection step" should be 3 or 0.2</span>
             </button>  

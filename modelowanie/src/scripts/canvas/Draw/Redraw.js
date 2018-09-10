@@ -40,18 +40,15 @@ function DrawRectangle() {
         const rect = Translate({});
         ctx.beginPath();
         ctx.fillStyle = "rgba(125, 125, 125, 1)";
-        ctx.moveTo((rect[0].x + 1) * 500, (rect[0].y + 1) * 350);
-        ctx.lineTo((rect[3].x + 1) * 500, (rect[3].y + 1) * 350);
-        ctx.lineTo((rect[1].x + 1) * 500, (rect[1].y + 1) * 350);
-        ctx.lineTo((rect[2].x + 1) * 500, (rect[2].y + 1) * 350);
+        ctx.moveTo((rect[0].x + 1) * 500, (rect[0].y + 0.8) * 450);
+        ctx.lineTo((rect[3].x + 1) * 500, (rect[3].y + 0.8) * 450);
+        ctx.lineTo((rect[1].x + 1) * 500, (rect[1].y + 0.8) * 450);
+        ctx.lineTo((rect[2].x + 1) * 500, (rect[2].y + 0.8) * 450);
         ctx.closePath();
         ctx.fill();
 }
 function DrawTorus() {
     const { ctx, ctxS1, ctxS2 } = getContexts();
-        //drawLine((rect[2].x + 1) * 500, (rect[2].y + 1) * 350, (rect[3].x + 1) * 500, (rect[3].y + 1) * 350, ctx);
-       // ctx.stroke();
-
     _DrawTorus( ctx, ctxS1, ctxS2);
 }
 function DrawSurfaces(){

@@ -32,7 +32,7 @@ function select(p) {
     translatedPoints = getStereoscopy() ? translatedPoints.left : translatedPoints;
     for(let i = 0; i < points.length; i ++) {
         const px = (translatedPoints[i].x + 1) * 500;
-        const py = (translatedPoints[i].y + 1) * 350;
+        const py = (translatedPoints[i].y + 0.8) * 450;
         if(px > p.x1 && px < p.x2 && py > p.y1 && py < p.y2) {
             selectPoint(points[i].id);
         }

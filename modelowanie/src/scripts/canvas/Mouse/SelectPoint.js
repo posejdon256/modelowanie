@@ -14,7 +14,7 @@ export function selectPoints(x, y, byCursor, z) {
             selectPoint(points[i].id);
             Redraw();
             return points[i];
-        } else if(Math.sqrt(Math.pow(((translatedPoints[i].x + 1) * 500) - x, 2) + Math.pow(((translatedPoints[i].y + 1) * 350) - y, 2)) < 10 ) {
+        } else if(Math.sqrt(Math.pow(((translatedPoints[i].x + 1) * 500) - x, 2) + Math.pow(((translatedPoints[i].y + 0.8) * 450) - y, 2)) < 10 ) {
             selectPoint(points[i].id);
             const _cursor = getCursor();
             // if(byCursor)

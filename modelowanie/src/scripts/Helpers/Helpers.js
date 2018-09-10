@@ -73,7 +73,7 @@ export function MultiplyPoint(p1, number) {
 export function UpdatePointsForCanvas(points) {
     const ret = [];
     points.forEach(p => {
-        ret.push({x: (p.x + 1) * 500, y: (p.y + 1) * 350});
+        ret.push({x: (p.x + 1) * 500, y: (p.y + 0.8) * 450});
     });
     return ret;
 }

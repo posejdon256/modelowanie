@@ -38,24 +38,24 @@ export function DrawLines(points, color) {
                     ctxS2.beginPath();
                     continue;
                 }
-                x1 = (left[0].x + 1) * 350;
-                y1 = (left[0].y + 1) * 350;
+                x1 = (left[0].x + 1) * 500;
+                y1 = (left[0].y + 0.8) * 450;
                 z1 = left[0].z;
             
                 x2 = (left[i].x + 1) * 500;
-                y2 = (left[i].y + 1) * 350;
+                y2 = (left[i].y + 0.8) * 450;
                 z2 = left[i].z;
                 if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -5 || z1 > 5
                     || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -5 || z2 > 5)
                     continue;
                     drawLine(parseInt(x1, 10), parseInt(y1, 10), parseInt(x2, 10), parseInt(y2, 10), ctxS1);
     
-                x1 = (right[0].x + 1) * 350;
-                y1 = (right[0].y + 1) * 350;
+                x1 = (right[0].x + 1) * 500;
+                y1 = (right[0].y + 0.8) * 450;
                 z1 = right[0].z;
             
                 x2 = (right[i].x + 1) * 500;
-                y2 = (right[i].y + 1) * 350;
+                y2 = (right[i].y + 0.8) * 450;
                 z2 = right[i].z;
                 if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -5 || z1 > 5
                     || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -5 || z2 > 5)
@@ -78,11 +78,11 @@ export function DrawLines(points, color) {
                 continue;
             }
             x1 = (translated[i - 1].x + 1) * 500;
-            y1 = (translated[i - 1].y + 1) * 350;
+            y1 = (translated[i - 1].y + 0.8) * 450;
             z1 = translated[i - 1].z;
     
             x2 = (translated[i].x + 1) * 500;
-            y2 = (translated[i].y + 1) * 350;
+            y2 = (translated[i].y + 0.8) * 450;
             z2 = translated[i].z;
             if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -5 || z1 > 5
                 || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -5 || z2 > 5)

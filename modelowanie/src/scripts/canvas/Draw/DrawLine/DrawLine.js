@@ -22,12 +22,12 @@ export function DrawLine(p1, p2, color) {
         ctxS2.strokeStyle = "rgba(0, 249, 247, 1)";
         ctxS1.beginPath();
 
-        x1 = (left[0].x + 1) * 350;
-        y1 = (left[0].y + 1) * 350;
+        x1 = (left[0].x + 1) * 500;
+        y1 = (left[0].y + 0.8) * 450;
         z1 = left[0].z;
     
         x2 = (left[1].x + 1) * 500;
-        y2 = (left[1].y + 1) * 350;
+        y2 = (left[1].y + 0.8) * 450;
         z2 = left[1].z;
         if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -5 || z1 > 5
             || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -5 || z2 > 5)
@@ -36,12 +36,12 @@ export function DrawLine(p1, p2, color) {
         ctxS1.stroke();
         ctxS2.beginPath();
 
-        x1 = (right[0].x + 1) * 350;
-        y1 = (right[0].y + 1) * 350;
+        x1 = (right[0].x + 1) * 500;
+        y1 = (right[0].y + 0.8) * 450;
         z1 = right[0].z;
     
         x2 = (right[1].x + 1) * 500;
-        y2 = (right[1].y + 1) * 350;
+        y2 = (right[1].y + 0.8) * 450;
         z2 = right[1].z;
         if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -5 || z1 > 5
             || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -5 || z2 > 5)
@@ -54,11 +54,11 @@ export function DrawLine(p1, p2, color) {
     }
     const translated = Translate({});
     x1 = (translated[0].x + 1) * 500;
-    y1 = (translated[0].y + 1) * 350;
+    y1 = (translated[0].y + 0.8) * 450;
     z1 = translated[0].z;
 
     x2 = (translated[1].x + 1) * 500;
-    y2 = (translated[1].y + 1) * 350;
+    y2 = (translated[1].y + 0.8) * 450;
     z2 = translated[1].z;
     if(x1 < 0 || y1 < 0 || x1 > 1000 || y1 > 700 || z1 < -5 || z1 > 5
         || x2 < 0 || y2 < 0 || x2 > 1000 || y2 > 700 || z2 < -5 || z2 > 5)

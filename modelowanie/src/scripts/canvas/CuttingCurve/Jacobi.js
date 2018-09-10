@@ -54,13 +54,6 @@ function getFforJacobi(ob, u, v, uNew, vNew, alpha) {
     const dU2 = evaluateDU(ob[1], u[1], v[1]);
     const dV2 = evaluateDV(ob[1], u[1], v[1]);
     const t = getT(dU1, dU2, dV1, dV2, alpha);
-    // setTranslationPoints([P0,  SumPoints(P0, MultiplyPoint(t, 0.1))]);
-    // const {ctx} = getContexts();
-    // const points = Translate({});
-    // ctx.strokeStyle = "rgba(0, 249, 247, 1)";
-    // ctx.beginPath();
-    // drawLine((points[0].x + 1) * (500), (points[0].y + 1) * (350), (points[1].x + 1) * (500), (points[1].y + 1) * (350), ctx);
-    // ctx.stroke();
     return [
         P1.x - Q.x,
         P1.y - Q.y,

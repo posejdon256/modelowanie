@@ -17,3 +17,6 @@
 .ab-point-image {
     height: 50px;
 }
+.ab-selected-state{
+    background-color: rgba(125, 125, 125, 0.7);
+}
