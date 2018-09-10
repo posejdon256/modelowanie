@@ -35,7 +35,6 @@ export function goGoNewton(best, iterations) {
     let betterPoint;
     let backed = false;
     let pStart = evaluate(ob[0], uStart[0], vStart[0]);
-    DrawPoint(pStart, "Blue");
     let notFinishYet = 0;
     let loops = 0;
     let crossed1 = 0, crossed2 = 0;

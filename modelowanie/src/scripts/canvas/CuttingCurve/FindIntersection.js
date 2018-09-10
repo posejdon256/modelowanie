@@ -1,7 +1,7 @@
-import { EvaluateTorus, getToruses, EvaluateTorusDU, EvaluateTorusDV } from "../Torus/Torus";
+import { EvaluateTorus, getToruses, EvaluateTorusDU, EvaluateTorusDV, cleanTrimToruses } from "../Torus/Torus";
 import { getVectorLength, DiffPoints, scalarMultiply, TryParseFloat } from "../../Helpers/Helpers";
 import { getCursor } from "../Cursor/Cursor";
-import { getSurfaces }  from  "../Surface/Surface";
+import { getSurfaces, cleanTrimSurfaces }  from  "../Surface/Surface";
 import { EvaluateSurface, EvaluateSurfaceDU, EvaluateSurfaceDV, EvaluateSurfaceC2, EvaluateSurfaceC2DU, EvaluateSurfaceC2DV } from "../Surface/EvaluateSurface";
 import { goGoNewton } from "./NewtonMethod";
 import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
@@ -25,6 +25,8 @@ export function getIntersectionEpsilon() {
     return intersectionEpsilon;
 }
 function findIntersection(_objects) {
+    cleanTrimSurfaces();
+    cleanTrimToruses();
     const cursor = getCursor();
     const best = {
         lenght: 10000,
@@ -88,8 +90,6 @@ function countGradientMethod(ob1, ob2, best){
         }
         p1 = evaluate(ob1, u[0], v[0]);
         p2 = evaluate(ob2, u[1], v[1]);
-        DrawPoint(p1, "Blue");
-        DrawPoint(p2, "Blue");
         const uPrev = u;
         const vPrev = v;
 

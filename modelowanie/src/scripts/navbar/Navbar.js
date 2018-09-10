@@ -105,7 +105,7 @@ export default class Navbar extends Component {
         convertToInterpolationCurve();
     }
     setPath(event) {
-        setPath(event.target.value);
+        setPath(event.target.files);
     }
     deselectPoints() {
         deselectPoints();

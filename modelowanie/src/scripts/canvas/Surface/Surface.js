@@ -165,6 +165,11 @@ export function addSurface(_width, _height, _cylinder, _u, _v, name, _type) {
     surfaces.push(surface);
     return surface;
 }
+export function cleanTrimSurfaces() {
+    surfaces.forEach(surface => {
+        surface.trim = false;
+    });
+}
 export function createSurface(type) {
     turnOffAllStates();
     addingSurface = true;

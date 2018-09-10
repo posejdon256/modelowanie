@@ -4,8 +4,8 @@ import { getCursor } from "../Cursor/Cursor";
 
 let toruses = [];
 let torusesCounter = 0;
-let gX = 10;
-let gY = 10;
+let gX = 50;
+let gY = 50;
 
 export function cleanToruses() {
     toruses = [];
@@ -116,6 +116,11 @@ export function getTorusVertices(id) {
 }
 export function getTorusLines(id) {
     return toruses.find(x => x.id === id).TorusLines;
+}
+export function cleanTrimToruses() {
+    toruses.forEach(torus => {
+        torus.trim = false;
+    });
 }
 export function EvaluateTorus(id, u, v, help) {
     let _u = u * (2 * Math.PI);

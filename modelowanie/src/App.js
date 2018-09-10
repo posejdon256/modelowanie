@@ -26,8 +26,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gridX: 18,
-      gridY: 18,
+      gridX: 50,
+      gridY: 50,
       points: [],
       curves: [],
       surfaces: [],

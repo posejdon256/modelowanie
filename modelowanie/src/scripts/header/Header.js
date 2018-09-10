@@ -150,10 +150,6 @@ export default class Header extends Component {
                 <img className="ab-point-image" src={save} alt="surface c0" />
                 <span class="tooltiptext">Save your work</span>
             </button>
-            <button className="ab-torus-button tooltip" onClick={this.loadFile}>
-                <img className="ab-point-image" src={load} alt="surface c2" />
-                <span class="tooltiptext">Load helicopter project. <br/>Hint: you can also load your project if you saved it firstly and selected it in "Load file" button in Basic navbar.</span>
-            </button>  
             <button className="ab-torus-button tooltip" onClick={this.projectIntersection}>
                 <img className="ab-point-image" src={projektor} alt="intersection curve projection" />
                 <span class="tooltiptext">Project intersection. If you selected two objects you can try to find intersection between them. Important is that cursor has to be near to intersection and "Finding intersection step" should be 3 or 0.2</span>

@@ -11,15 +11,26 @@ import { addTorus } from "../canvas/Torus/Torus";
 let path ="Ania3.json";
 
 export function setPath(_path) {
-    if(_path === "") {
-        return;
-    }
-    path =_path.substr(12, _path.length - 12);
+    var reader = new FileReader();
+    reader.onload = (function(theFile) {
+        return function(e) {
+            try{
+                const result = e.target.result;
+                const _result = result.slice(29, result.length);
+                const json = JSON.parse(atob(_result));
+                Load(json);
+            } catch(error) {
+                console.log(error);
+            }
+        }
+    })(_path[0]);
+    reader.readAsDataURL(_path[0]);
+    // if(_path === "") {
+    //     return;
+    // }
+    // path =_path.substr(12, _path.length - 12);
 }
-export function Load() {
-    console.log(path);
-   // console.log(require);
-    const json = require(`./../../DzialajaceTesty/${path}`);
+export function Load(json) {
     clearCurves();
     clearPoints();
     clearSurfaces();
