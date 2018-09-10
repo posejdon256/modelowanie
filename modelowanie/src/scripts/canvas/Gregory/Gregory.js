@@ -109,9 +109,9 @@ export function RebuildGregory(importantArrays, points, u, v) {
     importantArrays2.push(importantArrays[2]);
     importantArrays2.push(importantArrays[0]);
 
-    createSmallPatch(PArrs[0], vvArrs[0], importantArrays[0], importantArrays[1], u, v);
+    //createSmallPatch(PArrs[0], vvArrs[0], importantArrays[0], importantArrays[1], u, v);
     createSmallPatch(PArrs[1], vvArrs[1], importantArrays[1], importantArrays[2], u, v);
-    createSmallPatch(PArrs[2], vvArrs[2], importantArrays[2], importantArrays[0], u, v);
+   // createSmallPatch(PArrs[2], vvArrs[2], importantArrays[2], importantArrays[0], u, v);
    // addPoint(vvArrs[2][0].x, vvArrs[2][0].y, vvArrs[2][0].z, 'dfsds');
    // addPoint(vvArrs[2][1].x, vvArrs[2][1].y, vvArrs[2][1].z, 'dfsds');
    // addPoint(vvArrs[2][2].x, vvArrs[2][2].y, vvArrs[2][2].z, 'dfsds');

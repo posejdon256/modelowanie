@@ -9,6 +9,9 @@ import { cleanDrawSurfacePoints } from "../Draw/DrawSurface/DrawSurface";
 import Redraw from "../Draw/Redraw";
 import { CleanCatchedPoints } from "../Move/MoveCursor";
 import { clearVisualization } from "../Draw/RedrawVisualisation/RedrawVisualization";
+import { setAddingC2State } from "../Bezier/BSpline";
+import { setAddBezierState } from "../Bezier/Bezier";
+import { setInterpolationState } from "../Bezier/Interpolation";
 
 export function cleanScene() {
     cleanCurves();
@@ -21,5 +24,8 @@ export function cleanScene() {
     CleanCatchedPoints();
     clearVisualization();
     setCursor(0, 0, 0);
+    setAddBezierState(false);
+    setAddingC2State(false);
+    setInterpolationState(false);
     Redraw();
 }

@@ -11,18 +11,21 @@ export function _DrawCurves() {
     if(points.length > 0 && points[0].selected){
         color = {r: 255, g: 0, b: 0, a: 1};
     }
-    DrawLines(points, color);
+    DrawLines([{points: points, trim: false}], color);
 }
 
 function drawChaines() {
     const curves = getCurves();
+    let points;
     for(let i = 0; i < curves.length; i ++) {
         if(!curves[i].chain)
             continue;
         if(curves[i].surface && curves[i].type === "C2") {
-            DrawLines(curves[i].pointsBspline);
+            points = curves[i].pointsBspline; 
+            DrawLines([{points: points, trim: false}]);
         } else {
-            DrawLines(curves[i].points);
+            points = curves[i].points;
+            DrawLines([{points: points, trim: false}]);
         }
     }
 }
