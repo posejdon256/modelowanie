@@ -24,7 +24,7 @@ export function trimIsMet(u, v, ops) {
         }
     }
     if(op === "all") {
-        isMet = false;
+        isMet = true;
     }
     return isMet;
 }

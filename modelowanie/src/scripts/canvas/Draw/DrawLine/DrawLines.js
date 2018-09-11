@@ -72,7 +72,7 @@ export function DrawLines(points, color) {
         ctx.beginPath();
         for(let i = 1; i < translated.length; i ++) {
             if(_points.points[i].break || (_points.trim 
-                && (trimIsMet(_points.points[i].u, _points.points[i].v, ops) || trimIsMet(_points.points[i - 1].u, _points.points[i - 1].v, ops)))) {
+                && (!trimIsMet(_points.points[i].u, _points.points[i].v, ops) || !trimIsMet(_points.points[i - 1].u, _points.points[i - 1].v, ops)))) {
                 ctx.stroke();
                 ctx.beginPath();
                 continue;
