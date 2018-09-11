@@ -197,6 +197,7 @@ export function createSurface(type) {
     } else {
         makeSurfaceC2(surface, direction);
     }
+    surface.Width = type === "C2" && cylinder ? width + 2 : width;
     addingSurface = false;
     Redraw();
 }
