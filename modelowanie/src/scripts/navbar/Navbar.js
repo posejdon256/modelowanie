@@ -15,7 +15,6 @@ import { setIntersectionStep, setEpsilonOfFindingIntersection } from '../canvas/
 import { setNewtonAlpa, setFinalEpsilon } from '../canvas/CuttingCurve/NewtonMethod';
 import { setOneProjectionPointState, setFirstNewtonIt, setNewtonStep } from '../canvas/CuttingCurve/Projection';
 import { setLocekdCamrea } from '../canvas/Move/Move';
-import { convertToInterpolationCurve } from '../canvas/CuttingCurve/CuttingCurve';
 import { setPath } from '../Load/Load';
 
 export default class Navbar extends Component {
@@ -33,7 +32,6 @@ export default class Navbar extends Component {
         this.uniteTwoPoints = this.uniteTwoPoints.bind(this);
         this.setOneProjectionPointState = this.setOneProjectionPointState.bind(this);
         this.lockUnlockCamera = this.lockUnlockCamera.bind(this);
-        this.convertToInterpolation = this.convertToInterpolation.bind(this);
         this.setPath = this.setPath.bind(this);
         this.deselectPoints = this.deselectPoints.bind(this);
         this.selectNavbar = this.selectNavbar.bind(this);
@@ -100,9 +98,6 @@ export default class Navbar extends Component {
     }
     lockUnlockCamera(event) {
         setLocekdCamrea(event.target.checked);
-    }
-    convertToInterpolation(event) {
-        convertToInterpolationCurve();
     }
     setPath(event) {
         setPath(event.target.files);

@@ -6,6 +6,7 @@ import { setIntersectionStep, setEpsilonOfFindingIntersection } from '../canvas/
 import { setNewtonAlpa, setFinalEpsilon } from '../canvas/CuttingCurve/NewtonMethod';
 import { setOneProjectionPointState, setFirstNewtonIt, setNewtonStep } from '../canvas/CuttingCurve/Projection';
 import { trim } from '../canvas/CuttingCurve/Trimming';
+import { convertToInterpolationCurve } from '../canvas/CuttingCurve/CuttingCurve';
 
 export default class NavbarIntersection extends Component {
     constructor(props) {
@@ -18,9 +19,13 @@ export default class NavbarIntersection extends Component {
         this.setNewtonStep = this.setNewtonStep.bind(this);
         this.setIntersectionEpsilon = this.setIntersectionEpsilon.bind(this);
         this.trim = this.trim.bind(this);
+        this.convertToInterpolation = this.convertToInterpolation.bind(this);
     }
     setOneProjectionPointState(event) {
         setOneProjectionPointState(event.target.checked);
+    }
+    convertToInterpolation(event) {
+        convertToInterpolationCurve();
     }
     setIntersectionStep(event) {
         setIntersectionStep(event.target.value);

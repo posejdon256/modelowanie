@@ -21,16 +21,9 @@ function generateJacobi(ob, u, v, uNew, vNew, alpha) {
     dV2 =  evaluateDV(ob[1], uNew[1], vNew[1]);
     dU2 = MultiplyPoint(dU2, -1.0);
     dV2 = MultiplyPoint(dV2, -1.0);
-    // const diff1 = DiffPoints(evaluate(ob[0], uNew[0], vNew[0]), evaluate(ob[0], u[0], v[0]));
-    // const diff2 = DiffPoints(evaluate(ob[1], uNew[1], vNew[1]), evaluate(ob[1], u[1], v[1]));    
+
     const dot1 = scalarMultiply(dU1, t);
     const dot2 = scalarMultiply(dV1, t);
-    // const jacobiMatrix = [
-    //     [dU1.x, dU1.y, dU1.z, dot1],
-    //     [dV1.x, dV1.y, dV1.z, dot2],
-    //     [dU2.x, dU2.y, dU2.z, 0],
-    //     [dV2.x, dV2.y, dV2.z, 0],
-    // ];
     const jacobiMatrix = [
         [dU1.x, dV1.x, dU2.x, dV2.x],
         [dU1.y, dV1.y, dU2.y, dV2.y],
