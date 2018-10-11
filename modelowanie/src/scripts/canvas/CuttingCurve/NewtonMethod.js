@@ -39,8 +39,9 @@ export function goGoNewton(best, iterations) {
     let loops = 0;
     let crossed1 = 0, crossed2 = 0;
     let pointsList = [];
-    let stop = iterations ? iterations : 1000;
+    let stop = iterations ? iterations : 2000;
     let finished = false;
+    let stopped = false;
     while(!finished) {
         let tempAlpha = _alpha;
         for(let i = 0; i < 10; i ++) {
@@ -123,14 +124,15 @@ export function goGoNewton(best, iterations) {
             break;
         }
         if(loops > stop) {
+            stopped = true;
             break;
         }
         notFinishYet ++;
         loops ++;
     }
-    if(iterations) {
-        for(let i = 0; i < pointsList.length; i ++) {
-            //DrawPoint(pointsList[i], "Red"); 
+    if(iterations || stopped) {
+        if(stopped && !iterations) {
+            alert("Intersection is too large");
         }
         return;
     }
