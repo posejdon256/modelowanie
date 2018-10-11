@@ -8,8 +8,6 @@ import Redraw from "../canvas/Draw/Redraw";
 import { turnOffAllStates } from "../canvas/StatesCenter/StatesCenter";
 import { addTorus } from "../canvas/Torus/Torus";
 
-let path ="Ania3.json";
-
 export function setPath(_path) {
     var reader = new FileReader();
     reader.onload = (function(theFile) {

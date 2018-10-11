@@ -4,7 +4,6 @@ import { getCursor } from "../Cursor/Cursor";
 import { getSurfaces, cleanTrimSurfaces }  from  "../Surface/Surface";
 import { EvaluateSurface, EvaluateSurfaceDU, EvaluateSurfaceDV, EvaluateSurfaceC2, EvaluateSurfaceC2DU, EvaluateSurfaceC2DV } from "../Surface/EvaluateSurface";
 import { goGoNewton } from "./NewtonMethod";
-import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
 
 let intersectionStep = 3; //Needs to be updated for toruses and C0
 let intersectionEpsilon = 0.001;

@@ -94,7 +94,6 @@ export function trimVisualisation() {
 function recurence(stack, ob) {
     const problem = stack[stack.length - 1];
     let {x, y, canvas} = problem;
-    const ctx = canvas.getContext('2d');
     stack.splice(stack.length - 1, 1);
     if(x < 0) {
         if(ob.WrappedU) {
@@ -145,7 +144,6 @@ function getPixelColor(canvas, x, y){
     console.log("Problem with colors");
 }
 function colourPixelOnWhite(canvas, x, y) {
-    const _ctx = canvas.getContext('2d');
     const place = (parseInt((y), 10)* canvas.width * 4) + (parseInt(x, 10) * 4);
     img.data[place] = 255;
     img.data[place + 1] = 255;

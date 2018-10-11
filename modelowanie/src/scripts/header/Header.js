@@ -11,7 +11,6 @@ import platekC0 from '../../pictures/platek.png';
 import platekC2 from '../../pictures/platekc2.png';
 import platekG from '../../pictures/platekG.png';
 import scissors from '../../pictures/scissors.png';
-import load from '../../pictures/helicopter.png';
 import save from '../../pictures/safebox.png';
 import select from '../../pictures/square-select.png';
 import projektor from '../../pictures/projektor.png';

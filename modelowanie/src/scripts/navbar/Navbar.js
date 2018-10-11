@@ -11,9 +11,7 @@ import { setAddingC2Type } from '../canvas/Bezier/BSpline';
 import { getCurvesControlPoints, addCurveBySelectedPoints } from '../canvas/Bezier/Curve';
 import { updateSelectedPoints, deselectPoints } from '../canvas/Points/Points';
 import { uniteTwoPoints } from '../canvas/Gregory/Claps';
-import { setIntersectionStep, setEpsilonOfFindingIntersection } from '../canvas/CuttingCurve/FindIntersection';
-import { setNewtonAlpa, setFinalEpsilon } from '../canvas/CuttingCurve/NewtonMethod';
-import { setOneProjectionPointState, setFirstNewtonIt, setNewtonStep } from '../canvas/CuttingCurve/Projection';
+import { setOneProjectionPointState } from '../canvas/CuttingCurve/Projection';
 import { setLocekdCamrea } from '../canvas/Move/Move';
 import { setPath } from '../Load/Load';
 
@@ -193,7 +191,6 @@ export default class Navbar extends Component {
             <div className={this.state.navbar === 2 ? "ab-navbar-visible" : "ab-navbar-not-visible"}>
                 <BiCubicNavbar />
             </div>
-             <ElipsoidNavbar updateElipsoid={this.props.updateElipsoid} />
         </div>);
     }
 }

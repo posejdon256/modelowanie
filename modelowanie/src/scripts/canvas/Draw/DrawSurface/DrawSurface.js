@@ -1,12 +1,9 @@
 import { getSurfaces } from "../../Surface/Surface";
 import { getBezierPointsFromKnots } from "../../Bezier/Bezier";
-import Translate, { setTranslationPoints } from "../../Translation/TranslationCenter/TranslationCenter";
-import { getCanvas, drawLine } from "../Draw";
-import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
+import { setTranslationPoints } from "../../Translation/TranslationCenter/TranslationCenter";
 import { deCastiljau } from "../../Bezier/DeCastiljau";
 import { getBSplinePointsFromKnots, rebuildVirtualPointsForSingleCurve } from "../../Bezier/BSpline";
 import { DrawLines } from "../DrawLine/DrawLines";
-import { DrawPoint } from "../DrawPoints/DrawPoints";
 
 let lastPointsC0 = [];
 let lastPointsC2 = [];

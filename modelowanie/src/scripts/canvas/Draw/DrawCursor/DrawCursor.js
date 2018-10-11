@@ -1,7 +1,4 @@
-import { getCursor, setScreenPlace } from "../../Cursor/Cursor";
-import Translate, { setTranslationPoints } from "../../Translation/TranslationCenter/TranslationCenter";
-import { drawLine } from "../Draw";
-import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
+import { getCursor } from "../../Cursor/Cursor";
 import { DrawLine } from "../DrawLine/DrawLine";
 
 export function _DrawCursor(_ctx, _ctxStereo, _ctxStereo2) {

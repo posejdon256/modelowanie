@@ -63,8 +63,6 @@ export function findTorusBoundryToTrim(u1, v1, u2, v2, ops) {
         if(Math.abs(u2 - u1) > 0.5 || Math.abs(v2 - v1) > 0.5) {
             console.log(parseInt(v2 * 500, 10), parseInt(u2 * 500, 10));
         }
-    
-        const place2 = (parseInt((y), 10)* canvas.width * 4) + (parseInt(x, 10) * 4);
 
         if(op === "left") {
             if((img.data[place1] === 255 && img.data[place1] === 255 && img.data[place1] === 255)

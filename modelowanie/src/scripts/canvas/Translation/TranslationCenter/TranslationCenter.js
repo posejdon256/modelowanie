@@ -2,7 +2,6 @@ import { multiplyMatrices, multiplyVectorAndMatrix } from "../../../MatrixOperat
 import { setShiftVector, getShiftMatrix, ShiftWithRotation, updateShift } from "../Shift/Shift";
 import getProjectionMatrix from '../Projection/Projection';
 import getScaleMatrix from "../Scale/Scale";
-import math from 'mathjs';
 import normalizeVector from "../../../Normalization/Normalize";
 
 let stereoscopy;

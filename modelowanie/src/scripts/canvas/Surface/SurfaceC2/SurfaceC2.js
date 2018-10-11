@@ -1,16 +1,9 @@
 import { updateCursor, getCursor, setCursor } from "../../Cursor/Cursor";
-import { setAddBezierState, addBezierCurve } from "../../Bezier/Bezier";
 import { addPoint } from "../../Points/Points";
-import { addPointToCurve, selectCurve } from "../../Bezier/Curve";
-import { turnOffAllStates } from "../../StatesCenter/StatesCenter";
+import { addPointToCurve } from "../../Bezier/Curve";
 import { setAddingSurfaceState } from "../Surface";
 import { setAddingC2State, addBsplineCurve } from "../../Bezier/BSpline";
 
-const _lengthPrim = 0.05;
-let sinus = 0;
-let width;
-let r;
-let startCursor;
 export function makeSurfaceC2(surface, direction) {
     const iterationsX = surface.cylinder ? 4 + (surface.Width - 1) - 1 : 4 + (surface.Width - 1);
     const iterationsY = 4 + (surface.Height - 1);

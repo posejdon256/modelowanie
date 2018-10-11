@@ -5,7 +5,6 @@ import { removePoint } from "../Points/Points";
 import { removeCurveWithourRedraw } from "../Bezier/Curve";
 import { turnOffAllStates } from "../StatesCenter/StatesCenter";
 import { makeSurfaceC2 } from "./SurfaceC2/SurfaceC2";
-import { CatchPoint, RemoveCatchPoint } from "../Move/MoveCursor";
 import { getGrzegorzys } from "../Gregory/Gregory";
 
 

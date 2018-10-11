@@ -31,22 +31,10 @@ function setIntervalForMoving(){
         }, 5);
     }
 }
-function DrawElipsoidRecurence(i) {
-    if(i < 8)
-            DrawElipsoid(TranslateElipsoid({}));
-    else {
-        for(let i = 20; i > 4; i -=4) {
-            //  clearCanvas();
-              pseudoDrawElipsoid(PseudoTranslate({}, i), i);
-          }
-          DrawElipsoid(TranslateElipsoid({}));
-    }
-}
 function removeIntervalForMoving(){
     if(front === 0 && left === 0 && top === 0) {
         clearInterval(interval);
         interval = undefined;
-        DrawElipsoidRecurence(20);
       //  DrawElipsoid(TranslateElipsoid({}));
     }
 }

@@ -1,7 +1,5 @@
 import { getVectorLength, TryParseFloat } from "../../Helpers/Helpers";
-import { addPoint } from "../Points/Points";
 import { evaluate } from "./FindIntersection";
-import { addInterpolationCurve, setInterpolationState } from "../Bezier/Interpolation";
 import { addCuttingCurve, updateIn1Visualisation, updateIn2Visualisation } from "./CuttingCurve";
 import { findNewNewtonPoint } from "./Jacobi";
 import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
@@ -37,7 +35,7 @@ export function goGoNewton(best, iterations) {
     let pStart = evaluate(ob[0], uStart[0], vStart[0]);
     let notFinishYet = 0;
     let loops = 0;
-    let crossed1 = 0, crossed2 = 0;
+    let crossed1, crossed2;
     let pointsList = [];
     let stop = iterations ? iterations : 2000;
     let finished = false;
@@ -191,50 +189,6 @@ function addBorder(crossed, num, cuttingCurve, u, v, ob) {
             updateIn1Visualisation(cuttingCurve.id, 0.99999, v[0] / ob.Width);    
         }  else {
             updateIn2Visualisation(cuttingCurve.id, 0.99999, v[1] / ob.Width); 
-        }  
-    }
-}
-function updateWrappingBeforeFinish(crossed, num, cuttingCurve, u, v, ob) {
-    if(crossed === -2) {
-        if(num === 1) {
-            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Height, 0);  
-            updateIn1Visualisation(cuttingCurve.id, {break: true});
-            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Height, 0.99999);    
-        }  else {
-            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Height, 0);
-            updateIn2Visualisation(cuttingCurve.id, {break: true});
-            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Height, 0.99999); 
-        }  
-    } else if(crossed === 2) {
-        if(num === 1) {
-            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Height, 0.99999); 
-            updateIn1Visualisation(cuttingCurve.id, {break: true}); 
-            updateIn1Visualisation(cuttingCurve.id, u[0] / ob.Height, 0);    
-        }  else {
-            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Height, 0.99999);
-            updateIn2Visualisation(cuttingCurve.id, {break: true});
-            updateIn2Visualisation(cuttingCurve.id, u[1] / ob.Height, 0); 
-        } 
-    } 
-    if(crossed === -1) {
-        if(num === 1) {
-            updateIn1Visualisation(cuttingCurve.id, 0, v[0] / ob.Width);  
-            updateIn1Visualisation(cuttingCurve.id, {break: true});
-            updateIn1Visualisation(cuttingCurve.id, 0.99999, v[0] / ob.Width);   
-        }  else {
-            updateIn2Visualisation(cuttingCurve.id, 0, v[1] / ob.Width); 
-            updateIn2Visualisation(cuttingCurve.id, {break: true});
-            updateIn2Visualisation(cuttingCurve.id, 0.99999, v[1] / ob.Width); 
-        } 
-    } else if(crossed === 1) {
-        if(num === 1) {
-            updateIn1Visualisation(cuttingCurve.id, 0.99999, v[0] / ob.Width); 
-            updateIn1Visualisation(cuttingCurve.id, {break: true});
-            updateIn1Visualisation(cuttingCurve.id, 0, v[0] / ob.Width);    
-        }  else {
-            updateIn2Visualisation(cuttingCurve.id, 0.99999, v[1] / ob.Width); 
-            updateIn2Visualisation(cuttingCurve.id, {break: true});
-            updateIn2Visualisation(cuttingCurve.id, 0, v[1] / ob.Width); 
         }  
     }
 }

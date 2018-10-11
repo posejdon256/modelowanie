@@ -1,6 +1,5 @@
 import {multiplyVectorAndMatrix, multiplyMatrices} from '../../../MatrixOperations/Multiply/Multiply';
 import getRotationArray from '../Rotation/Rotation';
-import math from 'mathjs';
 let _wsMatrix;
 const sumShift = [0, 0, 0];
 

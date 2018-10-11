@@ -1,6 +1,3 @@
-import Translate, { setTranslationPoints } from "../../Translation/TranslationCenter/TranslationCenter";
-import { getCanvas, drawLine, stereoscopyDraw } from "../Draw";
-import { getStereoscopy } from "../../Stereoscopy/Stereoscopy";
 import { getCurves, getCurvesPoints } from "../../Bezier/Curve";
 import { DrawLines } from "../DrawLine/DrawLines";
 

@@ -168,8 +168,6 @@ export function EvaluateSurfaceC2DU(id, u, v) {
     return ret;
 }
 function getUVForC0(id, u, v, debug) {
-    const surfaces = getSurfaces();
-    const s = surfaces.find(x => x.id === id);
     const _u = Math.floor(u) * 3;
     const _v = Math.floor(v) * 3;
     const _u1 =  u - Math.floor(u);
@@ -180,8 +178,6 @@ function getUVForC0(id, u, v, debug) {
     return {_u: _u, _v: _v, _u1 : _u1, _v1: _v1};
 }
 function getUVForC2(id, u, v) {
-    const surfaces = getSurfaces();
-    const s = surfaces.find(x => x.id === id);
     const _u = Math.floor(u);
     const _v = Math.floor(v);
     const _u1 = u - Math.floor(u);
