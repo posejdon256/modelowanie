@@ -5,6 +5,7 @@ import List from './NavbarPoints/List';
 import ListPointsInCurve from './NavbarPoints/ListPointsInCurve';
 import BiCubicNavbar from './BiCubicNavbar/BiCubicNavbar';
 import NavbarIntersetion from './NavbutIntersection';
+import MillNavar from './MillNavbar/MillNavbar';
 
 import { getCursor, setCursor } from '../canvas/Cursor/Cursor';
 import { setAddingC2Type } from '../canvas/Bezier/BSpline';
@@ -110,6 +111,7 @@ export default class Navbar extends Component {
                 <button className="btn" onClick={(e) => this.selectNavbar(0)}>BASIC</button>
                 <button className="btn" onClick={(e) => this.selectNavbar(1)}>INTERSECTION</button>
                 <button className="btn" onClick={(e) => this.selectNavbar(2)}>BICUBIC</button>
+                <button className="btn" onClick={(e) => this.selectNavbar(3)}>MILL</button>
             </div>
             <div className={this.state.navbar === 0 ? "ab-navbar-visible" : "ab-navbar-not-visible"}>
                 <div>
@@ -190,6 +192,9 @@ export default class Navbar extends Component {
             </div>
             <div className={this.state.navbar === 2 ? "ab-navbar-visible" : "ab-navbar-not-visible"}>
                 <BiCubicNavbar />
+            </div>
+            <div className={this.state.navbar === 3 ? "ab-navbar-visible" : "ab-navbar-not-visible"}>
+                <MillNavar />
             </div>
         </div>);
     }
