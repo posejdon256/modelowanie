@@ -1,25 +1,33 @@
-import { DrawElipsoid, DrawTorus, clearCanvas, pseudoDrawElipsoid } from "../Draw/Draw";
-import { TranslateElipsoid, PseudoTranslate } from '../Elipsoid/Elipsoid';
+
+import Translate, { getFront } from "../Translation/TranslationCenter/TranslationCenter";
+import { RedrawWithoutChangingScene } from "../Draw/Redraw";
 
 
 let front = 0;
 let left = 0;
 let top = 0;
-let step = 0.001;
-
+let step = 0.003;
+let cameraLocked = true;
 let interval;
 
+export function setLocekdCamrea(_state) {
+    cameraLocked = _state;
+}
 function setIntervalForMoving(){
     if(!interval) {
         interval = setInterval(function(){
+            const _actualFront = getFront();
+            if(_actualFront > 1.5 && front !== 0.99 & cameraLocked)  {
+                front = 0;
+            }
             const trasnlationObject = {
                 front: front,
                 left: left,
                 top: top
             }
-            clearCanvas();
-            pseudoDrawElipsoid(PseudoTranslate(trasnlationObject, 20, true), 20);
-           //DrawElipsoid(TranslateElipsoid(trasnlationObject));
+            Translate(trasnlationObject);
+            Translate(trasnlationObject);
+            RedrawWithoutChangingScene();
         }, 5);
     }
 }
@@ -56,7 +64,6 @@ export function MoveToDown(){
 }
 export function MoveToFront(){
     if(front !== 0) return;
-
     front = 1.01;
     setIntervalForMoving();
 }

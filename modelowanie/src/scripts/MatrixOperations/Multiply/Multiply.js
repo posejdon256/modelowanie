@@ -13,7 +13,7 @@ export function multiplyMatrices(m1, m2) {
     return result;
 }
 export function multiplyVectorAndMatrix(matrix, vector) {
-    const result =[];
+    const result = [];
     for(let i = 0; i < vector.length; i ++) {
         result.push(0);
         for(let j = 0; j < matrix[i].length; j ++) {

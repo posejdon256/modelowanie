@@ -4,6 +4,7 @@ const f =0.4;
 const e = 1/Math.tan(fov);
 const n = 0.1;
 const a = 1;
+let eyes = 0.03;
 
 const l = -1;
 const t = 1;
@@ -16,10 +17,10 @@ const projectMatrix1 = [
     [0, 0, -f*n/(f-n), 1]
 ];
 const projectMatrixAnia = [
-    [1, 0, 1, 0],
-    [0, 1, 1, 0],
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
     [0, 0, 1, 0],
-    [0, 0, 0, 1]
+    [0, 0, 1 / r, 1]
 ];
 const projectMatrix2 = [
     [2 * n / (r - l), 0, (r + l) / (r - l), 0],
@@ -27,13 +28,32 @@ const projectMatrix2 = [
     [0, 0, - (f + n)/ (f - n), -2 * f * n/ (f - n)],
     [0, 0, -1, 1]
 ];
+const projectionMatrixStereoscopyLeft = [
+    [1, 0, -(eyes) / (2 * r), 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 1 / r, 1]
+];
 
+const projectionMatrixStereoscopyRight = [
+    [1, 0, (eyes) / (2 * r), 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 1 / r, 1]
+];
 export default function getProjectionMatrix(number) {
-    if(number === 1) {
-        return projectMatrix1;
-    } else if (number === 2) {
-        return projectMatrix2;
-    } else if( number === 3) {
-        return projectMatrixAnia;
+    switch(number) {
+        case 1:
+            return projectMatrix1;
+        case 2:
+            return projectMatrix2;
+        case 3: 
+            return projectMatrixAnia;
+        case 4:
+            return projectionMatrixStereoscopyLeft;
+        case 5:
+            return projectionMatrixStereoscopyRight;
+        default:
+            return projectMatrix1;
     }
 }

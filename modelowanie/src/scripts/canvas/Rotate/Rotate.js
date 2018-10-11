@@ -1,12 +1,21 @@
+<<<<<<< HEAD
 import { DrawTorus, clearCanvas, DrawElipsoid, pseudoDrawElipsoid } from "../Draw/Draw";
 import { TranslateTorus } from '../Torus/Torus';
 import { TranslateElipsoid, PseudoTranslate } from "../Elipsoid/Elipsoid";
+=======
+import Translate from "../Translation/TranslationCenter/TranslationCenter";
+import { RedrawWithoutChangingScene } from "../Draw/Redraw";
+>>>>>>> 3d_torus
 
 let lastX;
 let lastY;
 let rotationXY = false;
 let rotationZ = false;
+<<<<<<< HEAD
 const alpha = 0.15;
+=======
+const alpha = 0.10;
+>>>>>>> 3d_torus
 export function StartRotation(x, y, isZ){
     lastX = x;
     lastY = y;
@@ -30,7 +39,7 @@ export function StopRoatation(isZ){
         
 }
 export function TakeMouseMove(x, y){
-    if(!rotationZ && !rotationXY) {
+    if((!rotationZ && !rotationXY) || (lastX === x && lastY === y)) {
         return;
     }
     let translationObject = {};
@@ -51,6 +60,11 @@ export function TakeMouseMove(x, y){
     }
     lastX = x;
     lastY = y;
+<<<<<<< HEAD
     clearCanvas();
     pseudoDrawElipsoid(PseudoTranslate(translationObject, 20, true), 20);
+=======
+    Translate(translationObject);
+    RedrawWithoutChangingScene();
+>>>>>>> 3d_torus
 }
