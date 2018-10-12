@@ -9,6 +9,8 @@ import { DrawGregor } from "./DrawGregory/DrawGregory";
 import { DrawMaterial } from './DrawMaterial/DrawMaterial';
 import { _DrawIntersectionCurves } from "./DrawCurve/DrawIntersectionCurve";
 import Translate, { setTranslationPoints } from "../Translation/TranslationCenter/TranslationCenter";
+import { DrawMill } from "./DrawMill/DrawMill";
+import { OpenGLDrawScene } from "./OpenGL/DrawOpengl";
 
 export default function Redraw(){
 //     clearCanvas();
@@ -20,7 +22,8 @@ export default function Redraw(){
 //     DrawPoints(getPoints());
 //     DrawGregor();
 //     _DrawIntersectionCurves();
-    DrawMaterial();
+    OpenGLDrawScene();
+   // DrawMill();
    // getCanvas().focus();
 }
 export function RedrawWithoutChangingScene() {
@@ -33,7 +36,7 @@ export function RedrawWithoutChangingScene() {
     // DrawPoints(getPoints());
     // DrawGregor();
     // _DrawIntersectionCurves();
-    DrawMaterial();
+    OpenGLDrawScene();
    // getCanvas().focus();
 }
 function DrawRectangle() {

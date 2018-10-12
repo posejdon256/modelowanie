@@ -3,6 +3,7 @@ import '../../../css/navbar/Navbar.css';
 import { readMill } from '../../Load/ReadMill/ReadMill';
 import { _setXGrid, _setYGrid, _removeMaterial } from '../../canvas/Mill/Material/Material';
 import { generateMaterial } from '../../canvas/Mill/Material/Material';
+import { generateMill } from '../../canvas/Mill/Mill/Mill';
 
 export default class MillNavar extends Component {
     constructor(props) {
@@ -12,6 +13,10 @@ export default class MillNavar extends Component {
         this.setYGrid = this.setYGrid.bind(this);
         this.addMaterial = this.addMaterial.bind(this);
         this.removeMaterial = this.removeMaterial.bind(this);
+        this.addMill = this.addMill.bind(this);
+    }
+    addMill() {
+        generateMill();
     }
     removeMaterial() {
         _removeMaterial();
@@ -48,6 +53,9 @@ export default class MillNavar extends Component {
                 </div>
                 <div>
                     <button className="btn" onClick={this.removeMaterial}>Remove Material</button>
+                </div>
+                <div>
+                    <button className="btn" onClick={this.addMill}>Add Mill</button>
                 </div>
             </div>
         );

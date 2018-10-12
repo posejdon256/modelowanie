@@ -21,18 +21,21 @@ export function generateMaterial() {
     }
     let i = 0;
     let m = 0;
-    for(let k = 0; k <= xGrid * 2; k ++) {
-        if(k === xGrid) {
-            //i += xGrid;
-            m += yGrid;
-            continue;
-        }
+    for(let k = 0; k < xGrid * 2; k ++) {
+        // if(i >= xGrid * yGrid) {
+        //     //i += xGrid;
+        //     i += yGrid;
+        //     continue;
+        // }
         for(let j = 0; j < yGrid - 1; j ++) {
-            //.push(i, i + 1, i + xGrid);
-            indices.push(m, m + yGrid);
             indices.push(i, i + 1);
+            if(k !== xGrid - 1 && k !== xGrid * 2 - 1) {
+                indices.push(i, i + yGrid);
+            }
            i ++;
-           m ++;  
+         }
+         if(k !== xGrid - 1 && k !== xGrid * 2 - 1) {
+            indices.push(i, i + yGrid);
          }
         i ++
     }
