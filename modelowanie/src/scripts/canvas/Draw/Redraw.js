@@ -6,32 +6,35 @@ import { clearCanvas, getContexts, getCanvas } from "./Draw";
 import { _DrawCurves } from "./DrawCurve/DrawCurve";
 import { _DrawSurfaceWithoutRedraw, _DrawSurfacesC2, _DrawSurfacesC0 } from "./DrawSurface/DrawSurface";
 import { DrawGregor } from "./DrawGregory/DrawGregory";
+import { DrawMaterial } from './DrawMaterial/DrawMaterial';
 import { _DrawIntersectionCurves } from "./DrawCurve/DrawIntersectionCurve";
 import Translate, { setTranslationPoints } from "../Translation/TranslationCenter/TranslationCenter";
 
 export default function Redraw(){
-    clearCanvas();
-    DrawTorus();
-   //DrawRectangle();
-    DrawCursor();
-    DrawSurfaces();
-    DrawCurves();
-    DrawPoints(getPoints());
-    DrawGregor();
-    _DrawIntersectionCurves();
-    getCanvas().focus();
+//     clearCanvas();
+//     DrawTorus();
+//    //DrawRectangle();
+//     DrawCursor();
+//     DrawSurfaces();
+//     DrawCurves();
+//     DrawPoints(getPoints());
+//     DrawGregor();
+//     _DrawIntersectionCurves();
+    DrawMaterial();
+   // getCanvas().focus();
 }
 export function RedrawWithoutChangingScene() {
-    clearCanvas();
-    DrawTorus();
-    //DrawRectangle();
-    DrawCursor();
-    DrawSurfacesWithoutBezier();
-    DrawCurves();
-    DrawPoints(getPoints());
-    DrawGregor();
-    _DrawIntersectionCurves();
-    getCanvas().focus();
+    // clearCanvas();
+    // DrawTorus();
+    // //DrawRectangle();
+    // DrawCursor();
+    // DrawSurfacesWithoutBezier();
+    // DrawCurves();
+    // DrawPoints(getPoints());
+    // DrawGregor();
+    // _DrawIntersectionCurves();
+    DrawMaterial();
+   // getCanvas().focus();
 }
 function DrawRectangle() {
         //TODO

@@ -1,10 +1,15 @@
+import { initWebGL } from "../OpenGL/Init/InitOpenGL";
 
 let color = {r: 0, g: 0, b: 0, a: 0};
 let _ctx;
 let _ctxStereo;
 let _ctxStereo2;
 let _canvas;
+let gl;
 
+export function getGLCtx() {
+    return gl;
+}
 export function getContexts() {
     return { ctx: _ctx, ctxS1: _ctxStereo, ctxS2: _ctxStereo2 };
 }
@@ -15,9 +20,16 @@ export function getPixelColor() {
     return {r: color.r, g: color.g, b: color.g, a: color.a};
 }
 export function setCanvas(canvas) {
-    _ctx = canvas.getContext("2d");
-    _ctx.translate(0.5, 0.5);
+    _ctx = canvas.getContext("webgl");
     _canvas = canvas;
+    gl = initWebGL(canvas);      // Initialize the GL context
+  
+    if (gl) {
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);                      // Set clear color to black, fully opaque
+        gl.enable(gl.DEPTH_TEST);                               // Enable depth testing
+        gl.depthFunc(gl.LEQUAL);                                // Near things obscure far things
+        gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);      // Clear the color as well as the depth buffer.
+    }
    // _imagedata = _ctx.getImageData(0, 0, canvas.width, canvas.height);
 }
 export function getCanvas() {

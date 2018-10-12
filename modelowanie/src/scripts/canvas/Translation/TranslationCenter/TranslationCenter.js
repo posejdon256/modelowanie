@@ -86,7 +86,8 @@ function generateTranslation(translationMatrix) {
     const result = [];
     translationPoints.forEach(point => {
         //if(point.z > -0.5)
-        result.push(generateTranslatedPoint(point, translationMatrix));
+        const _ret = generateTranslatedPoint(point, translationMatrix);
+        result.push(_ret.x, _ret.y, _ret.z);
     });
     return result;
 }
