@@ -1,6 +1,5 @@
 import { getCursor } from '../Cursor/Cursor';
 import Redraw from '../Draw/Redraw';
-import { CatchPoint, RemoveCatchPoint } from '../Move/MoveCursor';
 import { getAddBezierState } from '../Bezier/Bezier';
 import { getSelectedCurveId, addPointToCurve, getCurves } from '../Bezier/Curve';
 import { getAddingC2State } from '../Bezier/BSpline';
@@ -40,7 +39,6 @@ export function deselectPoints() {
     const _points = points.filter(x => x.visible !== false && !x.c2Bezier);
     _points.forEach(p => {
         if(p.selected === true) {
-            RemoveCatchPoint(p);
         }
         p.selected = false;
     });
@@ -123,11 +121,6 @@ export function updatePoint(id, xDiff, yDiif, zDiff) {
 export function selectPoint(id) {
     for(let i = 0; i < points.length; i ++) {
         if(points[i].id === id) {
-            if(!points[i].selected === true) {
-                CatchPoint(points[i]);
-            } else {
-                RemoveCatchPoint(points[i]);
-            }
             points[i].selected = !points[i].selected;
         }
     }

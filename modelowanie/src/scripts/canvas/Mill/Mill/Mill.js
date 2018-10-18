@@ -1,16 +1,19 @@
-let r = 0.1;
-let type = 1; // 0 - flat, 1 - cylinder
+import { getDrillSpecification } from "../../../Load/ReadMill/ReadMill";
+
 let verticesCylinder = [];
 let indicesCylinder = [];
 let verticesSphere = [];
 let indicesSphere = [];
+let millPosition = { x: 0, y: 0, z: 0 };
 export function generateMill() {
+    const type = getDrillSpecification();
+    let r = type.mm / 1000;
     const division = 1000;
     verticesCylinder.push({x: 0, y: 0, z: 0});
     verticesCylinder.push({x: 0, y: 0, z: 0.2});
     for(let t = 0; t < 2 * Math.PI; t += (1 / division)) {
         verticesCylinder.push({x: r * Math.cos(t), y: r *  Math.sin(t), z: 0});
-        verticesCylinder.push({x: r * Math.cos(t), y: r *  Math.sin(t), z: 0.2});
+        verticesCylinder.push({x: r * Math.cos(t), y: r *  Math.sin(t), z: 0.7});
     }
     for(let i = 2; i < verticesCylinder.length - 2; i ++) {
         indicesCylinder.push(i, i + 1, i + 2);
@@ -19,7 +22,7 @@ export function generateMill() {
          indicesCylinder.push(i, i + 2, 0);
          indicesCylinder.push(i + 1, i + 3, 1);
     }
-    if(type === 1) {
+    if(type.k) {
         const w = 50;
         for(let teta = 0; teta <= w; teta ++) {
             for(let a = 0; a <= w; a ++) {
@@ -43,6 +46,24 @@ export function generateMill() {
         }
     }
 }
+export function updateMillPosition(x, y, z) {
+    millPosition.x += x;
+    millPosition.y += y;
+    millPosition.z += z;
+    verticesCylinder.forEach(v => {
+        v.x += x;
+        v.y += y;
+        v.z += z;
+    });
+    verticesSphere.forEach(v => {
+        v.x += x;
+        v.y += y;
+        v.z += z;
+    });
+}
+export function getMillPosition() {
+    return millPosition;
+}
 export function getMill() {
     return {
         vertices: verticesCylinder.concat(verticesSphere),
@@ -50,6 +71,7 @@ export function getMill() {
     };
 }
 export function removeMill() {
+    millPosition = {x: 0, y: 0, z: 0};
     verticesCylinder = [];
     indicesCylinder = [];
     verticesSphere = [];

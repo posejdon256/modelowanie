@@ -7,7 +7,7 @@ export function DrawMaterial(gl, vb, ib) {
     if(materialPoints.length === 0) {
         return;
     }
-    let points = [].concat(materialPoints).concat(materialTransformedBottom);
+    let points = [].concat(...materialPoints).concat(...materialTransformedBottom);
     setTranslationPoints(points);
     const _points = Translate({});
     DrawLnesOpenGL(_points, indices, gl, vb, ib);

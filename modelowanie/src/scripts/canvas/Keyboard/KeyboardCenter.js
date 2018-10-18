@@ -1,5 +1,5 @@
 import { MoveToFront, MoveToLeft, MoveToRight, StopMovingLeft, StopMovingRight, MoveToTop, MoveToBack, StopMovingTop, StopMovingDown, MoveToDown, StopMovingFront, StopMovingBack } from "../Move/Move";
-import { MoveToFrontCursor, MoveToLeftCursor, MoveToTopCursor, MoveToDownCursor, MoveToRightCursor, StopMovingLeftCursor, StopMovingDownCursor, StopMovingRightCursor, StopMovingTopCursor, MoveToBackCursor, StopMovingFrontCursor, StopMovingBackCursor, RemoveCatchPoint, CatchPoint } from '../Move/MoveCursor';
+import { MoveToFrontMill, MoveToBackMill, MoveToDownMill, MoveToLeftMill, MoveToRightMill, MoveToTopMill, StopMovingDownMill, StopMovingBackMill, StopMovingFrontMill, StopMovingTopCursor, StopMovingLeftMill, StopMovingRightMill, StopMovingTopMill} from '../Move/MoveMill';
 import { addPointWithRedraw } from "../Points/Points";
 export default function KeyboardCenter(event, refresh) {
     if(event.type === 'keydown') {
@@ -30,16 +30,16 @@ function KeyDown(event) {
             MoveToBack();
             break;
         case 80: //P
-            MoveToTopCursor()
+            MoveToTopMill()
             break;
         case 76: //L
-            MoveToLeftCursor();
+            MoveToLeftMill();
             break;
         case 186: //;
-            MoveToDownCursor();
+            MoveToDownMill();
             break;
         case 222: //'
-            MoveToRightCursor()
+            MoveToRightMill()
             break;
         case 32: //space
             //createSurface("C0");
@@ -47,15 +47,12 @@ function KeyDown(event) {
             event.preventDefault();
             break;
         case 38: //up
-            MoveToFrontCursor();
+            MoveToFrontMill();
             event.preventDefault();
             break;
         case 40: //down
-            MoveToBackCursor();
+            MoveToBackMill();
             event.preventDefault();
-            break;
-        case 72: //H
-            CatchPoint();
             break;
         default:
             break;
@@ -88,31 +85,28 @@ function KeyUp(event) {
             event.preventDefault();
             break;
         case 80: //P
-            StopMovingTopCursor();
+            StopMovingTopMill();
             event.preventDefault();
             break;
         case 76: //L
-            StopMovingLeftCursor();
+            StopMovingLeftMill();
             event.preventDefault();
             break;
         case 186: //;
-            StopMovingDownCursor();
+            StopMovingDownMill();
             event.preventDefault();
             break;
         case 222: //'
-            StopMovingRightCursor();
+            StopMovingRightMill();
             event.preventDefault();
             break;
         case 38: //up
-            StopMovingFrontCursor();
+            StopMovingFrontMill();
             event.preventDefault();
             break;
         case 40: //down
-            StopMovingBackCursor();
+            StopMovingBackMill();
             event.preventDefault();
-            break;
-        case 72: //H
-            RemoveCatchPoint();
             break;
         default:
             break;
