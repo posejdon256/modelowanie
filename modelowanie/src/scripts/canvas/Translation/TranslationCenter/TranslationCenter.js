@@ -19,6 +19,13 @@ let lastTranslation = [
     [0, 0, 1, 0],
     [0, 0, 0, 1]
 ];
+export function getLastTranslation() {
+    let ret = [];
+    for(let i = 0; i < lastTranslation.length; i ++) {
+        ret = ret.concat(lastTranslation[i]);
+    }
+    return ret;
+}
 export default function Translate(translationObject, type) {
     try{
     const {front, left, top, axisX, axisY, alphaX, alphaY} = translationObject;
@@ -68,7 +75,7 @@ export default function Translate(translationObject, type) {
     }
 }
 function normalTranslation(translationMatrix) {
-    const projectioMatrix = multiplyMatrices(getProjectionMatrix(3), translationMatrix);//3
+    const projectioMatrix = multiplyMatrices(getProjectionMatrix(1), translationMatrix);//3
     return generateTranslation(projectioMatrix);
 }
 function stereoscopyTranslation(translationMatrix) {

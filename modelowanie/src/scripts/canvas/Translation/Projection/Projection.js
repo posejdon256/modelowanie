@@ -11,22 +11,22 @@ const t = 1;
 const b = -1;
 const r = 1;
 const projectMatrix1 = [
-    [e, 0, 0, 0],
-    [0, e/a, 0, 0],
-    [0, 0, f/(f-n), 1],
-    [0, 0, -f*n/(f-n), 1]
+    e, 0, 0, 0,
+    0, e/a, 0, 0,
+    0, 0, f/(f-n), 1,
+    0, 0, -f*n/(f-n), 1
 ];
 const projectMatrixAnia = [
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 1, 0],
-    [0, 0, 1 / r, 1]
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 1 / r, 1
 ];
 const projectMatrix2 = [
-    [2 * n / (r - l), 0, (r + l) / (r - l), 0],
-    [0, 2 * n / (t - b), (t + b) / (t - b), 0],
-    [0, 0, - (f + n)/ (f - n), -2 * f * n/ (f - n)],
-    [0, 0, -1, 1]
+    2 * n / (r - l), 0, (r + l) / (r - l), 0,
+    0, 2 * n / (t - b), (t + b) / (t - b), 0,
+    0, 0, - (f + n)/ (f - n), -2 * f * n/ (f - n),
+    0, 0, -1, 1
 ];
 const projectionMatrixStereoscopyLeft = [
     [1, 0, -(eyes) / (2 * r), 0],

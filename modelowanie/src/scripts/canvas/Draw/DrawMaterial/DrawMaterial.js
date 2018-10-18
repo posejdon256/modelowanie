@@ -8,10 +8,10 @@ export function DrawMaterial(gl, vb, ib) {
         return;
     }
     let points = [].concat(...materialPoints).concat(...materialTransformedBottom);
-    setTranslationPoints(points);
-    const _points = Translate({});
-    DrawLnesOpenGL(_points, indices, gl, vb, ib);
-    //DrawLinesOnTranslatedPoints(_points, {r: 229, g: 114, b: 84});
+    //setTranslationPoints(points);
+    //const _points = Translate({});
+    DrawLnesOpenGL(points, indices, gl, vb, ib);
+    //DrawLinesOnTranslatedPoints(points, {r: 229, g: 114, b: 84});
 }
 function DrawLnesOpenGL(points, indices, gl, vb, ib) {
     // Create an empty buffer object

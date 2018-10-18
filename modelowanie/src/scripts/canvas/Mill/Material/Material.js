@@ -17,8 +17,8 @@ export function generateMaterial() {
         materialTransformed.push([]);
         materialTransformedBottom.push([]);
         for(let j = 0; j < yGrid; j ++) {
-            materialTransformed[i].push({x: (i / xGrid ) * (xSize / 10) - (xSize / 20), y: (j / yGrid)* (ySize / 10) - (ySize / 20), z: zSize / 10});
-            materialTransformedBottom[i].push({x: (i / xGrid) * (xSize / 10) - (xSize / 20), y: (j / yGrid) * (ySize / 10) - (ySize / 20), z: 0});
+            materialTransformed[i].push((i / xGrid ) * (xSize / 10) - (xSize / 20),  (j / yGrid)* (ySize / 10) - (ySize / 20),  zSize / 10);
+            materialTransformedBottom[i].push( (i / xGrid) * (xSize / 10) - (xSize / 20),  (j / yGrid) * (ySize / 10) - (ySize / 20), 0);
         }
     }
     let i = 0;

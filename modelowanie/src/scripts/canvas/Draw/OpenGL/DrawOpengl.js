@@ -1,6 +1,9 @@
 import { DrawMill } from "../DrawMill/DrawMill";
 import { DrawMaterial } from "../DrawMaterial/DrawMaterial";
 import { getCanvas, getGLCtx } from "../Draw";
+import { getShaderProgram, getModelMx, getProjectionMx } from "../../OpenGL/Init/InitOpenGL";
+import { getLastTranslation } from "../../Translation/TranslationCenter/TranslationCenter";
+import getProjectionMatrix from "../../Translation/Projection/Projection";
 
 export function OpenGLDrawScene() {
     const canvas = getCanvas();
@@ -10,69 +13,21 @@ export function OpenGLDrawScene() {
     gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
     var Index_Buffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Index_Buffer);
-    // Create an empty buffer object
-    /*=================== Shaders ====================*/
-
-    // Vertex shader source code
-    var vertCode =
-       'attribute vec3 coordinates;' +
-       'void main(void) {' +
-          ' gl_Position = vec4(coordinates, 1.0);' +
-       '}';
-
-    // Create a vertex shader object
-    var vertShader = gl.createShader(gl.VERTEX_SHADER);
-
-    // Attach vertex shader source code
-    gl.shaderSource(vertShader, vertCode);
-
-    // Compile the vertex shader
-    gl.compileShader(vertShader);
-
-    // Fragment shader source code
-    var fragCode =
-       'void main(void) {' +
-          'gl_FragColor = vec4(229.0, 114.0, 84.0, 1.0);' +
-       '}';
-
-    // Create fragment shader object
-    var fragShader = gl.createShader(gl.FRAGMENT_SHADER);
-
-    // Attach fragment shader source code
-    gl.shaderSource(fragShader, fragCode);
-
-    // Compile the fragmentt shader
-    gl.compileShader(fragShader);
-
-    // Create a shader program object to store
-    // the combined shader program
-    var shaderProgram = gl.createProgram();
-
-    // Attach a vertex shader
-    gl.attachShader(shaderProgram, vertShader);
-
-    // Attach a fragment shader
-    gl.attachShader(shaderProgram, fragShader);
-
-    // Link both the programs
-    gl.linkProgram(shaderProgram);
-
-    // Use the combined shader program object
-    gl.useProgram(shaderProgram);
-
-    /*======= Associating shaders to buffer objects ======*/
-
-    // Bind vertex and index buffer object
-
+    let shaderProgram = getShaderProgram();
     // Get the attribute location
-    var coord = gl.getAttribLocation(shaderProgram, "coordinates");
+    var coord = gl.getAttribLocation(shaderProgram, "position");
 
     // Point an attribute to the currently bound VBO
     gl.vertexAttribPointer(coord, 3, gl.FLOAT, false, 0, 0);
 
     // Enable the attribute
     gl.enableVertexAttribArray(coord);
-
+    let modelMx = getModelMx();
+    let projMx = getProjectionMx();
+    let mx = getLastTranslation();
+    gl.uniformMatrix4fv(modelMx, false, mx);
+    mx = getProjectionMatrix(1);
+    gl.uniformMatrix4fv(projMx, false, mx);
     /*============ Drawing the triangle =============*/
 
     // Clear the canvas

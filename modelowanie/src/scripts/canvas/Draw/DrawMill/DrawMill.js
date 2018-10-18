@@ -7,9 +7,9 @@ export function DrawMill(gl, vb, ib) {
     if(vertices.length === 0) {
         return;
     }
-    setTranslationPoints(vertices);
-    const _points = Translate({});
-    DrawLnesOpenGL(_points, indices, gl, vb, ib);
+    //setTranslationPoints(vertices);
+    //const _points = Translate({});
+    DrawLnesOpenGL(vertices, indices, gl, vb, ib);
 }
 function DrawLnesOpenGL(points, indices, gl, vb, ib) {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
