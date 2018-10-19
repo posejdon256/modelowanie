@@ -1,60 +1,105 @@
 
 import Translate, { setTranslationPoints } from '../../Translation/TranslationCenter/TranslationCenter';
-import { TryParseInt, getVectorLength } from '../../../Helpers/Helpers';
+import { TryParseInt, getVectorLength, DiffPoints, crossMultiply, DividePoint, normalize } from '../../../Helpers/Helpers';
 import Redraw from '../../Draw/Redraw';
 
 let material = [];
 let materialTransformed = [];
-let materialTransformedBottom = [];
 let xGrid = 4;
 let yGrid = 4;
 let xSize = 20;
 let ySize = 20;
 let zSize = 5;
 let indices = []
+let normals = [];
 export function generateMaterial() {
     for(let i = 0; i < xGrid; i ++) {
-        materialTransformed.push([]);
-        materialTransformedBottom.push([]);
         for(let j = 0; j < yGrid; j ++) {
-            materialTransformed[i].push((i / xGrid ) * (xSize / 10) - (xSize / 20),  (j / yGrid)* (ySize / 10) - (ySize / 20),  zSize / 10);
-            materialTransformedBottom[i].push( (i / xGrid) * (xSize / 10) - (xSize / 20),  (j / yGrid) * (ySize / 10) - (ySize / 20), 0);
+            material.push([(i / xGrid ) * (xSize / 10) - (xSize / 20),  (j / yGrid)* (ySize / 10) - (ySize / 20),  zSize / 10]);
+        }
+    }
+    for(let i = 0; i < xGrid; i ++) {
+        for(let j = 0; j < yGrid; j ++) {
+            material.push([ (i / xGrid) * (xSize / 10) - (xSize / 20),  (j / yGrid) * (ySize / 10) - (ySize / 20), 0]);
         }
     }
     let i = 0;
     for(let k = 0; k < xGrid * 2; k ++) {
         for(let j = 0; j < yGrid - 1; j ++) {
-            indices.push(i, i + 1);
+           // indices.push(i, i + 1);
             if(k !== xGrid - 1 && k !== xGrid * 2 - 1) {
-                indices.push(i, i + yGrid);
+                materialTransformed.push(material[i][0], material[i][1], material[i][2]);
+                materialTransformed.push(material[i + 1][0], material[i + 1][1], material[i + 1][2]);
+                materialTransformed.push(material[i + yGrid][0], material[i + yGrid][1], material[i + yGrid][2]);
+                getNormalVector(i, i + 1, i + yGrid);
+                materialTransformed.push(material[i + 1][0], material[i + 1][1], material[i + 1][2]);
+                materialTransformed.push(material[i +yGrid][0], material[i + yGrid][1], material[i + yGrid][2]);
+                materialTransformed.push(material[i + 1 + yGrid][0], material[i + 1 + yGrid][1], material[i + 1 + yGrid][2]);
+                getNormalVector(i + 1, i + yGrid, i + 1 + yGrid);
             }
            i ++;
          }
          if(k !== xGrid - 1 && k !== xGrid * 2 - 1) {
-            indices.push(i, i + yGrid);
+           // indices.push(i, i + yGrid);
          }
         i ++
     }
     i = 0;
-    for(let k = 0; k < yGrid; k ++) {
-        for(let j = 0; j < xGrid; j ++) {
-            indices.push(i, i + xGrid * yGrid);
+    for(let k = 0; k < xGrid; k ++) {
+        for(let j = 0; j < yGrid; j ++) {
+            if(k !== xGrid - 1) {
+
+              materialTransformed.push(material[i][0], material[i][1], material[i][2]);
+              materialTransformed.push(material[i + xGrid * yGrid][0], material[i + xGrid * yGrid][1], material[i + xGrid * yGrid][2]);
+              materialTransformed.push(material[i + yGrid + xGrid * yGrid][0], material[i + yGrid + xGrid*yGrid][1], material[i + yGrid + xGrid * yGrid][2]);
+              getNormalVector(i, i + xGrid * yGrid, i + yGrid + xGrid * yGrid);
+
+              getNormalVector(i, i + xGrid * yGrid + yGrid, i + yGrid);
+              materialTransformed.push(material[i][0], material[i][1], material[i][2]);
+              materialTransformed.push(material[i + yGrid + xGrid * yGrid][0], material[i + yGrid + xGrid*yGrid][1], material[i + yGrid + xGrid * yGrid][2]);
+              materialTransformed.push(material[i + yGrid][0], material[i + yGrid][1], material[i + yGrid][2]);
+            }
+            if(j !== yGrid - 1) {
+   
+                materialTransformed.push(material[i][0], material[i][1], material[i][2]);
+                materialTransformed.push(material[i + 1][0], material[i + 1][1], material[i + 1][2]);
+                materialTransformed.push(material[i + 1 + xGrid * yGrid][0], material[i + 1 + xGrid*yGrid][1], material[i + 1+ xGrid * yGrid][2]);
+                getNormalVector(i, i + 1, i + 1 + xGrid * yGrid);
+
+                materialTransformed.push(material[i + xGrid * yGrid][0], material[i + xGrid*yGrid][1], material[i + xGrid * yGrid][2]);
+                materialTransformed.push(material[i + 1 + xGrid * yGrid][0], material[i + 1 + xGrid*yGrid][1], material[i + 1 + xGrid * yGrid][2]);
+                materialTransformed.push(material[i][0], material[i][1], material[i][2]);
+
+                getNormalVector(i + xGrid * yGrid, i + 1 + xGrid * yGrid, i);
+            }
             i ++;
         }
     }
+    let ind = 0;
+    for(let i = 0; i < materialTransformed.length; i += 3) {
+        indices.push(ind);
+        ind ++;
+    }
 } 
+function getNormalVector(a, b, c) {
+    let vec = crossMultiply(DiffPoints(material[a], material[b]), DiffPoints(material[c], material[b]));
+    const norm = normalize(vec);
+    normals = normals.concat(norm);
+    normals = normals.concat(norm);
+    normals = normals.concat(norm);
+}
 export function _removeMaterial() {
     material = [];
     materialTransformed = [];
-    materialTransformedBottom = [];
     indices = [];
+    normals = [];
 }
 export function getMaterial() {
     return {
         indices: indices,
         materialArray: material,
         materialPoints: materialTransformed,
-        materialTransformedBottom: materialTransformedBottom
+        normals: normals
     };
 }
 export function _setXGrid(x) {

@@ -65,8 +65,13 @@ export function getMillPosition() {
     return millPosition;
 }
 export function getMill() {
+    const _vertices1 = verticesCylinder.concat(verticesSphere);
+    const _vertices = [];
+    _vertices1.forEach(ver => {
+        _vertices.push(ver.x, ver.y, ver.z);
+    });
     return {
-        vertices: verticesCylinder.concat(verticesSphere),
+        vertices: _vertices,
         indices: indicesCylinder.concat(indicesSphere)
     };
 }

@@ -10,18 +10,12 @@ const alpha = 0.10;
 export function StartRotation(x, y, isZ){
     lastX = x;
     lastY = y;
-    if(isZ)
-        rotationZ = true;
-    else
-        rotationXY = true;
+    rotationXY = true;
 }
 export function StopRoatation(isZ){
     lastX = undefined;
     lastY = undefined;
-    if(isZ)
-        rotationZ = false;
-    else
-        rotationXY = false;
+    rotationXY = false;
         
 }
 export function TakeMouseMove(x, y){
