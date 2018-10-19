@@ -13,10 +13,10 @@ export function Drill() {
     const points = cutPoints(getPointsToDrill());
     let id = setInterval(function(){
         const drillPos = getMillPosition();
-        const newCenter = DiffPoints(points[i], drillPos);
+        const newCenter = DiffPoints([points[i].x, points[i].y, points[i].z] , [drillPos.x, drillPos.y, drillPos.z]);
         const spec = getDrillSpecification();
-        cutCircle(drillPos, spec.mm / 1000, spec.k ? 1: 0);
-        updateMillPosition(newCenter.x, newCenter.y, newCenter.z);
+       // cutCircle(drillPos, spec.mm / 1000, spec.k ? 1: 0);
+        updateMillPosition(newCenter[0], newCenter[1], newCenter[2]);
         Redraw();
         i ++;
         if(i === points.length) {
