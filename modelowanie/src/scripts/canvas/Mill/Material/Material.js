@@ -1,10 +1,9 @@
 
-import Translate, { setTranslationPoints } from '../../Translation/TranslationCenter/TranslationCenter';
-import { TryParseInt, getVectorLength, DiffPoints, crossMultiply, DividePoint, normalize } from '../../../Helpers/Helpers';
-import Redraw from '../../Draw/Redraw';
+import { TryParseInt, DiffPoints, crossMultiply, normalize } from '../../../Helpers/Helpers';
 
 let material = [];
 let materialTransformed = [];
+let material2D = [];
 let xGrid = 4;
 let yGrid = 4;
 let xSize = 20;
@@ -14,8 +13,12 @@ let indices = []
 let normals = [];
 export function generateMaterial() {
     for(let i = 0; i < xGrid; i ++) {
+        material2D.push([]);
         for(let j = 0; j < yGrid; j ++) {
             material.push([(i / xGrid ) * (xSize / 10) - (xSize / 20),  (j / yGrid)* (ySize / 10) - (ySize / 20),  zSize / 10]);
+            material2D[i].push({indMaterial: material.length - 1});
+            material2D[i][j].points = [];
+            material[material.length - 1].material2DIndex = {x: i, y: j};
         }
     }
     for(let i = 0; i < xGrid; i ++) {
@@ -28,19 +31,13 @@ export function generateMaterial() {
         for(let j = 0; j < yGrid - 1; j ++) {
            // indices.push(i, i + 1);
             if(k !== xGrid - 1 && k !== xGrid * 2 - 1) {
-                materialTransformed.push(material[i][0], material[i][1], material[i][2]);
-                materialTransformed.push(material[i + 1][0], material[i + 1][1], material[i + 1][2]);
-                materialTransformed.push(material[i + yGrid][0], material[i + yGrid][1], material[i + yGrid][2]);
-                getNormalVector(i, i + 1, i + yGrid);
-                materialTransformed.push(material[i + 1][0], material[i + 1][1], material[i + 1][2]);
-                materialTransformed.push(material[i +yGrid][0], material[i + yGrid][1], material[i + yGrid][2]);
-                materialTransformed.push(material[i + 1 + yGrid][0], material[i + 1 + yGrid][1], material[i + 1 + yGrid][2]);
-                getNormalVector(i + 1, i + yGrid, i + 1 + yGrid);
+                updateMaterialOnIndexes([i, i + 1, i + yGrid]);
+                pushNormals(getNormalVector(i, i + 1, i + yGrid));
+                
+                updateMaterialOnIndexes([i + 1, i + yGrid, i + 1 + yGrid]);
+                pushNormals(getNormalVector(i + 1, i + yGrid, i + 1 + yGrid));
             }
            i ++;
-         }
-         if(k !== xGrid - 1 && k !== xGrid * 2 - 1) {
-           // indices.push(i, i + yGrid);
          }
         i ++
     }
@@ -48,45 +45,51 @@ export function generateMaterial() {
     for(let k = 0; k < xGrid; k ++) {
         for(let j = 0; j < yGrid; j ++) {
             if(k !== xGrid - 1) {
+              pushNormals(getNormalVector(i, i + xGrid * yGrid, i + yGrid + xGrid * yGrid));
+              updateMaterialOnIndexes([i, i + xGrid * yGrid, i + yGrid + xGrid * yGrid]);
 
-              materialTransformed.push(material[i][0], material[i][1], material[i][2]);
-              materialTransformed.push(material[i + xGrid * yGrid][0], material[i + xGrid * yGrid][1], material[i + xGrid * yGrid][2]);
-              materialTransformed.push(material[i + yGrid + xGrid * yGrid][0], material[i + yGrid + xGrid*yGrid][1], material[i + yGrid + xGrid * yGrid][2]);
-              getNormalVector(i, i + xGrid * yGrid, i + yGrid + xGrid * yGrid);
-
-              getNormalVector(i, i + xGrid * yGrid + yGrid, i + yGrid);
-              materialTransformed.push(material[i][0], material[i][1], material[i][2]);
-              materialTransformed.push(material[i + yGrid + xGrid * yGrid][0], material[i + yGrid + xGrid*yGrid][1], material[i + yGrid + xGrid * yGrid][2]);
-              materialTransformed.push(material[i + yGrid][0], material[i + yGrid][1], material[i + yGrid][2]);
-            }
+              pushNormals(getNormalVector(i, i + xGrid * yGrid + yGrid, i + yGrid));
+              updateMaterialOnIndexes([i, i + xGrid * yGrid + yGrid, i + yGrid]);
+             }
             if(j !== yGrid - 1) {
-   
-                materialTransformed.push(material[i][0], material[i][1], material[i][2]);
-                materialTransformed.push(material[i + 1][0], material[i + 1][1], material[i + 1][2]);
-                materialTransformed.push(material[i + 1 + xGrid * yGrid][0], material[i + 1 + xGrid*yGrid][1], material[i + 1+ xGrid * yGrid][2]);
-                getNormalVector(i, i + 1, i + 1 + xGrid * yGrid);
+                updateMaterialOnIndexes([i, i + 1, i + 1 + xGrid * yGrid]);
+                pushNormals(getNormalVector(i, i + 1, i + 1 + xGrid * yGrid));
 
-                materialTransformed.push(material[i + xGrid * yGrid][0], material[i + xGrid*yGrid][1], material[i + xGrid * yGrid][2]);
-                materialTransformed.push(material[i + 1 + xGrid * yGrid][0], material[i + 1 + xGrid*yGrid][1], material[i + 1 + xGrid * yGrid][2]);
-                materialTransformed.push(material[i][0], material[i][1], material[i][2]);
-
-                getNormalVector(i + xGrid * yGrid, i + 1 + xGrid * yGrid, i);
+                updateMaterialOnIndexes([i + xGrid * yGrid, i + 1 + xGrid * yGrid, i]);
+                pushNormals(getNormalVector(i + xGrid * yGrid, i + 1 + xGrid * yGrid, i));
             }
             i ++;
         }
     }
     let ind = 0;
     for(let i = 0; i < materialTransformed.length; i += 3) {
+        if(ind === 60000) {
+            ind = 0;
+        }
         indices.push(ind);
         ind ++;
     }
 } 
-function getNormalVector(a, b, c) {
+function updateMaterialOnIndexes(indexes) {
+    indexes.forEach(i => {
+        materialTransformed.push(material[i][0], material[i][1], material[i][2]);
+        if(i < xGrid * yGrid) {
+            material2D[material[i].material2DIndex.x][material[i].material2DIndex.y].points.push({p: materialTransformed.length - 3, indexes: indexes});
+            
+        }
+    });
+}
+export function getNormalVector(a, b, c) {
     let vec = crossMultiply(DiffPoints(material[a], material[b]), DiffPoints(material[c], material[b]));
-    const norm = normalize(vec);
-    normals = normals.concat(norm);
-    normals = normals.concat(norm);
-    normals = normals.concat(norm);
+    return normalize(vec);
+}
+function pushNormals(norm) {
+    normals.push(norm[0], norm[1], norm[2],norm[0], norm[1], norm[2], norm[0], norm[1], norm[2]);
+}
+export function updateNormals(i, norm) {
+    for(let j = 0; j < 9; j ++) {
+        normals[i + j] = norm[j] % 3;
+    }
 }
 export function _removeMaterial() {
     material = [];
@@ -97,8 +100,9 @@ export function _removeMaterial() {
 export function getMaterial() {
     return {
         indices: indices,
-        materialArray: material,
+        material: material,
         materialPoints: materialTransformed,
+        material2D: material2D,
         normals: normals
     };
 }
@@ -117,43 +121,9 @@ export function _setYSize(y) {
 export function _setZSize(z) {
     zSize = TryParseInt(z, zSize);
 }
-export function cutCircle(point, r, type) {
-    const square = {a: 2 * r, x: point.x - r, y: point.y - r, z: point.z};
-    const end = {x: point.x + r, y: point.y + r, z: point.z};
-    const indexStart = convertFromPlaceToIndex(square, materialTransformed.length, materialTransformed[0].length, xSize / 10, ySize / 10); // TODO
-    const indexEnd = convertFromPlaceToIndex(end, materialTransformed.length, materialTransformed[0].length, xSize / 10, ySize / 10);
-    for(let i = indexStart.x; i <indexEnd.x; i ++) {
-        for(let j = indexStart.y; j < indexEnd.y; j ++) {
-            if(!materialTransformed[i] || !materialTransformed[i][j]) {
-                continue;
-            }
-            const pSearched = convertFromIndexToPlace(i, j, 
-                 materialTransformed[i][j].z, materialTransformed.length, materialTransformed[0].length, xSize / 10, ySize / 10);  
-                 console.log(pSearched);
-            if(get2dvectorLength(point, pSearched) < r * 10) {
-                if(type === 0) {
-                    materialTransformed[i][j].z = materialTransformed[i][j].z - (Math.max(0, materialTransformed[i][j].z - point.z));
-                } else {
-                    materialTransformed[i][j].z = materialTransformed[i][j].z - 
-                    Math.sqrt(r*10*r -  Math.pow(Math.sqrt(Math.pow(point.x - materialTransformed[i][j].x, 2) + Math.pow(point.y - materialTransformed[i][j].y, 2)),2));
-                }
-            }
-        }
-    }
+export function getxSize() {
+    return xSize;
 }
-function convertFromPlaceToIndex(point, arrW, arrH, sizeX, sizeY) {
-    return {
-        x: parseInt((point.x + (sizeX / 2)) * arrW  / sizeX, 10),
-        y: parseInt((point.y + (sizeY / 2)) * arrH / sizeY, 10)
-    };
-}
-function get2dvectorLength(v1, v2) {
-    return Math.sqrt(Math.pow(v1.x - v2.x, 2) + Math.pow(v1.y - v2.y, 2));
-}
-function convertFromIndexToPlace(x, y, z, arrW, arrH, sizeX, sizeY) {
-    return {
-        x: (x / arrW) * (sizeX / 1) - (sizeX / 2),
-        y: (y / arrH) * (sizeY / 1) - (sizeY / 2),
-        z: z
-    };
+export function getySize() {
+    return ySize;
 }

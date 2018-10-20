@@ -48,13 +48,16 @@ export function initWebGL(canvas) {
     
     try {
       // Try to grab the standard context. If it fails, fallback to experimental.
+      //Pobieranie shaderów jako tekstu
       let vertexShaderText =  getMainVertexShader();
       let fragmentShaderText = getMainFragmentShader();
       let vertexMillShaderText = getMillVertexShader();
       let fragmentMillShaderText = getMillFragmentShader();
 
+      //Pobieranie kontekstu
       gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 
+      //Tworzenie Shaderów
       vShader = CreateShader( gl, vertexShaderText, gl.VERTEX_SHADER );
       fShader = CreateShader( gl, fragmentShaderText, gl.FRAGMENT_SHADER );
 
@@ -67,8 +70,10 @@ export function initWebGL(canvas) {
 
       gl.attachShader(shaderProgram, vShader);
       gl.attachShader(shaderProgram, fShader);
+
       gl.attachShader(shaderProgramMill, millVSShader);
       gl.attachShader(shaderProgramMill, millFSShader);
+
       gl.linkProgram(shaderProgram);
       gl.linkProgram(shaderProgramMill);
 
@@ -76,6 +81,7 @@ export function initWebGL(canvas) {
       gl.useProgram(shaderProgram);
       modelMx = gl.getUniformLocation(shaderProgram, "model");
       projectionMx = gl.getUniformLocation(shaderProgram, "projection");
+      
       gl.useProgram(shaderProgramMill);
       modelMxMill = gl.getUniformLocation(shaderProgramMill, "model");
       projectionMxMill = gl.getUniformLocation(shaderProgramMill, "projection");

@@ -25,3 +25,11 @@ export function OpenGLDrawScene() {
     DrawMaterial(gl, vertex_buffer, Index_Buffer, normalsBuffer);
     DrawMill(gl, vertex_buffer, Index_Buffer);
 }
+export function clearGL(gl) {
+    const canvas = getCanvas();
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    // Enable the depth test
+    gl.enable(gl.DEPTH_TEST);
+    // Set the view port
+}
