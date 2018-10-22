@@ -1,4 +1,6 @@
 import { getDrillSpecification } from "../../../Load/ReadMill/ReadMill";
+import { DrawMill } from "../../Draw/DrawMill/DrawMill";
+import Redraw from "../../Draw/Redraw";
 
 let verticesCylinder = [];
 let indicesCylinder = [];
@@ -7,7 +9,7 @@ let indicesSphere = [];
 let millPosition = { x: 0, y: 0, z: 0 };
 export function generateMill() {
     const type = getDrillSpecification();
-    let r = type.mm / 1000;
+    let r = type.mm;
     const division = 1000;
     verticesCylinder.push({x: 0, y: 0, z: 0});
     verticesCylinder.push({x: 0, y: 0, z: 0.2});
@@ -45,6 +47,7 @@ export function generateMill() {
             }
         }
     }
+    Redraw();
 }
 export function updateMillPosition(x, y, z) {
     millPosition.x += x;

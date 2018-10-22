@@ -1,3 +1,6 @@
+import { generateMill } from "../../canvas/Mill/Mill/Mill";
+import { bindMillRenderPoints } from "../../canvas/Draw/DrawMill/DrawMill";
+
 let points = [];
 let type = { k: true, mm: 10 };
 
@@ -5,7 +8,8 @@ export function readMill(_path) {
     var reader = new FileReader();
     const _typeStr = _path[0].name.split('.')[1];
     type.k = _typeStr[0] === 'k' ? true : false;
-    type.mm = parseInt(_typeStr.substr(1, _typeStr.length), 10);
+    type.mm = parseInt(_typeStr.substr(1, _typeStr.length), 10) / 200;
+   // generateMill();
     reader.onload = (function(theFile) {
         return function(e) {
             try{

@@ -55,14 +55,19 @@ function DrawLnesOpenGL(points, indices, normals, gl, vb, ib, nb, clear) {
     }
 
     // Create an empty buffer object
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
+   // gl.bufferSubData(gl.ARRAY_BUFFER, 0, points);
     // Bind appropriate array buffer to it
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
 
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+   // gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, indices);
+
     gl.bindBuffer(gl.ARRAY_BUFFER, nb);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+
+   // gl.bufferSubData(gl.ARRAY_BUFFER, 0, normals);
     /*=================== Shaders ====================*/
     // Draw the triangle
     gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
