@@ -1,5 +1,3 @@
-import { generateMill } from "../../canvas/Mill/Mill/Mill";
-import { bindMillRenderPoints } from "../../canvas/Draw/DrawMill/DrawMill";
 
 let points = [];
 let type = { k: true, mm: 10 };

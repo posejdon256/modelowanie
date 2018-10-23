@@ -1,6 +1,6 @@
 import { getMaterial } from "../Material/Material";
 
-export function Bresenham (x1, y1, x2, y2) {
+export function Bresenham (x1, y1, x2, y2, index) {
     var coordinatesArray = new Array();
     if(isNaN(x1) || isNaN(x2) || isNaN(y1) || isNaN(y2) ||
       x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0) {
@@ -15,7 +15,9 @@ export function Bresenham (x1, y1, x2, y2) {
     // Set first coordinates
     let x = x1;
     let y = y1;
-    coordinatesArray.push({x: x, y: y, banana1: true});
+    if(index === 1) {
+      coordinatesArray.push({x: x, y: y, banana1: true});
+    }
     // Main loop
     let i = 0;
     while (!((x == x2) && (y == y2))) {
@@ -29,7 +31,7 @@ export function Bresenham (x1, y1, x2, y2) {
         y += sy;
       }
       // Set coordinates
-      coordinatesArray.push({x: x, y: y, banana2: i === 0 ? true : false});
+      coordinatesArray.push({x: x, y: y, banana1: index !== 1 ? true : false});
       i ++;
     }
     // Return the result

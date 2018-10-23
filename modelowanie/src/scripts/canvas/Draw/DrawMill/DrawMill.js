@@ -1,24 +1,29 @@
 import { getMill } from "../../Mill/Mill/Mill";
 import Translate, { setTranslationPoints, getLastTranslation } from "../../Translation/TranslationCenter/TranslationCenter";
 import { getGLCtx, getCanvas } from "../Draw";
-import { getShaderMill, getModelMx, getProjectionMx, getModelMxMill, getProjectionMxMill } from "../../OpenGL/Init/InitOpenGL";
+import { getShaderMill, getModelMx, getProjectionMx, getModelMxMill, getProjectionMxMill, getVertexBuffer, getIndexBuffer } from "../../OpenGL/Init/InitOpenGL";
 import getProjectionMatrix from "../../Translation/Projection/Projection";
 
-export function DrawMill(gl, vb, ib) {
+export function DrawMill() {
     const { vertices, indices} = getMill();
     if(vertices.length === 0) {
         return;
     }
-    //setTranslationPoints(vertices);
-    //const _points = Translate({});
-    DrawLnesOpenGL(vertices, indices, gl, vb, ib);
+
+    DrawLnesOpenGL(vertices, indices, );
 }
-function DrawLnesOpenGL(points, indices, gl, vb, ib) {
+function DrawLnesOpenGL(points, indices) {
+
     const canvas = getCanvas();
+    const gl = getGLCtx();
     const shaderProgram = getShaderMill();
+
+    const vb = getVertexBuffer();
+    const ib = getIndexBuffer();
+
     gl.useProgram(shaderProgram);
 
-    var coord = gl.getAttribLocation(shaderProgram, "position");
+    let coord = gl.getAttribLocation(shaderProgram, "position");
 
     // Point an attribute to the currently bound VBO
     gl.vertexAttribPointer(coord, 3, gl.FLOAT, false, 0, 0);

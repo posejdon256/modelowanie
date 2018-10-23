@@ -3,7 +3,7 @@ import Redraw from "../../Draw/Redraw";
 import { getPointsToDrill, getDrillSpecification } from "../../../Load/ReadMill/ReadMill";
 import { DiffPoints } from "../../../Helpers/Helpers";
 import { Bresenham, updateZInBrezenhamy } from "../Bresenham/Bresenham";
-import { convertFromPlaceToIndex, convertFromIndexToPlace, createBananaFirstStep, createBananaSecondStep, cut, settArrayWidthAndHeight } from "../Material/Drilling";
+import { convertFromPlaceToIndex, convertFromIndexToPlace, createBananaFirstStep, cut, settArrayWidthAndHeight } from "../Material/Drilling";
 import { getMaterial, getxSize, getySize } from "../Material/Material";
 const speed = 0.2;
 
@@ -17,23 +17,24 @@ export function Drill() {
     let id = setInterval(function(){
 
         const drillPos = getMillPosition();
+        if(!points[i] || i >= points.length) {
+            clearInterval(id);
+            return;
+        }
         const p = convertFromIndexToPlace(points[i].x, points[i].y, points[i].z);
         const newCenter = DiffPoints([p.x, p.y, p.z] , [drillPos.x, drillPos.y, drillPos.z]);
 
         if(points[i].banana1) {
             createBananaFirstStep(p, spec.mm, spec.k);
         } else if(points[i].banana2) {
-            createBananaSecondStep(p, spec.k);
+         //   createBananaSecondStep(p, spec.k);
         }
         cut(points[i].x, points[i].y);
-        
+
         updateMillPosition(newCenter[0], newCenter[1], newCenter[2]);
         Redraw();
 
         i ++;
-        if(i === points.length) {
-            clearInterval(id);
-        }
     }, 10 * speed);
 }
 function cutPoints(points) {
@@ -45,7 +46,7 @@ function cutPoints(points) {
     for(let i = 1; i < points.length; i ++) {
         const p1 = convertFromPlaceToIndex(points[i - 1]);
         const p2 = convertFromPlaceToIndex(points[i]);
-        const brezenhamy = Bresenham(p1.x, p1.y, p2.x, p2.y);
+        const brezenhamy = Bresenham(p1.x, p1.y, p2.x, p2.y, i);
         _points = _points.concat(updateZInBrezenhamy(points[i- 1], points[i], brezenhamy));
     }
     return _points;

@@ -1,7 +1,5 @@
 import { getMainVertexShader } from "./Shaders/mainVert";
 import { getMainFragmentShader } from "./Shaders/mainFrag";
-import { getLastTranslation } from "../../Translation/TranslationCenter/TranslationCenter";
-import getProjectionMatrix from "../../Translation/Projection/Projection";
 import { getMillVertexShader } from "./Shaders/millVert";
 import { getMillFragmentShader } from "./Shaders/millFrag";
 
@@ -18,6 +16,20 @@ let modelMx;
 let modelMxMill;
 let projectionMx;
 let projectionMxMill;
+
+let vertexBuffer;
+let indexBuffer;
+let normalBuffer;
+
+export function getIndexBuffer() {
+  return indexBuffer;
+}
+export function getVertexBuffer() {
+  return vertexBuffer;
+}
+export function getNormalBuffer() {
+  return normalBuffer;
+}
 
 export function getModelMx(){
   return modelMx;
@@ -85,6 +97,11 @@ export function initWebGL(canvas) {
       gl.useProgram(shaderProgramMill);
       modelMxMill = gl.getUniformLocation(shaderProgramMill, "model");
       projectionMxMill = gl.getUniformLocation(shaderProgramMill, "projection");
+
+      //init buffers
+      vertexBuffer = gl.createBuffer();
+      indexBuffer = gl.createBuffer();
+      normalBuffer = gl.createBuffer();
     }
     catch(e) {}
     

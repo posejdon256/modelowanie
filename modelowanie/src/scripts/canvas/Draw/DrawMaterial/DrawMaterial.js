@@ -1,25 +1,27 @@
 import { getMaterial } from '../../Mill/Material/Material';
 import Translate, { setTranslationPoints, getLastTranslation }  from '../../Translation/TranslationCenter/TranslationCenter';
 import { getCanvas, getGLCtx } from '../Draw';
-import { getShaderProgram, getModelMx, getProjectionMx } from '../../OpenGL/Init/InitOpenGL';
+import { getShaderProgram, getModelMx, getProjectionMx, getVertexBuffer, getIndexBuffer, getNormalBuffer } from '../../OpenGL/Init/InitOpenGL';
 import getProjectionMatrix from '../../Translation/Projection/Projection';
 import { clearGL } from '../OpenGL/DrawOpengl';
 
-export function DrawMaterial(gl, vb, ib, nb) {
+export function DrawMaterial() {
+
+    const gl = getGLCtx();
     const { materialPoints, indices, normals} = getMaterial();
     if(materialPoints.length === 0) {
         return;
     }
-    const partsM = [];
-    const partsI = [];
-    const partsN = [];
-    let iIndices = 0;
-    for(let i = 0; i < materialPoints.length; i += (60000 * 3)) {
-        partsM.push(materialPoints.slice(i, i + (60000 * 3)));
-        partsI.push(indices.slice(iIndices, iIndices + 60000));
-        partsN.push(normals.slice(i, i + (60000 * 3)));
-        iIndices += 60000;
-    }
+    // const partsM = [];
+    // const partsI = [];
+    // const partsN = [];
+    // let iIndices = 0;
+    // for(let i = 0; i < materialPoints.length; i += (60000 * 3)) {
+    //     partsM.push(materialPoints.slice(i, i + (60000 * 3)));
+    //     partsI.push(indices.slice(iIndices, iIndices + 60000));
+    //     partsN.push(normals.slice(i, i + (60000 * 3)));
+    //     iIndices += 60000;
+    // }
     const shaderProgram = getShaderProgram();
     gl.useProgram(shaderProgram);
 
@@ -41,15 +43,20 @@ export function DrawMaterial(gl, vb, ib, nb) {
     mx = getProjectionMatrix(1);
     gl.uniformMatrix4fv(projMx, false, mx);
 
-    DrawLnesOpenGL(partsM[0], partsI[0], partsM[0], gl, vb, ib, nb, true);
-     for(let i = 1; i < partsI.length; i ++) {
-         DrawLnesOpenGL(partsM[i], partsI[i], partsM[i], gl, vb, ib, nb, false);
-     }
+    DrawLnesOpenGL(materialPoints, indices, normals, true);
+    //  for(let i = 1; i < partsI.length; i ++) {
+    //      DrawLnesOpenGL(partsM[i], partsI[i], partsN[i], false);
+    //  }
     //DrawLinesOnTranslatedPoints(points, {r: 229, g: 114, b: 84});
 }
-function DrawLnesOpenGL(points, indices, normals, gl, vb, ib, nb, clear) {
+function DrawLnesOpenGL(points, indices, normals, clear) {
 
-
+    const gl = getGLCtx();
+    const vb = getVertexBuffer();
+    const ib = getIndexBuffer();
+    const nb = getNormalBuffer();
+    
+    //var buffer = gl.createBuffer();
     if(clear) {
        clearGL(gl);
     }
@@ -64,11 +71,13 @@ function DrawLnesOpenGL(points, indices, normals, gl, vb, ib, nb, clear) {
 
    // gl.bufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, indices);
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, nb);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
-
+    //gl.bindBuffer(gl.ARRAY_BUFFER, nb);
+   // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+    //console.log(gl.getParameter(gl.ARRAY_BUFFER_BINDING));
+    //console.log(gl.getParameter(gl.ELEMENT_ARRAY_BUFFER_BINDING));
    // gl.bufferSubData(gl.ARRAY_BUFFER, 0, normals);
     /*=================== Shaders ====================*/
     // Draw the triangle
-    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+    //gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 100);
+    gl.drawArrays(gl.TRIANGLES, 0, indices.length);
 }

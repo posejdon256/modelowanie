@@ -1,5 +1,6 @@
 import { getMaterial, getxSize, getySize, getNormalVector, updateNormals } from "./Material";
 let indexes;
+let indexes2;
 let r;
 let final = [];
 let arrW, arrH;
@@ -7,79 +8,73 @@ export function settArrayWidthAndHeight(w, h) {
     arrW = w;
     arrH = h;
 }
-export function createBananaFirstStep(point, _r, sphere) {
-    r = _r;
+function prepareStep(point, step, sphere) {
     final = [];
-    indexes = [];
     const { material2D } = getMaterial();
-    const square = {a: 2 * r, x: point.x - r, y: point.y - r, z: point.z};
-    const end = {x: point.x + r, y: point.y + r, z: point.z};
+    const eps = 0.01;
+    const square = {x: point.x - (r + eps), y: point.y - (r + eps), z: point.z};
+    const end = {x: point.x + (r + eps), y: point.y + (r + eps), z: point.z};
     const indexStart = convertFromPlaceToIndex(square, 1);
-    const indexPoint = convertFromPlaceToIndex(point);
-    const indexEnd = convertFromPlaceToIndex(end, 0);
-     for(let i = indexStart.x; i <=indexEnd.x; i ++) {
-         for(let j = indexStart.y; j <= indexEnd.y; j ++) {
-             if(!material2D[i] || !material2D[i][j]) {
-                 continue;
-             }
-             const pSearched = convertFromIndexToPlace(i, j, material2D[i][j].z); 
-             const len =  get2dvectorLength(point, pSearched);
-             if(len <= r) {
-                 if(!sphere) {
-                    indexes.push({x: i, y: j, z: point.z});
-                    final.push({x: i - indexPoint.x, y: j - indexPoint.y, z: point.z});
-                 } else {
-                     const diff = r - Math.sqrt(Math.pow(r, 2) - Math.pow(len, 2));
-                     indexes.push({x: i, y: j, z: point.z + diff});
-                     final.push({x: i - indexPoint.x, y: j - indexPoint.y, z: point.z + diff});
-                 }
-             }
-            }
-        }
-
-}
-function get2dvectorLength(v1, v2) {
-    return Math.sqrt(Math.pow(v1.x - v2.x, 2) + Math.pow(v1.y - v2.y, 2));
-}
-export function createBananaSecondStep(point, sphere) {
-    const { material2D } = getMaterial();
-    final = [];
-    let indexes2 = [];
-    const square = {a: 2 * r, x: point.x - r, y: point.y - r, z: point.z};
-    const end = {x: point.x + r, y: point.y + r, z: point.z};
-    const indexStart = convertFromPlaceToIndex(square, 1);
-    const indexPoint = convertFromPlaceToIndex(point);
     const indexEnd = convertFromPlaceToIndex(end, 0);
     for(let i = indexStart.x; i <=indexEnd.x; i ++) {
         for(let j = indexStart.y; j <= indexEnd.y; j ++) {
             if(!material2D[i] || !material2D[i][j]) {
                 continue;
             }
-            const pSearched = convertFromIndexToPlace(i, j, material2D[i][j].z);  
-        const len =  get2dvectorLength(point, pSearched);
+            const pSearched = convertFromIndexToPlace(i, j, material2D[i][j].z); 
+            const len =  get2dvectorLength(point, pSearched);
             if(len <= r) {
-                if(!sphere) {
-                indexes2.push({x: i, y: j, z: point.z});
-                } else {
-                const diff = r - Math.sqrt(Math.pow(r, 2) - Math.pow(len, 2));
-                indexes2.push({x: i, y: j, z: point.z + diff});
-            }
+                innerFunction(step, sphere, i, j, point, len);
             }
         }
     }
-    for(let i = 0; i < indexes2.length; i ++) {
-        let same = false;
-        for(let j = 0; j < indexes.length; j ++) {
-            if(indexes2[i].x === indexes[j].x && indexes2[i].y === indexes[j].y) {
-                if(!sphere || indexes[j].z < indexes2[i].z) {
-                    same = true;
-                }
-            }
-            if(!same && j === indexes.length - 1) {
-                final.push({x: indexes2[i].x - indexPoint.x, y: indexes2[i].y - indexPoint.y, z: indexes2[i].z})
-            }
+}
+function innerFunction(step, sphere, i, j, point, len) {
+    const indexPoint = convertFromPlaceToIndex(point);
+    if(step === 1) {
+        if(!sphere) {
+            indexes.push({x: i, y: j, z: point.z});
+            final.push({x: i - indexPoint.x, y: j - indexPoint.y, z: point.z});
+         } else {
+             const diff = r - Math.sqrt(Math.pow(r, 2) - Math.pow(len, 2));
+             indexes.push({x: i, y: j, z: point.z + diff});
+             final.push({x: i - indexPoint.x, y: j - indexPoint.y, z: point.z + diff});
+         }
+    } else {
+        if(!sphere) {
+            indexes2.push({x: i, y: j, z: point.z});
+        } else {
+            const diff = r - Math.sqrt(Math.pow(r, 2) - Math.pow(len, 2));
+            indexes2.push({x: i, y: j, z: point.z + diff});
         }
     }
+
+}
+export function createBananaFirstStep(point, _r, sphere) {
+    r = _r;
+    indexes = [];
+    prepareStep(point, 1, sphere);
+
+}
+// export function createBananaSecondStep(point, sphere) {
+//     indexes2 = [];
+//     const indexPoint = convertFromPlaceToIndex(point);
+//     for(let i = 0; i < indexes2.length; i ++) {
+//         let same = false;
+//         for(let j = 0; j < indexes.length; j ++) {
+//             if(indexes2[i].x === indexes[j].x && indexes2[i].y === indexes[j].y) {
+//                 if(!sphere || indexes[j].z < indexes2[i].z) {
+//                     //same = true;
+//                 }
+//             }
+//             if(!same && j === indexes.length - 1) {
+//                 final.push({x: indexes2[i].x - indexPoint.x, y: indexes2[i].y - indexPoint.y, z: indexes2[i].z})
+//             }
+//         }
+//     }
+// }
+function get2dvectorLength(v1, v2) {
+    return Math.sqrt(Math.pow(v1.x - v2.x, 2) + Math.pow(v1.y - v2.y, 2));
 }
 export function cut(x, y) {
 
@@ -105,8 +100,8 @@ export function convertFromIndexToPlace(x, y, z) {
     const sizeX = getxSize() / 10;
     const sizeY = getySize() / 10;
     return {
-        x: (x / arrW) * (sizeX / 1) - (sizeX / 2),
-        y: (y / arrH) * (sizeY / 1) - (sizeY / 2),
+        x: (x / arrW) * sizeX - (sizeX / 2),
+        y: (y / arrH) * sizeY - (sizeY / 2),
         z: z
     };
 }

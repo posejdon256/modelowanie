@@ -16,7 +16,6 @@ export function generateMaterial() {
         material2D.push([]);
         for(let j = 0; j < yGrid; j ++) {
             material.push([(i / (xGrid - 1) ) * (xSize / 10) - (xSize / 20),  (j / (yGrid - 1))* (ySize / 10) - (ySize / 20),  zSize / 10]);
-            console.log(i, (i / (xGrid - 1) ) * (xSize / 10));
             material2D[i].push({indMaterial: material.length - 1});
             material2D[i][j].points = [];
             material[material.length - 1].material2DIndex = {x: i, y: j};
@@ -39,9 +38,9 @@ export function generateMaterial() {
     }
     let ind = 0;
     for(let i = 0; i < materialTransformed.length; i += 3) {
-        if(ind === 60000) {
-            ind = 0;
-        }
+        // if(ind === 60000) {
+        //     ind = 0;
+        // }
         indices.push(ind);
         ind ++;
     }
