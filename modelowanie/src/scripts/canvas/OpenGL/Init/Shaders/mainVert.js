@@ -5,13 +5,15 @@ attribute vec3 normal;
 uniform mat4 model;
 uniform mat4 projection;
 
+varying vec2 vTextureCoord;
 varying vec3 vNormal;
 varying vec3 vPos;
 
 void main() {
     
     vNormal = normal;
-    vPos = vec3((model * vec4(position, 1.0)).rgb);   
+    vPos = vec3((model * vec4(position, 1.0)).rgb);
+    vTextureCoord = vec2(position.x, position.y);   
     gl_Position = vec4(projection * model * vec4(position, 1.0));
   }`;
   export function getMainVertexShader() {

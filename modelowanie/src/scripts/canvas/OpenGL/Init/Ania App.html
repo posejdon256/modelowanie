@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)http://localhost:3000/texture.JPG -->
+<html lang="en" style="height: max-content;min-height: 100%;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="http://localhost:3000/manifest.json">
+    <link rel="shortcut icon" href="http://localhost:3000/favicon.ico">
+    <link rel="stylesheet" href="./Ania App_files/formbase.min.css">
+    <!--
+      Notice the use of  in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Ania App</title>
+  <style type="text/css">body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+</style><style type="text/css">.App {
+  text-align: center;
+}
+
+.App-logo {
+  -webkit-animation: App-logo-spin infinite 20s linear;
+          animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@-webkit-keyframes App-logo-spin {
+  from { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+  to { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+@keyframes App-logo-spin {
+  from { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+  to { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+.ab-main-div {
+  width: 1920px;
+  background: url(/static/media/stars.af62d83d.png);
+  background-repeat-y: repeat;
+  height: 100%;
+  min-height: 943px;
+}
+.ab-canvas-navbar-container {
+  height: 85%;
+  width: 100%;
+  display: -ms-flexbox;
+  display: flex;
+}</style><style type="text/css">.input{-webkit-appearance:none;-moz-appearance:none;appearance:none;-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;margin:0 0 .9rem;padding:.6rem;background:#fff;border:1px solid #bbb;-webkit-box-shadow:inset 0 1px 3px rgba(0,0,0,.05);box-shadow:inset 0 1px 3px rgba(0,0,0,.05);border-radius:0;outline:0;resize:vertical;-webkit-transition:border-color .3s ease;-o-transition:border-color .3s ease;transition:border-color .3s ease}.input[disabled]{border-color:#c8c8c8;background-color:#f2f2f2;-webkit-box-shadow:none;box-shadow:none;cursor:not-allowed}.input:focus{border-color:#0c69d6}.control{margin:0 0 .9rem;-webkit-box-sizing:border-box;box-sizing:border-box}.control__input{position:absolute;opacity:0;pointer-events:none}.control__label{display:block;position:relative;padding-left:calc(20px + .6rem);will-change:transform}.control__label::after,.control__label::before{content:'';position:absolute;top:calc(50% - 10px);left:0;width:20px;height:20px;border:1px solid transparent}.control__label::before{border-color:#bbb;-webkit-box-shadow:inset 0 1px 3px rgba(0,0,0,.05);box-shadow:inset 0 1px 3px rgba(0,0,0,.05);background:#fff;background-size:0}.control__label::after{background-size:60%;background-repeat:no-repeat;background-position:center;-webkit-transform:scale(0);-ms-transform:scale(0);transform:scale(0);-webkit-transition:-webkit-transform .3s ease;transition:-webkit-transform .3s ease;-o-transition:transform .3s ease;transition:transform .3s ease;transition:transform .3s ease, -webkit-transform .3s ease;transition:transform .3s ease,-webkit-transform .3s ease;will-change:transform}.control__input[type=radio]+.control__label::before{border-radius:100%}.control__input[type=radio]+.control__label::after{background-image:url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%20xml%3Aspace%3D%22preserve%22%3E%3Cpath%20fill%3D%22%23000%22%20d%3D%22M256%2C464c114.9%2C0%2C208-93.1%2C208-208c0-114.9-93.1-208-208-208C141.1%2C48%2C48%2C141.1%2C48%2C256C48%2C370.9%2C141.1%2C464%2C256%2C464z%22/%3E%3C/svg%3E)}.control__input[type=checkbox]+.control__label::after{background-image:url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%20xml%3Aspace%3D%22preserve%22%3E%3Cpath%20fill%3D%22%23000%22%20d%3D%22M461.6%2C109.6l-54.9-43.3c-1.7-1.4-3.8-2.4-6.2-2.4c-2.4%2C0-4.6%2C1-6.3%2C2.5L194.5%2C323c0%2C0-78.5-75.5-80.7-77.7c-2.2-2.2-5.1-5.9-9.5-5.9c-4.4%2C0-6.4%2C3.1-8.7%2C5.4c-1.7%2C1.8-29.7%2C31.2-43.5%2C45.8c-0.8%2C0.9-1.3%2C1.4-2%2C2.1c-1.2%2C1.7-2%2C3.6-2%2C5.7c0%2C2.2%2C0.8%2C4%2C2%2C5.7l2.8%2C2.6c0%2C0%2C139.3%2C133.8%2C141.6%2C136.1c2.3%2C2.3%2C5.1%2C5.2%2C9.2%2C5.2c4%2C0%2C7.3-4.3%2C9.2-6.2L462%2C121.8c1.2-1.7%2C2-3.6%2C2-5.8C464%2C113.5%2C463%2C111.4%2C461.6%2C109.6z%22/%3E%3C/svg%3E)}.control__input[type=checkbox][disabled]+.control__label,.control__input[type=radio][disabled]+.control__label{cursor:not-allowed}.control__input[type=checkbox][disabled]+.control__label::before,.control__input[type=radio][disabled]+.control__label::before{border-color:#c8c8c8;background-color:#f2f2f2;-webkit-box-shadow:none;box-shadow:none}.control__input:checked+.control__label::after{-webkit-transform:scale(1);-ms-transform:scale(1);transform:scale(1)}.select{-webkit-appearance:none;-moz-appearance:none;appearance:none;-webkit-box-sizing:border-box;box-sizing:border-box;margin:0 0 .9rem;padding:.6rem;width:100%;background:#fff;background-image:url(data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%20xml%3Aspace%3D%22preserve%22%3E%3Cpath%20fill%3D%22%23000%22%20d%3D%22M256%2C298.3L256%2C298.3L256%2C298.3l174.2-167.2c4.3-4.2%2C11.4-4.1%2C15.8%2C0.2l30.6%2C29.9c4.4%2C4.3%2C4.5%2C11.3%2C0.2%2C15.5L264.1%2C380.9c-2.2%2C2.2-5.2%2C3.2-8.1%2C3c-3%2C0.1-5.9-0.9-8.1-3L35.2%2C176.7c-4.3-4.2-4.2-11.2%2C0.2-15.5L66%2C131.3c4.4-4.3%2C11.5-4.4%2C15.8-0.2L256%2C298.3z%22/%3E%3C/svg%3E);background-size:12px;background-repeat:no-repeat;background-position:calc(100% - .6rem) center;border:1px solid #bbb;-webkit-box-shadow:inset 0 1px 3px rgba(0,0,0,.05);box-shadow:inset 0 1px 3px rgba(0,0,0,.05);border-radius:0;outline:0}.select[disabled]{border-color:#c8c8c8;background-color:#f2f2f2;-webkit-box-shadow:none;box-shadow:none;cursor:not-allowed}.select:focus{border-color:#0c69d6}.select::-ms-expand{display:none}</style><style type="text/css">.ab-navbar{
+    background: rgba(55, 0, 55, 0.7);
+    width: 30%;
+    height: 100%;;
+    padding: 10px;
+}
+.ab-navbar div {
+    padding: 5px;
+}
+label {
+    color: white;
+}
+.ab-small-input{
+    width: 30px;
+}
+.ab-ul-points{
+    max-height: 200px;
+    overflow-x: hidden;
+    width: 450px;
+    overflow-y: scroll;
+    list-style-type: none;
+}
+.ab-delete-point, .ab-select-point{
+    width: 30px;
+    height: 30px;
+}
+.ab-delete-point-button{
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.ab-point-list-input{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+}
+.ab-point-list-li{
+    position: relative;
+    height: 32px;
+}
+.ab-points-list-datas {
+    position: absolute;
+    top: 0;
+    left: 180px;
+}
+.ab-points-list-select-button {
+    position: absolute;
+    top: 0;
+    left: 350px;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+.ab-curve-chain-label{
+    position: absolute;
+    top: 7px;
+    left: 200px;
+}
+.ab-point-list-checkbox{
+    position: absolute;
+    top: 0;
+    left: 300px;
+    height: 30px;
+}
+.ab-bicubic{
+    border: 2px white solid;
+    max-width: 300px;
+}
+.btn {
+    background: #85118f;
+    background-image: -webkit-linear-gradient(top, #85118f, #540854);
+    background-image: -o-linear-gradient(top, #85118f, #540854);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#85118f), to(#540854));
+    background-image: linear-gradient(to bottom, #85118f, #540854);
+    -webkit-box-shadow: 0px 1px 1px #666666;
+    box-shadow: 0px 1px 1px #666666;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 13px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    border: none;
+  }
+  
+  .btn:hover {
+    text-decoration: none;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 200px;
+    margin: 10px;
+  }
+  input[type=range]:focus {
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+    animate: 0.2s;
+    -webkit-box-shadow: 0px 0px 0px #000000;
+            box-shadow: 0px 0px 0px #000000;
+    background: #ffffff;
+    border-radius: 0px;
+    border: 0px solid #ffffff;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-box-shadow: 0px 0px 1px #5b2961;
+            box-shadow: 0px 0px 1px #5b2961;
+    border: 3px solid #791468;
+    height: 25px;
+    width: 25px;
+    border-radius: 49px;
+    background: #d117c9;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -7px;
+  }
+  input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #ffffff;
+  }
+  input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 0px 0px 0px #000000;
+    background: #ffffff;
+    border-radius: 0px;
+    border: 0px solid #ffffff;
+  }
+  input[type=range]::-moz-range-thumb {
+    box-shadow: 0px 0px 1px #5b2961;
+    border: 3px solid #791468;
+    height: 10px;
+    width: 10px;
+    border-radius: 49px;
+    background: #d117c9;
+    cursor: pointer;
+  }
+  input[type=range]::-ms-track {
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+    animate: 0.2s;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+  input[type=range]::-ms-fill-lower {
+    background: #ffffff;
+    border: 0px solid #ffffff;
+    border-radius: 0px;
+    box-shadow: 0px 0px 0px #000000;
+  }
+  input[type=range]::-ms-fill-upper {
+    background: #ffffff;
+    border: 0px solid #ffffff;
+    border-radius: 0px;
+    box-shadow: 0px 0px 0px #000000;
+  }
+  input[type=range]::-ms-thumb {
+    box-shadow: 0px 0px 1px #5b2961;
+    border: 3px solid #791468;
+    height: 10px;
+    width: 10px;
+    border-radius: 49px;
+    background: #d117c9;
+    cursor: pointer;
+  }
+  input[type=range]:focus::-ms-fill-lower {
+    background: #ffffff;
+  }
+  input[type=range]:focus::-ms-fill-upper {
+    background: #ffffff;
+  }
+  .input-ab {
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    padding: 4px 5px;
+    border: 1px solid #b7b7b7;
+    border-radius: 3px;
+    font: normal 16px/normal "Times New Roman", Times, serif;
+    color: rgba(0,142,198,1);
+    -o-text-overflow: clip;
+    text-overflow: clip;
+    background: rgba(252,252,252,1);
+    -webkit-box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) inset;
+    box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) inset;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.66) ;
+    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  label {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 15px;
+    letter-spacing: 0px;
+    word-spacing: -0.8px;
+    color: #FFFFFF;
+    font-weight: 400;
+    -webkit-text-decoration: none solid rgb(68, 68, 68);
+            text-decoration: none solid rgb(68, 68, 68);
+    font-style: normal;
+    font-variant: normal;
+    text-transform: none;
+  }
+  .ab-navbar-visible {
+  }
+  .ab-navbar-not-visible {
+    display: none;
+  }
+  .ab-navbar-selector{
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .ab-grid {
+    display: grid;
+  }</style><style type="text/css">.ab-canvas-div {
+    width: 70%;
+    height: 100%;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    position: relative
+}
+.ab-canvas {
+    width: 1000px;
+    height: 700px;
+    display: table-row-group;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #000000;
+    border: white 1px solid;
+
+}
+.ab-canvas-visualization1{
+    width: 250px;
+    height: 250px;
+    display: table-row-group;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #000000;
+    border: white 1px solid;
+}
+.ab-canvas-visualization2{
+    width: 250px;
+    height: 250px;
+    display: table-row-group;
+    position: absolute;
+    top: 280px;
+    right: 20px;
+    background: #000000;
+    border: white 1px solid;
+}
+.ab-canvas-stereopscopy {
+    display: none;
+}</style><style type="text/css">
+.ab-header {
+    background: rgba(102, 0, 102, 0.7);
+    width: 100%;
+}
+.ab-torus-button {
+    background: transparent;
+    border: none;
+    padding: 20px;
+    outline: none;
+    cursor: pointer;
+}
+.ab-torus-image {
+    width: 50px;
+    height: 50px;
+}
+.ab-point-image {
+    height: 50px;
+}
+.ab-selected-state{
+    background-color: rgba(125, 125, 125, 0.7);
+}</style><style type="text/css">.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    opacity: 0.7;
+    padding: 5px 6px;
+    border-radius: 6px;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}</style></head>
+  <body style="height:100%;" cz-shortcut-listen="true">
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root" style="height:100%;"><div class="ab-main-div"><div class="ab-header"><button class="ab-torus-button tooltip"><img class="ab-point-image" src="data:image/png;base64,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" alt="intersection curve"><span class="tooltiptext">Drill</span></button></div><label></label><div class="ab-canvas-navbar-container"><div class="ab-canvas-div"><canvas tabindex="1" class="ab-canvas" width="1000px" height="700px"></canvas><canvas class="abcanvas ab-canvas-stereopscopy" width="1000px" height="700px"></canvas><canvas class="abcanvas ab-canvas-stereopscopy" width="1000px" height="700px"></canvas><canvas class="" width="500px" height="500px"></canvas><canvas class="" width="500px" height="500px"></canvas></div><div class="ab-navbar"><div class="ab-navbar-selector"><button class="btn">BASIC</button><button class="btn">MILL</button></div><div class="ab-navbar-not-visible"><div><label>Load files:</label><input class="input-ab" type="file" accept=".json"></div></div><div class="ab-navbar-visible"><div class="ab-bicubic"><div><label>Load milling file:</label><input class="input-ab" type="file"></div><div><label>X material grid: </label><input class="input-ab" type="text" value="100"></div><div><label>Y material grid: </label><input class="input-ab" type="text" value="100"></div><div><label>X size: </label><input class="input-ab" type="text" value="15"></div><div><label>Y size: </label><input class="input-ab" type="text" value="15"></div><div><label>Z size: </label><input class="input-ab" type="text" value="5"></div><div><button class="btn">Add material</button></div><div><button class="btn">Remove Material</button></div><div><button class="btn">Add Mill</button></div></div></div></div></div></div></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  <script type="text/javascript" src="./Ania App_files/bundle.js.pobrane"></script>
+
+</body></html>

@@ -15,26 +15,43 @@ export function generateMill() {
     const division = 1000;
     verticesCylinder.push({x: 0, y: 0, z: 0});
     verticesCylinder.push({x: 0, y: 0, z: 0.2});
+    let verticesCylinderAround = [];
     for(let t = 0; t < 2 * Math.PI; t += (1 / division)) {
         verticesCylinder.push({x: r * Math.cos(t), y: r *  Math.sin(t), z: type.k ? r : 0});
         verticesCylinder.push({x: r * Math.cos(t), y: r *  Math.sin(t), z: type.k ? 0.7 + r : 0.7});
+        verticesCylinderAround.push({x: r * Math.cos(t), y: r *  Math.sin(t), z: type.k ? r : 0});
+        verticesCylinderAround.push({x: r * Math.cos(t), y: r *  Math.sin(t), z: type.k ? 0.7 + r : 0.7});
     }
-    for(let i = 2; i < verticesCylinder.length - 2; i ++) {
-        indicesCylinder.push(i, i + 1, i + 2);
-      //  pushNormalsForCylinder(getNormalVectorForCylinder(i, i + 1, i + 2));
+    pushNormalsForCylinder(getNormalVectorForCylinder(2, 4, 0));
+    pushNormalsForCylinder(getNormalVectorForCylinder(3, 5, 1));
+    console.log(normalsCylinder.length);
+    for(let i = 0; i < verticesCylinderAround.length - 2; i ++) {
+        indicesCylinder.push(verticesCylinder.length + i, verticesCylinder.length + i + 1, verticesCylinder.length + i + 2);
+        pushNormalsForCylinder(getNormalVectorForCylinderAround(i, i + 1, i + 2, verticesCylinderAround));
     }
+    pushNormalsForCylinder(getNormalVectorForCylinderAround(verticesCylinderAround.length - 2, verticesCylinderAround.length - 1, 0, verticesCylinderAround));
+    pushNormalsForCylinder(getNormalVectorForCylinderAround(verticesCylinderAround.length - 1, 0, 1, verticesCylinderAround));
     for(let i = 2; i < verticesCylinder.length - 3; i += 2) {
          indicesCylinder.push(i, i + 2, 0);
-       //  pushNormalsForCylinder(getNormalVectorForCylinder(i, i + 2, 0));
+        // pushNormalsForCylinder(getNormalVectorForCylinder(i, i + 2, 0));
          indicesCylinder.push(i + 1, i + 3, 1);
-       //  pushNormalsForCylinder(getNormalVectorForCylinder(i + 1, i + 2, 1));
+        // pushNormalsForCylinder(getNormalVectorForCylinder(i + 1, i + 2, 1));
     }
+    for(let i = 2; i < verticesCylinder.length - 3; i += 2) {
+        pushNormalsForCylinder(getNormalVectorForCylinder(i, i + 2, 0));
+        pushNormalsForCylinder(getNormalVectorForCylinder(i + 1, i + 3, 1));
+    }
+    pushNormalsForCylinder(getNormalVectorForCylinder(verticesCylinder.length - 1, verticesCylinder.length - 3, 0));
+    pushNormalsForCylinder(getNormalVectorForCylinder(verticesCylinder.length - 2, verticesCylinder.length - 4, 1));
+    verticesCylinder = verticesCylinder.concat(verticesCylinderAround);
     if(type.k) {
         const w = 50;
         for(let teta = 0; teta <= w; teta ++) {
             for(let a = 0; a <= w; a ++) {
                 const _teta = teta * 2 * Math.PI / w;
                 const _a = a * Math.PI / w;
+                const vec = normalize([Math.cos(_teta) * Math.sin(_a), Math.sin(_teta) * Math.sin(_a), Math.cos(_a)]);
+                normalsSphere.push(vec[0], vec[1], vec[2] - 1);
                 verticesSphere.push({x: r * Math.cos(_teta) * Math.sin(_a), y: r * Math.sin(_teta) * Math.sin(_a), z: (r* Math.cos(_a)) + r});
             }
         }
@@ -63,14 +80,18 @@ function getNormalVectorForCylinder(a, b, c) {
     let vec = crossMultiply(DiffPointsXYZ(verticesCylinder[a], verticesCylinder[b]), DiffPointsXYZ(verticesCylinder[c], verticesCylinder[b]));
     return normalize(vec);
 }
+function getNormalVectorForCylinderAround(a, b, c, verticesCylinderAround) {
+    let vec = crossMultiply(DiffPointsXYZ(verticesCylinderAround[a], verticesCylinderAround[b]), DiffPointsXYZ(verticesCylinderAround[c], verticesCylinderAround[b]));
+    return normalize(vec);
+}
 function pushNormalsForCylinder(norm) {
-    for(let j = 0; j < 9; j ++) {
-        normalsCylinder.push(norm[j % 3]);
+    for(let j = 0; j < 3; j ++) {
+        normalsCylinder.push(norm[j]);
     }
 }
 function pushNormalsForSphere(norm) {
-    for(let j = 0; j < 9; j ++) {
-        normalsSphere.push(norm[j % 3]);
+    for(let j = 0; j < 3; j ++) {
+        normalsSphere.push(norm[j]);
     }
 }
 function getNormalVectorForSphere(a, b, c) {
@@ -113,4 +134,6 @@ export function removeMill() {
     indicesCylinder = [];
     verticesSphere = [];
     indicesSphere = [];
+    normalsCylinder = [];
+    normalsCylinder = [];
 }

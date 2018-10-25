@@ -19,16 +19,15 @@ export function DrawMill(update) {
         updateBuffers(vertices, indices, normals);
     }
 
-    DrawLnesOpenGL(vertices, indices, normals);
+    DrawLnesOpenGL(indices);
 }
-function DrawLnesOpenGL(points, indices, normals) {
+function DrawLnesOpenGL(indices) {
 
     const canvas = getCanvas();
     const gl = getGLCtx();
     const shaderProgram = getShaderMill();
 
     const vb = getVertexBufferMill();
-    const ib = getIndexBufferMill();
     const nb = getNormalBufferMill();
 
     gl.useProgram(shaderProgram);
@@ -36,9 +35,14 @@ function DrawLnesOpenGL(points, indices, normals) {
     gl.bindBuffer(gl.ARRAY_BUFFER, vb);
     let coord = gl.getAttribLocation(shaderProgram, "position");
     gl.vertexAttribPointer(coord, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(coord);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nb);
+    let normal = gl.getAttribLocation(shaderProgram, "normal");
+    gl.vertexAttribPointer(normal, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(normal);
 
     // Enable the attribute
-    gl.enableVertexAttribArray(coord);
 
     TranslateMatrix(getProjectionMxMill(), getModelMxMill());
     
@@ -65,6 +69,6 @@ function updateBuffers(points, indices, normals) {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
 
 
-    // gl.bindBuffer(gl.ARRAY_BUFFER, nb);
-    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, nb);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
 }

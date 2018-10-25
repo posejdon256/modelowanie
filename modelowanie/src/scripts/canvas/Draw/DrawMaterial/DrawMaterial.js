@@ -6,6 +6,7 @@ import {
     getProjectionMx,
     getShaderProgram,
     getVertexBuffer,
+    getTexture,
 } from '../../OpenGL/Init/InitOpenGL';
 import { getGLCtx } from '../Draw';
 import { clearGL, TranslateMatrix } from '../OpenGL/DrawOpengl';
@@ -48,6 +49,10 @@ function DrawLnesOpenGL(points, indices, normals) {
     clearGL(gl);
 
     TranslateMatrix(getProjectionMx(), getModelMx());
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, getTexture());
+    gl.uniform1i(gl.getUniformLocation(shaderProgram, "uSampler"), 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vb);
     gl.drawArrays(gl.TRIANGLES, 0, indices.length);
