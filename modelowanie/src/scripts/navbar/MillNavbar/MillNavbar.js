@@ -54,11 +54,11 @@ export default class MillNavar extends Component {
                 </div>
                 <div>
                     <label>X material grid: </label>
-                    <input className="input-ab" type="text" onChange={this.setXGrid} defaultValue={4}/>
+                    <input className="input-ab" type="text" onChange={this.setXGrid} defaultValue={100}/>
                 </div>
                 <div>
                     <label>Y material grid: </label>
-                    <input className="input-ab" type="text" onChange={this.setYGrid} defaultValue={4}/>
+                    <input className="input-ab" type="text" onChange={this.setYGrid} defaultValue={100}/>
                 </div>
                 <div>
                     <label>X size: </label>

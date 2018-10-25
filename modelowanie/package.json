@@ -5,6 +5,7 @@
   "dependencies": {
     "chalk": "^2.0.1",
     "fs": "0.0.1-security",
+    "gl-matrix-mat4": "^2.2.1-npm",
     "jsonfile": "^4.0.0",
     "mathjs": "^4.4.2",
     "react": "^16.2.0",

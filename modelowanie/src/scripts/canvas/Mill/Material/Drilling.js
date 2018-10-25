@@ -1,4 +1,5 @@
-import { getMaterial, getxSize, getySize, getNormalVector, updateNormals } from "./Material";
+import { getMaterial, getxSize, getySize, updateNormals } from "./Material";
+import { getNormalVector } from "../HelperMill";
 let indexes;
 let indexes2;
 let r;

@@ -1,110 +1,36 @@
 import { multiplyMatrices, multiplyVectorAndMatrix } from "../../../MatrixOperations/Multiply/Multiply";
 import { setShiftVector, getShiftMatrix, ShiftWithRotation, updateShift } from "../Shift/Shift";
-import getProjectionMatrix from '../Projection/Projection';
 import getScaleMatrix from "../Scale/Scale";
-import normalizeVector from "../../../Normalization/Normalize";
 
-let stereoscopy;
-let translationPoints = [];
-let _front = 1;
-export function getFront() {
-    return _front;
+let radX = 0, radY = 0, radZ = 0;
+let transVec = [0, 0, 0];
+let zoom = 1;
+export function getTranslationVector() {
+    return transVec;
 }
-export function setTranslationPoints(_points) {
-    translationPoints = _points;
+export function getRotationDatas() {
+    return {x: radX, y: radY};
 }
-let lastTranslation = [
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 1, 0],
-    [0, 0, 0, 1]
-];
-export function getLastTranslation() {
-    let ret = [];
-    for(let i = 0; i < lastTranslation.length; i ++) {
-        ret = ret.concat(lastTranslation[i]);
-    }
-    return ret;
+export function getZooming() {
+    return [zoom, zoom, zoom];
 }
-export default function Translate(translationObject, type) {
-    try{
+export default function Translate(translationObject) {
     const {front, left, top, axisX, axisY, alphaX, alphaY} = translationObject;
-    let translationMatrix = lastTranslation;
     //rotation
     if(axisX) {
-        translationMatrix = ShiftWithRotation(translationMatrix, 1, alphaX);
+        radY += alphaX;//bug
     }
     if(axisY) {
-        translationMatrix = ShiftWithRotation(translationMatrix, 0, alphaY);
+        radX += alphaY;//bug
     }
     //shift
-    const shiftVector = [];
     if(left !== undefined && left !== 0) {
-        shiftVector.push(left);
-    } else {
-        shiftVector.push(0);
+        transVec[0] += left;
     }
     if(top !== undefined && top !== 0) {
-        shiftVector.push(top);
-    } else  {
-        shiftVector.push(0);
+        transVec[1] += top;
     }
     if(front !== undefined && front !== 0) {
-        shiftVector.push(0);
-        translationMatrix = multiplyMatrices(getScaleMatrix(front), translationMatrix);
-        _front = _front * front;
-        updateShift(front);
+        zoom *= front;
     }
-    else
-        shiftVector.push(0);
-    setShiftVector(shiftVector);
-    translationMatrix = multiplyMatrices(getShiftMatrix(), translationMatrix);
-    if(type !== "torus")
-         lastTranslation = translationMatrix;
-
-    //projection
-    if(!stereoscopy)
-        return normalTranslation(translationMatrix);
-    else
-        return stereoscopyTranslation(translationMatrix);
-
-    }
-    catch(e) {
-        console.log("Ups, coś poszło nie tak...");
-        return [];
-    }
-}
-function normalTranslation(translationMatrix) {
-    const projectioMatrix = multiplyMatrices(getProjectionMatrix(1), translationMatrix);//3
-    return generateTranslation(projectioMatrix);
-}
-function stereoscopyTranslation(translationMatrix) {
-    const leftEye = multiplyMatrices(getProjectionMatrix(4), translationMatrix);
-    const rightEye = multiplyMatrices(getProjectionMatrix(5), translationMatrix);
-
-    const leftEyeResult = generateTranslation(leftEye);
-    const rightEyeResult = generateTranslation(rightEye);
-    return { left: leftEyeResult, right: rightEyeResult };
-}
-export function setStereoscopyTranslation(_stereoscopy) {
-    stereoscopy = _stereoscopy;
-}
-function generateTranslation(translationMatrix) {
-    const result = [];
-    translationPoints.forEach(point => {
-        //if(point.z > -0.5)
-        const _ret = generateTranslatedPoint(point, translationMatrix);
-        result.push(_ret.x, _ret.y, _ret.z);
-    });
-    return result;
-}
-function generateTranslatedPoint(point, translationMatrix) {
-    const pointMatrix = [point.x, point.y, point.z, 1];
-    const result = normalizeVector(multiplyVectorAndMatrix(translationMatrix, pointMatrix));
-   //console.log(result[2]);
-    return {
-        x: result[0],
-        y: result[1],
-        z: result[2]
-    };
 }

@@ -1,10 +1,17 @@
-import { generateMill, getMillPosition, updateMillPosition, removeMill } from "../Mill/Mill";
-import Redraw from "../../Draw/Redraw";
-import { getPointsToDrill, getDrillSpecification } from "../../../Load/ReadMill/ReadMill";
-import { DiffPoints } from "../../../Helpers/Helpers";
-import { Bresenham, updateZInBrezenhamy } from "../Bresenham/Bresenham";
-import { convertFromPlaceToIndex, convertFromIndexToPlace, createBananaFirstStep, cut, settArrayWidthAndHeight } from "../Material/Drilling";
-import { getMaterial, getxSize, getySize } from "../Material/Material";
+import { DiffPoints } from '../../../Helpers/Helpers';
+import { getDrillSpecification, getPointsToDrill } from '../../../Load/ReadMill/ReadMill';
+import Redraw from '../../Draw/Redraw';
+import { Bresenham, updateZInBrezenhamy } from '../Bresenham/Bresenham';
+import {
+    convertFromIndexToPlace,
+    convertFromPlaceToIndex,
+    createBananaFirstStep,
+    cut,
+    settArrayWidthAndHeight,
+} from '../Material/Drilling';
+import { getMaterial } from '../Material/Material';
+import { generateMill, getMillPosition, removeMill, updateMillPosition } from '../Mill/Mill';
+
 const speed = 0.2;
 
 let i;

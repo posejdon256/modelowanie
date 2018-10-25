@@ -49,6 +49,13 @@ export function DiffPoints(p1, p2) {
     ret.push(p1[2] - p2[2]);
     return ret;
 }
+export function DiffPointsXYZ(p1, p2) {
+    const ret = [];
+    ret.push(p1.x - p2.x);
+    ret.push(p1.y - p2.y);
+    ret.push(p1.z - p2.z);
+    return ret;
+}
 export function SumPoints(p1, p2) {
     const ret = {};
     ret.x = p1.x + p2.x;

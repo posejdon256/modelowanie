@@ -17,20 +17,32 @@ let modelMxMill;
 let projectionMx;
 let projectionMxMill;
 
-let vertexBuffer;
-let indexBuffer;
-let normalBuffer;
+let vertexBufferMaterial;
+let indexBufferMaterial;
+let normalBufferMaterial;
+
+let vertexBufferMill;
+let indexBufferMill;
+let normalBufferMill;
 
 export function getIndexBuffer() {
-  return indexBuffer;
+  return indexBufferMaterial;
 }
 export function getVertexBuffer() {
-  return vertexBuffer;
+  return vertexBufferMaterial;
 }
 export function getNormalBuffer() {
-  return normalBuffer;
+  return normalBufferMaterial;
 }
-
+export function getIndexBufferMill() {
+  return indexBufferMill;
+}
+export function getVertexBufferMill() {
+  return vertexBufferMill;
+}
+export function getNormalBufferMill() {
+  return normalBufferMill;
+}
 export function getModelMx(){
   return modelMx;
 }
@@ -59,37 +71,14 @@ export function initWebGL(canvas) {
     let gl = null;
     
     try {
-      // Try to grab the standard context. If it fails, fallback to experimental.
-      //Pobieranie shaderów jako tekstu
-      let vertexShaderText =  getMainVertexShader();
-      let fragmentShaderText = getMainFragmentShader();
-      let vertexMillShaderText = getMillVertexShader();
-      let fragmentMillShaderText = getMillFragmentShader();
 
       //Pobieranie kontekstu
       gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      gl.viewportWidth = canvas.width;
+      gl.viewportHeight = canvas.height;
 
-      //Tworzenie Shaderów
-      vShader = CreateShader( gl, vertexShaderText, gl.VERTEX_SHADER );
-      fShader = CreateShader( gl, fragmentShaderText, gl.FRAGMENT_SHADER );
+      initShaders(gl);
 
-      millVSShader = CreateShader( gl, vertexMillShaderText, gl.VERTEX_SHADER );
-      millFSShader = CreateShader( gl, fragmentMillShaderText, gl.FRAGMENT_SHADER );
-
-      //tworze program shaderowy
-      shaderProgram = gl.createProgram();
-      shaderProgramMill = gl.createProgram();
-
-      gl.attachShader(shaderProgram, vShader);
-      gl.attachShader(shaderProgram, fShader);
-
-      gl.attachShader(shaderProgramMill, millVSShader);
-      gl.attachShader(shaderProgramMill, millFSShader);
-
-      gl.linkProgram(shaderProgram);
-      gl.linkProgram(shaderProgramMill);
-
-      
       gl.useProgram(shaderProgram);
       modelMx = gl.getUniformLocation(shaderProgram, "model");
       projectionMx = gl.getUniformLocation(shaderProgram, "projection");
@@ -97,11 +86,7 @@ export function initWebGL(canvas) {
       gl.useProgram(shaderProgramMill);
       modelMxMill = gl.getUniformLocation(shaderProgramMill, "model");
       projectionMxMill = gl.getUniformLocation(shaderProgramMill, "projection");
-
-      //init buffers
-      vertexBuffer = gl.createBuffer();
-      indexBuffer = gl.createBuffer();
-      normalBuffer = gl.createBuffer();
+      initBuffers(gl);
     }
     catch(e) {}
     
@@ -112,6 +97,43 @@ export function initWebGL(canvas) {
     }
     
     return gl;
+  }
+  function initShaders(gl) {
+    // Try to grab the standard context. If it fails, fallback to experimental.
+    //Pobieranie shaderów jako tekstu
+    let vertexShaderText =  getMainVertexShader();
+    let fragmentShaderText = getMainFragmentShader();
+    let vertexMillShaderText = getMillVertexShader();
+    let fragmentMillShaderText = getMillFragmentShader();
+
+    vShader = CreateShader( gl, vertexShaderText, gl.VERTEX_SHADER );
+    fShader = CreateShader( gl, fragmentShaderText, gl.FRAGMENT_SHADER );
+
+    millVSShader = CreateShader( gl, vertexMillShaderText, gl.VERTEX_SHADER );
+    millFSShader = CreateShader( gl, fragmentMillShaderText, gl.FRAGMENT_SHADER );
+
+    //tworze program shaderowy
+    shaderProgram = gl.createProgram();
+    shaderProgramMill = gl.createProgram();
+
+    gl.attachShader(shaderProgram, vShader);
+    gl.attachShader(shaderProgram, fShader);
+
+    gl.attachShader(shaderProgramMill, millVSShader);
+    gl.attachShader(shaderProgramMill, millFSShader);
+
+    gl.linkProgram(shaderProgram);
+    gl.linkProgram(shaderProgramMill);
+  }
+  function initBuffers(gl) {
+      //init buffers
+      vertexBufferMaterial = gl.createBuffer();
+      indexBufferMaterial = gl.createBuffer();
+      normalBufferMaterial = gl.createBuffer();
+
+      vertexBufferMill = gl.createBuffer();
+      indexBufferMill = gl.createBuffer();
+      normalBufferMill = gl.createBuffer();
   }
   export  function CreateShader(gl, source, type) {
   

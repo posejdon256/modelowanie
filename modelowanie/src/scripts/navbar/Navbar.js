@@ -1,38 +1,21 @@
-import React, { Component } from 'react';
+import '../../css/formbase.min.css';
 import '../../css/navbar/Navbar.css';
-import'../../css/formbase.min.css';
-import List from './NavbarPoints/List';
-import ListPointsInCurve from './NavbarPoints/ListPointsInCurve';
-import BiCubicNavbar from './BiCubicNavbar/BiCubicNavbar';
-import NavbarIntersetion from './NavbutIntersection';
-import MillNavar from './MillNavbar/MillNavbar';
 
-import { getCursor, setCursor } from '../canvas/Cursor/Cursor';
+import React, { Component } from 'react';
+
 import { setAddingC2Type } from '../canvas/Bezier/BSpline';
-import { getCurvesControlPoints, addCurveBySelectedPoints } from '../canvas/Bezier/Curve';
-import { updateSelectedPoints, deselectPoints } from '../canvas/Points/Points';
-import { uniteTwoPoints } from '../canvas/Gregory/Claps';
+import { addCurveBySelectedPoints, getCurvesControlPoints } from '../canvas/Bezier/Curve';
+import { getCursor, setCursor } from '../canvas/Cursor/Cursor';
 import { setOneProjectionPointState } from '../canvas/CuttingCurve/Projection';
+import { uniteTwoPoints } from '../canvas/Gregory/Claps';
 import { setLocekdCamrea } from '../canvas/Move/Move';
+import { deselectPoints, updateSelectedPoints } from '../canvas/Points/Points';
 import { setPath } from '../Load/Load';
+import MillNavar from './MillNavbar/MillNavbar';
 
 export default class Navbar extends Component {
     constructor(props) {
         super(props);
-
-        // this.updateXGrid = this.updateXGrid.bind(this);
-        // this.updateYGrid = this.updateYGrid.bind(this);
-        // this.updateChecked = this.updateChecked.bind(this);
-        // this.addCurve = this.addCurve.bind(this);
-        // this.updateCurvePoints = this.updateCurvePoints.bind(this);
-        // this.updateAddingC2Type = this.updateAddingC2Type.bind(this);
-        // this.updateSelectedPoints = this.updateSelectedPoints.bind(this);
-        // this.setCursorToStart = this.setCursorToStart.bind(this);
-        // this.uniteTwoPoints = this.uniteTwoPoints.bind(this);
-        // this.setOneProjectionPointState = this.setOneProjectionPointState.bind(this);
-        // this.lockUnlockCamera = this.lockUnlockCamera.bind(this);
-        // this.setPath = this.setPath.bind(this);
-        // this.deselectPoints = this.deselectPoints.bind(this);
         this.selectNavbar = this.selectNavbar.bind(this);
         const cursor = getCursor();
         this.state = {

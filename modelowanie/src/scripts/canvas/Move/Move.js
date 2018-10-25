@@ -1,5 +1,5 @@
 
-import Translate, { getFront } from "../Translation/TranslationCenter/TranslationCenter";
+import Translate, { getZooming } from "../Translation/TranslationCenter/TranslationCenter";
 import { RedrawWithoutChangingScene } from "../Draw/Redraw";
 
 
@@ -16,7 +16,7 @@ export function setLocekdCamrea(_state) {
 function setIntervalForMoving(){
     if(!interval) {
         interval = setInterval(function(){
-            const _actualFront = getFront();
+            const _actualFront = getZooming();
             if(_actualFront > 1.5 && front !== 0.99 & cameraLocked)  {
                 front = 0;
             }

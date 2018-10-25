@@ -1,10 +1,10 @@
-import { getVectorLength, TryParseFloat } from "../../Helpers/Helpers";
-import { evaluate } from "./FindIntersection";
-import { addCuttingCurve, updateIn1Visualisation, updateIn2Visualisation } from "./CuttingCurve";
-import { findNewNewtonPoint } from "./Jacobi";
-import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
-import { updateUVAfterNewton, backNewton } from "./NewtonUpdateUV";
-import { setVisualisationObjects } from "../Draw/RedrawVisualisation/RedrawVisualization";
+import { getVectorLength, TryParseFloat } from '../../Helpers/Helpers';
+import { DrawPoint } from '../Draw/DrawPoints/DrawPoints';
+import { setVisualisationObjects } from '../Draw/RedrawVisualisation/RedrawVisualization';
+import { addCuttingCurve, updateIn1Visualisation, updateIn2Visualisation } from './CuttingCurve';
+import { evaluate } from './FindIntersection';
+import { findNewNewtonPoint } from './Jacobi';
+import { backNewton, updateUVAfterNewton } from './NewtonUpdateUV';
 
 
 let alpha = 0.002;

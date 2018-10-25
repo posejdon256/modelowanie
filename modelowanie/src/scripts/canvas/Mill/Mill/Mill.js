@@ -1,11 +1,13 @@
 import { getDrillSpecification } from "../../../Load/ReadMill/ReadMill";
-import { DrawMill } from "../../Draw/DrawMill/DrawMill";
 import Redraw from "../../Draw/Redraw";
+import { DiffPointsXYZ, normalize, crossMultiply } from "../../../Helpers/Helpers";
 
 let verticesCylinder = [];
 let indicesCylinder = [];
+let normalsCylinder = [];
 let verticesSphere = [];
 let indicesSphere = [];
+let normalsSphere = [];
 let millPosition = { x: 0, y: 0, z: 0 };
 export function generateMill() {
     const type = getDrillSpecification();
@@ -14,15 +16,18 @@ export function generateMill() {
     verticesCylinder.push({x: 0, y: 0, z: 0});
     verticesCylinder.push({x: 0, y: 0, z: 0.2});
     for(let t = 0; t < 2 * Math.PI; t += (1 / division)) {
-        verticesCylinder.push({x: r * Math.cos(t), y: r *  Math.sin(t), z: 0});
-        verticesCylinder.push({x: r * Math.cos(t), y: r *  Math.sin(t), z: 0.7});
+        verticesCylinder.push({x: r * Math.cos(t), y: r *  Math.sin(t), z: type.k ? r : 0});
+        verticesCylinder.push({x: r * Math.cos(t), y: r *  Math.sin(t), z: type.k ? 0.7 + r : 0.7});
     }
     for(let i = 2; i < verticesCylinder.length - 2; i ++) {
         indicesCylinder.push(i, i + 1, i + 2);
+      //  pushNormalsForCylinder(getNormalVectorForCylinder(i, i + 1, i + 2));
     }
     for(let i = 2; i < verticesCylinder.length - 3; i += 2) {
          indicesCylinder.push(i, i + 2, 0);
+       //  pushNormalsForCylinder(getNormalVectorForCylinder(i, i + 2, 0));
          indicesCylinder.push(i + 1, i + 3, 1);
+       //  pushNormalsForCylinder(getNormalVectorForCylinder(i + 1, i + 2, 1));
     }
     if(type.k) {
         const w = 50;
@@ -30,7 +35,7 @@ export function generateMill() {
             for(let a = 0; a <= w; a ++) {
                 const _teta = teta * 2 * Math.PI / w;
                 const _a = a * Math.PI / w;
-                verticesSphere.push({x: r * Math.cos(_teta) * Math.sin(_a), y: r * Math.sin(_teta) * Math.sin(_a), z: r* Math.cos(_a)});
+                verticesSphere.push({x: r * Math.cos(_teta) * Math.sin(_a), y: r * Math.sin(_teta) * Math.sin(_a), z: (r* Math.cos(_a)) + r});
             }
         }
         for (let latNumber = 0; latNumber < w; latNumber++) {
@@ -41,13 +46,36 @@ export function generateMill() {
                 indicesSphere.push(verticesCylinder.length + second);
                 indicesSphere.push(verticesCylinder.length + first + 1);
 
+              //  pushNormalsForSphere(getNormalVectorForSphere(first, second, first + 1));
+
                 indicesSphere.push(verticesCylinder.length + second);
                 indicesSphere.push(verticesCylinder.length + second + 1);
                 indicesSphere.push(verticesCylinder.length + first + 1);
+
+             //   pushNormalsForSphere(getNormalVectorForSphere(second, second + 1, first + 1));
+
             }
         }
     }
     Redraw();
+}
+function getNormalVectorForCylinder(a, b, c) {
+    let vec = crossMultiply(DiffPointsXYZ(verticesCylinder[a], verticesCylinder[b]), DiffPointsXYZ(verticesCylinder[c], verticesCylinder[b]));
+    return normalize(vec);
+}
+function pushNormalsForCylinder(norm) {
+    for(let j = 0; j < 9; j ++) {
+        normalsCylinder.push(norm[j % 3]);
+    }
+}
+function pushNormalsForSphere(norm) {
+    for(let j = 0; j < 9; j ++) {
+        normalsSphere.push(norm[j % 3]);
+    }
+}
+function getNormalVectorForSphere(a, b, c) {
+    let vec = crossMultiply(DiffPointsXYZ(verticesSphere[a], verticesSphere[b]), DiffPointsXYZ(verticesSphere[c], verticesSphere[b]));
+    return normalize(vec);
 }
 export function updateMillPosition(x, y, z) {
     millPosition.x += x;
@@ -75,7 +103,8 @@ export function getMill() {
     });
     return {
         vertices: _vertices,
-        indices: indicesCylinder.concat(indicesSphere)
+        indices: indicesCylinder.concat(indicesSphere),
+        normals : normalsCylinder.concat(normalsSphere)
     };
 }
 export function removeMill() {

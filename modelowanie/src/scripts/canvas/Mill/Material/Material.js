@@ -1,11 +1,13 @@
 
 import { TryParseInt, DiffPoints, crossMultiply, normalize } from '../../../Helpers/Helpers';
+import Redraw from '../../Draw/Redraw';
+import { getNormalVector } from '../HelperMill';
 
 let material = [];
 let materialTransformed = [];
 let material2D = [];
-let xGrid = 4;
-let yGrid = 4;
+let xGrid = 100;
+let yGrid = 100;
 let xSize = 15;
 let ySize = 15;
 let zSize = 5;
@@ -29,8 +31,8 @@ export function generateMaterial() {
                 updateMaterialOnIndexes([i, i + 1, i + yGrid]);
                 pushNormals(getNormalVector(i, i + 1, i + yGrid));
                 
-                updateMaterialOnIndexes([i + 1, i + yGrid, i + 1 + yGrid]);
-                pushNormals(getNormalVector(i + 1, i + yGrid, i + 1 + yGrid));
+                updateMaterialOnIndexes([i + yGrid,i + 1,  i + 1 + yGrid]);
+                pushNormals(getNormalVector(i + yGrid,i + 1,  i + 1 + yGrid));
             }
            i ++;
          }
@@ -44,6 +46,8 @@ export function generateMaterial() {
         indices.push(ind);
         ind ++;
     }
+    Redraw();
+    Redraw();
 } 
 function updateMaterialOnIndexes(indexes) {
     indexes.forEach(i => {
@@ -54,16 +58,12 @@ function updateMaterialOnIndexes(indexes) {
         }
     });
 }
-export function getNormalVector(a, b, c) {
-    let vec = crossMultiply(DiffPoints(material[a], material[b]), DiffPoints(material[c], material[b]));
-    return normalize(vec);
-}
 function pushNormals(norm) {
     normals.push(norm[0], norm[1], norm[2],norm[0], norm[1], norm[2], norm[0], norm[1], norm[2]);
 }
 export function updateNormals(i, norm) {
     for(let j = 0; j < 9; j ++) {
-        normals[i + j] = norm[j] % 3;
+        normals[i + j] = norm[j % 3];
     }
 }
 export function _removeMaterial() {
