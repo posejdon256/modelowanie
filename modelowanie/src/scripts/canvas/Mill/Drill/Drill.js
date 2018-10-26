@@ -1,4 +1,4 @@
-import { DiffPoints } from '../../../Helpers/Helpers';
+import { DiffPoints, TryParseFloat } from '../../../Helpers/Helpers';
 import { getDrillSpecification, getPointsToDrill } from '../../../Load/ReadMill/ReadMill';
 import Redraw from '../../Draw/Redraw';
 import { Bresenham, updateZInBrezenhamy } from '../Bresenham/Bresenham';
@@ -12,20 +12,43 @@ import {
 import { getMaterial } from '../Material/Material';
 import { generateMill, getMillPosition, removeMill, updateMillPosition } from '../Mill/Mill';
 
-const speed = 0.2;
+let speed = 1;
+let automatic = false;
 
 let i;
+export function _setAutomatic() {
+    automatic = !automatic;
+}
+export function _setSpeed(_speed) {
+    speed = TryParseFloat(_speed, speed);
+}
 export function Drill() {
     i = 0;
     removeMill();
     generateMill();
-    const points = cutPoints(getPointsToDrill());
+    const drillPoints = getPointsToDrill();
+    const { materialPoints } = getMaterial();
+    if(materialPoints.length === 0) {
+        alert("Please add material");
+        return;
+    }
+    const points = cutPoints(drillPoints);
     const spec = getDrillSpecification();
+    if(automatic) {
+        for(let j = 0; j < points.length; j ++) {
+            updatePoint(points, j, spec);
+        }
+        Redraw();
+        return;
+    }
     let id = setInterval(function(){
 
         const drillPos = getMillPosition();
         if(!points[i] || i >= points.length) {
             clearInterval(id);
+            if(automatic) {
+                Redraw();
+            }
             return;
         }
         const p = convertFromIndexToPlace(points[i].x, points[i].y, points[i].z);
@@ -39,10 +62,19 @@ export function Drill() {
         cut(points[i].x, points[i].y);
 
         updateMillPosition(newCenter[0], newCenter[1], newCenter[2]);
-        Redraw();
+        if(i % speed === 0 && !automatic) {
+            Redraw();
+        }
 
         i ++;
-    }, 10 * speed);
+    }, 1);
+}
+function updatePoint(points, j, spec) {
+    const p = convertFromIndexToPlace(points[j].x, points[j].y, points[j].z);
+    if(points[j].banana1) {
+        createBananaFirstStep(p, spec.mm, spec.k);
+    }
+    cut(points[j].x, points[j].y);
 }
 function cutPoints(points) {
     let _points = [];

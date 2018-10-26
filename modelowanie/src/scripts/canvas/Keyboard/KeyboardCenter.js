@@ -1,12 +1,11 @@
 import { MoveToFront, MoveToLeft, MoveToRight, StopMovingLeft, StopMovingRight, MoveToTop, MoveToBack, StopMovingTop, StopMovingDown, MoveToDown, StopMovingFront, StopMovingBack } from "../Move/Move";
 import { MoveToFrontMill, MoveToBackMill, MoveToDownMill, MoveToLeftMill, MoveToRightMill, MoveToTopMill, StopMovingDownMill, StopMovingBackMill, StopMovingFrontMill, StopMovingTopCursor, StopMovingLeftMill, StopMovingRightMill, StopMovingTopMill} from '../Move/MoveMill';
 import { addPointWithRedraw } from "../Points/Points";
-export default function KeyboardCenter(event, refresh) {
+export default function KeyboardCenter(event) {
     if(event.type === 'keydown') {
         KeyDown(event);
     } else if(event.type === 'keyup') {
         KeyUp(event);
-        refresh();
     }
 }
 function KeyDown(event) {

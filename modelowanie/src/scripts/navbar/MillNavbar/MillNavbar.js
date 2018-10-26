@@ -4,6 +4,7 @@ import { readMill } from '../../Load/ReadMill/ReadMill';
 import { _setXGrid, _setYGrid, _removeMaterial, _setXSize, _setYSize, _setZSize } from '../../canvas/Mill/Material/Material';
 import { generateMaterial } from '../../canvas/Mill/Material/Material';
 import { generateMill } from '../../canvas/Mill/Mill/Mill';
+import { _setAutomatic, _setSpeed } from '../../canvas/Mill/Drill/Drill';
 
 export default class MillNavar extends Component {
     constructor(props) {
@@ -17,6 +18,8 @@ export default class MillNavar extends Component {
         this.setXSize = this.setXSize.bind(this);
         this.setYSize = this.setYSize.bind(this);
         this.setZSize = this.setZSize.bind(this);
+        this.setAutomatic = this.setAutomatic.bind(this);
+        this.setSpeed = this.setSpeed.bind(this);
     }
     addMill() {
         generateMill();
@@ -45,6 +48,12 @@ export default class MillNavar extends Component {
     setPath(e){
         readMill(e.target.files);
     }
+    setAutomatic() {
+        _setAutomatic();
+    }
+    setSpeed(e) {
+        _setSpeed(e.target.value);
+    }
     render(){
         return(
             <div className="ab-bicubic">
@@ -71,6 +80,14 @@ export default class MillNavar extends Component {
                 <div>
                     <label>Z size: </label>
                     <input className="input-ab" type="text" onChange={this.setZSize} defaultValue={5}/>
+                </div>
+                <div>
+                    <label>Speed: </label>
+                    <input className="input-ab" type="text" onChange={this.setSpeed} defaultValue={1}/>
+                </div>
+                <div>
+                    <label>Automatic: </label>
+                    <input className="input-ab" type="checkbox" onChange={this.setAutomatic}/>
                 </div>
                 <div>
                     <button className="btn" onClick={this.addMaterial}>Add material</button>

@@ -7,7 +7,6 @@ import { setAddingC2Type } from '../canvas/Bezier/BSpline';
 import { addCurveBySelectedPoints, getCurvesControlPoints } from '../canvas/Bezier/Curve';
 import { getCursor, setCursor } from '../canvas/Cursor/Cursor';
 import { setOneProjectionPointState } from '../canvas/CuttingCurve/Projection';
-import { uniteTwoPoints } from '../canvas/Gregory/Claps';
 import { setLocekdCamrea } from '../canvas/Move/Move';
 import { deselectPoints, updateSelectedPoints } from '../canvas/Points/Points';
 import { setPath } from '../Load/Load';
@@ -76,7 +75,6 @@ export default class Navbar extends Component {
         setCursor(0,0,0, true);// with redraw
     }
     uniteTwoPoints() {
-        uniteTwoPoints();
     }
     lockUnlockCamera(event) {
         setLocekdCamrea(event.target.checked);
