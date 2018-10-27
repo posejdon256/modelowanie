@@ -18,7 +18,7 @@ void main() {
 
   vec3 Ia = ambient * ambientSaturation;
   vec3 Id = diffuse * diff;
-  gl_FragColor = texture2D(uSampler, ((vTextureCoord )  + (0.75, 0.75))/ 1.5) * 0.7 +  vec4(Ia + Id, 1) * 0.3;
+  gl_FragColor = texture2D(uSampler, ((vTextureCoord )  + (1.5, 1.5))/ 3.0) * 0.7 +  vec4(Ia + Id, 1) * 0.3;
  // gl_FragColor = vec4(Ia + Id, 1) ;
 }`;
 export function getMainFragmentShader() {

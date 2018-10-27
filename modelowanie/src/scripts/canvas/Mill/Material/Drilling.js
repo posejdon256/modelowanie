@@ -1,11 +1,14 @@
 import { getMaterial, getxSize, getySize, updateNormals } from "./Material";
 import { getNormalVector } from "../HelperMill";
+import { getDrillSpecification } from "../../../Load/ReadMill/ReadMill";
 let indexes;
 let indexes2;
 let r;
 let final = [];
 let arrW, arrH;
+let typeSphere = false;
 export function settArrayWidthAndHeight(w, h) {
+    typeSphere = getDrillSpecification().k;
     arrW = w;
     arrH = h;
 }
@@ -57,27 +60,10 @@ export function createBananaFirstStep(point, _r, sphere) {
     prepareStep(point, 1, sphere);
 
 }
-// export function createBananaSecondStep(point, sphere) {
-//     indexes2 = [];
-//     const indexPoint = convertFromPlaceToIndex(point);
-//     for(let i = 0; i < indexes2.length; i ++) {
-//         let same = false;
-//         for(let j = 0; j < indexes.length; j ++) {
-//             if(indexes2[i].x === indexes[j].x && indexes2[i].y === indexes[j].y) {
-//                 if(!sphere || indexes[j].z < indexes2[i].z) {
-//                     //same = true;
-//                 }
-//             }
-//             if(!same && j === indexes.length - 1) {
-//                 final.push({x: indexes2[i].x - indexPoint.x, y: indexes2[i].y - indexPoint.y, z: indexes2[i].z})
-//             }
-//         }
-//     }
-// }
 function get2dvectorLength(v1, v2) {
     return Math.sqrt(Math.pow(v1.x - v2.x, 2) + Math.pow(v1.y - v2.y, 2));
 }
-export function cut(x, y) {
+export function cut(x, y, zCentral, zCentralPrev) {
 
     const {material, material2D, materialPoints} = getMaterial();
     for(let i = 0; i < final.length; i ++) {
@@ -87,8 +73,17 @@ export function cut(x, y) {
         }
         let indMaterial = material2D[x + final[i].x][y + final[i].y].indMaterial;
         let points = material2D[x + final[i].x][y + final[i].y].points;
+        let faces = material2D[x + final[i].x][y + final[i].y].faces;
 
-        material[indMaterial][2] = Math.min(material[indMaterial][2], final[i].z);
+        if(material[indMaterial][2] > final[i].z) {
+            if(!typeSphere && zCentral < zCentralPrev) {
+                throw Error("Error: Cannot mill down with a flat cutter.");
+            }
+            material[indMaterial][2] = final[i].z;
+        }
+        for(let j = 0; j < faces.length; j ++) {
+            material[faces[j]][2] = Math.min(material[faces[j]][2], final[i].z);
+        }
 
         for(let j = 0; j < points.length; j ++) {
             materialPoints[points[j].p + 2] = Math.min(materialPoints[points[j].p + 2], final[i].z);
@@ -116,8 +111,8 @@ export function convertFromPlaceToIndex(point, floor) {
     x === floor === undefined ? parseInt((point.x + (sizeX / 2)) * arrW  / sizeX, 10) : x;
     y === floor === undefined ? parseInt((point.y + (sizeY / 2)) * arrH / sizeY, 10) : y;
     return {
-        x: Math.min(Math.max(x, 0), arrW - 1),
-        y: Math.min(Math.max(y, 0), arrH - 1),
+        x: x,
+        y: y,
         z: point.z
     };
 }

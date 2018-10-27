@@ -13,7 +13,7 @@ export default class Header extends Component {
         this.drillFun = this.drillFun.bind(this);
     }
     drillFun() {
-        Drill();
+            Drill();
 
     }
     render(){

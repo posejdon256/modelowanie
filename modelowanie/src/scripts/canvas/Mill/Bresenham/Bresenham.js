@@ -2,8 +2,7 @@ import { getMaterial } from "../Material/Material";
 
 export function Bresenham (x1, y1, x2, y2, index) {
     var coordinatesArray = new Array();
-    if(isNaN(x1) || isNaN(x2) || isNaN(y1) || isNaN(y2) ||
-      x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0) {
+    if(isNaN(x1) || isNaN(x2) || isNaN(y1) || isNaN(y2)) {
         return [];
     }
 

@@ -26,13 +26,21 @@ export function Drill() {
     i = 0;
     removeMill();
     generateMill();
+    updateMillPosition(0, 0, 1);
     const drillPoints = getPointsToDrill();
     const { materialPoints } = getMaterial();
     if(materialPoints.length === 0) {
         alert("Please add material");
         return;
     }
-    const points = cutPoints(drillPoints);
+    let points;
+    try{
+        points = cutPoints(drillPoints);
+    }
+    catch(e) {
+        alert(e);
+        return;
+    }
     const spec = getDrillSpecification();
     if(automatic) {
         for(let j = 0; j < points.length; j ++) {
@@ -59,7 +67,13 @@ export function Drill() {
         } else if(points[i].banana2) {
          //   createBananaSecondStep(p, spec.k);
         }
-        cut(points[i].x, points[i].y);
+        try{
+            cut(points[i].x, points[i].y, points[i].z, i === 0 ? 0 : points[i - 1].z);
+        }
+        catch(e) {
+            clearInterval(id);
+            alert(e);
+        }
 
         updateMillPosition(newCenter[0], newCenter[1], newCenter[2]);
         if(i % speed === 0 && !automatic) {
@@ -85,6 +99,9 @@ function cutPoints(points) {
     for(let i = 1; i < points.length; i ++) {
         const p1 = convertFromPlaceToIndex(points[i - 1]);
         const p2 = convertFromPlaceToIndex(points[i]);
+        if(p1.z < 0 || p2.z < 0) {
+            throw Error("The cutter drills into the stand.");
+        }
         const brezenhamy = Bresenham(p1.x, p1.y, p2.x, p2.y, i);
         _points = _points.concat(updateZInBrezenhamy(points[i- 1], points[i], brezenhamy));
     }
