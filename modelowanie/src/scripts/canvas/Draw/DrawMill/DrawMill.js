@@ -15,7 +15,7 @@ export function DrawMill(update) {
     if(vertices.length === 0) {
         return;
     }
-    if(update) {
+    if(true) {
         updateBuffers(vertices, indices, normals);
     }
 

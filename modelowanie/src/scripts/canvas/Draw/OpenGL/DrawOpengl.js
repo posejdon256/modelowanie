@@ -3,10 +3,12 @@ import { DrawMill } from '../DrawMill/DrawMill';
 import mat4 from 'gl-matrix-mat4';
 import { getGLCtx } from '../Draw';
 import { getTranslationVector, getZooming, getRotationDatas } from '../../Translation/TranslationCenter/TranslationCenter';
+import { DrawLines } from '../DrawLine/DrawLines';
 
 export function OpenGLDrawScene(update) {
     DrawMaterial(update);
     DrawMill(update);
+    DrawLines(update);
 }
 export function clearGL(gl) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);

@@ -1,3 +1,5 @@
+import Redraw from "../../canvas/Draw/Redraw";
+import { TryParseFloat2 } from "../../Helpers/Helpers";
 
 let points = [];
 let type = { k: true, mm: 10 };
@@ -15,6 +17,7 @@ export function readMill(_path) {
                 const _result =  result.slice(37, result.length);
                 const file = atob(_result);
                 parseMill(file);
+                Redraw();
             } catch(error) {
                 console.log(error);
             }
@@ -36,4 +39,14 @@ export function getPointsToDrill() {
 }
 export function getDrillSpecification() {
     return type;
+}
+export function _setMillType(k) {
+    type.k = k === "f" ? false : true;
+}
+export function _setMillMM(mm) {
+    const prev = type.mm;
+    type.mm = TryParseFloat2(mm, type.mm);
+    if(type.mm !== prev) {
+        type.mm = type.mm /100;
+    }
 }

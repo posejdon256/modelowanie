@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import '../../../css/navbar/Navbar.css';
-import { readMill } from '../../Load/ReadMill/ReadMill';
+import { readMill, _setMillType, _setMillMM } from '../../Load/ReadMill/ReadMill';
 import { _setXGrid, _setYGrid, _removeMaterial, _setXSize, _setYSize, _setZSize } from '../../canvas/Mill/Material/Material';
 import { generateMaterial } from '../../canvas/Mill/Material/Material';
 import { generateMill } from '../../canvas/Mill/Mill/Mill';
-import { _setAutomatic, _setSpeed } from '../../canvas/Mill/Drill/Drill';
+import { _setAutomatic, _setSpeed, _setMinimumValue } from '../../canvas/Mill/Drill/Drill';
+import { ShowPaths } from '../../canvas/Draw/DrawLine/DrawLines';
 
 export default class MillNavar extends Component {
     constructor(props) {
@@ -20,6 +21,21 @@ export default class MillNavar extends Component {
         this.setZSize = this.setZSize.bind(this);
         this.setAutomatic = this.setAutomatic.bind(this);
         this.setSpeed = this.setSpeed.bind(this);
+        this.showPaths = this.showPaths.bind(this);
+        this.setMaxDown = this.setMaxDown.bind(this);
+        this.setType = this.setType.bind(this);
+        this.setMillSize = this.setMillSize.bind(this);
+    }
+    setMaxDown(e) {
+        _setMinimumValue(e.target.value);
+    }
+    setType(e) {
+        if(e.target.value === "k" || e.target.value === "f") {
+            _setMillType(e.target.value);
+        }
+    }
+    setMillSize(e) {
+        _setMillMM(e.target.value);
     }
     addMill() {
         generateMill();
@@ -54,6 +70,9 @@ export default class MillNavar extends Component {
     setSpeed(e) {
         _setSpeed(e.target.value);
     }
+    showPaths() {
+        ShowPaths();
+    }
     render(){
         return(
             <div className="ab-bicubic">
@@ -86,8 +105,24 @@ export default class MillNavar extends Component {
                     <input className="input-ab" type="text" onChange={this.setSpeed} defaultValue={1}/>
                 </div>
                 <div>
+                    <label>Max mill down: </label>
+                    <input className="input-ab" type="text" onChange={this.setMaxDown} defaultValue={2}/>
+                </div>
+                <div>
+                    <label>Mill type: </label>
+                    <input className="input-ab" type="text" onChange={this.setType} defaultValue={"k"}/>
+                </div>
+                <div>
+                    <label>Mill Size: </label>
+                    <input className="input-ab" type="text" onChange={this.setMillSize} defaultValue={12}/>
+                </div>
+                <div>
                     <label>Automatic: </label>
                     <input className="input-ab" type="checkbox" onChange={this.setAutomatic}/>
+                </div>
+                <div>
+                    <label>Show paths: </label>
+                    <input className="input-ab" type="checkbox" onChange={this.showPaths}/>
                 </div>
                 <div>
                     <button className="btn" onClick={this.addMaterial}>Add material</button>

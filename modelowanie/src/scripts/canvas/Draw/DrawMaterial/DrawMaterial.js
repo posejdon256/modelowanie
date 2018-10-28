@@ -28,7 +28,7 @@ function DrawLnesOpenGL(points, indices, normals) {
     const vb = getVertexBuffer();
     const ib = getIndexBuffer();
     const nb = getNormalBuffer();
-
+    gl.enable(gl.DEPTH_TEST);
     const shaderProgram = getShaderProgram();
 
     gl.useProgram(shaderProgram);

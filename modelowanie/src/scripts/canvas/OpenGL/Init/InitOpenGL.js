@@ -3,6 +3,8 @@ import { getMainFragmentShader } from "./Shaders/mainFrag";
 import { getMillVertexShader } from "./Shaders/millVert";
 import { getMillFragmentShader } from "./Shaders/millFrag";
 import { getGLCtx } from "../../Draw/Draw";
+import { getLineVertexShader } from "./Shaders/lineVert";
+import { getLineFragmentShader } from "./Shaders/lineFrag";
 
 let fShader;
 let vShader;
@@ -11,13 +13,20 @@ let texture;
 let millVSShader;
 let millFSShader;
 
+let lineVSShader;
+let lineFSShader;
+
 let shaderProgram;
 let shaderProgramMill;
+let shaderProgramLine;
 
 let modelMx;
 let modelMxMill;
 let projectionMx;
 let projectionMxMill;
+
+let modelMxLine;
+let projectionMxLine;
 
 let vertexBufferMaterial;
 let indexBufferMaterial;
@@ -26,6 +35,9 @@ let normalBufferMaterial;
 let vertexBufferMill;
 let indexBufferMill;
 let normalBufferMill;
+
+let vertexBufferLine;
+let indexBufferLine;
 
 export function getTexture() {
   return texture;
@@ -48,14 +60,26 @@ export function getVertexBufferMill() {
 export function getNormalBufferMill() {
   return normalBufferMill;
 }
+export function getIndexBufferLine() {
+  return indexBufferLine;
+}
+export function getVertexBufferLine() {
+  return vertexBufferLine;
+}
 export function getModelMx(){
   return modelMx;
 }
 export function getModelMxMill(){
   return modelMxMill;
 }
+export function getModelMxLine(){
+  return modelMxLine;
+}
 export function getProjectionMxMill() {
   return projectionMxMill;
+}
+export function getProjectionMxLine() {
+  return projectionMxLine;
 }
 export function getProjectionMx(){
   return projectionMx;
@@ -65,6 +89,9 @@ export function getShaderProgram() {
 }
 export function getShaderMill() {
   return shaderProgramMill;
+}
+export function getShaderLine() {
+  return shaderProgramLine;
 }
 export function getFragmentShader() {
   return fShader;
@@ -91,6 +118,11 @@ export function initWebGL(canvas) {
       gl.useProgram(shaderProgramMill);
       modelMxMill = gl.getUniformLocation(shaderProgramMill, "model");
       projectionMxMill = gl.getUniformLocation(shaderProgramMill, "projection");
+
+      gl.useProgram(shaderProgramLine);
+      modelMxLine = gl.getUniformLocation(shaderProgramLine, "model");
+      projectionMxLine = gl.getUniformLocation(shaderProgramLine, "projection");
+
       initBuffers(gl);
       initTexture(gl);
     }
@@ -111,6 +143,8 @@ export function initWebGL(canvas) {
     let fragmentShaderText = getMainFragmentShader();
     let vertexMillShaderText = getMillVertexShader();
     let fragmentMillShaderText = getMillFragmentShader();
+    let vertexLineShaderText = getLineVertexShader();
+    let fragmentLineShaderText = getLineFragmentShader();
 
     vShader = CreateShader( gl, vertexShaderText, gl.VERTEX_SHADER );
     fShader = CreateShader( gl, fragmentShaderText, gl.FRAGMENT_SHADER );
@@ -118,9 +152,13 @@ export function initWebGL(canvas) {
     millVSShader = CreateShader( gl, vertexMillShaderText, gl.VERTEX_SHADER );
     millFSShader = CreateShader( gl, fragmentMillShaderText, gl.FRAGMENT_SHADER );
 
+    lineVSShader = CreateShader( gl, vertexLineShaderText, gl.VERTEX_SHADER );
+    lineFSShader = CreateShader( gl, fragmentLineShaderText, gl.FRAGMENT_SHADER );
+
     //tworze program shaderowy
     shaderProgram = gl.createProgram();
     shaderProgramMill = gl.createProgram();
+    shaderProgramLine = gl.createProgram();
 
     gl.attachShader(shaderProgram, vShader);
     gl.attachShader(shaderProgram, fShader);
@@ -128,6 +166,10 @@ export function initWebGL(canvas) {
     gl.attachShader(shaderProgramMill, millVSShader);
     gl.attachShader(shaderProgramMill, millFSShader);
 
+    gl.attachShader(shaderProgramLine, lineVSShader);
+    gl.attachShader(shaderProgramLine, lineFSShader);
+
+    gl.linkProgram(shaderProgramLine);
     gl.linkProgram(shaderProgram);
     gl.linkProgram(shaderProgramMill);
   }
@@ -140,6 +182,9 @@ export function initWebGL(canvas) {
       vertexBufferMill = gl.createBuffer();
       indexBufferMill = gl.createBuffer();
       normalBufferMill = gl.createBuffer();
+
+      vertexBufferLine = gl.createBuffer();
+      indexBufferLine = gl.createBuffer();
   }
   export  function CreateShader(gl, source, type) {
   

@@ -1,4 +1,4 @@
-import { DiffPoints, TryParseFloat } from '../../../Helpers/Helpers';
+import { DiffPoints, TryParseFloat, TryParseFloat2 } from '../../../Helpers/Helpers';
 import { getDrillSpecification, getPointsToDrill } from '../../../Load/ReadMill/ReadMill';
 import Redraw from '../../Draw/Redraw';
 import { Bresenham, updateZInBrezenhamy } from '../Bresenham/Bresenham';
@@ -14,8 +14,17 @@ import { generateMill, getMillPosition, removeMill, updateMillPosition } from '.
 
 let speed = 1;
 let automatic = false;
+let minimumValue = 0.2;
+
 
 let i;
+export function _setMinimumValue(_val) {
+    const prev = minimumValue;
+    minimumValue = TryParseFloat2(_val, 2);
+    if(minimumValue !== prev) {
+        minimumValue /= 10;
+    }
+}
 export function _setAutomatic() {
     automatic = !automatic;
 }
@@ -99,7 +108,7 @@ function cutPoints(points) {
     for(let i = 1; i < points.length; i ++) {
         const p1 = convertFromPlaceToIndex(points[i - 1]);
         const p2 = convertFromPlaceToIndex(points[i]);
-        if(p1.z < 0 || p2.z < 0) {
+        if(p1.z < minimumValue || p2.z < minimumValue) {
             throw Error("The cutter drills into the stand.");
         }
         const brezenhamy = Bresenham(p1.x, p1.y, p2.x, p2.y, i);
