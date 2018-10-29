@@ -5,12 +5,14 @@ import { Bresenham, updateZInBrezenhamy } from '../Bresenham/Bresenham';
 import {
     convertFromIndexToPlace,
     convertFromPlaceToIndex,
-    createBananaFirstStep,
+    findCircle,
     cut,
     settArrayWidthAndHeight,
 } from '../Material/Drilling';
 import { getMaterial } from '../Material/Material';
 import { generateMill, getMillPosition, removeMill, updateMillPosition } from '../Mill/Mill';
+import { ScanLine } from './ScanLine';
+import { getRectangleCorners, getRectangleLines } from '../../../Helpers/LinesHelper';
 
 let speed = 1;
 let automatic = false;
@@ -32,7 +34,7 @@ export function _setSpeed(_speed) {
     speed = TryParseFloat(_speed, speed);
 }
 export function Drill() {
-    i = 0;
+    i = 1;
     removeMill();
     generateMill();
     updateMillPosition(0, 0, 1);
@@ -69,15 +71,20 @@ export function Drill() {
             return;
         }
         const p = convertFromIndexToPlace(points[i].x, points[i].y, points[i].z);
+        const p1 = convertFromIndexToPlace(points[i - 1].x, points[i - 1].y, points[i - 1].z);
+        const p2 = convertFromIndexToPlace(points[i].x, points[i].y, points[i].z);
+        let pointsToDrill = ScanLine(getRectangleCorners(p1, p2, spec.mm), getRectangleLines(p1, p2, spec.mm));
+        pointsToDrill = pointsToDrill.concat(findCircle(p1, spec.mm,spec.k));
+        pointsToDrill = pointsToDrill.concat(findCircle(p2, spec.mm,spec.k));
         const newCenter = DiffPoints([p.x, p.y, p.z] , [drillPos.x, drillPos.y, drillPos.z]);
 
-        if(points[i].banana1) {
-            createBananaFirstStep(p, spec.mm, spec.k);
-        } else if(points[i].banana2) {
+        //if(points[i].banana1) {
+         //   createBananaFirstStep(p, spec.mm, spec.k);
+        //} else if(points[i].banana2) {
          //   createBananaSecondStep(p, spec.k);
-        }
+        //}
         try{
-            cut(points[i].x, points[i].y, points[i].z, i === 0 ? 0 : points[i - 1].z);
+            cut(points[i].x, points[i].y, points[i].z, i === 0 ? 0 : points[i - 1].z, pointsToDrill);
         }
         catch(e) {
             clearInterval(id);
@@ -94,9 +101,7 @@ export function Drill() {
 }
 function updatePoint(points, j, spec) {
     const p = convertFromIndexToPlace(points[j].x, points[j].y, points[j].z);
-    if(points[j].banana1) {
-        createBananaFirstStep(p, spec.mm, spec.k);
-    }
+    //createBananaFirstStep(p, spec.mm, spec.k);
     cut(points[j].x, points[j].y);
 }
 function cutPoints(points) {
@@ -105,14 +110,19 @@ function cutPoints(points) {
 
     settArrayWidthAndHeight(material2D.length, material2D[0].length);
 
-    for(let i = 1; i < points.length; i ++) {
+    for(let i = 1; i < points.length; i += 2) {
         const p1 = convertFromPlaceToIndex(points[i - 1]);
+        _points.push(p1);
         const p2 = convertFromPlaceToIndex(points[i]);
+        if(p1.x !== p2.x || p1.y !== p2.y) {
+            _points.push(p2);
+        }
+        //const p2 = convertFromPlaceToIndex(points[i]);
         if(p1.z < minimumValue || p2.z < minimumValue) {
             throw Error("The cutter drills into the stand.");
         }
-        const brezenhamy = Bresenham(p1.x, p1.y, p2.x, p2.y, i);
-        _points = _points.concat(updateZInBrezenhamy(points[i- 1], points[i], brezenhamy));
+        //const brezenhamy = Bresenham(p1.x, p1.y, p2.x, p2.y, i);
+        //_points = _points.concat(updateZInBrezenhamy(points[i- 1], points[i], brezenhamy));
     }
     return _points;
 }

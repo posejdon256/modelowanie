@@ -2,11 +2,13 @@ import { getPointsToDrill } from "../../../Load/ReadMill/ReadMill";
 import { getVertexBufferLine, getIndexBufferLine, getShaderLine, getProjectionMxLine, getModelMxLine } from "../../OpenGL/Init/InitOpenGL";
 import { getGLCtx } from "../Draw";
 import { TranslateMatrix } from "../OpenGL/DrawOpengl";
+import Redraw from "../Redraw";
 
 let indices;
 let show = false;
 export function ShowPaths() {
     show = !show;
+    Redraw();
 }
 export function DrawLines(update) {
     if(getPointsToDrill().length === 0 || !show) {
