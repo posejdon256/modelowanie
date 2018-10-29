@@ -1,23 +1,19 @@
 import { getMaterial, getxSize, getySize, updateNormals } from "./Material";
 import { getNormalVector } from "../HelperMill";
 import { getDrillSpecification } from "../../../Load/ReadMill/ReadMill";
-let indexes;
-let indexes2;
+
 let r;
-let final = [];
-let arrW, arrH;
 let typeSphere = false;
+let arrW, arrH;
 export function settArrayWidthAndHeight(w, h) {
-    typeSphere = getDrillSpecification().k;
     arrW = w;
     arrH = h;
+    typeSphere = getDrillSpecification().k;
 }
 function prepareStep(point, sphere) {
-    final = [];
     const { material2D } = getMaterial();
-    const eps = 0.01;
-    const square = {x: point.x - (r + eps), y: point.y - (r + eps), z: point.z};
-    const end = {x: point.x + (r + eps), y: point.y + (r + eps), z: point.z};
+    const square = {x: point.x - r, y: point.y - r, z: point.z};
+    const end = {x: point.x + r, y: point.y + r, z: point.z};
     const indexStart = convertFromPlaceToIndex(square, 1);
     const indexEnd = convertFromPlaceToIndex(end, 0);
     const points = [];
@@ -29,34 +25,31 @@ function prepareStep(point, sphere) {
             const pSearched = convertFromIndexToPlace(i, j, material2D[i][j].z); 
             const len =  get2dvectorLength(point, pSearched);
             if(len <= r) {
-                points.push(innerFunction(sphere, i, j, point, len, points));
+                points.push(innerFunction(sphere, i, j, point, len));
             }
         }
     }
     return points;
 }
-function innerFunction(sphere, i, j, point, len, points) {
+function innerFunction(sphere, i, j, point, len) {
     let newPoint;
     if(!sphere) {
-        indexes.push({x: i, y: j, z: point.z});
         newPoint = {x: i, y: j, z: point.z};
     } else {
         const diff = r - Math.sqrt(Math.pow(r, 2) - Math.pow(len, 2));
-        indexes.push({x: i, y: j, z: point.z + diff});
         newPoint = {x: i, y: j, z: point.z + diff};
     }
     return newPoint;
 }
 export function findCircle(point, _r, sphere) {
     r = _r;
-    indexes = [];
     return prepareStep(point, sphere);
 
 }
 function get2dvectorLength(v1, v2) {
     return Math.sqrt(Math.pow(v1.x - v2.x, 2) + Math.pow(v1.y - v2.y, 2));
 }
-export function cut(x, y, zCentral, zCentralPrev, _points) {
+export function cut(zCentral, zCentralPrev, _points) {
 
     const {material, material2D, materialPoints} = getMaterial();
     for(let i = 0; i < _points.length; i ++) {
@@ -67,12 +60,12 @@ export function cut(x, y, zCentral, zCentralPrev, _points) {
         let indMaterial = material2D[_points[i].x][_points[i].y].indMaterial;
         let points = material2D[_points[i].x][_points[i].y].points;
 
-        // if(material[indMaterial][2] > _points[i].z) {
-        //     if(!typeSphere && zCentral < zCentralPrev) {
-        //         throw Error("Error: Cannot mill down with a flat cutter.");
-        //     }
+        if(material[indMaterial][2] > _points[i].z) {
+            if(!typeSphere && zCentral < zCentralPrev) {
+                throw Error("Error: Cannot mill down with a flat cutter.");
+            }
             material[indMaterial][2] = _points[i].z;
-        //}
+        }
 
         for(let j = 0; j < points.length; j ++) {
             materialPoints[points[j].p + 2] = Math.min(materialPoints[points[j].p + 2], _points[i].z);

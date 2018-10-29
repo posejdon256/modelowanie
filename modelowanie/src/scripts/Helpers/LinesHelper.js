@@ -7,6 +7,20 @@ export function getLineFactors(p1, p2) {
         b: p1.y - p1.x * _a
     }
 }
+export function getPointNearLine(a, b, p) {
+    if(a === 0 ){
+        return {
+            x: p.x,
+            y: b
+        };
+    }
+    const a2 = -(1/a);
+    const b2 = p.y -  a2 * p.x;
+    const p2 = {};
+    p2.x = (b - b2)/(a2 - a);
+    p2.y = (a2 * b - b2 * a) / (a2 - a);
+    return p2;
+}
 export function getRectangleCorners(p1, p2, r) {
 
     const line = getLineFactors(p1, p2);

@@ -54,7 +54,7 @@ export function Drill() {
     }
     const spec = getDrillSpecification();
     if(automatic) {
-        for(let j = 0; j < points.length; j ++) {
+        for(let j = 1; j < points.length; j ++) {
             updatePoint(points, j, spec);
         }
         Redraw();
@@ -73,18 +73,14 @@ export function Drill() {
         const p = convertFromIndexToPlace(points[i].x, points[i].y, points[i].z);
         const p1 = convertFromIndexToPlace(points[i - 1].x, points[i - 1].y, points[i - 1].z);
         const p2 = convertFromIndexToPlace(points[i].x, points[i].y, points[i].z);
-        let pointsToDrill = ScanLine(getRectangleCorners(p1, p2, spec.mm), getRectangleLines(p1, p2, spec.mm));
+
+        let pointsToDrill = ScanLine(getRectangleCorners(p1, p2, spec.mm), getRectangleLines(p1, p2, spec.mm), p1, p2);
         pointsToDrill = pointsToDrill.concat(findCircle(p1, spec.mm,spec.k));
         pointsToDrill = pointsToDrill.concat(findCircle(p2, spec.mm,spec.k));
         const newCenter = DiffPoints([p.x, p.y, p.z] , [drillPos.x, drillPos.y, drillPos.z]);
 
-        //if(points[i].banana1) {
-         //   createBananaFirstStep(p, spec.mm, spec.k);
-        //} else if(points[i].banana2) {
-         //   createBananaSecondStep(p, spec.k);
-        //}
         try{
-            cut(points[i].x, points[i].y, points[i].z, i === 0 ? 0 : points[i - 1].z, pointsToDrill);
+            cut(points[i].z, points[i - 1].z, pointsToDrill);
         }
         catch(e) {
             clearInterval(id);
@@ -100,9 +96,13 @@ export function Drill() {
     }, 1);
 }
 function updatePoint(points, j, spec) {
-    const p = convertFromIndexToPlace(points[j].x, points[j].y, points[j].z);
-    //createBananaFirstStep(p, spec.mm, spec.k);
-    cut(points[j].x, points[j].y);
+
+    const p1 = convertFromIndexToPlace(points[j - 1].x, points[j - 1].y, points[j - 1].z);
+    const p2 = convertFromIndexToPlace(points[j].x, points[j].y, points[j].z);
+    let pointsToDrill = ScanLine(getRectangleCorners(p1, p2, spec.mm), getRectangleLines(p1, p2, spec.mm), p1, p2);
+    pointsToDrill = pointsToDrill.concat(findCircle(p1, spec.mm,spec.k));
+    pointsToDrill = pointsToDrill.concat(findCircle(p2, spec.mm,spec.k));
+    cut(points[j].z, points[j - 1].z, pointsToDrill);
 }
 function cutPoints(points) {
     let _points = [];
