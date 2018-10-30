@@ -92,7 +92,7 @@ export function Drill() {
         }
 
         updateMillPosition(newCenter[0], newCenter[1], newCenter[2]);
-        if(!automatic) {
+        if(i % speed === 0 && !automatic) {
             Redraw();
         }
 

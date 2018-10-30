@@ -53,17 +53,17 @@ export function Bresenham (x1, y1, x2, y2, index) {
   export function getPointsDependsOnSpeed(p1, p2, speed) {
     const points = [];
     const vecLen = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
-    if(vecLen === 0) {
+   // if(vecLen === 0) {
       return [p1, p2];
-    }
-     for(let  i = 0; i <= vecLen; i += (vecLen / speed)) {
-      points.push(
-        {
-          x: p1.x + (i / vecLen) * (p2.x - p1.x),
-          y: p1.y + (i / vecLen) * (p2.y - p1.y),
-          z: p1.z + (i / vecLen) * (p2.z - p1.z),
-        }
-      );
-    }
-    return points;
+    // }
+    //  for(let  i = 0; i <= vecLen; i += (vecLen / speed)) {
+    //   points.push(
+    //     {
+    //       x: p1.x + (i / vecLen) * (p2.x - p1.x),
+    //       y: p1.y + (i / vecLen) * (p2.y - p1.y),
+    //       z: p1.z + (i / vecLen) * (p2.z - p1.z),
+    //     }
+    //   );
+    // }
+    // return points;
   }
