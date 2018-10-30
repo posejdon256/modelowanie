@@ -4,7 +4,7 @@ import { readMill, _setMillType, _setMillMM } from '../../Load/ReadMill/ReadMill
 import { _setXGrid, _setYGrid, _removeMaterial, _setXSize, _setYSize, _setZSize } from '../../canvas/Mill/Material/Material';
 import { generateMaterial } from '../../canvas/Mill/Material/Material';
 import { generateMill } from '../../canvas/Mill/Mill/Mill';
-import { _setAutomatic, _setSpeed, _setMinimumValue } from '../../canvas/Mill/Drill/Drill';
+import { _setAutomatic, _setSpeed, _setMinimumValue, _stop } from '../../canvas/Mill/Drill/Drill';
 import { ShowPaths } from '../../canvas/Draw/DrawLine/DrawLines';
 
 export default class MillNavar extends Component {
@@ -15,7 +15,7 @@ export default class MillNavar extends Component {
         this.setYGrid = this.setYGrid.bind(this);
         this.addMaterial = this.addMaterial.bind(this);
         this.removeMaterial = this.removeMaterial.bind(this);
-        this.addMill = this.addMill.bind(this);
+        this.stopMill = this.stopMill.bind(this);
         this.setXSize = this.setXSize.bind(this);
         this.setYSize = this.setYSize.bind(this);
         this.setZSize = this.setZSize.bind(this);
@@ -37,8 +37,8 @@ export default class MillNavar extends Component {
     setMillSize(e) {
         _setMillMM(e.target.value);
     }
-    addMill() {
-        generateMill();
+    stopMill() {
+        _stop();
     }
     setXSize(e) {
         _setXSize(e.target.value)
@@ -131,7 +131,7 @@ export default class MillNavar extends Component {
                     <button className="btn" onClick={this.removeMaterial}>Remove Material</button>
                 </div>
                 <div>
-                    <button className="btn" onClick={this.addMill}>Add Mill</button>
+                    <button className="btn" onClick={this.stopMill}>Stop Mill</button>
                 </div>
             </div>
         );

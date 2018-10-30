@@ -24,7 +24,6 @@ export function generateMill() {
     }
     pushNormalsForCylinder(getNormalVectorForCylinder(2, 4, 0));
     pushNormalsForCylinder(getNormalVectorForCylinder(3, 5, 1));
-    console.log(normalsCylinder.length);
     for(let i = 0; i < verticesCylinderAround.length - 2; i ++) {
         indicesCylinder.push(verticesCylinder.length + i, verticesCylinder.length + i + 1, verticesCylinder.length + i + 2);
         pushNormalsForCylinder(getNormalVectorForCylinderAround(i, i + 1, i + 2, verticesCylinderAround));

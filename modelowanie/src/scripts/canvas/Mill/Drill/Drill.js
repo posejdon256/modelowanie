@@ -1,22 +1,23 @@
 import { DiffPoints, TryParseFloat, TryParseFloat2 } from '../../../Helpers/Helpers';
+import { getRectangleCorners, getRectangleLines } from '../../../Helpers/LinesHelper';
 import { getDrillSpecification, getPointsToDrill } from '../../../Load/ReadMill/ReadMill';
 import Redraw from '../../Draw/Redraw';
-import { Bresenham, updateZInBrezenhamy } from '../Bresenham/Bresenham';
+import { getPointsDependsOnSpeed } from '../Bresenham/Bresenham';
 import {
     convertFromIndexToPlace,
     convertFromPlaceToIndex,
-    findCircle,
     cut,
+    findCircle,
     settArrayWidthAndHeight,
 } from '../Material/Drilling';
 import { getMaterial } from '../Material/Material';
 import { generateMill, getMillPosition, removeMill, updateMillPosition } from '../Mill/Mill';
 import { ScanLine } from './ScanLine';
-import { getRectangleCorners, getRectangleLines } from '../../../Helpers/LinesHelper';
 
 let speed = 1;
 let automatic = false;
 let minimumValue = 0.2;
+let id;
 
 
 let i;
@@ -26,6 +27,9 @@ export function _setMinimumValue(_val) {
     if(minimumValue !== prev) {
         minimumValue /= 10;
     }
+}
+export function _stop() {
+    clearInterval(id);
 }
 export function _setAutomatic() {
     automatic = !automatic;
@@ -60,7 +64,7 @@ export function Drill() {
         Redraw();
         return;
     }
-    let id = setInterval(function(){
+    id = setInterval(function(){
 
         const drillPos = getMillPosition();
         if(!points[i] || i >= points.length) {
@@ -88,7 +92,7 @@ export function Drill() {
         }
 
         updateMillPosition(newCenter[0], newCenter[1], newCenter[2]);
-        if(i % speed === 0 && !automatic) {
+        if(!automatic) {
             Redraw();
         }
 
@@ -102,7 +106,7 @@ function updatePoint(points, j, spec) {
     let pointsToDrill = ScanLine(getRectangleCorners(p1, p2, spec.mm), getRectangleLines(p1, p2, spec.mm), p1, p2);
     pointsToDrill = pointsToDrill.concat(findCircle(p1, spec.mm,spec.k));
     pointsToDrill = pointsToDrill.concat(findCircle(p2, spec.mm,spec.k));
-    cut(points[j].z, points[j - 1].z, pointsToDrill);
+    cut(points[j- 1].z, points[j].z, pointsToDrill);
 }
 function cutPoints(points) {
     let _points = [];
@@ -112,17 +116,13 @@ function cutPoints(points) {
 
     for(let i = 1; i < points.length; i += 2) {
         const p1 = convertFromPlaceToIndex(points[i - 1]);
-        _points.push(p1);
         const p2 = convertFromPlaceToIndex(points[i]);
-        if(p1.x !== p2.x || p1.y !== p2.y) {
-            _points.push(p2);
-        }
         //const p2 = convertFromPlaceToIndex(points[i]);
         if(p1.z < minimumValue || p2.z < minimumValue) {
             throw Error("The cutter drills into the stand.");
         }
-        //const brezenhamy = Bresenham(p1.x, p1.y, p2.x, p2.y, i);
-        //_points = _points.concat(updateZInBrezenhamy(points[i- 1], points[i], brezenhamy));
+        const _pointsBetweend = getPointsDependsOnSpeed(p1, p2, speed);
+        _points = _points.concat(_pointsBetweend);
     }
     return _points;
 }

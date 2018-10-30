@@ -1,7 +1,7 @@
 import { convertFromPlaceToIndex } from "../canvas/Mill/Material/Drilling";
 
 export function getLineFactors(p1, p2) {
-    const _a = (p2.y - p1.y) / (p2.x - p1.x);
+    const _a = (p2.x - p1.x) === 0 ? "Top" :  (p2.y - p1.y) / (p2.x - p1.x);
     return {
         a: _a,
         b: p1.y - p1.x * _a
@@ -34,7 +34,12 @@ export function getRectangleCorners(p1, p2, r) {
     let pC2 = _p1[1];
     let pC3 = _p2[0];
     let pC4 = _p2[1];
-    if(_a === 0) {
+    if(p1.x === p2.x) {
+        pC1 = {x: p1.x + r, y: p1.y, z: p1.z};
+        pC2 = {x: p1.x - r, y: p1.y, z: p1.z};
+        pC3 = {x: p2.x + r, y: p2.y, z: p2.z};
+        pC4 = {x: p2.x - r, y: p2.y, z: p2.z};
+    } else if(p1.y === p2.y) {
         pC1 = {x: p1.x, y: p1.y + r, z: p1.z};
         pC2 = {x: p1.x, y: p1.y - r, z: p1.z};
         pC3 = {x: p2.x, y: p2.y + r, z: p2.z};
@@ -64,7 +69,12 @@ export function getRectangleLines(p1, p2, r) {
     let pC2 = _p1[1];
     let pC3 = _p2[0];
     let pC4 = _p2[1];
-    if(_a === 0) {
+    if(p1.x === p2.x) {
+        pC1 = {x: p1.x + r, y: p1.y, z: p1.z};
+        pC2 = {x: p1.x - r, y: p1.y, z: p1.z};
+        pC3 = {x: p2.x + r, y: p2.y, z: p2.z};
+        pC4 = {x: p2.x - r, y: p2.y, z: p2.z};
+    } else if(p1.y === p2.y) {
         pC1 = {x: p1.x, y: p1.y + r, z: p1.z};
         pC2 = {x: p1.x, y: p1.y - r, z: p1.z};
         pC3 = {x: p2.x, y: p2.y + r, z: p2.z};
@@ -72,10 +82,10 @@ export function getRectangleLines(p1, p2, r) {
     }
 
     const lines = [];
-    const l1 = getLineFactors(pC1, pC2);
-    const l2 = getLineFactors(pC3, pC4);
-    const l3 = _a === 0 ? {a: Infinity} : getLineFactors(pC1, pC3);
-    const l4 = _a === 0 ? {a: Infinity} : getLineFactors(pC2, pC4);
+    const l1 = pC1.x === pC2.x ? {a: Infinity} : getLineFactors(pC1, pC2);
+    const l2 = pC3.x === pC4.x ? {a: Infinity} :getLineFactors(pC3, pC4);
+    const l3 = pC1.x === pC3.x ? {a: Infinity} :getLineFactors(pC1, pC3);
+    const l4 = pC2.x === pC4.x ? {a: Infinity} : getLineFactors(pC2, pC4);
 
     const pC1Transformed = convertFromPlaceToIndex(pC1);
     const pC2Transformed = convertFromPlaceToIndex(pC2);

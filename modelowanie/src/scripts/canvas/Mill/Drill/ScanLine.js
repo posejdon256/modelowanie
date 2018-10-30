@@ -12,13 +12,14 @@ export function ScanLine(corners, lines, p1, p2) {
     for(let y = y_min; y <= y_max; y ++) {
         let x_s = [];
         lines.forEach(l => {
-            if(l.a === Infinity || l.a === -Infinity) {
+            if(l.a === Infinity || l.a === -Infinity || Math.abs(l.a) === 0) {
                 x_s.push(l.xmin);
                 x_s.push(l.xmax);
             } else {
                 const helper = convertFromIndexToPlace(0, y, undefined);
-                const x = convertFromPlaceToIndex({x: -(l.b - helper.y) / l.a, y:0, z: undefined}).x;
-                if(x >= l.xmin && x <= l.xmax) {
+                let x;
+                x = convertFromPlaceToIndex({x: -(l.b - helper.y) / l.a, y:0, z: undefined}).x;
+                if(x > l.xmin && x < l.xmax) {
                     x_s.push(x);
                 }
             }
@@ -27,7 +28,12 @@ export function ScanLine(corners, lines, p1, p2) {
         for(let x = 1; x < x_s.length; x ++) {
             for(let i = x_s[x - 1]; i < x_s[x]; i ++) {
                 const _p1 = convertFromIndexToPlace(i, y, 0);
-                const _p2 = getPointNearLine(mainLine.a, mainLine.b, _p1);
+                let _p2;
+                if(mainLine.a === "Top") {
+                    _p2 = { x: p1.x, y: _p1.y};
+                } else {
+                    _p2 = getPointNearLine(mainLine.a, mainLine.b, _p1);
+                }
                 const len =  get2dvectorLength(_p1, _p2);
                 if(spec.k) {
                     const diff = spec.mm - Math.sqrt(Math.pow(spec.mm, 2) - Math.pow(len, 2));
@@ -40,7 +46,6 @@ export function ScanLine(corners, lines, p1, p2) {
                     const lenend = get2dvectorLength(_p2, p2);
                     const zDiff = hstart + (lenstart === 0 ? 1 : (lenstart / lenend)) * (hend - hstart);
                     points.push({x: i, y: y, z: zDiff + diff});
-                    console.log(zDiff);
                 } else {
                     points.push({x: i, y: y, z: corners[0].z});
                 }
