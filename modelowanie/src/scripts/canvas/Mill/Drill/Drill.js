@@ -84,10 +84,12 @@ export function Drill() {
         const newCenter = DiffPoints([p.x, p.y, p.z] , [drillPos.x, drillPos.y, drillPos.z]);
 
         try{
-            cut(points[i].z, points[i - 1].z, pointsToDrill);
+            if(!cut(points[i].z, points[i - 1].z, pointsToDrill)) {
+                _stop();
+            }
         }
         catch(e) {
-            clearInterval(id);
+            _stop();
             alert(e);
         }
 
@@ -106,7 +108,9 @@ function updatePoint(points, j, spec) {
     let pointsToDrill = ScanLine(getRectangleCorners(p1, p2, spec.mm), getRectangleLines(p1, p2, spec.mm), p1, p2);
     pointsToDrill = pointsToDrill.concat(findCircle(p1, spec.mm,spec.k));
     pointsToDrill = pointsToDrill.concat(findCircle(p2, spec.mm,spec.k));
-    cut(points[j- 1].z, points[j].z, pointsToDrill);
+    if(!cut(points[j].z, points[j - 1].z, pointsToDrill)) {
+        _stop();
+    }
 }
 function cutPoints(points) {
     let _points = [];

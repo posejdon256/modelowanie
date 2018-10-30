@@ -60,11 +60,16 @@ export function cut(zCentral, zCentralPrev, _points) {
         let indMaterial = material2D[_points[i].x][_points[i].y].indMaterial;
         let points = material2D[_points[i].x][_points[i].y].points;
 
-        if(material[indMaterial][2] > _points[i].z) {
-            if(!typeSphere && zCentral < zCentralPrev) {
-                throw Error("Error: Cannot mill down with a flat cutter.");
+        try{
+            if(material[indMaterial][2] > _points[i].z) {
+                if(!typeSphere && zCentral < zCentralPrev) {
+                    throw Error("Error: Cannot mill down with a flat cutter.");
+                }
+                material[indMaterial][2] = _points[i].z;
             }
-            material[indMaterial][2] = _points[i].z;
+        } catch(e) {
+            alert(e);
+            return false;
         }
 
         for(let j = 0; j < points.length; j ++) {
@@ -72,6 +77,7 @@ export function cut(zCentral, zCentralPrev, _points) {
             updateNormals(points[j].p, getNormalVector(points[j].indexes[0], points[j].indexes[1], points[j].indexes[2]));
         }
     }
+    return true;
 }
 export function convertFromIndexToPlace(x, y, z) {
 
