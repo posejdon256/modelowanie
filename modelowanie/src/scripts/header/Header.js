@@ -14,6 +14,7 @@ import scissors from '../../pictures/scissors.png';
 import save from '../../pictures/safebox.png';
 import select from '../../pictures/square-select.png';
 import projektor from '../../pictures/projektor.png';
+import path from '../../pictures/path.png';
 import { getAddBezierState, setAddBezierState } from '../canvas/Bezier/Bezier';
 import { getAddingC2State, setAddingC2State } from '../canvas/Bezier/BSpline';
 import { getInterpolationState, setInterpolationState } from '../canvas/Bezier/Interpolation';
@@ -26,6 +27,7 @@ import { findObjectToIntersectionAndIntersection } from '../canvas/CuttingCurve/
 import { setProjectionState, getProjectionState } from '../canvas/CuttingCurve/Projection';
 import { cleanScene } from '../canvas/Clean/Clean';
 import { setRectangleSelectionState, getRectangleSelectionRectangle } from '../canvas/Mouse/RectangleSelect';
+import { generatePaths } from '../Save/GeneratePaths/GeneratePaths';
 
 export default class Header extends Component {
     constructor(props) {
@@ -51,6 +53,10 @@ export default class Header extends Component {
         this.projectIntersection = this.projectIntersection.bind(this);
         this.cleanScene = this.cleanScene.bind(this);
         this.selectByRectange = this.selectByRectange.bind(this);
+        this._generatePaths = this._generatePaths.bind(this);
+    }
+    _generatePaths() {
+        generatePaths();
     }
     addTorus() {
         addTorus();
@@ -179,6 +185,10 @@ export default class Header extends Component {
             <button className={"ab-torus-button tooltip"} onClick={this.addIntersection}>
                 <img className="ab-point-image" src={scissors} alt="intersection curve" />
                 <span class="tooltiptext">Project intersection. If you selected two objects you can try to find intersection between them. Important is that cursor has to be near to intersection and "Finding intersection step" should be 3 or 0.2</span>
+            </button>  
+            <button className={"ab-torus-button tooltip"} onClick={this._generatePaths}>
+                <img className="ab-point-image" src={path} alt="path" />
+                <span class="tooltiptext">Generates paths for helicopter</span>
             </button>  
         </div>);
     }

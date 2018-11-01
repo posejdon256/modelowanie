@@ -8,7 +8,9 @@ import Redraw from "../canvas/Draw/Redraw";
 import { turnOffAllStates } from "../canvas/StatesCenter/StatesCenter";
 import { addTorus } from "../canvas/Torus/Torus";
 
+let name = undefined;
 export function setPath(_path) {
+    name = _path[0].name ? _path[0].name : undefined;
     var reader = new FileReader();
     reader.onload = (function(theFile) {
         return function(e) {
@@ -112,4 +114,10 @@ export function Load(json) {
     });
     turnOffAllStates();
     Redraw();
+}
+export function isHelicopterLoaded() {
+    if(name === "Ania3.json") {
+        return true;
+    }
+    return false;
 }
