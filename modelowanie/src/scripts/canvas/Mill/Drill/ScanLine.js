@@ -19,7 +19,7 @@ export function ScanLine(corners, lines, p1, p2) {
                 const helper = convertFromIndexToPlace(0, y, undefined);
                 let x;
                 x = convertFromPlaceToIndex({x: -(l.b - helper.y) / l.a, y:0, z: undefined}).x;
-                if(x > l.xmin && x < l.xmax) {
+                if(x >= l.xmin && x <= l.xmax) {
                     x_s.push(x);
                 }
             }

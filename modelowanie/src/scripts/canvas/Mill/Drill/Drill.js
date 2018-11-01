@@ -125,8 +125,12 @@ function cutPoints(points) {
         if(p1.z < minimumValue || p2.z < minimumValue) {
             throw Error("The cutter drills into the stand.");
         }
-        const _pointsBetweend = getPointsDependsOnSpeed(p1, p2, speed);
-        _points = _points.concat(_pointsBetweend);
+        //const _pointsBetweend = getPointsDependsOnSpeed(p1, p2, speed);
+        _points.push(p1);
+        if(p1.x !== p2.x || p1.y !== p2.y || p1.z !== p2.z) {
+            _points.push(p2);
+        }
+        //_points = _points.concat(_pointsBetweend);
     }
     return _points;
 }
