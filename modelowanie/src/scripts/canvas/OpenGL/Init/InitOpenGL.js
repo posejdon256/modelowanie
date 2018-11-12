@@ -213,7 +213,7 @@ export function initWebGL(canvas) {
     image.onload = function() {
       handleLoadedTexture(image);
     }
-    image.src = "./stars2.png";
+    image.src = "./wood.png";
   }
   function handleLoadedTexture(image) {
     const gl = getGLCtx();
