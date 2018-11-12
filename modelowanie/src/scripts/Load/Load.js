@@ -116,7 +116,7 @@ export function Load(json) {
     Redraw();
 }
 export function isHelicopterLoaded() {
-    if(name === "Ania3.json") {
+    if(name === "Project.json") {
         return true;
     }
     return false;

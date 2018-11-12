@@ -205,3 +205,24 @@ function saveToFile(json) {
     // });
     
 }
+export function saveToFilePaths(text, extension) { 
+    var file = new Blob([text], {type: extension});
+    var a = document.createElement("a"),
+            url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = 'Project.' + extension;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);  
+    }, 0); 
+// fs.writeFile("./Project.json", json, (err) => {
+//     if (err) {
+//         console.error(err);
+//         return;
+//     };
+//     console.log("File has been created");
+// });
+
+}

@@ -5,6 +5,16 @@ let canvas2;
 let ob1;
 let ob2;
 let img;
+let _settedS1X = undefined;
+let _settedS1Y = undefined;
+let _settedS2X = undefined;
+let _settedS2Y = undefined;
+export function setSettedStart(x1, y1, x2, y2) {
+    _settedS1X = x1;
+    _settedS1Y = y1;
+    _settedS2X = x2;
+    _settedS2Y = y2;
+}
 export function setVisualisationCanvases(c1, c2) {
     canvas1 = c1;
     canvas2 = c2;
@@ -73,6 +83,10 @@ export function trimVisualisation() {
         startX = parseInt(Math.random() * 500, 10);
         startY = parseInt(Math.random() * 500, 10);
     }
+    if(_settedS1X) {
+        startX = _settedS1X;
+        startY = _settedS1Y;
+    }
     stack.push({canvas: canvas1, x: startX, y: startY});
     while(stack.length > 0) {
         //const problem = stack[stack.length - 1];
@@ -83,6 +97,10 @@ export function trimVisualisation() {
     while (getPixelColor(canvas2, startX, startY) !== "Black") {
         startX = parseInt(Math.random() * 255, 10);
         startY = parseInt(Math.random() * 255, 10);
+    }
+    if(_settedS2X) {
+        startX = _settedS2X;
+        startY = _settedS2Y;
     }
     stack.push({canvas: canvas2, x: startX, y: startY});
     while(stack.length > 0) {

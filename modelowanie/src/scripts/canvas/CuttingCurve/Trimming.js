@@ -1,10 +1,12 @@
 import { findObjectToIntersectionAndIntersection, getIntersectionSelectedObjects } from "./FindIntersection";
 import { RedrawVisualization, getUVImages } from "../Draw/RedrawVisualisation/RedrawVisualization";
 import Redraw from "../Draw/Redraw";
+import { generatePathsState } from "../../Save/GeneratePaths/GeneratePaths";
 
 export function trimIsMet(u, v, ops) {
     let isMet = true;
-    const { canvas, op, img } = ops;
+    let { canvas, op, img } = ops;
+
 
     let y = parseInt(u * 500, 10);
     let x = parseInt(v * 500, 10);
