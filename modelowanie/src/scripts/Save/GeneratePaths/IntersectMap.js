@@ -38,7 +38,7 @@ export function createIntersectMap(id) {
     return _map;
 
 }
-function initalizeMap() {
+export function initalizeMap() {
     const _map = [];
     for(let i = 0; i < width; i ++) {
         _map.push([]);

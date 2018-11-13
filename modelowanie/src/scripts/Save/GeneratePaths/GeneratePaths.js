@@ -1,15 +1,13 @@
-import { cleanScene } from '../../canvas/Clean/Clean';
-import Redraw from '../../canvas/Draw/Redraw';
-import { addPoint } from '../../canvas/Points/Points';
 import { EvaluateSurface, EvaluateSurfaceC2 } from '../../canvas/Surface/EvaluateSurface';
 import { getSurfaces } from '../../canvas/Surface/Surface';
 import { isHelicopterLoaded } from '../../Load/Load';
 import { saveToFilePaths } from '../Save';
-import { createIntersectMap } from './IntersectMap';
 import { generatePoints1 } from './First';
-import { generatePoints2 } from './Second';
+import { createIntersectMap } from './IntersectMap';
+import { generatePoints2 } from './FlatCut/Second';
 
 let generatingPaths = false;
+let r;
 export function generatePathsState() {
     return generatingPaths;
 }
@@ -26,12 +24,17 @@ export function generatePaths() {
 
     const surfacesC2 = getSurfaces("C2");
     map = getZ(surfacesC2, map, EvaluateSurfaceC2);
+    setR(8);
     generatePoints1(map);
+    setR(5);
     generatePoints2(map);
    // console.log(getPoints()); 
 
     alert('Generated!');
     generatingPaths = false;
+}
+function setR(_r) {
+    r = _r;
 }
 export function createFiles(points, size) {
     let str = "";
@@ -68,7 +71,7 @@ function getZ(surfaces, map, evFun) {
     });
     return map;
 }
-function convertSpaceToIndex(i, j, m, n) {
+export function convertSpaceToIndex(i, j, m, n) {
     return {
         x: Math.max(Math.min(parseInt((i + 0.48) * m, 10), m - 1), 0),
         y: Math.max(Math.min(parseInt((j + 0.48) * n, 10), n - 1), 0)
@@ -84,8 +87,19 @@ function generateMap(n, m) {
     }
     return _map;
 }
-export function fromIndexToPlace(map, x, r) {
-    const multi = 140 / map[0].length;
-    const start = - 75;
-    return (x + r) * multi + start;
+export function fromIndexToPlace(x) {
+    const { size, r, start} = getDatasOfMill();
+    return (x + r) * size + start;
+}
+export function getDatasOfMill() {
+    return {
+        size: 140 / 500,
+        start: -70,
+        end: 70,
+        r: r,
+        drawStart: -70,
+        minDraw: 0.45 * 100,
+        maxDraw: 0.2 * 100,
+        aboveDraw: 0.6 * 100
+    }
 }

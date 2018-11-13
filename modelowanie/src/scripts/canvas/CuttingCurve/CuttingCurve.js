@@ -1,22 +1,28 @@
 import { addInterpolationCurve, setInterpolationState } from "../Bezier/Interpolation";
 import { addPoint } from "../Points/Points";
+import { evaluate, evaluateDU, evaluateDV } from "./FindIntersection";
+import { crossMultiply, SumPoints, MultiplyPoint } from "../../Helpers/Helpers";
 
 let curves = [];
 let numberOfIntersections = 0;
 const size = 501.0;
 export function cleanCuttingCurves() {
     curves = [];
+    numberOfIntersections = 0;
 }
-export function addCuttingCurve(iCurve) {
+export function addCuttingCurve(iCurve, ob) {
     const intersectionVisualization1 = [];
     const intersectionVisualization2 = [];
     const curve = {
         id: numberOfIntersections,
         name: "Intersection curve " + numberOfIntersections,
         points: [],
+        u: [],
+        v: [],
         interpolationCurve: iCurve ? iCurve : null,
         intersectionVisualization1: intersectionVisualization1,
-        intersectionVisualization2: intersectionVisualization2
+        intersectionVisualization2: intersectionVisualization2,
+        ob: ob
     }
     numberOfIntersections++;
     curves.push(curve);
@@ -39,7 +45,7 @@ export function updateIn1Visualisation(id, u, v) {
     }
     curve.intersectionVisualization1.push({u: _u, v: _v});
 }
-export function updateIn2Visualisation(id, u, v) {
+export function updateIn2Visualisation(ob, id, u, v, u2, v2, ob_id) {
     const curve = curves.find(x => x.id === id);
     if(u.break) {
         curve.intersectionVisualization2.push({break: true});
@@ -49,8 +55,16 @@ export function updateIn2Visualisation(id, u, v) {
         curve.intersectionVisualization2.push({back: true});
         return;
     }
-    const _u = (parseInt(u * size, 10)) % size;
-    const _v = (parseInt(v * size, 10)) % size;
+    let _u = (parseInt((u) * size, 10)) % size;
+    let _v = (parseInt((v) * size, 10)) % size;
+    if(ob_id === 7) {
+       // const p = evaluate(ob, u, v);
+        const pu = evaluateDU(ob, u2, v2);
+        const pv = evaluateDV(ob, u2, v2);
+        const cross = MultiplyPoint(crossMultiply(pu, pv), 0.5);
+        _u = (parseInt((u + cross.x) * size, 10)) % size;
+        _v = (parseInt((v + cross.y) * size, 10)) % size;
+    }
     if(_u < 0 || _v < 0){
         return;
     }

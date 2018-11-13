@@ -26,30 +26,6 @@ const s5 = {
     ]
 };
 const s6 = 'all';
-//     id: 6,
-//     intersections:[
-//         {
-//             id: 2,
-//             cursor: {x: -0.1, y: 0.2, z: 0},
-//             trimP: {x: 450, y:450}
-//         },
-//         {
-//             id: 2,
-//             cursor: {x: -0.17, y: 0.2, z: 0},
-//             trimP: {x: 50, y:50}
-//         },
-//         {
-//             id: 4,
-//             cursor: {x: -0.27, y: 0.43, z: 0.04},
-//             trimP: {x: 450, y:450}
-//         },
-//         {
-//             id: 4,
-//             cursor: {x: -0.03, y: 0.46, z: -0.04},
-//             trimP: {x: 50, y:50}
-//         },
-// ]};;
-
 export function getTrimConfiguration() {
     return [undefined, s1, s2, s3, s4, s5, s6];
 }
