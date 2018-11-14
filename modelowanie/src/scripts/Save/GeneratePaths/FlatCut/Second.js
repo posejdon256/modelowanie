@@ -1,6 +1,6 @@
 import { cleanCuttingCurves } from '../../../canvas/CuttingCurve/CuttingCurve';
 import { createSurface, setHeight, setWidth } from '../../../canvas/Surface/Surface';
-import { createFiles, getDatasOfMill } from '../GeneratePaths';
+import { createFiles, getDatasOfMill } from '../Helpers/GeneratePathsHelper';
 import { createCuttingCurvesFoFlatMill } from './ParametrisationZ0';
 import { trayectoryOnCurves } from './TrayectoryOnCurves';
 

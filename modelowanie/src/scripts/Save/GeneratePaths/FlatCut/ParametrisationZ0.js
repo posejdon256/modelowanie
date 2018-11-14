@@ -1,7 +1,7 @@
 import { setCursor } from '../../../canvas/Cursor/Cursor';
 import { findObjectToIntersectionAndIntersection } from '../../../canvas/CuttingCurve/FindIntersection';
 import { selectSurface } from '../../../canvas/Surface/Surface';
-import { getConfigurationCut } from '../ConfigurationCut';
+import { getConfigurationCut } from './ConfigurationCut';
 import { initalizeMap } from '../IntersectMap';
 
 export function createCuttingCurvesFoFlatMill() {

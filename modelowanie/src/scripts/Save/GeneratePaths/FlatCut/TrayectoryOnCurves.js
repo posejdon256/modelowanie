@@ -3,6 +3,7 @@ import { evaluateDU, evaluateDV } from '../../../canvas/CuttingCurve/FindInterse
 import { addPoint } from '../../../canvas/Points/Points';
 import { crossMultiply, getVectorLength, normalize, SumPoints, MultiplyPoint, DiffPoints } from '../../../Helpers/Helpers';
 import Redraw from '../../../canvas/Draw/Redraw';
+import { getCross } from '../Helpers/GeneratePathsHelper';
 
 export function trayectoryOnCurves() {
     const curves = getCuttingCurves();
@@ -75,11 +76,11 @@ function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange) {
     const points = [];
     if(ind1 < ind2) {
         for(i = ind2; i < c1.points.length - 1; i ++) {
-            let cross1 = getCross(c1, i);
+            let cross1 = getCross(c1.ob, c1[i].u, c1[i].v);
             //addPoint(c1.points[i].x - cross1.x, c1.points[i].y - cross1.y, 0, "mill");
             points.push(DiffPoints(c1.points[i], cross1));
             for(j = 0; j < c2.points.length - 1; j ++) {
-                const cross2 = getCross(c2, j);
+                const cross2 = getCross(c2.ob, c2[j].u, c2[j].v);
                 if(getVectorLength(DiffPoints(c1.points[i], cross1), DiffPoints(c2.points[j], cross2)) < 0.01 && !derrrivativeChange) {
                     return {_points: points, ind1: j};
                 } else if(getVectorLength(DiffPoints(c1.points[i], cross1), SumPoints(c2.points[j], cross2)) < 0.01 && derrrivativeChange) {
@@ -89,13 +90,13 @@ function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange) {
         }
     } else {
         for(i = ind2; i >= 1; i --) {
-            let cross1 = getCross(c1, i);
+            let cross1 = getCross(c1.ob, c1[i].u, c1[i].v);
            // addPoint(c1.points[i].x + cross1.x, c1.points[i].y + cross1.y, 0, "mill");
             //addPoint(c1.points[i].x, c1.points[i].y, c1.points[i].z, "mill");
             points.push(SumPoints(c1.points[i], cross1));
            // points.push(c1.points[i]);
             for(j = 0; j < c2.points.length - 1; j ++) {
-                const cross2 = getCross(c2, j);
+                const cross2 = getCross(c2.ob, c2[j].u, c2[j].v);
                 if(getVectorLength(SumPoints(c1.points[i], cross1), DiffPoints(c2.points[j], cross2)) < 0.01) {
                     return {_points: points, ind1: j};
                 }
@@ -104,27 +105,4 @@ function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange) {
     }
     console.log("problem with connection");
     return {_points: points, ind1: 0} ;
-}
-function getCrossC0(c, i) {
-    const p_u1 = evaluateDU(c.ob, c.ob.Width - 0.01, c.v[i]);
-    const p_v1 = evaluateDV(c.ob, c.ob.Width - 0.01, c.v[i]);
-    const cross1 = crossMultiply(p_u1, p_v1);
-
-    const p_u2 = evaluateDU(c.ob, 0.01, c.v[i]);
-    const p_v2 = evaluateDV(c.ob, 0.01, c.v[i]);
-    const cross2 = crossMultiply(p_u2, p_v2);
-
-    return SumPoints(cross1, cross2);
-}
-
-function getCross(c, i) {
-    const p_u = evaluateDU(c.ob, c.u[i], c.v[i]);
-    const p_v = evaluateDV(c.ob, c.u[i], c.v[i]);
-    let cross = crossMultiply(p_u, p_v);
-    if(cross.x === 0 && cross.y === 0 && cross.z === 0 ){
-        cross = getCrossC0(c, i);
-    }
-    cross = MultiplyPoint(normalize(cross), 0.05);
-    cross.z = 0;
-    return cross;
 }

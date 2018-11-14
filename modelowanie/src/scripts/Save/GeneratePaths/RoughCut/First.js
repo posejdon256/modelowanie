@@ -1,4 +1,4 @@
-import { createFiles, fromIndexToPlace, getDatasOfMill } from './GeneratePaths';
+import { createFiles, fromIndexToPlace, getDatasOfMill } from '../Helpers/GeneratePathsHelper';
 
 function findMaximum(map, x, y) {
     let max = 0;

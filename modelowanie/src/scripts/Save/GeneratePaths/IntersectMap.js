@@ -2,7 +2,7 @@ import { setCursor } from '../../canvas/Cursor/Cursor';
 import { trim } from '../../canvas/CuttingCurve/Trimming';
 import { getUVImages, RedrawVisualization, setSettedStart } from '../../canvas/Draw/RedrawVisualisation/RedrawVisualization';
 import { selectSurface } from '../../canvas/Surface/Surface';
-import { getTrimConfiguration } from './ConfigurationTrim';
+import { getTrimConfiguration } from './RoughCut/ConfigurationTrim';
 
 const width = 500;
 export function createIntersectMap(id) {
