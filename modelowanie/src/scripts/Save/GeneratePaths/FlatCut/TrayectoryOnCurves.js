@@ -1,8 +1,5 @@
 import { getCuttingCurves } from '../../../canvas/CuttingCurve/CuttingCurve';
-import { evaluateDU, evaluateDV } from '../../../canvas/CuttingCurve/FindIntersection';
-import { addPoint } from '../../../canvas/Points/Points';
-import { crossMultiply, getVectorLength, normalize, SumPoints, MultiplyPoint, DiffPoints } from '../../../Helpers/Helpers';
-import Redraw from '../../../canvas/Draw/Redraw';
+import { DiffPoints, getVectorLength, SumPoints } from '../../../Helpers/Helpers';
 import { getCross } from '../Helpers/GeneratePathsHelper';
 
 export function trayectoryOnCurves() {
@@ -76,11 +73,11 @@ function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange) {
     const points = [];
     if(ind1 < ind2) {
         for(i = ind2; i < c1.points.length - 1; i ++) {
-            let cross1 = getCross(c1.ob, c1[i].u, c1[i].v);
+            let cross1 = getCross(c1.ob, c1.u[i], c1.v[i]);
             //addPoint(c1.points[i].x - cross1.x, c1.points[i].y - cross1.y, 0, "mill");
             points.push(DiffPoints(c1.points[i], cross1));
             for(j = 0; j < c2.points.length - 1; j ++) {
-                const cross2 = getCross(c2.ob, c2[j].u, c2[j].v);
+                const cross2 = getCross(c2.ob, c2.u[j], c2.v[j]);
                 if(getVectorLength(DiffPoints(c1.points[i], cross1), DiffPoints(c2.points[j], cross2)) < 0.01 && !derrrivativeChange) {
                     return {_points: points, ind1: j};
                 } else if(getVectorLength(DiffPoints(c1.points[i], cross1), SumPoints(c2.points[j], cross2)) < 0.01 && derrrivativeChange) {
@@ -90,13 +87,13 @@ function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange) {
         }
     } else {
         for(i = ind2; i >= 1; i --) {
-            let cross1 = getCross(c1.ob, c1[i].u, c1[i].v);
+            let cross1 = getCross(c1.ob, c1.u[i], c1.v[i]);
            // addPoint(c1.points[i].x + cross1.x, c1.points[i].y + cross1.y, 0, "mill");
             //addPoint(c1.points[i].x, c1.points[i].y, c1.points[i].z, "mill");
             points.push(SumPoints(c1.points[i], cross1));
            // points.push(c1.points[i]);
             for(j = 0; j < c2.points.length - 1; j ++) {
-                const cross2 = getCross(c2.ob, c2[j].u, c2[j].v);
+                const cross2 = getCross(c2.ob, c2.u[j], c2.v[j]);
                 if(getVectorLength(SumPoints(c1.points[i], cross1), DiffPoints(c2.points[j], cross2)) < 0.01) {
                     return {_points: points, ind1: j};
                 }

@@ -3,6 +3,7 @@ import { saveToFilePaths } from "../../Save";
 import { evaluateDV, evaluateDU } from "../../../canvas/CuttingCurve/FindIntersection";
 import { crossMultiply, SumPoints, MultiplyPoint, normalize } from "../../../Helpers/Helpers";
 
+let stretchValue = 1.0;
 export function fromIndexToPlace(x) {
     const { size, r, start} = getDatasOfMill();
     return (x + r) * size + start;
@@ -46,7 +47,18 @@ export function getCross(ob, u, v) {
     if(cross.x === 0 && cross.y === 0 && cross.z === 0 ){
         cross = getCrossC0(ob, u, v);
     }
-    cross = MultiplyPoint(normalize(cross), 0.05);
-    cross.z = 0;
+    const r = getMillRForPaths();
+    cross = MultiplyPoint(normalize(cross), r / 100);
+    //cross.z = 0;
     return cross;
+}
+export function updateStretChValue(_v) {
+    stretchValue = _v;
+}
+export function getStretchValue() {
+    return stretchValue;
+}
+export function stretchModel(p) {
+    const model = {x: p.x, y: p.y, z: p.z * getStretchValue()};
+    return p;//model;
 }

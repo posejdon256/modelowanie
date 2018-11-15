@@ -1,17 +1,19 @@
-import { cleanCuttingCurves, getCuttingCurves } from "../../../canvas/CuttingCurve/CuttingCurve";
-import { getLastIntersectionsConfiguration } from "./ConfigurationLastIntersection";
-import { RedrawVisualization } from "../../../canvas/Draw/RedrawVisualisation/RedrawVisualization";
-import { selectSurface, getSurfaces } from "../../../canvas/Surface/Surface";
-import { setCursor } from "../../../canvas/Cursor/Cursor";
-import { findObjectToIntersectionAndIntersection, evaluate } from "../../../canvas/CuttingCurve/FindIntersection";
-import { getCross, createFiles, getDatasOfMill } from "../Helpers/GeneratePathsHelper";
-import { SumPoints, DiffPoints } from "../../../Helpers/Helpers";
-import { isIntersectionClose } from "./IntersectionCollision";
+import { setCursor } from '../../../canvas/Cursor/Cursor';
+import { cleanCuttingCurves, getCuttingCurves } from '../../../canvas/CuttingCurve/CuttingCurve';
+import { evaluate, findObjectToIntersectionAndIntersection } from '../../../canvas/CuttingCurve/FindIntersection';
+import { RedrawVisualization } from '../../../canvas/Draw/RedrawVisualisation/RedrawVisualization';
+import { getSurfaces, selectSurface } from '../../../canvas/Surface/Surface';
+import { DiffPoints, SumPoints } from '../../../Helpers/Helpers';
+import { createFiles, getCross, getDatasOfMill, stretchModel, updateStretChValue } from '../Helpers/GeneratePathsHelper';
+import { getLastIntersectionsConfiguration } from './ConfigurationLastIntersection';
+import { isIntersectionClose } from './IntersectionCollision';
 
 const points = [];
+let pointsFromBeforePaths = [];
 let minusValue = false;
 let intersectionCurves = [];
 let sumCross = false;
+
 export function generatePoints3(map) {
     cleanCuttingCurves();
 
@@ -55,19 +57,24 @@ function goOnParametrisation() {
     const curves = getCuttingCurves();
    // curves[2].back = true;
     setSumCross(false);
-    goOnSelectedParametrisation(2, curves, 40, false);
+    //updateStretChValue(1);
+    goOnSelectedParametrisation(2, curves, 60, false);
     goToBase();
-    goOnSelectedParametrisation(4, curves, 40, false);
+   // updateStretChValue(3);
+    goOnSelectedParametrisation(4, curves, 60, false);
     goToBase();
-    goOnSelectedParametrisation(3, curves, 40, false);
+
+    goOnSelectedParametrisation(3, curves, 60, false);
     goToBase();
-    setSumCross(true);
-    goOnSelectedParametrisation(5, curves, 40, false);
+
+    //setSumCross(false);
+    goOnSelectedParametrisation(1, curves, 60, false);
     goToBase();
-    setSumCross(false);
-    goOnSelectedParametrisation(1, curves, 40, false);
+    //setSumCross(true);
+    goOnSelectedParametrisation(5, curves, 60, false);
     goToBase();
-    goOnSelectedParametrisation(6, curves, 40, false);
+    goOnSelectedParametrisation(6, curves, 60, false);
+    goToBase();
 
 
 }
@@ -76,51 +83,39 @@ function goOnSelectedParametrisation(sId, iCurves, division, left) {
     intersectionCurves = iCurves;
     const s = getSurfaces().find(x => x.id === sId);
     if(left) {
+        evalAndPush(s, 0, 0, true);
         for(let i = 0; i < s.Height - (s.Height / division); i += (s.Height / division)) {
             let j = 0;
             for(; j < s.Width; j += (s.Width / constantDivision)) {
-                if(!decideAboutIntersecion(s, i, j)) break;
+                decideAboutIntersecion(s, i, j);
             }
             i += (s.Height / division)
-            j = Math.max(0, j - (s.Width / constantDivision));
-            evalAndPush(s, i, j);
-            for(; j >= 0; j -= (s.Width / constantDivision)) {
-                if(!decideAboutIntersecion(s, i, j)) break;
+            for(j = s.Width - 0.001; j >= 0; j -= (s.Width / constantDivision)) {
+                decideAboutIntersecion(s, i, j);
             }
         }
     } else {
+        evalAndPush(s, 0, 0, true);
         for(let i = 0; i < s.Width - (s.Width / division); i += (s.Width / division)) {
             let j = 0;
             for(; j < s.Height; j += (s.Height / constantDivision)) {
-                if(!decideAboutIntersecion(s, j, i)) break;
+                decideAboutIntersecion(s, j, i);
             }
             i += (s.Width / division);
-            j = Math.max(0, j - (s.Height / constantDivision));
-            evalAndPush(s, j, i);
-            for(; j >= 0; j -= (s.Height / constantDivision)) {
-                if(!decideAboutIntersecion(s, j, i)) break;
+            for(j = s.Height - 0.001; j >= 0; j -= (s.Height / constantDivision)) {
+                decideAboutIntersecion(s, j, i);
             }
         }
     }
+    pointsFromBeforePaths = points.slice();
 }
 function decideAboutIntersecion(s, i, j) {
-    if(points.length < 1) {
+    if(!isIntersectionClose(stretchModel(evaluate(s, i, j)), pointsFromBeforePaths)) {
         evalAndPush(s, i, j);
-        return true;
-    }
-    const isClose = isIntersectionClose(points[points.length - 1], intersectionCurves);
-    if(isClose === 0) {
-        evalAndPush(s, i, j);
-        return true;
-    } if(isClose === 1) {
-        evalAndPush(s, i, j, true);
-        return true;
-    } else {
-        return false;
     }
 }
 function evalAndPush(s, i, j, up) {
-    const p = evaluate(s, i, j);
+    const p = stretchModel(evaluate(s, i, j));
     const cross = getCross(s, i, j);
     let newP;
     if(sumCross) {
@@ -129,11 +124,12 @@ function evalAndPush(s, i, j, up) {
         newP = DiffPoints(p, cross);
     }
     const UpP = {x: newP.x, y: newP.y, z: 0.6};
+    newP = moveMillDown(newP);
     if(up) {
         points.push(UpP);
         return;
     }
-    if(newP.z > 0) {
+    if(newP.z >= 0) {
         if(minusValue) {
             points.push(UpP);
             minusValue = false;
@@ -152,4 +148,9 @@ function goToBase() {
     //const {aboveDraw} = getDatasOfMill();
     points.push({x: points[l].x, y: points[l].y, z: 0.6});
     points.push({x: 0, y: 0, z: 0.6});
+}
+function moveMillDown(p) {
+    const {r} = getDatasOfMill();
+    const down = {x: 0, y: 0, z: -r / 100};
+    return SumPoints(p, down);
 }

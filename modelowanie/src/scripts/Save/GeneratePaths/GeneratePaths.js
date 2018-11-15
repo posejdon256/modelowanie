@@ -1,11 +1,11 @@
 import { EvaluateSurface, EvaluateSurfaceC2 } from '../../canvas/Surface/EvaluateSurface';
 import { getSurfaces } from '../../canvas/Surface/Surface';
 import { isHelicopterLoaded } from '../../Load/Load';
-import { saveToFilePaths } from '../Save';
-import { generatePoints1 } from './RoughCut/First';
-import { createIntersectMap } from './IntersectMap';
-import { generatePoints2 } from './FlatCut/Second';
 import { generatePoints3 } from './FInalCut/Third';
+import { generatePoints2 } from './FlatCut/Second';
+import { stretchModel, updateStretChValue } from './Helpers/GeneratePathsHelper';
+import { createIntersectMap } from './IntersectMap';
+import { generatePoints1 } from './RoughCut/First';
 
 let generatingPaths = false;
 let r;
@@ -24,15 +24,15 @@ export function generatePaths() {
     let map = generateMap(500, 500);
 
     const surfacesC0 = getSurfaces("C0");
-    //map = getZ(surfacesC0, map, EvaluateSurface);
+    map = getZ(surfacesC0, map, EvaluateSurface);
 
     const surfacesC2 = getSurfaces("C2");
-   // map = getZ(surfacesC2, map, EvaluateSurfaceC2);
-   // setR(8);
-   // generatePoints1(map);
-    //setR(5);
-    //generatePoints2(map);
-    setR(5);
+    map = getZ(surfacesC2, map, EvaluateSurfaceC2);
+    // setR(8);
+    // generatePoints1(map);
+    // setR(5);
+    // generatePoints2(map);
+    setR(4);
     generatePoints3(map);
    // console.log(getPoints()); 
 
@@ -44,6 +44,11 @@ function setR(_r) {
 }
 function getZ(surfaces, map, evFun) {
     surfaces.forEach(s => {
+        if(s.id === 2) {
+            updateStretChValue(1);
+        } else {
+            updateStretChValue(3);
+        }
         const _trimMap = createIntersectMap(s.id);
         let iBig = 0;
         const width = 500;
@@ -58,11 +63,15 @@ function getZ(surfaces, map, evFun) {
                 if(_trimMap !== undefined && _trimMap[parseInt(iBig, 10)][parseInt(jBig, 10)] === 0) {
                     continue;
                 }
-                const p = evFun(s.id, iSmall, jSmall)
+                const p = stretchModel(evFun(s.id, iSmall, jSmall));
 
                 if(p.z >= 0) {
                     const ind = convertSpaceToIndex(p.x, p.y, map.length, map[0].length);
-                    map[ind.x][ind.y] = Math.max(map[ind.x][ind.y], p.z);
+                    if(map[ind.x][ind.y].z < p.z) {
+                        map[ind.x][ind.y].z = p.z;
+                        map[ind.x][ind.y].x = p.x;
+                        map[ind.x][ind.y].y = p.y;
+                    }
                 }
             }
         }
@@ -71,8 +80,15 @@ function getZ(surfaces, map, evFun) {
 }
 export function convertSpaceToIndex(i, j, m, n) {
     return {
-        x: Math.max(Math.min(parseInt((i + 0.48) * m, 10), m - 1), 0),
-        y: Math.max(Math.min(parseInt((j + 0.48) * n, 10), n - 1), 0)
+        x: Math.max(Math.min(parseInt((i + 0.5) * m, 10), m - 1), 0),
+        y: Math.max(Math.min(parseInt((j + 0.5) * n, 10), n - 1), 0)
+    };
+}
+export function convertIndexToSpace(x, y, z) {
+    return {
+        x: (x / 500) - 0.5,
+        y: (y / 500) - 0.5,
+        z: z
     };
 }
 function generateMap(n, m) {
@@ -80,7 +96,8 @@ function generateMap(n, m) {
     for(let i = 0; i < n; i ++) {
         _map.push([]);
         for(let j = 0; j < m; j ++) {
-            _map[i].push(0);
+            const p = convertIndexToSpace(i, j, 0);
+            _map[i].push(p);
         }
     }
     return _map;

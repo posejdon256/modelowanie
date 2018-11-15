@@ -110,8 +110,8 @@ export function goGoNewton(best, iterations) {
         if(alphaEpsilon < getVectorLength(p2, p1)) {
             tempAlpha /= 2;
         }
-        // DrawPoint(p1, "Red"); 
-        // DrawPoint(p2, "Blue"); 
+         DrawPoint(p1, "Red"); 
+         DrawPoint(p2, "Blue"); 
         pointsList.push(evaluate(ob1, u[0], v[0]));
         pointsList[pointsList.length - 1].u = u[0];
         pointsList[pointsList.length - 1].v = v[0];
