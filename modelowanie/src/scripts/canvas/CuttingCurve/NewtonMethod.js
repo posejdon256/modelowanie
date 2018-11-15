@@ -1,10 +1,12 @@
-import { getVectorLength, TryParseFloat } from "../../Helpers/Helpers";
+import { getVectorLength, TryParseFloat, SumPoints, DividePoint, MultiplyPoint } from "../../Helpers/Helpers";
 import { evaluate, evaluateDU, evaluateDV } from "./FindIntersection";
 import { addCuttingCurve, updateIn1Visualisation, updateIn2Visualisation } from "./CuttingCurve";
 import { findNewNewtonPoint } from "./Jacobi";
 import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
 import { updateUVAfterNewton, backNewton } from "./NewtonUpdateUV";
 import { setVisualisationObjects } from "../Draw/RedrawVisualisation/RedrawVisualization";
+import { getCross } from "../../Save/GeneratePaths/Helpers/GeneratePathsHelper";
+import { getMillState, getSummCross, moveMillDown } from "../../Save/GeneratePaths/FInalCut/Third";
 
 
 let alpha = 0.002;
@@ -89,7 +91,15 @@ export function goGoNewton(best, iterations) {
                 updateIn2Visualisation(ob1, cuttingCurve.id, {back: true});
             }
             if(upd1.backThisTime || upd2.backThisTime) {
-                pointsList.push(evaluate(ob1, u[0], v[0]));
+                let newP = evaluate(ob1, u[0], v[0]);
+                if(getMillState()) {
+                    const {crossP1, crossP2} = getSummCross();
+                    const cross1 = crossP1 ? getCross(ob1, u[0], v[0]) : MultiplyPoint(getCross(ob1, u[0], v[0]), -1);
+                    const cross2 = crossP2 ? getCross(ob2, u[1], v[1]) : MultiplyPoint(getCross(ob2, u[1], v[1]), -1);
+
+                    newP = moveMillDown(SumPoints(newP, DividePoint(SumPoints(cross1, cross2), 2)));
+                }
+                pointsList.push(newP);
                 pointsList[pointsList.length - 1].u = u[0];
                 pointsList[pointsList.length - 1].v = v[0];
                 const ret = backNewton(pointsList, uStart, vStart, u, v, uPrev, vPrev, _alpha);
@@ -112,7 +122,15 @@ export function goGoNewton(best, iterations) {
         }
          DrawPoint(p1, "Red"); 
          DrawPoint(p2, "Blue"); 
-        pointsList.push(evaluate(ob1, u[0], v[0]));
+        let newP = evaluate(ob1, u[0], v[0]);
+        if(getMillState()) {
+            const {crossP1, crossP2} = getSummCross();
+            const cross1 = crossP1 ? getCross(ob1, u[0], v[0]) : MultiplyPoint(getCross(ob1, u[0], v[0]), -1);
+            const cross2 = crossP2 ? getCross(ob2, u[1], v[1]) : MultiplyPoint(getCross(ob2, u[1], v[1]), -1);
+
+            newP = moveMillDown(SumPoints(newP, DividePoint(SumPoints(cross1, cross2), 2)));
+        }
+        pointsList.push(newP);
         pointsList[pointsList.length - 1].u = u[0];
         pointsList[pointsList.length - 1].v = v[0];
 
@@ -140,7 +158,7 @@ export function goGoNewton(best, iterations) {
     }
     setVisualisationObjects(ob1, ob2);
     if(!backed) {
-        cuttingCurve.points.push({x: pStart.x, y: pStart.y, z: pStart.z});
+        if(!getMillState())  cuttingCurve.points.push({x: pStart.x, y: pStart.y, z: pStart.z});
     }
     for(let i = 0; i < pointsList.length; i ++) {
         cuttingCurve.points.push({x: pointsList[i].x, y: pointsList[i].y, z: pointsList[i].z});
@@ -148,7 +166,7 @@ export function goGoNewton(best, iterations) {
         cuttingCurve.v.push(pointsList[i].v);
     }
     if(!backed) {
-        cuttingCurve.points.push({x: pStart.x, y: pStart.y, z: pStart.z});
+        if(!getMillState())  cuttingCurve.points.push({x: pStart.x, y: pStart.y, z: pStart.z});
         if(isLenghtNotToLong(cuttingCurve.intersectionVisualization1)) {
             cuttingCurve.intersectionVisualization1.push({u: cuttingCurve.intersectionVisualization1[0].u, v: cuttingCurve.intersectionVisualization1[0].v});
         }

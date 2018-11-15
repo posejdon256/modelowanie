@@ -2,7 +2,7 @@ import { DiffPoints } from '../../../Helpers/Helpers';
 
 export function isIntersectionClose(p, pointsBefore) {
     for(let i = 0; i < pointsBefore.length; i ++) {
-        if(getXYVectioLength(p, pointsBefore[i]) < 0.02) {
+        if(getXYVectioLength(p, pointsBefore[i]) < 0.05) {
             return true;
         }
     }

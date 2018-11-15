@@ -7,14 +7,25 @@ import { DiffPoints, SumPoints } from '../../../Helpers/Helpers';
 import { createFiles, getCross, getDatasOfMill, stretchModel, updateStretChValue } from '../Helpers/GeneratePathsHelper';
 import { getLastIntersectionsConfiguration } from './ConfigurationLastIntersection';
 import { isIntersectionClose } from './IntersectionCollision';
+import { goOnIntersection } from './GoOnIntersections';
 
-const points = [];
+let points = [];
 let pointsFromBeforePaths = [];
 let minusValue = false;
 let intersectionCurves = [];
 let sumCross = false;
+let sumCross1 = false;
+let sumCross2 = false;
+let millState = false;
 
+export function getMillState() {
+    return millState;
+}
+export function getSummCross() {
+    return {crossP1: sumCross1, crossP2: sumCross2};
+}
 export function generatePoints3(map) {
+    millState = true;
     cleanCuttingCurves();
 
     const conf = getLastIntersectionsConfiguration();
@@ -26,6 +37,8 @@ export function generatePoints3(map) {
         selectSurface(sConf.id);
         for (let j = 0; j < sConf.intersections.length; j++) {
             const inter = sConf.intersections[j];
+            sumCross1 = sConf.cross;
+            sumCross2 = inter.cross;
             selectSurface(inter.id);
             setCursor(inter.cursor.x, inter.cursor.y, inter.cursor.z, false);
             if (!findObjectToIntersectionAndIntersection()) {
@@ -39,15 +52,17 @@ export function generatePoints3(map) {
     }
     goOnParametrisation();
     const {aboveDraw} = getDatasOfMill();
-    points.forEach(p => {
-        p.x = p.x * 140;
-        p.y = p.y * 140;
-        p.z = p.z < 0 ? aboveDraw : (p.z + 0.2) * 100;
-    });
-    points.forEach(p => {
-        p.x = - p.x;
-    });
+    points = points.concat(goOnIntersection());
+    // points.forEach(p => {
+    //     p.x = p.x * 140;
+    //     p.y = p.y * 140;
+    //     p.z = p.z < 0 ? aboveDraw : (p.z + 0.2) * 100;
+    // });
+    // points.forEach(p => {
+    //     p.x = - p.x;
+    // });
     createFiles(points, "k08");
+    millState = false;
     //return points;
 }
 function setSumCross(_sum) {
@@ -73,6 +88,7 @@ function goOnParametrisation() {
     //setSumCross(true);
     goOnSelectedParametrisation(5, curves, 60, false);
     goToBase();
+
     goOnSelectedParametrisation(6, curves, 60, false);
     goToBase();
 
@@ -149,7 +165,7 @@ function goToBase() {
     points.push({x: points[l].x, y: points[l].y, z: 0.6});
     points.push({x: 0, y: 0, z: 0.6});
 }
-function moveMillDown(p) {
+export function moveMillDown(p) {
     const {r} = getDatasOfMill();
     const down = {x: 0, y: 0, z: -r / 100};
     return SumPoints(p, down);

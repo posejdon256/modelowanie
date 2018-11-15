@@ -1,7 +1,9 @@
 const s1 = {
     id: 1,
+    cross: false,
     intersections:[
     {
+        cross: true,
         id: 5,
         cursor: {x: -0.11, y: -0.37, z: 0.02},
         back: false
@@ -9,23 +11,28 @@ const s1 = {
 ]};
 const s2 = {
     id: 2,
+    cross: false,
     intersections:[
     {
+        cross: true,
         id: 5,
         cursor: {x: 0.01, y: -0.16, z: 0},
         back: false
     },
     {
+        cross: false,
         id: 3,
         cursor: {x: 0.16, y: -0.06, z: 0.0},
         back: true
     },
     {
+        cross: false,
         id: 6,
         cursor: {x: -0.11, y: 0.19, z: 0},
        back: false
     },
     {
+        cross: false,
         id: 6,
         cursor: {x: -0.04, y: 0.08, z: -0.29},
         back: false
@@ -34,14 +41,17 @@ const s2 = {
 const s3 = 'all';
 const s4 = {
     id: 4,
+    cross: false,
     intersections: [
         {
             id: 6,
+            cross: false,
             cursor: {x: -0.18, y: 0.41, z: 0.04},
             back: false
         },
         {
             id: 6,
+            cross: false,
             cursor: {x: 0.04, y: 0.41, z: 0.04},
             back: false
         }
