@@ -6,6 +6,8 @@ export function trayectoryOnCurves() {
     const curves = getCuttingCurves();
     let points = [];
     //nose to leg1
+    points.push({x: -0.6, y: 0});
+    points.push({x: -0.6, y: 0, z: 0.2});
     let ret = goOnCurveToCurve(curves[6], curves[8], 0, 1);
     points = points.concat(ret._points);
     
@@ -30,7 +32,7 @@ export function trayectoryOnCurves() {
     points = points.concat(ret._points);
     
     //bely to tail2
-    ret = goOnCurveToCurve(curves[6], curves[1], ret.ind1, ret.ind1 + 1);
+    ret = goOnCurveToCurve(curves[6], curves[1], ret.ind1, ret.ind1 + 1, false, true);
     points = points.concat(ret._points);
     
     //tail2 to tail1
@@ -42,33 +44,34 @@ export function trayectoryOnCurves() {
     points = points.concat(ret._points);
     
     //back to stand
-    ret = goOnCurveToCurve(curves[5], curves[3], ret.ind1, ret.ind1 + 1, true);
-    points = points.concat(ret._points);
+     ret = goOnCurveToCurve(curves[5], curves[3], ret.ind1, ret.ind1 + 1, true);
+     points = points.concat(ret._points);
     
-    //stand to propeller
-    ret = goOnCurveToCurve(curves[3], curves[0], ret.ind1, ret.ind1 - 1);
-    points = points.concat(ret._points);
+    // //stand to propeller
+     ret = goOnCurveToCurve(curves[3], curves[0], ret.ind1, ret.ind1 - 1);
+     points = points.concat(ret._points);
     
-    //propeller to stand
-    ret = goOnCurveToCurve(curves[0], curves[4], ret.ind1 + 5, ret.ind1 + 6);
-    points = points.concat(ret._points);
+    // //propeller to stand
+     ret = goOnCurveToCurve(curves[0], curves[4], ret.ind1 + 5, ret.ind1 + 6);
+     points = points.concat(ret._points);
     
 
-    ret = goOnCurveToCurve(curves[0], curves[4], ret.ind1, ret.ind1 + 1, true);
-    points = points.concat(ret._points);
+     ret = goOnCurveToCurve(curves[0], curves[4], ret.ind1, ret.ind1 + 1, true);
+     points = points.concat(ret._points);
     
-    //stand to back
-    ret = goOnCurveToCurve(curves[4], curves[5], ret.ind1, ret.ind1 - 1);
-    points = points.concat(ret._points);
+    // //stand to back
+     ret = goOnCurveToCurve(curves[4], curves[5], ret.ind1, ret.ind1 - 1);
+     points = points.concat(ret._points);
     
-    //back to bely
-    ret = goOnCurveToCurve(curves[5], curves[10], ret.ind1, ret.ind1 + 1);
-    points = points.concat(ret._points);
+    // //back to bely
+     ret = goOnCurveToCurve(curves[5], curves[10], ret.ind1, ret.ind1 + 1, false, true);
+     points = points.concat(ret._points);
+     points.push({x: points[2].x, y: points[2].y, z: points[2].z });
     
     return points;
 
 }
-function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange) {
+function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange, veryClose) {
     let j, i;
     const points = [];
     if(ind1 < ind2) {
@@ -78,9 +81,9 @@ function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange) {
             points.push(DiffPoints(c1.points[i], cross1));
             for(j = 0; j < c2.points.length - 1; j ++) {
                 const cross2 = getCross(c2.ob, c2.u[j], c2.v[j]);
-                if(getVectorLength(DiffPoints(c1.points[i], cross1), DiffPoints(c2.points[j], cross2)) < 0.01 && !derrrivativeChange) {
+                if(getVectorLength(DiffPoints(c1.points[i], cross1), DiffPoints(c2.points[j], cross2)) < (veryClose ? 0.003 :0.02) && !derrrivativeChange) {
                     return {_points: points, ind1: j};
-                } else if(getVectorLength(DiffPoints(c1.points[i], cross1), SumPoints(c2.points[j], cross2)) < 0.01 && derrrivativeChange) {
+                } else if(getVectorLength(DiffPoints(c1.points[i], cross1), SumPoints(c2.points[j], cross2)) < (veryClose ? 0.003 :0.02)  && derrrivativeChange) {
                     return {_points: points, ind1: j};
                 }
             }
@@ -94,7 +97,7 @@ function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange) {
            // points.push(c1.points[i]);
             for(j = 0; j < c2.points.length - 1; j ++) {
                 const cross2 = getCross(c2.ob, c2.u[j], c2.v[j]);
-                if(getVectorLength(SumPoints(c1.points[i], cross1), DiffPoints(c2.points[j], cross2)) < 0.01) {
+                if(getVectorLength(SumPoints(c1.points[i], cross1), DiffPoints(c2.points[j], cross2)) < (veryClose ? 0.003 :0.02) ) {
                     return {_points: points, ind1: j};
                 }
             }

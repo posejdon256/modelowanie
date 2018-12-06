@@ -7,6 +7,7 @@ import { updateUVAfterNewton, backNewton } from "./NewtonUpdateUV";
 import { setVisualisationObjects } from "../Draw/RedrawVisualisation/RedrawVisualization";
 import { getCross } from "../../Save/GeneratePaths/Helpers/GeneratePathsHelper";
 import { getMillState, getSummCross, moveMillDown } from "../../Save/GeneratePaths/FInalCut/Third";
+import { setR } from "../../Save/GeneratePaths/GeneratePaths";
 
 
 let alpha = 0.002;
@@ -19,11 +20,17 @@ export function setFinalEpsilon(_eps) {
     finalEpsilon = TryParseFloat(_eps, finalEpsilon);
 }
 export function goGoNewton(best, iterations) {
-    console.clear();
+    //console.clear();
     let {ob1, ob2, u, v} = best;
     let interpolation;
     let cuttingCurve;
     let _alpha = alpha;
+    //2.5 is good for legs
+    // 4.5 is good for down part in half
+    // 3 is good for nail and stand
+    // 6 is good for down left part
+    //DrawPoint(evaluate(ob2, 4, 0), "Blue"); 
+    //DrawPoint(evaluate(ob1, 4, 0), "Red"); 
     if(!iterations) {
         cuttingCurve = addCuttingCurve(interpolation, ob1);
     }
@@ -96,8 +103,7 @@ export function goGoNewton(best, iterations) {
                     const {crossP1, crossP2} = getSummCross();
                     const cross1 = crossP1 ? getCross(ob1, u[0], v[0]) : MultiplyPoint(getCross(ob1, u[0], v[0]), -1);
                     const cross2 = crossP2 ? getCross(ob2, u[1], v[1]) : MultiplyPoint(getCross(ob2, u[1], v[1]), -1);
-
-                    newP = moveMillDown(SumPoints(newP, DividePoint(SumPoints(cross1, cross2), 2)));
+                    newP = moveMillDown(SumPoints(newP, SumPoints(cross1, cross2)));
                 }
                 pointsList.push(newP);
                 pointsList[pointsList.length - 1].u = u[0];
@@ -120,15 +126,14 @@ export function goGoNewton(best, iterations) {
         if(alphaEpsilon < getVectorLength(p2, p1)) {
             tempAlpha /= 2;
         }
-         DrawPoint(p1, "Red"); 
+       //  DrawPoint(p1, "Red"); 
          DrawPoint(p2, "Blue"); 
         let newP = evaluate(ob1, u[0], v[0]);
         if(getMillState()) {
             const {crossP1, crossP2} = getSummCross();
             const cross1 = crossP1 ? getCross(ob1, u[0], v[0]) : MultiplyPoint(getCross(ob1, u[0], v[0]), -1);
             const cross2 = crossP2 ? getCross(ob2, u[1], v[1]) : MultiplyPoint(getCross(ob2, u[1], v[1]), -1);
-
-            newP = moveMillDown(SumPoints(newP, DividePoint(SumPoints(cross1, cross2), 2)));
+            newP = moveMillDown(SumPoints(newP, SumPoints(cross1, cross2)));
         }
         pointsList.push(newP);
         pointsList[pointsList.length - 1].u = u[0];

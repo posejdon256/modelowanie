@@ -173,8 +173,8 @@ function getUVForC0(id, u, v, debug) {
     const _u1 =  u - Math.floor(u);
     const _v1 = v - Math.floor(v);
     //console.log(u, v, uNew, vNew, _u, _v);
-    if(debug)
-        console.log(_u, _v, u, v);
+    //if(debug)
+      //  console.log(_u, _v, u, v);
     return {_u: _u, _v: _v, _u1 : _u1, _v1: _v1};
 }
 function getUVForC2(id, u, v) {

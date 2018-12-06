@@ -29,17 +29,17 @@ export function generatePaths() {
     const surfacesC2 = getSurfaces("C2");
     map = getZ(surfacesC2, map, EvaluateSurfaceC2);
     // setR(8);
-    // generatePoints1(map);
+    // generatePoints1(map); //DZIAŁA
     // setR(5);
-    // generatePoints2(map);
-    setR(4);
-    generatePoints3(map);
+    // generatePoints2(map); //DZIAŁA
+   // setR(4);
+   // generatePoints3();
    // console.log(getPoints()); 
 
     alert('Generated!');
     generatingPaths = false;
 }
-function setR(_r) {
+export function setR(_r) {
     r = _r;
 }
 function getZ(surfaces, map, evFun) {

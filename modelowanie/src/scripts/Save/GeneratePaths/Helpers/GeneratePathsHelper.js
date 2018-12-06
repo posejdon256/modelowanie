@@ -23,6 +23,10 @@ export function getDatasOfMill() {
 export function createFiles(points, size) {
     let str = "";
     for(let i = 0; i < points.length; i ++) {
+        if(isNaN(points[i].x) || isNaN(points[i].y) || isNaN(points[i].z)) {
+            console.log(points[i]);
+            continue;
+        }
         //N3G01X0.000Y-98.000Z80.000
         str = str.concat(`N${i}G01X${points[i].x.toFixed(3)}Y${points[i].y.toFixed(3)}Z${points[i].z.toFixed(3)}\n`);
     }

@@ -15,47 +15,67 @@ function findMaximum(map, x, y) {
 
 export function generatePoints1(map) {
 
-    const points = [];
-    const {r, drawStart, end, start, size, minDraw, aboveDraw} = getDatasOfMill();
-    const step = 41;
-    const wid = 140;
+    let points = [];
+    const {drawStart, aboveDraw} = getDatasOfMill();
 
     points.push({x: 0, y: 0, z: aboveDraw});
     points.push({x: drawStart,y: drawStart, z:  aboveDraw});
 
-    //First part, only on 45 mm high
-    for(let i = 0; i < map.length; i += (2 * step)) {
-        for(let j = 0; j < map[0].length; j ++) {   
-            points.push({x: map[i][j].x * wid, y: map[i][j].y * wid, z: minDraw});
-        }
-        for(let j = map[0].length - 1; j >= 0; j --) {
-            points.push({x: map[Math.min(i + step, 499)][j].x * wid, y: map[Math.min(i + step, 499)][j].y * wid, z: minDraw});
-        }
-    }
     //Second part on proper hight
-    points.push({x: end, y: start, z:  aboveDraw});
-    points.push({x: drawStart, y: drawStart, z:  aboveDraw});
-
-    for(let i = 0; i < map.length; i += (2 * step)) {
-        for(let j = 0; j < map[0].length; j ++) {
-            points.push({x: map[i][j].x * wid, y: map[i][j].y * wid, z: (findMaximum(map, i, j) + 0.2) * 100});
-        }
-        for(let j = map[0].length - 1; j >= 0; j --) {
-            points.push({x: map[Math.min(i + step, 499)][j].x * wid, y: map[Math.min(i + step, 499)][j].y * wid, z: (findMaximum(map, i + step, j) + 0.2) * 100});
-        }
-    }
-
-    //Cut things that was not cutted on the start
-    // points.push({x: start, y: start, z:  (0.3) * 100});
-    // points.push({x: start, y: end, z:  (0.3) * 100});
-    // points.push({x: start +  r, y: start, z:  (0.3) * 100});
-    // points.push({x: start +  r, y: end, z:  (0.3) * 100});
-    // points.push({x: start, y: end, z:  aboveDraw});
-    points.push({x: points[points.length - 1].x, y: points[points.length - 1].y, z:  aboveDraw});
-    points.push({x: 0, y: 0, z:  aboveDraw});
+    addLayer(0.15, points, map);
+    addLayer(0.05, points, map);
+    points = postProcessFirstPaths(points);
 
     points.forEach(p => {
         p.x = - p.x;
     });
     createFiles(points, "k16");
+}
+function addLayer(shift, points, map) {
+    const {drawStart, end, start, aboveDraw} = getDatasOfMill();
+    const step = 41;
+    const wid = 140;
+
+    points.push({x: end, y: start, z:  aboveDraw});
+    points.push({x: drawStart, y: drawStart, z:  aboveDraw});
+
+    for(let i = 0; i < map.length; i += (2 * step)) {
+        for(let j = 0; j < map[0].length; j ++) {
+            points.push({x: map[i][j].x * wid, y: map[i][j].y * wid, z: Math.min(findMaximum(map, i, j) + 0.2 + shift, 0.5) * 100});
+        }
+        if(i + 2 * step >= map.length) {
+            break;
+        }
+        for(let j = map[0].length - 1; j >= 0; j --) {
+            points.push({x: map[Math.min(i + step, 499)][j].x * wid, y: map[Math.min(i + step, 499)][j].y * wid, z: Math.min(findMaximum(map, i + step, j) + 0.2 + shift, 0.5) * 100});
+        }
+    }
+    points.push({x: points[points.length - 1].x, y: points[points.length - 1].y, z:  aboveDraw});
+    points.push({x: 0, y: 0, z:  aboveDraw});
+
+    return points;
+}
+export function postProcessFirstPaths(points) {
+    const postProcessedPoints = [];
+    let same = false;
+    let firstSame = points[0];
+    for(let i = 0; i < points.length; i ++) {
+        if(i === 0) {
+            postProcessedPoints.push(points[i]);
+        } else if(!areSame(points[i], points[i - 1], firstSame)) {
+            if(same) {
+                postProcessedPoints.push(points[i - 1]);
+            }
+            postProcessedPoints.push(points[i]);
+            firstSame = points[i];
+            same = false
+        }
+        else {
+            same = true;
+        }
+    }
+    return postProcessedPoints;
+}
+function areSame(p1, p2, firstSame) {
+    return Math.abs(p1.x - firstSame.x) < 2 && p1.z === p2.z;
 }

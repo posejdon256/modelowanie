@@ -54,7 +54,7 @@ export function findTorusBoundryToTrim(u1, v1, u2, v2, ops) {
         y = y === 500 ? 499 : y;
         x = x === 500 ? 499 : x;
         if(Math.abs(u2 - u1) > 0.5 || Math.abs(v2 - v1) > 0.5) {
-            console.log(x, y);
+           // console.log(x, y);
         }
         const place1 = (parseInt((y), 10)* canvas.width * 4) + (parseInt(x, 10) * 4);
 
@@ -63,7 +63,7 @@ export function findTorusBoundryToTrim(u1, v1, u2, v2, ops) {
         y = y === 500 ? 499 : y;
         x = x === 500 ? 499 : x;
         if(Math.abs(u2 - u1) > 0.5 || Math.abs(v2 - v1) > 0.5) {
-            console.log(parseInt(v2 * 500, 10), parseInt(u2 * 500, 10));
+        //    console.log(parseInt(v2 * 500, 10), parseInt(u2 * 500, 10));
         }
 
         if(op === "left") {
@@ -85,7 +85,7 @@ export function findTorusBoundryToTrim(u1, v1, u2, v2, ops) {
         loopPrevV = loopV;
     }
     if(parseInt(500 * loopPrevU  - 500 * u1, 10) > 200 || parseInt(500 * loopPrevV - 500 * v2, 10) > 200) {
-        console.log(u1, u2, v1, v2);
+       // console.log(u1, u2, v1, v2);
     }
     const ret = {u: loopPrevU, v: loopPrevV};
     return ret;

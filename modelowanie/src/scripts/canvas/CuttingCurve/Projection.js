@@ -117,7 +117,7 @@ function countGradientMethod(ob1, ob2, best){
         i ++;
         if(i > 1000) {
             console.log("Nie znaleziono przecięcia!");
-            console.log(getVectorLength(p1, p2));
+           // console.log(getVectorLength(p1, p2));
             return false;
         }
         const help = {
