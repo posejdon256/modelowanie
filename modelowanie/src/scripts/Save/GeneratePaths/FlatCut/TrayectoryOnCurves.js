@@ -1,6 +1,7 @@
 import { getCuttingCurves } from '../../../canvas/CuttingCurve/CuttingCurve';
 import { DiffPoints, getVectorLength, SumPoints } from '../../../Helpers/Helpers';
 import { getCross } from '../Helpers/GeneratePathsHelper';
+import { addPoint } from '../../../canvas/Points/Points';
 
 export function trayectoryOnCurves() {
     const curves = getCuttingCurves();
@@ -8,7 +9,7 @@ export function trayectoryOnCurves() {
     //nose to leg1
     points.push({x: -0.6, y: 0});
     points.push({x: -0.6, y: 0, z: 0.2});
-    let ret = goOnCurveToCurve(curves[6], curves[8], 0, 1);
+    let ret = goOnCurveToCurve(curves[6], curves[8], 0, 1, false, true);
     points = points.concat(ret._points);
     
     //leg1 to skid1
@@ -71,19 +72,19 @@ export function trayectoryOnCurves() {
     return points;
 
 }
-function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange, veryClose) {
+export function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange, veryClose) {
     let j, i;
     const points = [];
     if(ind1 < ind2) {
         for(i = ind2; i < c1.points.length - 1; i ++) {
             let cross1 = getCross(c1.ob, c1.u[i], c1.v[i]);
-            //addPoint(c1.points[i].x - cross1.x, c1.points[i].y - cross1.y, 0, "mill");
+            addPoint(c1.points[i].x - cross1.x, c1.points[i].y - cross1.y, 0, "mill");
             points.push(DiffPoints(c1.points[i], cross1));
             for(j = 0; j < c2.points.length - 1; j ++) {
                 const cross2 = getCross(c2.ob, c2.u[j], c2.v[j]);
-                if(getVectorLength(DiffPoints(c1.points[i], cross1), DiffPoints(c2.points[j], cross2)) < (veryClose ? 0.003 :0.02) && !derrrivativeChange) {
+                if(getVectorLength(DiffPoints(c1.points[i], cross1), DiffPoints(c2.points[j], cross2)) < (veryClose ? 0.003 :0.02) && !derrrivativeChange && Math.abs(ind2 - i) > 5) {
                     return {_points: points, ind1: j};
-                } else if(getVectorLength(DiffPoints(c1.points[i], cross1), SumPoints(c2.points[j], cross2)) < (veryClose ? 0.003 :0.02)  && derrrivativeChange) {
+                } else if(getVectorLength(DiffPoints(c1.points[i], cross1), SumPoints(c2.points[j], cross2)) < (veryClose ? 0.003 :0.02)  && derrrivativeChange && Math.abs(ind2 - i) > 5) {
                     return {_points: points, ind1: j};
                 }
             }
@@ -91,13 +92,13 @@ function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange, veryClose) {
     } else {
         for(i = ind2; i >= 1; i --) {
             let cross1 = getCross(c1.ob, c1.u[i], c1.v[i]);
-           // addPoint(c1.points[i].x + cross1.x, c1.points[i].y + cross1.y, 0, "mill");
+            addPoint(c1.points[i].x + cross1.x, c1.points[i].y + cross1.y, 0, "mill");
             //addPoint(c1.points[i].x, c1.points[i].y, c1.points[i].z, "mill");
             points.push(SumPoints(c1.points[i], cross1));
            // points.push(c1.points[i]);
             for(j = 0; j < c2.points.length - 1; j ++) {
                 const cross2 = getCross(c2.ob, c2.u[j], c2.v[j]);
-                if(getVectorLength(SumPoints(c1.points[i], cross1), DiffPoints(c2.points[j], cross2)) < (veryClose ? 0.003 :0.02) ) {
+                if(getVectorLength(SumPoints(c1.points[i], cross1), DiffPoints(c2.points[j], cross2)) < (veryClose ? 0.003 :0.02) && Math.abs(ind2 - i) > 5) {
                     return {_points: points, ind1: j};
                 }
             }

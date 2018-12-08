@@ -5,6 +5,8 @@ import { getCursor } from '../Cursor/Cursor';
 import { evaluate, getGradient, getIntersectionStep } from './FindIntersection';
 import { getVectorLength, TryParseInt } from '../../Helpers/Helpers';
 import { goGoNewton } from './NewtonMethod';
+import { getMillState } from '../../Save/GeneratePaths/FInalCut/Third';
+import { evaluateOffset } from './EvaluateOffset';
 
 let projectionState = false;
 let oneIntersectionPointState = false;
@@ -38,6 +40,8 @@ function findIntersection(_objects) {
         point1: {},
         point2: {}
     };
+    
+    const _evaluate = getMillState() ? evaluateOffset : evaluate;
     const epsDistance = { x: 0.5, y: 0.5 };
     const sameObjects = _objects[0].id === _objects[1].id ? true : false;
     const divideValue = sameObjects ? 10.0 : 10.0;
@@ -51,8 +55,8 @@ function findIntersection(_objects) {
         for(let j = 0.0; j < _objects[0].Height; j += step.h1) {
             for(let k = 0.0; k < _objects[1].Width; k += step.w2) {
                 for(let m = 0.0; m < _objects[1].Height; m += step.h2) {
-                    const ev1 = evaluate(_objects[0], j, i);
-                    const ev2 = evaluate(_objects[1], m, k);
+                    const ev1 = _evaluate(_objects[0], j, i);
+                    const ev2 = _evaluate(_objects[1], m, k);
                     const _lenght = getVectorLength(ev1, cursor) + getVectorLength(ev2, cursor);
                     if(_lenght < best.lenght && (!sameObjects || (epsDistance.x < Math.abs(i - k) && epsDistance.y < Math.abs(j - m)))) {
                         best.point1 = {u: j, v: i};
@@ -63,8 +67,8 @@ function findIntersection(_objects) {
             }
         }
     }
-    const p1 = evaluate(_objects[0], best.point1.u, best.point1.v);
-    const p2 = evaluate(_objects[1], best.point2.u, best.point2.v);
+    const p1 = _evaluate(_objects[0], best.point1.u, best.point1.v);
+    const p2 = _evaluate(_objects[1], best.point2.u, best.point2.v);
 
     DrawPoint(p1, "Blue");
     DrawPoint(p2, "Red");
@@ -93,22 +97,23 @@ export function projectIntersectionPoints(){
     for(let i = 0; i < toruses.length; i ++) {
         _objects.push(toruses[i]);
     }
-    try {
+  //  try {
         if(!findIntersection(_objects)) {
             return false
         }
-    }  catch(e) {
-        console.log("Error: " + e);
-        return false;
-    }
+   // }  catch(e) {
+      //  console.log("Error: " + e);
+      //  return false;
+   // }
     return true;//TODO
 }
 function countGradientMethod(ob1, ob2, best){
     const intersectionStep = getIntersectionStep();
+    const _evaluate = getMillState() ? evaluateOffset : evaluate;
     let u = [best.point1.u, best.point2.u];
     let v = [best.point1.v, best.point2.v];
-    let p1 = evaluate(ob1, u[0], v[0]);
-    let p2 = evaluate(ob2, u[1], v[1]);
+    let p1 = _evaluate(ob1, u[0], v[0]);
+    let p2 = _evaluate(ob2, u[1], v[1]);
     // DrawPoint(evaluate(ob1, 0, 0), "Green");
     // DrawPoint(evaluate(ob1, 2.1, 3.1), "Green");
     const eps = 0.001;
@@ -134,10 +139,10 @@ function countGradientMethod(ob1, ob2, best){
         for(let j = 0; j < 4; j ++) {
             betterPoint[j] *= intersectionStep;
         }
-        p1 = evaluate(ob1, u[0], v[0]);
-        p2 = evaluate(ob2, u[1], v[1]);
+        p1 = _evaluate(ob1, u[0], v[0]);
+        p2 = _evaluate(ob2, u[1], v[1]);
         DrawPoint(p1, "Red");
-        DrawPoint(p2, "Red");
+        DrawPoint(p2, "Blue");
         const uPrev = u;
         const vPrev = v;
 

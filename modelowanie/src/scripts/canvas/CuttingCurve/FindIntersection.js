@@ -4,6 +4,9 @@ import { getCursor } from "../Cursor/Cursor";
 import { getSurfaces, cleanTrimSurfaces }  from  "../Surface/Surface";
 import { EvaluateSurface, EvaluateSurfaceDU, EvaluateSurfaceDV, EvaluateSurfaceC2, EvaluateSurfaceC2DU, EvaluateSurfaceC2DV } from "../Surface/EvaluateSurface";
 import { goGoNewton } from "./NewtonMethod";
+import { getMillState } from "../../Save/GeneratePaths/FInalCut/Third";
+import { evaluateOffset, evaluateOffsetDU, evaluateOffsetDV } from "./EvaluateOffset";
+import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
 
 let intersectionStep = 3; //Needs to be updated for toruses and C0
 let intersectionEpsilon = 0.001;
@@ -27,6 +30,7 @@ function findIntersection(_objects) {
     cleanTrimSurfaces();
     cleanTrimToruses();
     const cursor = getCursor();
+    const _evaluate = getMillState() ? evaluateOffset : evaluate;
     const best = {
         lenght: 10000,
         point1: {},
@@ -45,8 +49,8 @@ function findIntersection(_objects) {
         for(let j = 0.0; j < _objects[0].Height; j += step.h1) {
             for(let k = 0.0; k < _objects[1].Width; k += step.w2) {
                 for(let m = 0.0; m < _objects[1].Height; m += step.h2) {
-                    const ev1 = evaluate(_objects[0], j, i);
-                    const ev2 = evaluate(_objects[1], m, k);
+                    const ev1 = _evaluate(_objects[0], j, i);
+                    const ev2 = _evaluate(_objects[1], m, k);
                     const trans = [ev1, ev2];
                     const _lenght = getVectorLength(trans[0], cursor) + getVectorLength(trans[1], cursor);
                     if(_lenght < best.lenght && (!sameObjects || (epsDistance.x < Math.abs(i - k) && epsDistance.y < Math.abs(j - m)))) {
@@ -61,10 +65,11 @@ function findIntersection(_objects) {
     return countGradientMethod(_objects[0], _objects[1], best);
 }
 function countGradientMethod(ob1, ob2, best){
+    const _evaluate = getMillState() ? evaluateOffset : evaluate;
     let u = [best.point1.u, best.point2.u];
     let v = [best.point1.v, best.point2.v];
-    let p1 = evaluate(ob1, u[0], v[0]);
-    let p2 = evaluate(ob2, u[1], v[1]);
+    let p1 = _evaluate(ob1, u[0], v[0]);
+    let p2 = _evaluate(ob2, u[1], v[1]);
     let i = 0;
     while(getVectorLength(p1, p2) > intersectionEpsilon) {
         i ++;
@@ -78,17 +83,21 @@ function countGradientMethod(ob1, ob2, best){
             point2: {u: u[1], v: v[1]}
         };
         let betterPoint;
-        try{
+      //  try{
             betterPoint = getGradient(ob1, ob2, help);
-        } catch(e) {
-            alert("There is no intersection. Try to put cursor in other place."  + e);
-            return false;
-        }
+       // } catch(e) {
+           // alert("There is no intersection. Try to put cursor in other place."  + e);
+           // return false;
+      //  }
         for(let j = 0; j < 4; j ++) {
             betterPoint[j] *= intersectionStep;
         }
-        p1 = evaluate(ob1, u[0], v[0]);
-        p2 = evaluate(ob2, u[1], v[1]);
+        p1 = _evaluate(ob1, u[0], v[0]);
+        p2 = _evaluate(ob2, u[1], v[1]);
+        if(getMillState()) {
+            DrawPoint(p1, "Blue");
+            DrawPoint(p2, "Red");
+        }
         const uPrev = u;
         const vPrev = v;
 
@@ -106,16 +115,19 @@ function countGradientMethod(ob1, ob2, best){
     return true;
 }
 export function getGradient(ob1, ob2, best) {
-    const eval1 = evaluate(ob1, best.point1.u, best.point1.v);
-    const eval2 = evaluate(ob2, best.point2.u, best.point2.v);
+    const _evaluate = getMillState() ? evaluateOffset : evaluate;
+    const _evaluateDU = getMillState() ? evaluateOffsetDU : evaluateDU;
+    const _evaluateDV = getMillState() ? evaluateOffsetDV : evaluateDV;
+    const eval1 = _evaluate(ob1, best.point1.u, best.point1.v);
+    const eval2 = _evaluate(ob2, best.point2.u, best.point2.v);
 
     const diff = DiffPoints(eval1, eval2);
     
-    const eval1u = evaluateDU(ob1, best.point1.u, best.point1.v);
-    const eval1v = evaluateDV(ob1, best.point1.u, best.point1.v);
+    const eval1u = _evaluateDU(ob1, best.point1.u, best.point1.v);
+    const eval1v = _evaluateDV(ob1, best.point1.u, best.point1.v);
 
-    const eval2u = evaluateDU(ob2, best.point2.u, best.point2.v);
-    const eval2v = evaluateDV(ob2, best.point2.u, best.point2.v);
+    const eval2u = _evaluateDU(ob2, best.point2.u, best.point2.v);
+    const eval2v = _evaluateDV(ob2, best.point2.u, best.point2.v);
 
     return [
             scalarMultiply(diff, eval1u) * 2,
@@ -142,15 +154,15 @@ export function findObjectToIntersectionAndIntersection(){
     for(let i = 0; i < toruses.length; i ++) {
         _objects.push(toruses[i]);
     }
-    try{
+   // try{
         selectedObjects = _objects;
         if(!findIntersection(_objects)) {
             return false
         }
-    } catch(e) {
-        console.log("Error: " + e);
-        return false;
-    }
+  //  } catch(e) {
+     //   console.log("Error: " + e);
+       // return false;
+  //  }
     return true;//TODO
 }
 export function evaluate(object, u, v, debug) {

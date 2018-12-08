@@ -1,6 +1,7 @@
 import { DiffPoints } from '../../../Helpers/Helpers';
 import { getCuttingCurves } from '../../../canvas/CuttingCurve/CuttingCurve';
 import { getMillRForPaths } from '../GeneratePaths';
+import { moveMillUp } from './Third';
 
 export function isOtherPartnClose(p, pointsBefore, id) {
     for(let i = 0; i < pointsBefore.length; i ++) {
@@ -10,12 +11,12 @@ export function isOtherPartnClose(p, pointsBefore, id) {
     }
     return false
 }
-export function isIntersectionClose(p, id) {
+export function isIntersectionClose(p) {
     const curves = getCuttingCurves();
     const r = getMillRForPaths();
-    for(let i = 0; i < curves.length - 7; i ++) {
+    for(let i = curves.length - 7; i < curves.length; i ++) {
         for(let j = 0; j < curves[i].points.length; j ++) {
-            if(getXYZVectioLength(p, curves[i].points[j]) < r / 100) {
+            if(getXYVectioLength(p, curves[i].points[j]) < 0.002 && curves[i].points[j].z > 0) {
                 return true;
             }
         }
@@ -25,7 +26,7 @@ export function isIntersectionClose(p, id) {
 function IsThisSurfaceOneOfTheFirsts(id) {
     return id === 2 || id === 4 || id === 1;
 }
-function getXYVectioLength(p1, p2) {
+export function getXYVectioLength(p1, p2) {
     const p = DiffPoints(p1, p2);
     return Math.sqrt(Math.pow(p.x, 2) + Math.pow(p.y, 2));
 }

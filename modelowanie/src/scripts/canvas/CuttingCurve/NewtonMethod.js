@@ -1,13 +1,16 @@
-import { getVectorLength, TryParseFloat, SumPoints, DividePoint, MultiplyPoint } from "../../Helpers/Helpers";
+import { getVectorLength, TryParseFloat, SumPoints, DividePoint, MultiplyPoint, normalize } from "../../Helpers/Helpers";
 import { evaluate, evaluateDU, evaluateDV } from "./FindIntersection";
 import { addCuttingCurve, updateIn1Visualisation, updateIn2Visualisation } from "./CuttingCurve";
 import { findNewNewtonPoint } from "./Jacobi";
 import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
 import { updateUVAfterNewton, backNewton } from "./NewtonUpdateUV";
 import { setVisualisationObjects } from "../Draw/RedrawVisualisation/RedrawVisualization";
-import { getCross } from "../../Save/GeneratePaths/Helpers/GeneratePathsHelper";
+import { getCross, getDatasOfMill } from "../../Save/GeneratePaths/Helpers/GeneratePathsHelper";
 import { getMillState, getSummCross, moveMillDown } from "../../Save/GeneratePaths/FInalCut/Third";
 import { setR } from "../../Save/GeneratePaths/GeneratePaths";
+import { DrawLine } from "../Draw/DrawLine/DrawLine";
+import { evaluateOffset } from "./EvaluateOffset";
+import { addPoint } from "../Points/Points";
 
 
 let alpha = 0.002;
@@ -25,6 +28,7 @@ export function goGoNewton(best, iterations) {
     let interpolation;
     let cuttingCurve;
     let _alpha = alpha;
+    const _evaluate = getMillState() ? evaluateOffset : evaluate;
     //2.5 is good for legs
     // 4.5 is good for down part in half
     // 3 is good for nail and stand
@@ -41,9 +45,10 @@ export function goGoNewton(best, iterations) {
     let vPrev = [vStart[0], vStart[1]];
     let betterPoint;
     let backed = false;
-    let pStart = evaluate(ob[0], uStart[0], vStart[0]);
+    let pStart = _evaluate(ob[0], uStart[0], vStart[0]);
     let notFinishYet = 0;
     let loops = 0;
+    const {} = getDatasOfMill();
     let crossed1, crossed2;
     let pointsList = [];
     let stop = iterations ? iterations : 2000;
@@ -98,12 +103,10 @@ export function goGoNewton(best, iterations) {
                 updateIn2Visualisation(ob1, cuttingCurve.id, {back: true});
             }
             if(upd1.backThisTime || upd2.backThisTime) {
-                let newP = evaluate(ob1, u[0], v[0]);
+                let newP = _evaluate(ob1, u[0], v[0]);
                 if(getMillState()) {
-                    const {crossP1, crossP2} = getSummCross();
-                    const cross1 = crossP1 ? getCross(ob1, u[0], v[0]) : MultiplyPoint(getCross(ob1, u[0], v[0]), -1);
-                    const cross2 = crossP2 ? getCross(ob2, u[1], v[1]) : MultiplyPoint(getCross(ob2, u[1], v[1]), -1);
-                    newP = moveMillDown(SumPoints(newP, SumPoints(cross1, cross2)));
+                    newP = moveMillDown(newP);
+                    DrawPoint(newP, "Blue");
                 }
                 pointsList.push(newP);
                 pointsList[pointsList.length - 1].u = u[0];
@@ -121,19 +124,17 @@ export function goGoNewton(best, iterations) {
         uPrev = [u[0], u[1]];
         vPrev = [v[0], v[1]];
 
-        const p1 = evaluate(ob1, u[0], v[0], true);
-        const p2 = evaluate(ob2, u[1], v[1]);
+        const p1 = _evaluate(ob1, u[0], v[0], true);
+        const p2 = _evaluate(ob2, u[1], v[1]);
         if(alphaEpsilon < getVectorLength(p2, p1)) {
             tempAlpha /= 2;
         }
        //  DrawPoint(p1, "Red"); 
-         DrawPoint(p2, "Blue"); 
-        let newP = evaluate(ob1, u[0], v[0]);
+        // DrawPoint(p2, "Blue"); 
+        let newP = _evaluate(ob1, u[0], v[0]);
         if(getMillState()) {
-            const {crossP1, crossP2} = getSummCross();
-            const cross1 = crossP1 ? getCross(ob1, u[0], v[0]) : MultiplyPoint(getCross(ob1, u[0], v[0]), -1);
-            const cross2 = crossP2 ? getCross(ob2, u[1], v[1]) : MultiplyPoint(getCross(ob2, u[1], v[1]), -1);
-            newP = moveMillDown(SumPoints(newP, SumPoints(cross1, cross2)));
+            newP = moveMillDown(newP);
+            DrawPoint(newP, "Blue");
         }
         pointsList.push(newP);
         pointsList[pointsList.length - 1].u = u[0];
@@ -171,7 +172,7 @@ export function goGoNewton(best, iterations) {
         cuttingCurve.v.push(pointsList[i].v);
     }
     if(!backed) {
-        if(!getMillState())  cuttingCurve.points.push({x: pStart.x, y: pStart.y, z: pStart.z});
+        cuttingCurve.points.push({x: pointsList[0].x, y: pointsList[0].y, z: pointsList[0].z});
         if(isLenghtNotToLong(cuttingCurve.intersectionVisualization1)) {
             cuttingCurve.intersectionVisualization1.push({u: cuttingCurve.intersectionVisualization1[0].u, v: cuttingCurve.intersectionVisualization1[0].v});
         }

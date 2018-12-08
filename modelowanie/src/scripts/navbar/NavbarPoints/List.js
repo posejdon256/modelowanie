@@ -175,7 +175,7 @@ export default class List extends Component {
         return(
             <div>
                 <label>Scene objects:</label>
-                {/* <ul className="ab-ul-points">
+                <ul className="ab-ul-points">
                 {
                     toruses.map(torus => {
                         return (
@@ -273,7 +273,7 @@ export default class List extends Component {
                         ); 
                 })
             }
-                </ul> */}
+                </ul>
             </div>
         );
     }

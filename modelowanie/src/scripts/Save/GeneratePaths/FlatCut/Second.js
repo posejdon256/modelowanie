@@ -30,7 +30,7 @@ export function generatePoints2(map) {
     points.push({ x: 0, y: 0, z: aboveDraw });
 
     for (let i = 0; i < map.length; i += step) {
-        points.push({ x: start - 2 * r, y: map[0][i].y * width, z: aboveDraw });
+        points.push({ x: start - 2 * r, y: map[0][i].y * width, z: maxDraw });
         points.push({ x: start - 2 * r - 1, y: map[0][i].y *width, z: maxDraw });
 
         let j;
@@ -59,7 +59,7 @@ export function generatePoints2(map) {
     }
     goToBase(points);
      for (let i = 0; i < map.length; i += step) {
-         points.push({ x: end + 2 * r, y: map[map.length - 1][i].y * width, z: aboveDraw });
+         points.push({ x: end + 2 * r, y: map[map.length - 1][i].y * width, z: maxDraw });
          points.push({ x: end + 2 * r + 1, y: map[map.length - 1][i].y *width, z: maxDraw });
 
          let j = goLeft(points, i, map[0].length - 1, map, width);
@@ -157,10 +157,6 @@ function goToBase(points) {
 function getCutPart() {
 
     //add surface z = 0
-    const value = 6;
-    setHeight((value + 1).toString());
-    setWidth(value.toString());
-    createSurface("C0");
 
     createCuttingCurvesFoFlatMill();
     const points = trayectoryOnCurves();
