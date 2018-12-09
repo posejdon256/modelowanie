@@ -37,7 +37,7 @@ export function getConfigurationCut() {
         {
             id: 2,
             cross: false,
-            cursor: {x: 0.70, y: -0.17, z: 0},
+            cursor: {x: -0.23, y: 0.7, z: 0},
         },
         {
             id: 6,

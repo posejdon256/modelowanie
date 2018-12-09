@@ -32,10 +32,9 @@ export function generatePoints1(map) {
     createFiles(points, "k16");
 }
 function addLayer(shift, points, map) {
-    const {drawStart, end, start, aboveDraw} = getDatasOfMill();
+    const {drawStart, end, start, aboveDraw, r} = getDatasOfMill();
     const step = 41;
     const wid = 140;
-
     points.push({x: end, y: start, z:  aboveDraw});
     points.push({x: drawStart, y: drawStart, z:  aboveDraw});
 
@@ -50,6 +49,9 @@ function addLayer(shift, points, map) {
             points.push({x: map[Math.min(i + step, 499)][j].x * wid, y: map[Math.min(i + step, 499)][j].y * wid, z: Math.min(findMaximum(map, i + step, j) + 0.2 + shift, 0.5) * 100});
         }
     }
+    points.push({x : end + r, y: end + r, z: (0.2 + shift ) * 100});
+    points.push({x : end + r, y: start - r, z: (0.2 + shift) * 100});
+    points.push({x : end + r, y: start - r, z: aboveDraw});
     points.push({x: points[points.length - 1].x, y: points[points.length - 1].y, z:  aboveDraw});
     points.push({x: 0, y: 0, z:  aboveDraw});
 

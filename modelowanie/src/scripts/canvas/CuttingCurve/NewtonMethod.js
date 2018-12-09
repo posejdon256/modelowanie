@@ -105,8 +105,11 @@ export function goGoNewton(best, iterations) {
             if(upd1.backThisTime || upd2.backThisTime) {
                 let newP = _evaluate(ob1, u[0], v[0]);
                 if(getMillState()) {
+                    // if(ob1.id === 3 || ob2.id === 3) {
+                    //     newP.z = -newP.z;
+                    // }
                     newP = moveMillDown(newP);
-                    DrawPoint(newP, "Blue");
+                    //DrawPoint(newP, "Blue");
                 }
                 pointsList.push(newP);
                 pointsList[pointsList.length - 1].u = u[0];
@@ -133,6 +136,9 @@ export function goGoNewton(best, iterations) {
         // DrawPoint(p2, "Blue"); 
         let newP = _evaluate(ob1, u[0], v[0]);
         if(getMillState()) {
+            // if(ob1.id === 3 || ob2.id === 3) {
+            //     newP.z = -newP.z;;
+            // }
             newP = moveMillDown(newP);
             DrawPoint(newP, "Blue");
         }

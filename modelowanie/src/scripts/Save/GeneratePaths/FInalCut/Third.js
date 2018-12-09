@@ -117,28 +117,28 @@ function goOnParametrisation() {
     //updateStretChValue(1);
     let startPoint = {u: 3, v: 2.5};
     let pointsParts = preparePartsOfPoints();
-    goOnSelectedParametrisation(2, 120, 100, startPoint, points, pointsParts);
-    goToBase();
+     goOnSelectedParametrisation(2, 120, 250, startPoint, points, pointsParts);
+     goToBase();
 
-    startPoint.u = 4.7;
-    startPoint.v = 2.5;
-    goOnSelectedParametrisation(4, 120, 100, startPoint, points, pointsParts);
-    goToBase();
+     startPoint.u = 4.7;
+     startPoint.v = 2.5;
+     goOnSelectedParametrisation(4, 120, 200, startPoint, points, pointsParts);
+     goToBase();
 
     startPoint.u = 3;
-    goOnSelectedParametrisation(3, 120, 150,  startPoint, points, pointsParts);
+    goOnSelectedParametrisation(3, 200, 300,  startPoint, points, pointsParts);
     goToBase();
 
-    setSumCross(false);
-    startPoint.u = 3;
-    startPoint.v = 3;
-    goOnSelectedParametrisation(1, 120, 120, startPoint, points, pointsParts);
+     setSumCross(false);
+     startPoint.u = 3;
+     startPoint.v = 3;
+    goOnSelectedParametrisation(1, 200, 200, startPoint, points, pointsParts);
     goToBase();
 
     setSumCross(true);
     startPoint.u = 2.5;
     startPoint.v = 3.7;
-    goOnSelectedParametrisation(5, 90, 100, startPoint, points, pointsParts);
+    goOnSelectedParametrisation(5, 90, 200, startPoint, points, pointsParts);
     goToBase();
     setSumCross(false);
 
@@ -156,23 +156,23 @@ function preparePartsOfPoints() {
 
     startPoint.u = 4.7;
     startPoint.v = 2.5;
-    pointsParts.push(prepareParametrisation(4, 120,300, startPoint));
+    pointsParts.push(prepareParametrisation(4, 200,300, startPoint));
 
     startPoint.u = 3;
-    pointsParts.push(prepareParametrisation(3, 150,200, startPoint));
+    pointsParts.push(prepareParametrisation(3, 200,200, startPoint));
 
     startPoint.u = 3;
     startPoint.v = 3;
-    pointsParts.push(prepareParametrisation(1, 150,150, startPoint));
+    pointsParts.push(prepareParametrisation(1, 200,150, startPoint));
 
     setSumCross(true);
     startPoint.u = 2.5;
     startPoint.v = 3.7;
-    pointsParts.push(prepareParametrisation(5, 90,100, startPoint));
+    pointsParts.push(prepareParametrisation(5, 300,300, startPoint));
     setSumCross(false);
 
     startPoint.v = 5 - eps;
-    pointsParts.push(prepareParametrisation(6, 150, 200, startPoint));
+    pointsParts.push(prepareParametrisation(6, 200, 200, startPoint));
     return pointsParts;
 }
 export function evaluatePointWithCross(s, i, j) {

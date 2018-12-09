@@ -11,13 +11,13 @@ export function isOtherPartnClose(p, pointsBefore, id) {
     }
     return false
 }
-export function isIntersectionClose(p) {
+export function isIntersectionClose(p, howClose) {
     const curves = getCuttingCurves();
     const r = getMillRForPaths();
     for(let i = curves.length - 7; i < curves.length; i ++) {
         for(let j = 0; j < curves[i].points.length; j ++) {
-            if(getXYVectioLength(p, curves[i].points[j]) < 0.002 && curves[i].points[j].z > 0) {
-                return true;
+            if(getXYZVectioLength(p, curves[i].points[j]) < howClose && curves[i].points[j].z > 0) {
+                return curves[i].points[j].z;
             }
         }
     }

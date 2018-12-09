@@ -22,7 +22,7 @@ const s2 = {
     {
         cross: false,
         id: 3,
-        cursor: {x: 0.16, y: -0.06, z: 0.0},
+        cursor: {x: 0.06, y: -0.07, z: 0.18},
         back: true
     },
     {
@@ -68,7 +68,7 @@ const s2m = {
     {
         cross: false,
         id: 3,
-        cursor: {x: 0.17, y: -0.13, z: 0.20},
+        cursor: {x: 0.17, y: -0.11, z: -0.16},
         back: true
     },
     {

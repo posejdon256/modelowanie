@@ -4,23 +4,35 @@ import { isIntersectionClose } from "./IntersectionCollision";
 
 export function proceedPoint(sId, p, pointsInPart, u) {
     const { aboveDraw } = getDatasOfMill();
-    if(isIntersectionClose(p)) {
+    if((sId === 2|| sId === 4) && isIntersectionClose(p, 0.005)) {
+        return {x: p.x, y: p.y, z: aboveDraw / 100};
+    }
+    if((sId === 6 || sId === 3 || sId === 5) && isIntersectionClose(p, 0.002)) {
+        return {x: p.x, y: p.y, z: aboveDraw / 100};
+    }
+    if((sId === 1) && isIntersectionClose(p, 0.012)) {
         return {x: p.x, y: p.y, z: aboveDraw / 100};
     }
     if(p.y < -0.40 && sId === 5) {
         return {x: p.x, y: p.y, z: aboveDraw / 100};
-    }
+    }   
+    let minDist = 1000;
+    let closestPoint = pointsInPart[0][0];
     for(let i = 0; i < pointsInPart.length; i ++) {
         const part = pointsInPart[i];
         if(part.id === sId) continue;
         for(let j = 0; j < part.length; j ++) {
-            if((getXYVectioLength(p, part[j]) < 0.005 && p.z < part[j].z)
-            || (getXYVectioLength(p, part[j]) < 0.005 && p.z < part[j].z && part.id === 1)) {
-                return {x: p.x, y: p.y, z: aboveDraw / 100};
+            const len = getXYVectioLength(p, part[j]);
+            if(len < minDist && part[j].z > 0) {
+                minDist = len;
+                closestPoint = part[j];
             }
         }
     }
-    return p;
+    if(closestPoint.z < p.z) {
+        return p;
+    }
+    return {x: p.x, y: p.y, z: aboveDraw / 100};
 }
 function getXYZVectioLength(p1, p2) {
     const p = DiffPoints(p1, p2);

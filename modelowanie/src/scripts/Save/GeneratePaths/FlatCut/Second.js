@@ -28,6 +28,7 @@ export function generatePoints2(map) {
     const width = 140;
     //start position
     points.push({ x: 0, y: 0, z: aboveDraw });
+    points.push({ x: start - 2 * r, y: map[0][0].y * width, z: aboveDraw });
 
     for (let i = 0; i < map.length; i += step) {
         points.push({ x: start - 2 * r, y: map[0][i].y * width, z: maxDraw });
@@ -58,6 +59,7 @@ export function generatePoints2(map) {
         }
     }
     goToBase(points);
+    points.push({ x: end + 2 * r, y: map[map.length - 1][0].y * width, z: aboveDraw });
      for (let i = 0; i < map.length; i += step) {
          points.push({ x: end + 2 * r, y: map[map.length - 1][i].y * width, z: maxDraw });
          points.push({ x: end + 2 * r + 1, y: map[map.length - 1][i].y *width, z: maxDraw });

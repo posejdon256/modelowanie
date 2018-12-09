@@ -32,8 +32,12 @@ export function trayectoryOnCurves() {
     ret = goOnCurveToCurve(curves[8], curves[6], ret.ind1, ret.ind1 + 1);
     points = points.concat(ret._points);
     
-    //bely to tail2
-    ret = goOnCurveToCurve(curves[6], curves[1], ret.ind1, ret.ind1 + 1, false, true);
+    //bely to back
+    ret = goOnCurveToCurve(curves[6], curves[5], ret.ind1, ret.ind1 + 1, false, true);
+    points = points.concat(ret._points);
+
+    //back to tail2
+    ret = goOnCurveToCurve(curves[5], curves[1], ret.ind1, ret.ind1 + 1, false, true);
     points = points.concat(ret._points);
     
     //tail2 to tail1

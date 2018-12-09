@@ -20,17 +20,17 @@ export function generatePaths() {
         alert("Load helicopter!");
         return false;
     }
-    generatePaths = true;
+     generatePaths = true;
     let map = generateMap(500, 500);
 
     const surfacesC0 = getSurfaces("C0");
     map = getZ(surfacesC0, map, EvaluateSurface);
 
     const surfacesC2 = getSurfaces("C2");
-    const value = 6;
-    setHeight((value + 1).toString());
-    setWidth(value.toString());
-    createSurface("C0");
+     const value = 6;
+     setHeight((value + 1).toString());
+     setWidth(value.toString());
+     createSurface("C0");
     map = getZ(surfacesC2, map, EvaluateSurfaceC2);
     setR(8);
     generatePoints1(map); //DZIAŁA
