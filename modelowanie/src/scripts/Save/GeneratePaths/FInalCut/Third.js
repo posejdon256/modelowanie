@@ -122,28 +122,29 @@ function goOnParametrisation() {
 
      startPoint.u = 4.7;
      startPoint.v = 2.5;
-     goOnSelectedParametrisation(4, 120, 200, startPoint, points, pointsParts);
+     goOnSelectedParametrisation(4, 40, 200, startPoint, points, pointsParts);
      goToBase();
 
     startPoint.u = 3;
-    goOnSelectedParametrisation(3, 200, 300,  startPoint, points, pointsParts);
+    goOnSelectedParametrisation(3, 50, 400,  startPoint, points, pointsParts);
     goToBase();
 
      setSumCross(false);
      startPoint.u = 3;
      startPoint.v = 3;
-    goOnSelectedParametrisation(1, 200, 200, startPoint, points, pointsParts);
+    goOnSelectedParametrisation(1, 67, 200, startPoint, points, pointsParts);
     goToBase();
 
     setSumCross(true);
     startPoint.u = 2.5;
     startPoint.v = 3.7;
-    goOnSelectedParametrisation(5, 90, 200, startPoint, points, pointsParts);
+    goOnSelectedParametrisation(5, 45, 200, startPoint, points, pointsParts);
     goToBase();
     setSumCross(false);
 
+    //startPoint.u = 3.5;
     startPoint.v = 5 - eps;
-    goOnSelectedParametrisation(6, 150, 250, startPoint, points, pointsParts);
+    goOnSelectedParametrisation(6, 50, 250, startPoint, points, pointsParts);
     goToBase();
 }
 function preparePartsOfPoints() {
@@ -152,18 +153,18 @@ function preparePartsOfPoints() {
     //updateStretChValue(1);
     let startPoint = {u: 3, v: 2.5};
     let pointsParts = [];
-    pointsParts.push(prepareParametrisation(2, 190, 200, startPoint));
+    pointsParts.push(prepareParametrisation(2, 300, 400, startPoint));
 
     startPoint.u = 4.7;
     startPoint.v = 2.5;
     pointsParts.push(prepareParametrisation(4, 200,300, startPoint));
 
     startPoint.u = 3;
-    pointsParts.push(prepareParametrisation(3, 200,200, startPoint));
+    pointsParts.push(prepareParametrisation(3, 300,300, startPoint));
 
     startPoint.u = 3;
     startPoint.v = 3;
-    pointsParts.push(prepareParametrisation(1, 200,150, startPoint));
+    pointsParts.push(prepareParametrisation(1, 300,300, startPoint));
 
     setSumCross(true);
     startPoint.u = 2.5;
@@ -184,7 +185,11 @@ export function evaluatePointWithCross(s, i, j) {
     } else {
         newP = DiffPoints(p, cross);
     }
-    newP = moveMillDown(newP);
+    if(s.id === 5) {
+        newP = moveMillUp(newP);
+    } else {
+        newP = moveMillDown(newP);
+    }
     return newP;
 }
 function goToBase() {

@@ -76,7 +76,7 @@ function prepareTopPoints(top, left) {
     const ret = [];
     const {aboveDraw} = getDatasOfMill();
     ret.push({x: top[0].x, y: top[0].y, z: aboveDraw / 100});
-    for(let i = 0; i < top.length; i ++) {
+    for(let i = 0; i < top.length; i += 2) {
         ret.push(top[i], left[top.length - i - 1]);
     }
     return ret;
@@ -95,7 +95,7 @@ function prepareThrete(down, others) {
             maxX = others[i].x;
         }
     }
-    for(let i = 0; i < down.length; i ++) {
+    for(let i = 0; i < down.length; i += 4) {
         let t = (i / down.length);
         points.push({x: down[i].x, y: down[i].y, z: 0.0});
         points.push({x: t * minX + (1 - t) * maxX, y: 0.25, z: 0.0});

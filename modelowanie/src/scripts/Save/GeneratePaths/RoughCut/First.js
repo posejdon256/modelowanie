@@ -1,9 +1,9 @@
 import { createFiles, fromIndexToPlace, getDatasOfMill } from '../Helpers/GeneratePathsHelper';
 
-function findMaximum(map, x, y) {
+function findMaximum(map, x, y, step) {
     let max = 0;
     for(let i = x - 20; i < x + 21 && i < map.length; i ++) {
-        for(let j = y - 22; j < y + 23 && j < map[0].length; j ++) {
+        for(let j = y - 22 -  step; j < y + 23+ step && j < map[0].length; j ++) {
             if(map[i] && map[i][j]) {
                 max = Math.max(max, map[i][j].z);
             }
@@ -39,14 +39,15 @@ function addLayer(shift, points, map) {
     points.push({x: drawStart, y: drawStart, z:  aboveDraw});
 
     for(let i = 0; i < map.length; i += (2 * step)) {
-        for(let j = 0; j < map[0].length; j ++) {
-            points.push({x: map[i][j].x * wid, y: map[i][j].y * wid, z: Math.min(findMaximum(map, i, j) + 0.2 + shift, 0.5) * 100});
+        for(let j = 0; j < map[0].length; j += step) {
+            points.push({x: map[i][j].x * wid, y: map[i][j].y * wid, z: Math.min(findMaximum(map, i, j, step) + 0.2 + shift, 0.5) * 100});
         }
+        points.push({x: map[i][499].x * wid, y: map[i][499].y * wid, z: Math.min(findMaximum(map, i, 499, step) + 0.2 + shift, 0.5) * 100});
         if(i + 2 * step >= map.length) {
             break;
         }
-        for(let j = map[0].length - 1; j >= 0; j --) {
-            points.push({x: map[Math.min(i + step, 499)][j].x * wid, y: map[Math.min(i + step, 499)][j].y * wid, z: Math.min(findMaximum(map, i + step, j) + 0.2 + shift, 0.5) * 100});
+        for(let j = map[0].length - 1; j >= 0; j -= step) {
+            points.push({x: map[Math.min(i + step, 499)][j].x * wid, y: map[Math.min(i + step, 499)][j].y * wid, z: Math.min(findMaximum(map, i + step, j, step) + 0.2 + shift, 0.5) * 100});
         }
     }
     points.push({x : end + r, y: end + r, z: (0.2 + shift ) * 100});

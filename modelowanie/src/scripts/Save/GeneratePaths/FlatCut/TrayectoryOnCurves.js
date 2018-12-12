@@ -53,7 +53,7 @@ export function trayectoryOnCurves() {
      points = points.concat(ret._points);
     
     // //stand to propeller
-     ret = goOnCurveToCurve(curves[3], curves[0], ret.ind1, ret.ind1 - 1);
+     ret = goOnCurveToCurve(curves[3], curves[0], ret.ind1, ret.ind1 - 1, true);
      points = points.concat(ret._points);
     
     // //propeller to stand
@@ -65,7 +65,7 @@ export function trayectoryOnCurves() {
      points = points.concat(ret._points);
     
     // //stand to back
-     ret = goOnCurveToCurve(curves[4], curves[5], ret.ind1, ret.ind1 - 1);
+     ret = goOnCurveToCurve(curves[4], curves[5], ret.ind1, ret.ind1 - 1, true);
      points = points.concat(ret._points);
     
     // //back to bely

@@ -17,7 +17,6 @@ export function evaluateOffsetDU(ob, u, v) {
 
 
     const smallNorm = MultiplyPoint(normDiff, 0.01);
-    DrawLine(ev1, SumPoints(ev1, normDiff));
     return smallNorm;
 }
 export function evaluateOffsetDV(ob, u, v) {
@@ -31,7 +30,6 @@ export function evaluateOffsetDV(ob, u, v) {
     const diff = DiffPoints(ev1, ev2);
     const normDiff = normalize(diff);
     const smallNorm = MultiplyPoint(normDiff, 0.01);
-    DrawLine(ev1, SumPoints(ev1, normDiff));
     return smallNorm;
 }
 export function evaluateOffset(ob, u, v) {
