@@ -5,7 +5,7 @@ const s1 = {
     {
         cross: true,
         id: 5,
-        cursor: {x: -0.11, y: -0.37, z: 0.02},
+        cursor: {x: -0.04, y: -0.37, z: -0.05},
         back: false
     }
 ]};
@@ -51,7 +51,7 @@ const s1m = {
     {
         cross: true,
         id: 5,
-        cursor: {x: -0.05, y: -0.37, z: -0.04},
+        cursor: {x: -0.04, y: -0.37, z: -0.05},
         back: false
     }
 ]};
@@ -122,12 +122,12 @@ const s7 = {
         {
             id: 1,
             cross: false,
-            cursor: {x: 0.21, y: -0.28, z: 0.0},
+            cursor: {x: 0.17, y: -0.44, z: -0.01},
         },
         {
             id: 5,
             cross: false,
-            cursor: {x: 0.07, y: -0.28, z: 0.0},
+            cursor: {x: 0.07, y: -0.29, z: 0.0},
         }
 ]
 };

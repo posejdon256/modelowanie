@@ -3,7 +3,7 @@ import { getCuttingCurves } from "../../../canvas/CuttingCurve/CuttingCurve";
 export function goOnIntersection() {
     const points = [];
     const cuttingCurves = getCuttingCurves();
-    for(let j = 7; j < cuttingCurves.length; j ++) {
+    for(let j = 0; j < cuttingCurves.length; j ++) {
         const c = cuttingCurves[j];
         points.push({x: c.points[0].x - 0.001, y: c.points[0].y, z: 0.6});
         for(let i = 0; i < c.points.length; i ++) {

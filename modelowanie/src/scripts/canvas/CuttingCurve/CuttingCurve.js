@@ -10,19 +10,22 @@ export function cleanCuttingCurves() {
     curves = [];
     numberOfIntersections = 0;
 }
-export function addCuttingCurve(iCurve, ob) {
+export function addCuttingCurve(iCurve, ob1, ob2) {
     const intersectionVisualization1 = [];
     const intersectionVisualization2 = [];
     const curve = {
         id: numberOfIntersections,
         name: "Intersection curve " + numberOfIntersections,
         points: [],
-        u: [],
-        v: [],
+        u1: [],
+        v1: [],
+        u2: [],
+        v2: [],
         interpolationCurve: iCurve ? iCurve : null,
         intersectionVisualization1: intersectionVisualization1,
         intersectionVisualization2: intersectionVisualization2,
-        ob: ob
+        ob1: ob1,
+        ob2: ob2
     }
     numberOfIntersections++;
     curves.push(curve);

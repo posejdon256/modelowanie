@@ -28,7 +28,7 @@ export function createFiles(points, size) {
             continue;
         }
         //N3G01X0.000Y-98.000Z80.000
-        str = str.concat(`N${i}G01X${points[i].x.toFixed(3)}Y${points[i].y.toFixed(3)}Z${points[i].z.toFixed(3)}\n`);
+        str = str.concat(`N${i}G01X${points[i].x.toFixed(3)}Y${points[i].y.toFixed(3)}Z${points[i].z.toFixed(3)}\r\n`);
     }
     saveToFilePaths(str, size);
 }

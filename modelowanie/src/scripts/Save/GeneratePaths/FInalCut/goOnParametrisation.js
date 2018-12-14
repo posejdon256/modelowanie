@@ -3,7 +3,12 @@ import { getDatasOfMill } from "../Helpers/GeneratePathsHelper";
 import { getSurfaces } from "../../../canvas/Surface/Surface";
 import { proceedPoint } from "./GoUnderOtherFlake";
 
-export function goOnSelectedParametrisation(sId, division, constantDivision, startPoint, points, pointsInParts) {
+let maxIter = 10000;
+
+export function setMaxIter(_iter) {
+    maxIter = _iter;
+}
+export function goOnSelectedParametrisation(sId, division, constantDivision, startPoint, points, pointsInParts, minValue, maxValue) {
     //Height to wzduż - 6, pierwsza
     //Width to dookołoa - 5
     let start = true;
@@ -20,7 +25,7 @@ export function goOnSelectedParametrisation(sId, division, constantDivision, sta
     let isUnderZero = false;
     while(!isVeryCloseToStart(u, v, startPoint.u, startPoint.v, iter)) {
         while(!isVeryCloseToStart(u, v, startPoint.u, startPoint.v, iter)
-        && u < surface.Height) {
+        && (u < surface.Height && (maxValue === undefined || u < maxValue))) {
             if(isCloseToZero(surface, u, v) && isUnderZero) {
                 isUnderZero = false;
                 break;
@@ -30,7 +35,7 @@ export function goOnSelectedParametrisation(sId, division, constantDivision, sta
                     points.push({x: p.x, y: p.y, z: aboveDraw / 100});
                     start = false;
                 }
-                const pProceed = proceedPoint(sId, p, pointsInParts, v);
+                const pProceed = proceedPoint(sId, p, pointsInParts, {u: u, v: v});
                 const prev = points[points.length - 1]; 
                 if(pProceed.z !== (aboveDraw / 100) && prev.z === (aboveDraw / 100)) {
                     points.push({x: pProceed.x, y: pProceed.y, z: aboveDraw / 100});
@@ -38,7 +43,7 @@ export function goOnSelectedParametrisation(sId, division, constantDivision, sta
                 if(pProceed.z === (aboveDraw / 100) && prev.z !== (aboveDraw / 100)) {
                     points.push({x: prev.x, y: prev.y, z: aboveDraw / 100});
                 }
-                points.push(proceedPoint(sId, p, pointsInParts, v));
+                points.push(pProceed);
             } else if(!isCloseToZero(surface, u, v)) {
                 isUnderZero = true;
             }
@@ -48,12 +53,12 @@ export function goOnSelectedParametrisation(sId, division, constantDivision, sta
         if(isVeryCloseToStart(u, v, startPoint.u, startPoint.v, iter)) {
             return;
         }
-        if(u >= surface.Height) u -= stepWithParametrization;
+        if(u >= surface.Height || (maxValue !== undefined && u >= maxValue)) u -= stepWithParametrization;
         v += stepAround;
         v = roundV(v, surface.Width);
 
         while(!isVeryCloseToStart(u, v, startPoint.u, startPoint.v, iter)
-        && u >= 0) {
+        && (u >= 0 && (minValue === undefined || u > minValue))) {
             if(isCloseToZero(surface, u, v) && isUnderZero) {
                 isUnderZero = false;
                 break;
@@ -63,7 +68,7 @@ export function goOnSelectedParametrisation(sId, division, constantDivision, sta
                     points.push({x: p.x, y: p.y, z: aboveDraw / 100});
                     start = false;
                 }
-                const pProceed = proceedPoint(sId, p, pointsInParts, v);
+                const pProceed = proceedPoint(sId, p, pointsInParts, {u: u, v: v});
                 const prev = points[points.length - 1]; 
                 if(pProceed.z !== (aboveDraw / 100) && prev.z === (aboveDraw / 100)) {
                     points.push({x: pProceed.x, y: pProceed.y, z: aboveDraw / 100});
@@ -71,7 +76,7 @@ export function goOnSelectedParametrisation(sId, division, constantDivision, sta
                 if(pProceed.z === (aboveDraw / 100) && prev.z !== (aboveDraw / 100)) {
                     points.push({x: prev.x, y: prev.y, z: aboveDraw / 100});
                 }
-                points.push(proceedPoint(sId, p, pointsInParts, v));
+                points.push(pProceed);
             } else if(!isCloseToZero(surface, u, v)) {
                 isUnderZero = true;
             }
@@ -81,7 +86,7 @@ export function goOnSelectedParametrisation(sId, division, constantDivision, sta
         if(isVeryCloseToStart(u, v, startPoint.u, startPoint.v, iter)) {
             return;
         }
-        if(u < 0 ) u += stepWithParametrization;
+        if(u < 0 || (minValue !== undefined && u <= minValue)) u += stepWithParametrization;
         v += stepAround;
         v = roundV(v, surface.Width);
     }
@@ -124,7 +129,7 @@ export function prepareParametrisation(sId, division, constantDivision, startPoi
         v = roundV(v, surface.Width);
 
         while(!isVeryCloseToStart(u, v, startPoint.u, startPoint.v, iter)
-        && u >= 0) {
+        && u >= 0 ) {
             if(isCloseToZero(surface, u, v) && isUnderZero) {
                 isUnderZero = false;
                 break;
@@ -158,7 +163,7 @@ function roundV(u, Width) {
 }
 function isVeryCloseToStart(u1, v1, u2, v2, iter) {
     const eps = 0.03;
-    if(Math.sqrt(Math.pow(u1 - u2, 2) + Math.pow(v1 - v2, 2)) < eps && iter > 10000) {
+    if(Math.sqrt(Math.pow(u1 - u2, 2) + Math.pow(v1 - v2, 2)) < eps && iter > maxIter) {
         return true;
     }
     return false;

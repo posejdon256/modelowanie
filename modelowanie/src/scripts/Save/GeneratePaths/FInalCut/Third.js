@@ -1,17 +1,19 @@
 import { setCursor } from '../../../canvas/Cursor/Cursor';
 import { cleanCuttingCurves } from '../../../canvas/CuttingCurve/CuttingCurve';
-import { evaluate, findObjectToIntersectionAndIntersection } from '../../../canvas/CuttingCurve/FindIntersection';
-import { setNewtonAlpa } from '../../../canvas/CuttingCurve/NewtonMethod';
+import { evaluate, findObjectToIntersectionAndIntersection, setIntersectionStep, setEpsilonOfFindingIntersection } from '../../../canvas/CuttingCurve/FindIntersection';
+import { setNewtonAlpa, setFinalEpsilon } from '../../../canvas/CuttingCurve/NewtonMethod';
 import { RedrawVisualization } from '../../../canvas/Draw/RedrawVisualisation/RedrawVisualization';
-import { selectSurface } from '../../../canvas/Surface/Surface';
+import { selectSurface, getSurfaces } from '../../../canvas/Surface/Surface';
 import { DiffPoints, SumPoints } from '../../../Helpers/Helpers';
 import { getMillRForPaths } from '../GeneratePaths';
 import { createFiles, getCross, getDatasOfMill, stretchModel } from '../Helpers/GeneratePathsHelper';
 import { getLastIntersectionsConfiguration, getLastIntersectionsConfigurationMill } from './ConfigurationLastIntersection';
 import { goOnIntersection } from './GoOnIntersections';
-import { goOnSelectedParametrisation, prepareParametrisation } from './goOnParametrisation';
-import { getXYVectioLength, isIntersectionClose } from './IntersectionCollision';
+import { goOnSelectedParametrisation, prepareParametrisation, setMaxIter } from './goOnParametrisation';
+import { getXYVectioLength } from './IntersectionCollision';
 import { cutBetweenLegsAndTop } from './cutBetweenLegs';
+import { DrawPoint } from '../../../canvas/Draw/DrawPoints/DrawPoints';
+import { cutUnderProperller } from './cutUnderPropeller';
 
 let points = [];
 let pointsFromBeforePaths = [];
@@ -20,7 +22,14 @@ let sumCross = false;
 let sumCross1 = false;
 let sumCross2 = false;
 let millState = false;
-
+let cutIterationsS6 = 0;
+let cutS1 = false;
+export function getS6CutIt() {
+    return cutIterationsS6;
+}
+export function getcutS1() {
+    return cutS1;
+}
 export function getMillState() {
     return millState;
 }
@@ -31,34 +40,15 @@ export function getSummCross() {
     return {crossP1: sumCross1, crossP2: sumCross2};
 }
 export function generatePoints3() { //Generujemy od odwrotnej strony
-    //DrawPoint(evaluate(getSurfaces().find(x => x.id === 1), 1.5, 1.5), "Blue");
-    //console.log(evaluate(getSurfaces().find(x => x.id === 4), 1.5, 1.5).z);
-    //return [];
+    //od u = 3.3 do 3.7
+    //od 0.6 do 1
+   // DrawPoint(evaluate(getSurfaces().find(x => x.id === 1), 1, 2), "Red");
+   // return [];
     let conf = getLastIntersectionsConfiguration();
     points = points.concat(cutBetweenLegsAndTop());
+   // return [];
     goToBase();
     cleanCuttingCurves();
-    for(let i = 0; i < conf.length; i ++ ) {
-        const sConf = conf[i];
-        if(!conf[i] || conf[i] === 'all') {
-            continue;
-        }
-        selectSurface(sConf.id);
-        for (let j = 0; j < sConf.intersections.length; j++) {
-            const inter = sConf.intersections[j];
-            sumCross1 = sConf.cross;
-            sumCross2 = inter.cross;
-            selectSurface(inter.id);
-            setCursor(inter.cursor.x, inter.cursor.y, inter.cursor.z, false);
-            if (!findObjectToIntersectionAndIntersection()) {
-                console.log('problem with intersecion place');
-                continue;
-            }
-            RedrawVisualization();
-            selectSurface(inter.id);
-        }
-        selectSurface(sConf.id);
-    }
     millState = true;
     conf = getLastIntersectionsConfigurationMill();
     for(let i = 0; i < conf.length; i ++ ) {
@@ -69,12 +59,11 @@ export function generatePoints3() { //Generujemy od odwrotnej strony
         selectSurface(sConf.id);
         for (let j = 0; j < sConf.intersections.length; j++) {
             const inter = sConf.intersections[j];
-            if(inter.id === 1 || sConf.id === 1) {
-                setNewtonAlpa("0.00021");
-            } else if(inter.id === 3 || sConf.id === 3) {
-                setNewtonAlpa("0.0002");
-            } else {
-                setNewtonAlpa("0.0001");
+            if(inter.id === 6) {
+                cutIterationsS6 ++;
+            }
+            if(sConf.id === 1) {
+                cutS1 = true;
             }
             sumCross1 = sConf.cross;
             sumCross2 = inter.cross;
@@ -94,6 +83,7 @@ export function generatePoints3() { //Generujemy od odwrotnej strony
      const {aboveDraw} = getDatasOfMill();
      const intersectionPoints = goOnIntersection();
      points = points.concat(intersectionPoints);
+     points = points.concat(cutUnderProperller());
      points = postProcessThirdPaths();
      goToBase();
     points.forEach(p => {
@@ -117,16 +107,17 @@ function goOnParametrisation() {
     //updateStretChValue(1);
     let startPoint = {u: 3, v: 2.5};
     let pointsParts = preparePartsOfPoints();
-     goOnSelectedParametrisation(2, 120, 250, startPoint, points, pointsParts);
-     goToBase();
-
+    setMaxIter(5000);
+      goOnSelectedParametrisation(2, 120, 300, startPoint, points, pointsParts);
+      goToBase();
+     
      startPoint.u = 4.7;
      startPoint.v = 2.5;
      goOnSelectedParametrisation(4, 40, 200, startPoint, points, pointsParts);
      goToBase();
-
+     
     startPoint.u = 3;
-    goOnSelectedParametrisation(3, 50, 400,  startPoint, points, pointsParts);
+    goOnSelectedParametrisation(3, 50, 200,  startPoint, points, pointsParts);
     goToBase();
 
      setSumCross(false);
@@ -141,10 +132,13 @@ function goOnParametrisation() {
     goOnSelectedParametrisation(5, 45, 200, startPoint, points, pointsParts);
     goToBase();
     setSumCross(false);
-
     //startPoint.u = 3.5;
     startPoint.v = 5 - eps;
-    goOnSelectedParametrisation(6, 50, 250, startPoint, points, pointsParts);
+    goOnSelectedParametrisation(6, 50, 400, startPoint, points, pointsParts, undefined, 3);
+    goToBase();
+
+    startPoint.u = 3.5;
+    goOnSelectedParametrisation(6, 50, 400, startPoint, points, pointsParts, 3, undefined);
     goToBase();
 }
 function preparePartsOfPoints() {
@@ -153,27 +147,27 @@ function preparePartsOfPoints() {
     //updateStretChValue(1);
     let startPoint = {u: 3, v: 2.5};
     let pointsParts = [];
-    pointsParts.push(prepareParametrisation(2, 300, 400, startPoint));
+    pointsParts.push(prepareParametrisation(2, 300, 300, startPoint));
 
     startPoint.u = 4.7;
     startPoint.v = 2.5;
-    pointsParts.push(prepareParametrisation(4, 200,300, startPoint));
+    pointsParts.push(prepareParametrisation(4, 300,300, startPoint));
 
     startPoint.u = 3;
     pointsParts.push(prepareParametrisation(3, 300,300, startPoint));
 
     startPoint.u = 3;
     startPoint.v = 3;
-    pointsParts.push(prepareParametrisation(1, 300,300, startPoint));
+    pointsParts.push(prepareParametrisation(1, 300, 300, startPoint));
 
     setSumCross(true);
     startPoint.u = 2.5;
     startPoint.v = 3.7;
-    pointsParts.push(prepareParametrisation(5, 300,300, startPoint));
+    pointsParts.push(prepareParametrisation(5, 300, 300, startPoint));
     setSumCross(false);
 
     startPoint.v = 5 - eps;
-    pointsParts.push(prepareParametrisation(6, 200, 200, startPoint));
+    pointsParts.push(prepareParametrisation(6, 300, 300, startPoint));
     return pointsParts;
 }
 export function evaluatePointWithCross(s, i, j) {
@@ -185,11 +179,7 @@ export function evaluatePointWithCross(s, i, j) {
     } else {
         newP = DiffPoints(p, cross);
     }
-    if(s.id === 5) {
-        newP = moveMillUp(newP);
-    } else {
-        newP = moveMillDown(newP);
-    }
+    newP = moveMillDown(newP);
     return newP;
 }
 function goToBase() {
@@ -218,9 +208,6 @@ function postProcessThirdPaths() {
             up = true;
         } else if(!isUnder(points[i]) && !up) {
             ret.push(points[i]);
-            if(points[i].z === aboveDraw / 100) {
-                console.log(points[i].z);  
-            }
 
         } else if(!isUnder(points[i]) && up) {
             if(getXYVectioLength(ret[ret.length - 1], points[i]) < 0.02) {

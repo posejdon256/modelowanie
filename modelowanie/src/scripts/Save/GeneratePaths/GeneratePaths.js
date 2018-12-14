@@ -27,15 +27,15 @@ export function generatePaths() {
     map = getZ(surfacesC0, map, EvaluateSurface);
 
     const surfacesC2 = getSurfaces("C2");
-     const value = 6;
-     setHeight((value + 1).toString());
-     setWidth(value.toString());
-     createSurface("C0");
+    const value = 6;
+    setHeight((value + 1).toString());
+    setWidth(value.toString());
+    createSurface("C0");
     map = getZ(surfacesC2, map, EvaluateSurfaceC2);
     setR(8);
-    generatePoints1(map); //DZIAŁA
+    generatePoints1(map);
     setR(5);
-    generatePoints2(map); //DZIAŁA
+    generatePoints2(map);
     setR(4);
     generatePoints3();
 

@@ -1,16 +1,13 @@
-import { getVectorLength, TryParseFloat, SumPoints, DividePoint, MultiplyPoint, normalize } from "../../Helpers/Helpers";
-import { evaluate, evaluateDU, evaluateDV } from "./FindIntersection";
-import { addCuttingCurve, updateIn1Visualisation, updateIn2Visualisation } from "./CuttingCurve";
-import { findNewNewtonPoint } from "./Jacobi";
-import { DrawPoint } from "../Draw/DrawPoints/DrawPoints";
-import { updateUVAfterNewton, backNewton } from "./NewtonUpdateUV";
-import { setVisualisationObjects } from "../Draw/RedrawVisualisation/RedrawVisualization";
-import { getCross, getDatasOfMill } from "../../Save/GeneratePaths/Helpers/GeneratePathsHelper";
-import { getMillState, getSummCross, moveMillDown } from "../../Save/GeneratePaths/FInalCut/Third";
-import { setR } from "../../Save/GeneratePaths/GeneratePaths";
-import { DrawLine } from "../Draw/DrawLine/DrawLine";
-import { evaluateOffset } from "./EvaluateOffset";
-import { addPoint } from "../Points/Points";
+import { getVectorLength, TryParseFloat } from '../../Helpers/Helpers';
+import { getcutS1, getMillState, getS6CutIt, moveMillDown } from '../../Save/GeneratePaths/FInalCut/Third';
+import { getDatasOfMill } from '../../Save/GeneratePaths/Helpers/GeneratePathsHelper';
+import { setVisualisationObjects } from '../Draw/RedrawVisualisation/RedrawVisualization';
+import { addCuttingCurve, updateIn1Visualisation, updateIn2Visualisation } from './CuttingCurve';
+import { evaluateOffset } from './EvaluateOffset';
+import { evaluate } from './FindIntersection';
+import { findNewNewtonPoint } from './Jacobi';
+import { backNewton, updateUVAfterNewton } from './NewtonUpdateUV';
+import { DrawPoint } from '../Draw/DrawPoints/DrawPoints';
 
 
 let alpha = 0.002;
@@ -36,7 +33,7 @@ export function goGoNewton(best, iterations) {
     //DrawPoint(evaluate(ob2, 4, 0), "Blue"); 
     //DrawPoint(evaluate(ob1, 4, 0), "Red"); 
     if(!iterations) {
-        cuttingCurve = addCuttingCurve(interpolation, ob1);
+        cuttingCurve = addCuttingCurve(interpolation, ob1, ob2);
     }
     const ob = [ob1, ob2];
     const uStart = [u[0], u[1]];
@@ -105,15 +102,17 @@ export function goGoNewton(best, iterations) {
             if(upd1.backThisTime || upd2.backThisTime) {
                 let newP = _evaluate(ob1, u[0], v[0]);
                 if(getMillState()) {
-                    // if(ob1.id === 3 || ob2.id === 3) {
-                    //     newP.z = -newP.z;
-                    // }
+                     if(ob1.id === 3 || ob2.id === 3 || ((ob1.id === 6 || ob2.id === 6) && getS6CutIt() === 2)||  ((ob1.id === 1 || ob2.id === 1) && getcutS1()))  {
+                         newP.z = -newP.z;
+                     }
                     newP = moveMillDown(newP);
-                    //DrawPoint(newP, "Blue");
+                   // DrawPoint(newP, "Blue");
                 }
                 pointsList.push(newP);
-                pointsList[pointsList.length - 1].u = u[0];
-                pointsList[pointsList.length - 1].v = v[0];
+                pointsList[pointsList.length - 1].u1 = u[0];
+                pointsList[pointsList.length - 1].v1 = v[0];
+                pointsList[pointsList.length - 1].u2 = u[1];
+                pointsList[pointsList.length - 1].v2 = v[1];
                 const ret = backNewton(pointsList, uStart, vStart, u, v, uPrev, vPrev, _alpha);
                 _alpha = ret.alpha;
                 pointsList = ret.pointsList;
@@ -136,15 +135,17 @@ export function goGoNewton(best, iterations) {
         // DrawPoint(p2, "Blue"); 
         let newP = _evaluate(ob1, u[0], v[0]);
         if(getMillState()) {
-            // if(ob1.id === 3 || ob2.id === 3) {
-            //     newP.z = -newP.z;;
-            // }
+            if(ob1.id === 3 || ob2.id === 3 || ((ob1.id === 6 || ob2.id === 6) && getS6CutIt() === 2)||  ((ob1.id === 1 || ob2.id === 1) && getcutS1()))  {
+                newP.z = -newP.z;;
+             }
             newP = moveMillDown(newP);
-            DrawPoint(newP, "Blue");
+           // DrawPoint(newP, "Blue");
         }
         pointsList.push(newP);
-        pointsList[pointsList.length - 1].u = u[0];
-        pointsList[pointsList.length - 1].v = v[0];
+        pointsList[pointsList.length - 1].u1 = u[0];
+        pointsList[pointsList.length - 1].v1 = v[0];
+        pointsList[pointsList.length - 1].u2 = u[1];
+        pointsList[pointsList.length - 1].v2 = v[1];
 
         if(!iterations) {
             updateIn1Visualisation(cuttingCurve.id, u[0] / ob1.Height , v[0] / ob1.Width);
@@ -174,16 +175,18 @@ export function goGoNewton(best, iterations) {
     }
     for(let i = 0; i < pointsList.length; i ++) {
         cuttingCurve.points.push({x: pointsList[i].x, y: pointsList[i].y, z: pointsList[i].z});
-        cuttingCurve.u.push(pointsList[i].u);
-        cuttingCurve.v.push(pointsList[i].v);
+        cuttingCurve.u1.push(pointsList[i].u1);
+        cuttingCurve.v1.push(pointsList[i].v1);
+        cuttingCurve.u2.push(pointsList[i].u2);
+        cuttingCurve.v2.push(pointsList[i].v2);
     }
     if(!backed) {
         cuttingCurve.points.push({x: pointsList[0].x, y: pointsList[0].y, z: pointsList[0].z});
         if(isLenghtNotToLong(cuttingCurve.intersectionVisualization1)) {
-            cuttingCurve.intersectionVisualization1.push({u: cuttingCurve.intersectionVisualization1[0].u, v: cuttingCurve.intersectionVisualization1[0].v});
+            cuttingCurve.intersectionVisualization1.push({u1: cuttingCurve.intersectionVisualization1[0].u, v1: cuttingCurve.intersectionVisualization1[0].v});
         }
         if(isLenghtNotToLong(cuttingCurve.intersectionVisualization2)) {
-            cuttingCurve.intersectionVisualization2.push({u: cuttingCurve.intersectionVisualization2[0].u, v: cuttingCurve.intersectionVisualization2[0].v});
+            cuttingCurve.intersectionVisualization2.push({u1: cuttingCurve.intersectionVisualization2[0].u, v1: cuttingCurve.intersectionVisualization2[0].v});
         }
     }
 }

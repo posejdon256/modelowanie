@@ -8,6 +8,7 @@ import { addPoint } from "../../../canvas/Points/Points";
 import { getCross, getDatasOfMill } from "../Helpers/GeneratePathsHelper";
 import { setMillState } from "./Third";
 import { setNewtonAlpa, setFinalEpsilon } from "../../../canvas/CuttingCurve/NewtonMethod";
+import { DrawPoint } from "../../../canvas/Draw/DrawPoints/DrawPoints";
 
 export function cutBetweenLegsAndTop() {
     cleanCuttingCurves();
@@ -18,23 +19,6 @@ export function cutBetweenLegsAndTop() {
     for (let i = 0; i < sConf.intersections.length; i++) {
         const inter = sConf.intersections[i];
         selectSurface(inter.id);
-        if(i === 0) {
-            setNewtonAlpa("0.0001");
-            setEpsilonOfFindingIntersection("0.01");
-            setFinalEpsilon("0.02");
-        } else if(i === 1) {
-            setNewtonAlpa("0.0002");
-            setEpsilonOfFindingIntersection("0.001");
-            setFinalEpsilon("0.01");
-        } else if(i === 2)  {
-            setNewtonAlpa("0.0002");
-            setEpsilonOfFindingIntersection("0.001");
-            setFinalEpsilon("0.01");
-        } else{ 
-            setNewtonAlpa("0.0002");
-            setEpsilonOfFindingIntersection("0.01");
-            setFinalEpsilon("0.01");
-        }
         setCursor(inter.cursor.x, inter.cursor.y, inter.cursor.z, false);
         if (!findObjectToIntersectionAndIntersection()) {
             console.log('problem with intersecion place');
@@ -49,7 +33,7 @@ export function cutBetweenLegsAndTop() {
     selectSurface(sConf.id);
     const curves = getCuttingCurves();
     const {aboveDraw} = getDatasOfMill();
-    let ret = goOnCurveToCurve(curves[0], curves[1], 640, 641, false, true);
+    let ret = goOnCurveToCurve(curves[0], curves[1], 535, 536, false, true);
      let retPrevPoints = ret._points;
      points.push({x: ret._points[0].x, y:ret._points[0].y, z: aboveDraw /  100});
      points = points.concat(ret._points);
@@ -62,7 +46,7 @@ export function cutBetweenLegsAndTop() {
 
     //top
     prepared1.push({x: prepared1[prepared1.length - 1].x, y: prepared1[prepared1.length - 1].y, z: aboveDraw / 100});
-    ret = goOnCurveToCurve(curves[3], curves[2], 551, 550, true, true);
+    ret = goOnCurveToCurve(curves[3], curves[2], 420, 419, true, true);
     const leftTopPart = ret._points.slice(ret._points.length - ret.ind1, ret._points.length);
     const topTopPart = [];
     for(let i = 0; i < leftTopPart.length; i ++) {
@@ -123,9 +107,10 @@ function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange, veryClose) {
         for(i = ind2; i < c1.points.length - 1; i ++) {
             addPoint(c1.points[i].x, c1.points[i].y, 0, "mill");
             const p = c1.points[i];
-            p.u = c1.u[i];
-            p.v = c1.v[i];
+            p.u = c1.u1[i];
+            p.v = c1.v1[i];
             p.z = 0;
+            DrawPoint(c1.points[i], "Blue");
             points.push(p);
             for(j = 0; j < c2.points.length - 1; j ++) {
                 if(getVectorLength(c1.points[i], c2.points[j]) < (veryClose ? 0.002 :0.02) && !derrrivativeChange && Math.abs(ind2 - i) > 5) {
@@ -138,10 +123,11 @@ function goOnCurveToCurve(c1, c2, ind1, ind2, derrrivativeChange, veryClose) {
     } else {
         for(i = ind2; i >= 1; i --) {
             const p = c1.points[i];
-            p.u = c1.u[i];
-            p.v = c1.v[i];
+            p.u = c1.u1[i];
+            p.v = c1.v1[i];
             p.z = 0;
             addPoint(c1.points[i].x, c1.points[i].y, 0, "mill");
+            DrawPoint(c1.points[i], "Blue");
             points.push(p);
            // points.push(c1.points[i]);
             for(j = 0; j < c2.points.length - 1; j ++) {
