@@ -53,6 +53,7 @@ export function cutBetweenLegsAndTop() {
         topTopPart.push(curves[2].points[ret.ind1 - i]);
         topTopPart[i].z = 0;
     }
+    prepared1[0].z = 0.6;
     const prepared2 = prepareTopPoints(topTopPart, leftTopPart);
     return prepared1.concat(prepared2);
 }

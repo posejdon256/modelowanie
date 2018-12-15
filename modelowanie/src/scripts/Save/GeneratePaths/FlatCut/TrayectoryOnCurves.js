@@ -11,7 +11,7 @@ export function trayectoryOnCurves() {
     //nose to leg1
     points.push({x: -0.6, y: 0});
     points.push({x: -0.6, y: 0, z: 0.2});
-    let ret = goOnCurveToCurve(curves[6], curves[8], 0, 1, false, true);
+    let ret = goOnCurveToCurve(curves[6], curves[8], 0, 1, true);
     points = points.concat(ret._points);
     
     //leg1 to skid1
@@ -91,10 +91,6 @@ export function goOnCurveToCurve(c1, c2, ind1, ind2, veryClose) {
             points.push(cross1);
             for(j = 0; j < c2.points.length - 1; j ++) {
                 const cross2 = c2.ob1.id === 5 ? SumPoints(c2.points[j], getCross(c2.ob1, c2.u1[j], c2.v1[j])) :  DiffPoints(c2.points[j], getCross(c2.ob1, c2.u1[j], c2.v1[j]));
-                // if(c2.ob1.id === 5 && c1.ob1.id === 1 && getXYVectioLength(cross1, cross2) < 0.027) {
-                //     DrawPoint(cross1, "Red");
-                //     DrawPoint(cross2, "Blue");
-                // }
                 if(getXYVectioLength(cross1, cross2) < close && Math.abs(ind2 - i) > 5) {
                     return {_points: points, ind1: j};
                 }

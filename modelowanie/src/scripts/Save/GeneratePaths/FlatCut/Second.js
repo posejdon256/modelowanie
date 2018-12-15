@@ -30,7 +30,11 @@ export function generatePoints2(map) {
     points.push({ x: 0, y: 0, z: aboveDraw });
     points.push({ x: start - 2 * r, y: map[0][0].y * width, z: aboveDraw });
 
+    let blocked;
     for (let i = 0; i < map.length; i += step) {
+        if(blocked) {
+            points.push({ x: start - 2 * r, y: map[0][i].y * width, z: aboveDraw });
+         }
         points.push({ x: start - 2 * r, y: map[0][i].y * width, z: maxDraw });
         points.push({ x: start - 2 * r - 1, y: map[0][i].y *width, z: maxDraw });
 
@@ -41,7 +45,7 @@ export function generatePoints2(map) {
         if(i >= map.length) break;
         while(researchPointsInCircle(map, j, i) && j <= map.length) j ++;
         while(!researchPointsInCircle(map, j, i) && j >= 0) j --;
-        let blocked = false;
+        blocked = false;
         for(let k = j; k >= 0; k --) {
             if(!researchPointsInCircle(map, k, i)) {
                 blocked = true;
@@ -61,6 +65,9 @@ export function generatePoints2(map) {
     goToBase(points);
     points.push({ x: end + 2 * r, y: map[map.length - 1][0].y * width, z: aboveDraw });
      for (let i = 0; i < map.length; i += step) {
+         if(blocked) {
+            points.push({ x: end + 2 * r, y: map[map.length - 1][i].y * width, z: aboveDraw });
+         }
          points.push({ x: end + 2 * r, y: map[map.length - 1][i].y * width, z: maxDraw });
          points.push({ x: end + 2 * r + 1, y: map[map.length - 1][i].y *width, z: maxDraw });
 
@@ -70,7 +77,7 @@ export function generatePoints2(map) {
          if(i >= map.length) break;
          while(researchPointsInCircle(map, j, i) && j >= 0) j --;
          while(!researchPointsInCircle(map, j, i) && j < map.length) j ++;
-         let blocked = false;
+         blocked = false;
          for(let k = j; k < map.length; k ++) {
              if(!researchPointsInCircle(map, k, i)) {
                  blocked = true;

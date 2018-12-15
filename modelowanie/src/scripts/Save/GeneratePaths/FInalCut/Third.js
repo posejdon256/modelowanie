@@ -45,6 +45,7 @@ export function generatePoints3() { //Generujemy od odwrotnej strony
    // DrawPoint(evaluate(getSurfaces().find(x => x.id === 1), 1, 2), "Red");
    // return [];
     let conf = getLastIntersectionsConfiguration();
+    points.push({x: 0, y: 0, z: 0.6});
     points = points.concat(cutBetweenLegsAndTop());
    // return [];
     goToBase();
@@ -86,6 +87,7 @@ export function generatePoints3() { //Generujemy od odwrotnej strony
      points = points.concat(cutUnderProperller());
      points = postProcessThirdPaths();
      goToBase();
+     points[0] = {x: 0, y: 0, z: 0.6};
     points.forEach(p => {
          p.x = p.x * 140;
          p.y = p.y * 140;

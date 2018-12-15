@@ -6,6 +6,7 @@ import { generatePoints2 } from './FlatCut/Second';
 import { stretchModel, updateStretChValue } from './Helpers/GeneratePathsHelper';
 import { createIntersectMap } from './IntersectMap';
 import { generatePoints1 } from './RoughCut/First';
+import { generatePaths4 } from './Specials/SpecialCut';
 
 let generatingPaths = false;
 let r = 4;
@@ -38,6 +39,8 @@ export function generatePaths() {
     generatePoints2(map);
     setR(4);
     generatePoints3();
+    setR(0.5);
+    generatePaths4();
 
     alert('Generated!');
     generatingPaths = false;
