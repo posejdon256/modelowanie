@@ -1,19 +1,19 @@
 import { setCursor } from '../../../canvas/Cursor/Cursor';
 import { cleanCuttingCurves } from '../../../canvas/CuttingCurve/CuttingCurve';
-import { evaluate, findObjectToIntersectionAndIntersection, setIntersectionStep, setEpsilonOfFindingIntersection } from '../../../canvas/CuttingCurve/FindIntersection';
-import { setNewtonAlpa, setFinalEpsilon } from '../../../canvas/CuttingCurve/NewtonMethod';
+import { evaluate, findObjectToIntersectionAndIntersection } from '../../../canvas/CuttingCurve/FindIntersection';
+import { DrawPoint } from '../../../canvas/Draw/DrawPoints/DrawPoints';
 import { RedrawVisualization } from '../../../canvas/Draw/RedrawVisualisation/RedrawVisualization';
-import { selectSurface, getSurfaces } from '../../../canvas/Surface/Surface';
+import { getSurfaces, selectSurface } from '../../../canvas/Surface/Surface';
 import { DiffPoints, SumPoints } from '../../../Helpers/Helpers';
 import { getMillRForPaths } from '../GeneratePaths';
-import { createFiles, getCross, getDatasOfMill, stretchModel } from '../Helpers/GeneratePathsHelper';
+import { createFiles, getCross, getDatasOfMill } from '../Helpers/GeneratePathsHelper';
 import { getLastIntersectionsConfiguration, getLastIntersectionsConfigurationMill } from './ConfigurationLastIntersection';
+import { cutBetweenLegsAndTop } from './cutBetweenLegs';
+import { cutUnderProperller } from './cutUnderPropeller';
 import { goOnIntersection } from './GoOnIntersections';
 import { goOnSelectedParametrisation, prepareParametrisation, setMaxIter } from './goOnParametrisation';
 import { getXYVectioLength } from './IntersectionCollision';
-import { cutBetweenLegsAndTop } from './cutBetweenLegs';
-import { DrawPoint } from '../../../canvas/Draw/DrawPoints/DrawPoints';
-import { cutUnderProperller } from './cutUnderPropeller';
+import { findCutBetweenC0 } from './FindCutBetweenC0';
 
 let points = [];
 let pointsFromBeforePaths = [];
@@ -42,8 +42,11 @@ export function getSummCross() {
 export function generatePoints3() { //Generujemy od odwrotnej strony
     //od u = 3.3 do 3.7
     //od 0.6 do 1
-   // DrawPoint(evaluate(getSurfaces().find(x => x.id === 1), 1, 2), "Red");
-   // return [];
+    //u to wzdłoz, v to naokolo
+    //DrawPoint(evaluate(getSurfaces().find(x => x.id === 1), 1, 2.5), "Red");
+    // findCutBetweenC0();Thi
+  //   setSumCross(false);
+    // return [];
     let conf = getLastIntersectionsConfiguration();
     points.push({x: 0, y: 0, z: 0.6});
     points = points.concat(cutBetweenLegsAndTop());
@@ -79,6 +82,8 @@ export function generatePoints3() { //Generujemy od odwrotnej strony
         }
         selectSurface(sConf.id);
     }
+    findCutBetweenC0();
+    setSumCross(false);
     millState = false;
      goOnParametrisation();
      const {aboveDraw} = getDatasOfMill();
@@ -99,7 +104,7 @@ export function generatePoints3() { //Generujemy od odwrotnej strony
     createFiles(points, "k08");
     //return points;
 }
-function setSumCross(_sum) {
+export function setSumCross(_sum) {
     sumCross = _sum;
 }
 function goOnParametrisation() {
@@ -125,17 +130,17 @@ function goOnParametrisation() {
      setSumCross(false);
      startPoint.u = 3;
      startPoint.v = 3;
-    goOnSelectedParametrisation(1, 67, 200, startPoint, points, pointsParts);
+    goOnSelectedParametrisation(1, 67, 300, startPoint, points, pointsParts);
     goToBase();
 
     setSumCross(true);
     startPoint.u = 2.5;
     startPoint.v = 3.7;
-    goOnSelectedParametrisation(5, 45, 200, startPoint, points, pointsParts);
+    goOnSelectedParametrisation(5, 45, 300, startPoint, points, pointsParts);
     goToBase();
     setSumCross(false);
-    //startPoint.u = 3.5;
-    startPoint.v = 5 - eps;
+   startPoint.u = 1.5;
+    startPoint.v = 2.5;
     goOnSelectedParametrisation(6, 50, 400, startPoint, points, pointsParts, undefined, 3);
     goToBase();
 

@@ -16,10 +16,9 @@ function findMaximum(map, x, y, step) {
 export function generatePoints1(map) {
 
     let points = [];
-    const {drawStart, aboveDraw} = getDatasOfMill();
+    const {aboveDraw} = getDatasOfMill();
 
     points.push({x: 0, y: 0, z: aboveDraw});
-    points.push({x: drawStart,y: drawStart, z:  aboveDraw});
 
     //Second part on proper hight
     addLayer(0.15, points, map);
@@ -49,6 +48,7 @@ function addLayer(shift, points, map) {
         for(let j = map[0].length - 1; j >= 0; j -= step) {
             points.push({x: map[Math.min(i + step, 499)][j].x * wid, y: map[Math.min(i + step, 499)][j].y * wid, z: Math.min(findMaximum(map, i + step, j, step) + 0.2 + shift, 0.5) * 100});
         }
+        points.push({x: map[Math.min(i + step, 499)][0].x * wid, y: map[Math.min(i + step, 499)][0].y * wid - r, z: Math.min(findMaximum(map, i + step, 0, step) + 0.2 + shift, 0.5) * 100});
     }
     points.push({x : end + r, y: end + r, z: (0.2 + shift ) * 100});
     points.push({x : end + r, y: start - r, z: (0.2 + shift) * 100});

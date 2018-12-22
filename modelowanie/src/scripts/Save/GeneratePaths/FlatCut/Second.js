@@ -35,8 +35,7 @@ export function generatePoints2(map) {
         if(blocked) {
             points.push({ x: start - 2 * r, y: map[0][i].y * width, z: aboveDraw });
          }
-        points.push({ x: start - 2 * r, y: map[0][i].y * width, z: maxDraw });
-        points.push({ x: start - 2 * r - 1, y: map[0][i].y *width, z: maxDraw });
+        points.push({ x: start - 2 * r - 1, y: map[0][i].y * width, z: maxDraw });
 
         let j;
         j = goRight(points, i, 0, map, width);
@@ -61,6 +60,7 @@ export function generatePoints2(map) {
         for (; j >= 0; j--) {
             points.push({ x: map[j][i].x * width, y: map[j][i].y * width, z: maxDraw });
         }
+        points.push({ x: start - 2 * r - 1, y: map[0][i].y * width, z: maxDraw });
     }
     goToBase(points);
     points.push({ x: end + 2 * r, y: map[map.length - 1][0].y * width, z: aboveDraw });
@@ -68,8 +68,7 @@ export function generatePoints2(map) {
          if(blocked) {
             points.push({ x: end + 2 * r, y: map[map.length - 1][i].y * width, z: aboveDraw });
          }
-         points.push({ x: end + 2 * r, y: map[map.length - 1][i].y * width, z: maxDraw });
-         points.push({ x: end + 2 * r + 1, y: map[map.length - 1][i].y *width, z: maxDraw });
+         points.push({ x: end + 2 * r + 1, y: map[map.length - 1][i].y * width, z: maxDraw });
 
          let j = goLeft(points, i, map[0].length - 1, map, width);
          let lastJ = Math.min(j, wid - 1);
@@ -93,6 +92,7 @@ export function generatePoints2(map) {
          for (; j < map.length; j++) {
              points.push({ x: map[j][i].x * width, y: map[j][i].y * width, z: maxDraw });
          }
+         points.push({ x: end + 2 * r + 1, y: map[map.length - 1][i].y * width, z: maxDraw });
     }
     goToBase(points);
     removeRelicts(map, points, start);

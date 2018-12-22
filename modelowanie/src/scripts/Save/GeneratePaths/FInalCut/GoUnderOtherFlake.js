@@ -5,8 +5,10 @@ import { isIntersectionClose, findSmallestIntersection } from "./IntersectionCol
 export function proceedPoint(sId, p, pointsInPart, uvPoint) {
     const { aboveDraw } = getDatasOfMill();
     let interPoint;
-    if(sId === 5 || sId === 1) {
-        interPoint = isIntersectionClose(p, 0.006, uvPoint, sId);
+    if(sId === 1) {
+        interPoint = isIntersectionClose(p, 0.005, uvPoint, sId);
+    } else if(sId === 5) {
+        interPoint = isIntersectionClose(p, 0.005, uvPoint, sId);
     }
      else {
         interPoint = isIntersectionClose(p, 0.005, uvPoint, sId);

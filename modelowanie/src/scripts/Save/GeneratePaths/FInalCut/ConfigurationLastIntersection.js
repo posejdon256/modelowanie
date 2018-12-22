@@ -51,7 +51,7 @@ const s1m = {
     {
         cross: true,
         id: 5,
-        cursor: {x: -0.04, y: -0.37, z: -0.05},
+        cursor: {x: 0.06, y: -0.36, z: 0.04},
         back: false
     }
 ]};

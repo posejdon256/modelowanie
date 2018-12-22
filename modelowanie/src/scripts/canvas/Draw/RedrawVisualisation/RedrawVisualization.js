@@ -70,7 +70,7 @@ export function RedrawVisualization() {
     }
     ctx1.stroke();
     ctx2.stroke();
-    trimVisualisation();
+    //trimVisualisation();
 }
 export function trimVisualisation() {
     let stack = [];

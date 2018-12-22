@@ -22,25 +22,25 @@ export function generatePaths() {
         return false;
     }
      generatePaths = true;
-    let map = generateMap(500, 500);
+ //   let map = generateMap(500, 500);
 
     const surfacesC0 = getSurfaces("C0");
-    map = getZ(surfacesC0, map, EvaluateSurface);
+  //  map = getZ(surfacesC0, map, EvaluateSurface);
 
     const surfacesC2 = getSurfaces("C2");
     const value = 6;
     setHeight((value + 1).toString());
     setWidth(value.toString());
     createSurface("C0");
-    map = getZ(surfacesC2, map, EvaluateSurfaceC2);
-    setR(8);
-    generatePoints1(map);
-    setR(5);
-    generatePoints2(map);
+   // map = getZ(surfacesC2, map, EvaluateSurfaceC2);
+    //  setR(8);
+    //  generatePoints1(map);
+    //  setR(5);
+    //  generatePoints2(map);
     setR(4);
     generatePoints3();
-    setR(0.5);
-    generatePaths4();
+    // setR(0.5);
+    // generatePaths4();
 
     alert('Generated!');
     generatingPaths = false;
