@@ -128,7 +128,7 @@ export default class Header extends Component {
     render(){
         return(
         <div className="ab-header">
-            <button className="ab-torus-button tooltip" onClick={this.cleanScene}>
+            {/* <button className="ab-torus-button tooltip" onClick={this.cleanScene}>
                 <img className="ab-torus-image" src={clean} alt="clean" />
                 <span class="tooltiptext">Clean all elements from the scene</span>
             </button>
@@ -179,7 +179,7 @@ export default class Header extends Component {
             <button className={"ab-torus-button tooltip"} onClick={this.addIntersection}>
                 <img className="ab-point-image" src={scissors} alt="intersection curve" />
                 <span class="tooltiptext">Project intersection. If you selected two objects you can try to find intersection between them. Important is that cursor has to be near to intersection and "Finding intersection step" should be 3 or 0.2</span>
-            </button>  
+            </button>   */}
         </div>);
     }
 }

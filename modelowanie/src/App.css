@@ -29,7 +29,7 @@
 
 .ab-main-div {
   width: 1920px;
-  background: url('pictures/stars.png');
+  background: rgb(32, 99, 175);
   background-repeat-y: repeat;
   height: 100%;
   min-height: 943px;
