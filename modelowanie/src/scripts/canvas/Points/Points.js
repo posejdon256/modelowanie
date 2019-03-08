@@ -144,7 +144,7 @@ export function updateSelectedPoints(x, y, z) {
     Redraw();
     return points;
 }
-export function addPoint(x, y, z, type) {
+export function addPoint(x, y, z, type, color) {
     const cursor = type === undefined ? getCursor() : {x: x, y: y, z: z};
     const newPoint = {
         x: cursor.x,
@@ -153,6 +153,7 @@ export function addPoint(x, y, z, type) {
         name: "Point " + pointNumber,
         id: pointNumber,
         selected: false,
+        color: color,
         c2Bezier: type === "C2-bezier" ? true : false,
         c2BSpline: getAddingC2State() && x === undefined ? true : false,
         curves: [],

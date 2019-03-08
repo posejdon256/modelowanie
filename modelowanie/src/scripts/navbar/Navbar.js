@@ -124,7 +124,7 @@ export default class Navbar extends Component {
                 </div>
                 <div>
                     <label>Block camera:</label>
-                    <input className="input-ab" type="checkbox" onChange={this.lockUnlockCamera} defaultChecked={true}/>
+                    <input className="input-ab" type="checkbox" onChange={this.lockUnlockCamera} defaultChecked={false}/>
                 </div>
                 <div>
                     <label>Torus grid X</label>

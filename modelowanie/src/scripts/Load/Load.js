@@ -7,6 +7,7 @@ import { addInterpolationCurve, setInterpolationState } from "../canvas/Bezier/I
 import Redraw from "../canvas/Draw/Redraw";
 import { turnOffAllStates } from "../canvas/StatesCenter/StatesCenter";
 import { addTorus } from "../canvas/Torus/Torus";
+import { addLine } from "../canvas/Lines";
 
 export function setPath(_path) {
     var reader = new FileReader();
@@ -33,9 +34,12 @@ export function Load(json) {
     clearPoints();
     clearSurfaces();
     json.points.forEach(point => {
-        let p = addPoint(point.x/10, point.y/10, point.z/10, "load");
+        let p = addPoint(point.x/10, -point.y/10, point.z/10, "load", point.color);
         point.id = p.id;
         updatePointName(p.id, point.name);
+    });
+    json.lines.forEach(line => {
+        addLine(line.p1, line.p2, line.color);
     });
     const _points = getPoints();
     json.curvesC0.forEach(curve => {

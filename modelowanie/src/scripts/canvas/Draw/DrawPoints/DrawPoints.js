@@ -45,48 +45,13 @@ export function _DrawPoints(points, _ctx, _ctxStereo, _ctxStereo2) {
     const stereoscopy = getStereoscopy();
     const c2BezierVisible = getAddingC2type();
     const _canvas = getCanvas();
-    if(stereoscopy){
-        const { left, right } = translatedPoints;
-        img = _ctxStereo.getImageData(0, 0, _canvas.width, _canvas.height);
-        let rgb = {r: 236, g: 4, b: 0};
-        for(let i = 0; i < left.length; i ++) {
-            if((!points[i].c2Bezier && !points[i].c2BSpline) || (points[i].c2BSpline && c2BezierVisible) || (points[i].c2Bezier && !c2BezierVisible))
-            drawPoint(left[i].x, left[i].y, left[i].z, img, _ctxStereo, rgb);
-        }
-        _ctxStereo.putImageData(img, 0, 0);
-        rgb = {r: 0, g: 249, b: 247};
-        img = _ctxStereo2.getImageData(0, 0, _canvas.width, _canvas.height);
-        for(let i = 0; i < right.length; i ++) {
-            if((!points[i].c2Bezier && !points[i].c2BSpline) || (points[i].c2BSpline && c2BezierVisible) || (points[i].c2Bezier && !c2BezierVisible))
-                drawPoint(right[i].x, right[i].y, right[i].z, img, _ctxStereo, rgb);
-        }
-        _ctxStereo2.putImageData(img, 0, 0);
-        stereoscopyDraw();
-    }
-    else {
         img = _ctx.getImageData(0, 0, _canvas.width, _canvas.height);
-        let rgb;
+        let rgb = {r: 255, g: 0, b: 0};
         for(let i = 0; i < translatedPoints.length; i ++ ) {
-            if(points[i].selected) {
-                rgb = {r: 255, g: 0, b: 0};
-            }  else if(points[i].c2Bezier) {
-                rgb = {r: 0, g: 255, b: 0};
-            } else if(points[i].type === "Pink"){
-                rgb = {r: 128, g: 0, b: 128};
-            }
-            else if(points[i].type === "Orange"){
-                rgb = {r: 255, g: 140, b: 0};
-            }  
-            else if(points[i].type === "Blue"){
-                rgb = {r: 0, g: 0, b: 255};
-            }
-            else {
-                rgb = {r: 255, g: 255, b: 255};
-            }
+            rgb = points[i].color ? points[i].color : rgb;
             if(((!points[i].c2Bezier) || (points[i].c2Bezier && c2BezierVisible)) && (points[i].visible !== false)) {
                 drawPoint(translatedPoints[i].x, translatedPoints[i].y, translatedPoints[i].z, img, _ctx, rgb);
             }
         }
-        _ctx.putImageData(img, 0, 0);  
-    }
+        _ctx.putImageData(img, 0, 0);
 }

@@ -7,7 +7,7 @@ let front = 0;
 let left = 0;
 let top = 0;
 let step = 0.003;
-let cameraLocked = true;
+let cameraLocked = false;
 let interval;
 
 export function setLocekdCamrea(_state) {

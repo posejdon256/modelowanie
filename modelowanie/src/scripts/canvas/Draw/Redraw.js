@@ -8,29 +8,33 @@ import { _DrawSurfaceWithoutRedraw, _DrawSurfacesC2, _DrawSurfacesC0 } from "./D
 import { DrawGregor } from "./DrawGregory/DrawGregory";
 import { _DrawIntersectionCurves } from "./DrawCurve/DrawIntersectionCurve";
 import Translate, { setTranslationPoints } from "../Translation/TranslationCenter/TranslationCenter";
+import { DrawLines } from "./DrawLine/DrawLines";
+import { getLines } from "../Lines";
 
 export default function Redraw(){
     clearCanvas();
-    DrawTorus();
+   // DrawTorus();
    //DrawRectangle();
     DrawCursor();
-    DrawSurfaces();
-    DrawCurves();
+    // DrawSurfaces();
+    // DrawCurves();
     DrawPoints(getPoints());
-    DrawGregor();
-    _DrawIntersectionCurves();
+    // DrawGregor();
+    DrawLines(getLines());
+    // _DrawIntersectionCurves();
     getCanvas().focus();
 }
 export function RedrawWithoutChangingScene() {
     clearCanvas();
-    DrawTorus();
+   // DrawTorus();
     //DrawRectangle();
     DrawCursor();
-    DrawSurfacesWithoutBezier();
-    DrawCurves();
+    // DrawSurfacesWithoutBezier();
+    // DrawCurves();
     DrawPoints(getPoints());
-    DrawGregor();
-    _DrawIntersectionCurves();
+   // DrawGregor();
+    DrawLines(getLines());
+   // _DrawIntersectionCurves();
     getCanvas().focus();
 }
 function DrawRectangle() {
